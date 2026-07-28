@@ -65,15 +65,31 @@ export function useWallet() {
       if (!window.ethereum) {
         throw new Error("No wallet detected. Install MetaMask or Avalanche Core Wallet.");
       }
-      await switchToFuji();
+
+      // Step 1: Request account authorization FIRST.
+      // EIP-1193 requires an authorized account before chain-switch calls.
       const client = await getWalletClient();
       const [acc] = await client.requestAddresses();
       setAddress(acc);
       localStorage.setItem(STORAGE_KEY, acc);
+
+      // Step 2: Now that an account is authorized, switch to Fuji.
+      await switchToFuji();
+
+      // Step 3: Read the actual chain id from the wallet.
       const id = publicClient ? await publicClient.getChainId() : null;
       setChainId(id);
     } catch (err) {
-      setError(err.message || "Failed to connect wallet");
+      // Provide friendlier messages for the common EIP-1193 error codes.
+      if (err.code === 4100) {
+        setError("Account not authorized. Please approve the connection request in your wallet.");
+      } else if (err.code === 4001) {
+        setError("Connection request was rejected. Please approve the request to connect.");
+      } else if (err.code === -32002) {
+        setError("A connection request is already pending. Please check your wallet.");
+      } else {
+        setError(err.shortMessage || err.message || "Failed to connect wallet");
+      }
     } finally {
       setConnecting(false);
     }
