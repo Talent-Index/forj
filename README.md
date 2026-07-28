@@ -12,6 +12,46 @@ A gamified skills-credentialing dApp where users learn Avalanche blockchain conc
 - **Printable certificate** — Acquired pieces print light green, missing pieces light red
 - **On-chain credential** — Soulbound NFT minted via `SkillForgeCredential.sol`
 
+---
+
+## Contract Addresses
+
+Deployed on **Avalanche Fuji (C-Chain)** — Chain ID `43113`.
+
+### Gamification mechanics contract addresses
+
+The on-chain gamification logic (point thresholds, puzzle-mask tracking,
+per-difficulty score recording, and soulbound non-transfer enforcement) is
+embedded in the credential contract below.
+
+| Contract | Network | Address |
+|----------|---------|---------|
+| SkillForgeCredential (gamification logic) | Fuji | `0x80bBdD4D4606DF5Ba6561e4B9C4a59B49061f713` |
+
+### Tokenized incentives contract addresses
+
+The soulbound ERC-721 credential NFT serves as the tokenized incentive —
+learners mint a non-transferable on-chain badge that permanently records
+their earned points, puzzle pieces, and per-tier scores.
+
+| Contract | Network | Address |
+|----------|---------|---------|
+| SkillForgeCredential (soulbound NFT incentive) | Fuji | `0x80bBdD4D4606DF5Ba6561e4B9C4a59B49061f713` |
+
+### Gamified ledger starter contract addresses
+
+> _No standalone ledger contract deployed yet._
+> The `SkillForgeCredential` contract currently doubles as the gamified
+> ledger, storing `CredentialData` (points, puzzle mask, scores, image,
+> timestamp) per token ID and per learner address.
+> A dedicated ledger contract may be introduced in a future milestone.
+
+| Contract | Network | Address |
+|----------|---------|---------|
+| _reserved for GamifiedLedger_ | Fuji | _0x…_ |
+
+---
+
 ## Quick Start
 
 ```bash
