@@ -7,6 +7,7 @@ import PuzzleBoard from "./components/PuzzleBoard";
 import Certificate from "./components/Certificate";
 import Dashboard from "./components/Dashboard";
 import Achievements from "./components/Achievements";
+import Landing from "./components/Landing";
 import { PIECE_COST } from "./data/questions";
 import puzzleImage from "../images.jpeg";
 
@@ -70,23 +71,7 @@ function App() {
   }, []);
 
   if (!wallet.isConnected) {
-    return (
-      <div className="app">
-        <header className="app-header">
-          <h1>🏔️ SkillForge</h1>
-          <p className="tagline">
-            Learn <span>Avalanche</span>. Earn Credentials.
-          </p>
-        </header>
-        <WalletConnect
-          address={wallet.address}
-          connecting={wallet.connecting}
-          error={wallet.error}
-          onConnect={wallet.connect}
-          onDisconnect={wallet.disconnect}
-        />
-      </div>
-    );
+    return <Landing wallet={wallet} />;
   }
 
   return (

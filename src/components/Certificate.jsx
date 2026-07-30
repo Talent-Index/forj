@@ -92,7 +92,7 @@ function Certificate({
     : {};
 
   return (
-    <div className="certificate" id="certificate-print" style={certStyle}>
+    <div className="certificate" style={certStyle}>
       <div className="certificate-icon">🏔️</div>
       <h1>Certificate of Avalanche Competence</h1>
       <h2>SkillForge — Verifiable On-Chain Credential</h2>
@@ -153,14 +153,19 @@ function Certificate({
       </div>
 
       <div className="certificate-actions">
-        <button className="btn-primary" onClick={() => window.print()}>
-          🖨️ Print Certificate
+        <button
+          className="btn-primary btn-mint"
+          onClick={handleMint}
+          disabled={minting || !!mintTx || !CONTRACT_ADDRESS}
+        >
+          {minting
+            ? "Minting..."
+            : mintTx
+              ? "✅ Minted On-Chain"
+              : CONTRACT_ADDRESS
+                ? "⛓️ Mint Credential On Avalanche"
+                : "⛓️ Mint (Deploy contract first)"}
         </button>
-        {CONTRACT_ADDRESS && (
-          <button className="btn-primary btn-mint" onClick={handleMint} disabled={minting || !!mintTx}>
-            {minting ? "Minting..." : mintTx ? "✅ Minted On-Chain" : "⛓️ Mint On Avalanche"}
-          </button>
-        )}
         <button className="btn-secondary" onClick={onRetry}>
           🔄 Try Again
         </button>
