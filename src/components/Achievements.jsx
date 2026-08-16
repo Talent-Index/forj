@@ -41,14 +41,25 @@ const ACHIEVEMENTS = [
     desc: "Acquire all 16 puzzle pieces",
     check: (data) => data.acquiredPieces.length >= 16,
   },
+  {
+    id: "persistent",
+    icon: "💾",
+    name: "Persistent Learner",
+    desc: "Complete at least 3 quiz attempts",
+    check: (data) => data.attempts.length >= 3,
+  },
 ];
 
 function Achievements({ sectionScores, acquiredPieces, attempts }) {
   const data = { sectionScores, acquiredPieces, attempts };
+  const earnedCount = ACHIEVEMENTS.filter((ach) => ach.check(data)).length;
 
   return (
     <div className="card">
-      <h3 className="achievements-title">🏅 Achievements & Badges</h3>
+      <h3 className="achievements-title">Achievements & Badges</h3>
+      <p className="achievements-summary">
+        {earnedCount}/{ACHIEVEMENTS.length} unlocked from your saved progress
+      </p>
       <div className="achievements-grid">
         {ACHIEVEMENTS.map((ach) => {
           const earned = ach.check(data);
@@ -60,7 +71,7 @@ function Achievements({ sectionScores, acquiredPieces, attempts }) {
             >
               <span className="ach-icon">{ach.icon}</span>
               <span className="ach-name">{ach.name}</span>
-              <span className="ach-status">{earned ? "✅ Earned" : "🔒 Locked"}</span>
+              <span className="ach-status">{earned ? "Earned" : "Locked"}</span>
             </div>
           );
         })}

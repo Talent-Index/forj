@@ -1271,6 +1271,57 @@ body {
   gap: 14px;
 }
 
+.landing-hero-focus {
+  padding: 56px 20px 24px;
+  border: 1px solid rgba(255, 215, 0, 0.18);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top, rgba(255, 210, 0, 0.12), transparent 55%),
+    rgba(255, 255, 255, 0.03);
+}
+
+.landing-cta-hero {
+  margin-top: 8px;
+}
+
+.cert-honesty {
+  max-width: 520px;
+  margin: 0 auto 12px;
+  color: #a0a0c0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.onchain-credential {
+  margin: 16px auto 0;
+  padding: 14px 16px;
+  max-width: 520px;
+  border-radius: 14px;
+  border: 1px solid rgba(105, 240, 174, 0.25);
+  background: rgba(105, 240, 174, 0.08);
+  text-align: left;
+}
+
+.onchain-credential h3 {
+  margin-bottom: 8px;
+  color: #69f0ae;
+}
+
+.onchain-credential a {
+  color: #ffd200;
+}
+
+.achievements-summary,
+.dashboard-empty {
+  color: #a0a0c0;
+  font-size: 0.9rem;
+  margin-bottom: 14px;
+}
+
+.mint-success a {
+  color: #69f0ae;
+}
+
 .landing-badge {
   display: inline-flex;
   align-items: center;

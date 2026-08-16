@@ -1,27 +1,23 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { createWalletClient, custom, createPublicClient } from "viem";
 import { avalancheFuji } from "viem/chains";
 
 const STORAGE_KEY = "skillforge_wallet";
 
 export function useWallet() {
-  const [address, setAddress] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) || null;
-    } catch {
-      return null;
-    }
-  });
+  const [address, setAddress] = useState(null);
   const [chainId, setChainId] = useState(null);
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState(null);
+  const [restoring, setRestoring] = useState(true);
 
-  const publicClient = window.ethereum
-    ? createPublicClient({
-        chain: avalancheFuji,
-        transport: custom(window.ethereum),
-      })
-    : null;
+  const publicClient = useMemo(() => {
+    if (!window.ethereum) return null;
+    return createPublicClient({
+      chain: avalancheFuji,
+      transport: custom(window.ethereum),
+    });
+  }, []);
 
   const getWalletClient = useCallback(async () => {
     if (!window.ethereum) throw new Error("No wallet found. Install MetaMask or Core Wallet.");
@@ -66,21 +62,16 @@ export function useWallet() {
         throw new Error("No wallet detected. Install MetaMask or Avalanche Core Wallet.");
       }
 
-      // Step 1: Request account authorization FIRST.
-      // EIP-1193 requires an authorized account before chain-switch calls.
       const client = await getWalletClient();
       const [acc] = await client.requestAddresses();
       setAddress(acc);
       localStorage.setItem(STORAGE_KEY, acc);
 
-      // Step 2: Now that an account is authorized, switch to Fuji.
       await switchToFuji();
 
-      // Step 3: Read the actual chain id from the wallet.
       const id = publicClient ? await publicClient.getChainId() : null;
       setChainId(id);
     } catch (err) {
-      // Provide friendlier messages for the common EIP-1193 error codes.
       if (err.code === 4100) {
         setError("Account not authorized. Please approve the connection request in your wallet.");
       } else if (err.code === 4001) {
@@ -100,6 +91,46 @@ export function useWallet() {
     setChainId(null);
     localStorage.removeItem(STORAGE_KEY);
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function restoreSession() {
+      if (!window.ethereum) {
+        if (!cancelled) setRestoring(false);
+        return;
+      }
+
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return;
+
+        const accounts = await window.ethereum.request({ method: "eth_accounts" });
+        const match = accounts.find((acc) => acc.toLowerCase() === saved.toLowerCase());
+        if (!match) {
+          localStorage.removeItem(STORAGE_KEY);
+          return;
+        }
+
+        if (!cancelled) {
+          setAddress(match);
+          if (publicClient) {
+            const id = await publicClient.getChainId();
+            if (!cancelled) setChainId(id);
+          }
+        }
+      } catch {
+        localStorage.removeItem(STORAGE_KEY);
+      } finally {
+        if (!cancelled) setRestoring(false);
+      }
+    }
+
+    restoreSession();
+    return () => {
+      cancelled = true;
+    };
+  }, [publicClient]);
 
   useEffect(() => {
     if (!window.ethereum || !address) return;
@@ -128,11 +159,13 @@ export function useWallet() {
     address,
     chainId,
     connecting,
+    restoring,
     error,
     connect,
     disconnect,
     getWalletClient,
     publicClient,
+    switchToFuji,
     isConnected: !!address,
   };
 }

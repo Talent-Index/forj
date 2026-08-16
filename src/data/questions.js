@@ -47,6 +47,40 @@ export const sections = [
         hint: "They let teams run their own validator sets and rules.",
         funFact: "Subnets are sovereign networks with their own validators and custom rules.",
       },
+      {
+        id: "e6",
+        question: "What does ICM stand for in the Avalanche ecosystem?",
+        options: [
+          "Interchain Messaging",
+          "Internal Chain Mining",
+          "Instant Consensus Module",
+          "Indexed Contract Market",
+        ],
+        answer: "Interchain Messaging",
+        hint: "It is Avalanche's native cross-chain messaging layer.",
+        funFact: "ICM lets Avalanche L1s and the C-Chain exchange authenticated messages.",
+      },
+      {
+        id: "e7",
+        question: "An Avalanche L1 is best described as:",
+        options: [
+          "A sovereign blockchain with its own validators and rules",
+          "A centralized database shard",
+          "An Ethereum Layer 2 only",
+          "A wallet plugin",
+        ],
+        answer: "A sovereign blockchain with its own validators and rules",
+        hint: "L1s evolve the subnet model into independently governed networks.",
+        funFact: "Avalanche L1s can customize gas tokens, VMs, and membership rules.",
+      },
+      {
+        id: "e8",
+        question: "Which Avalanche chain is primarily used for staking and network coordination?",
+        options: ["X-Chain", "P-Chain", "C-Chain", "Q-Chain"],
+        answer: "P-Chain",
+        hint: "Platform Chain.",
+        funFact: "The P-Chain tracks validators, staking, and subnet/L1 membership.",
+      },
     ],
   },
   {
@@ -55,7 +89,7 @@ export const sections = [
     icon: "🟡",
     pointsPerQuestion: 5,
     timePerQuestion: 15,
-    description: "Avalanche blockchain validators, staking, and subnet architecture",
+    description: "Avalanche validators, staking, ICM, and L1 architecture",
     questions: [
       {
         id: "m1",
@@ -83,7 +117,7 @@ export const sections = [
       },
       {
         id: "m4",
-        question: "Avalanche subnets allow validators to:",
+        question: "Avalanche subnet validators can:",
         options: [
           "Only validate one subnet",
           "Validate multiple subnets they choose",
@@ -102,6 +136,45 @@ export const sections = [
         hint: "Think sub-second or single-digit seconds finality.",
         funFact: "Sub-second finality makes Avalanche ideal for DeFi and gaming applications.",
       },
+      {
+        id: "m6",
+        question: "Why is ICM useful for Avalanche L1s?",
+        options: [
+          "It enables authenticated cross-chain messaging without bridges for every app",
+          "It replaces AVAX as the gas token",
+          "It removes the need for validators",
+          "It only works offline",
+        ],
+        answer: "It enables authenticated cross-chain messaging without bridges for every app",
+        hint: "Native messaging across Avalanche networks.",
+        funFact: "ICM reduces custom bridge complexity for Avalanche-native interoperability.",
+      },
+      {
+        id: "m7",
+        question: "Compared with a generic sidechain, an Avalanche L1 emphasizes:",
+        options: [
+          "Custom validator sets and sovereign execution environments",
+          "Shared global mempools only",
+          "Proof-of-work mining pools",
+          "Centralized sequencers only",
+        ],
+        answer: "Custom validator sets and sovereign execution environments",
+        hint: "Sovereignty and custom membership.",
+        funFact: "Teams can tailor L1 economics and virtual machines to their application.",
+      },
+      {
+        id: "m8",
+        question: "Delegators on Avalanche primarily do what?",
+        options: [
+          "Stake AVAX with validators to help secure the network",
+          "Write Solidity compilers",
+          "Operate the X-Chain alone",
+          "Mint unlimited AVAX",
+        ],
+        answer: "Stake AVAX with validators to help secure the network",
+        hint: "Delegation supports validators.",
+        funFact: "Delegators earn rewards by staking with validators without running a node.",
+      },
     ],
   },
   {
@@ -110,7 +183,7 @@ export const sections = [
     icon: "🔴",
     pointsPerQuestion: 8,
     timePerQuestion: 12,
-    description: "Advanced Avalanche blockchain — Snow protocols, VMs, and tokenomics",
+    description: "Advanced Avalanche — Snow protocols, VMs, ICM, and tokenomics",
     questions: [
       {
         id: "h1",
@@ -152,40 +225,54 @@ export const sections = [
         hint: "Fees are burned dynamically as part of transactions.",
         funFact: "AVAX fees are burned, reducing supply and aligning incentives with network usage.",
       },
+      {
+        id: "h6",
+        question: "Which statement about Avalanche ICM is most accurate?",
+        options: [
+          "It provides native message delivery between Avalanche chains/L1s",
+          "It is only a wallet UI theme",
+          "It replaces the need for AVAX entirely",
+          "It is a Bitcoin ordinals standard",
+        ],
+        answer: "It provides native message delivery between Avalanche chains/L1s",
+        hint: "Cross-chain messaging.",
+        funFact: "ICM is designed for Avalanche-native interoperability and composability.",
+      },
+      {
+        id: "h7",
+        question: "A major benefit of Avalanche L1s for application teams is:",
+        options: [
+          "Application-specific performance, fees, and membership control",
+          "Forced use of a single global gas market only",
+          "Elimination of cryptography",
+          "Automatic mainnet AVAX minting",
+        ],
+        answer: "Application-specific performance, fees, and membership control",
+        hint: "Customization for app needs.",
+        funFact: "L1s let teams optimize for games, DeFi, RWAs, or enterprise constraints.",
+      },
+      {
+        id: "h8",
+        question: "In Avalanche consensus sampling, validators repeatedly query:",
+        options: [
+          "Small random subsets of other validators",
+          "Only the largest mining pool",
+          "A single elected leader forever",
+          "Off-chain social media polls",
+        ],
+        answer: "Small random subsets of other validators",
+        hint: "Repeated randomized sampling.",
+        funFact: "Repeated sampling drives metastable decisions toward irreversible finality.",
+      },
     ],
   },
 ];
-
-// Expand the question pools programmatically to reach ~200 total questions.
-// We create numbered variants of the base questions (keeps answers and hints),
-// then replace the section.questions with the expanded pool.
-const TARGET_TOTAL = 200;
-const perSection = Math.ceil(TARGET_TOTAL / sections.length);
-
-sections.forEach((sec) => {
-  const base = sec.questions.slice();
-  const expanded = [];
-  let idx = 1;
-  while (expanded.length < perSection) {
-    for (let b of base) {
-      if (expanded.length >= perSection) break;
-      const copy = {
-        ...b,
-        id: `${sec.id}-${b.id || 'q'}-${idx}`,
-        question: b.question.includes("(variant") ? b.question : `${b.question} (variant ${idx})`,
-      };
-      expanded.push(copy);
-      idx++;
-    }
-  }
-  sec.questions = expanded;
-});
 
 export const PUZZLE_SIZE = 4;
 export const PIECE_COST = 5;
 export const TOTAL_PIECES = PUZZLE_SIZE * PUZZLE_SIZE;
 export const MAX_POINTS = sections.reduce(
-  (sum, s) => sum + s.pointsPerQuestion * s.questions.length,
+  (sum, s) => sum + s.pointsPerQuestion * Math.min(5, s.questions.length),
   0
 );
 

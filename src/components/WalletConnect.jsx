@@ -21,7 +21,7 @@ function WalletConnect({ address, connecting, error, onConnect, onDisconnect }) 
       <div className="wallet-icon">👛</div>
       <h2>Connect Your Wallet</h2>
       <p className="wallet-desc">
-        Sign up with MetaMask or Core Wallet on Avalanche Fuji to earn verifiable on-chain credentials.
+        Connect MetaMask or Core Wallet on Avalanche Fuji to mint an on-chain record of your claimed scores.
       </p>
       {error && <div className="wallet-error">{error}</div>}
       <button className="btn-primary btn-connect" onClick={onConnect} disabled={connecting}>

@@ -1,32 +1,15 @@
-const TOKEN = import.meta.env.VITE_NFT_STORAGE_KEY || "";
+/** Stable artwork URI for on-chain metadata. Prefer IPFS or a durable HTTPS URL. */
+export const CREDENTIAL_IMAGE_URI =
+  import.meta.env.VITE_CREDENTIAL_IMAGE_URI ||
+  "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=800&q=80";
 
-export async function pinFileToIPFS(file) {
-  if (!TOKEN) throw new Error('VITE_NFT_STORAGE_KEY not set');
-  const formData = new FormData();
-  formData.append('file', file, file.name || 'image.png');
-
-  const response = await fetch('https://api.nft.storage/upload', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-    },
-    body: formData,
-  });
-
-  if (!response.ok) {
-    const detail = await response.text();
-    throw new Error(`IPFS pin failed: ${response.status} ${response.statusText} ${detail}`);
-  }
-
-  const json = await response.json();
-  const cid = json.value?.cid;
-  if (!cid) {
-    throw new Error('IPFS pin returned no CID');
-  }
-
-  return {
-    ipfs: `ipfs://${cid}`,
-    gateway: `https://nftstorage.link/ipfs/${cid}`,
-    cid,
-  };
+/**
+ * Prefer a configured remote URI for minting. Local Vite asset paths are not
+ * usable by explorers, so fall back to CREDENTIAL_IMAGE_URI.
+ */
+export function resolveCredentialImageUri(localAssetUrl = "") {
+  const configured = (import.meta.env.VITE_CREDENTIAL_IMAGE_URI || "").trim();
+  if (configured) return configured;
+  if (localAssetUrl && /^https?:\/\//i.test(localAssetUrl)) return localAssetUrl;
+  return CREDENTIAL_IMAGE_URI;
 }

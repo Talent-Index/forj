@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useWallet } from "./hooks/useWallet";
 import WalletConnect from "./components/WalletConnect";
 import SectionSelect from "./components/SectionSelect";
@@ -10,12 +10,29 @@ import Achievements from "./components/Achievements";
 import Landing from "./components/Landing";
 import { PIECE_COST } from "./data/questions";
 import puzzleImage from "../images.jpeg";
+import {
+  applySectionResult,
+  clearProgress,
+  loadProgress,
+  saveProgress,
+} from "./utils/progress";
 
 const VIEWS = {
   SECTIONS: "sections",
   QUIZ: "quiz",
   PUZZLE: "puzzle",
   CERTIFICATE: "certificate",
+};
+
+const EMPTY_PROGRESS = {
+  view: VIEWS.SECTIONS,
+  activeSection: null,
+  totalPoints: 0,
+  spentPoints: 0,
+  acquiredPieces: [],
+  sectionScores: {},
+  completedSections: [],
+  attempts: [],
 };
 
 function App() {
@@ -28,19 +45,63 @@ function App() {
   const [sectionScores, setSectionScores] = useState({});
   const [completedSections, setCompletedSections] = useState([]);
   const [attempts, setAttempts] = useState([]);
-  // The puzzle uses the bundled Build Games artwork; no image upload is needed.
   const userImage = puzzleImage;
 
+  useEffect(() => {
+    if (!wallet.address) return;
+    const saved = loadProgress(wallet.address);
+    if (!saved) {
+      setView(VIEWS.SECTIONS);
+      setActiveSection(null);
+      setTotalPoints(0);
+      setSpentPoints(0);
+      setAcquiredPieces([]);
+      setSectionScores({});
+      setCompletedSections([]);
+      setAttempts([]);
+      return;
+    }
+
+    setView(saved.view || VIEWS.SECTIONS);
+    setActiveSection(saved.activeSection || null);
+    setTotalPoints(saved.totalPoints || 0);
+    setSpentPoints(saved.spentPoints || 0);
+    setAcquiredPieces(saved.acquiredPieces || []);
+    setSectionScores(saved.sectionScores || {});
+    setCompletedSections(saved.completedSections || []);
+    setAttempts(saved.attempts || []);
+  }, [wallet.address]);
+
+  useEffect(() => {
+    if (!wallet.address) return;
+    saveProgress(wallet.address, {
+      view,
+      activeSection,
+      totalPoints,
+      spentPoints,
+      acquiredPieces,
+      sectionScores,
+      completedSections,
+      attempts,
+    });
+  }, [
+    wallet.address,
+    view,
+    activeSection,
+    totalPoints,
+    spentPoints,
+    acquiredPieces,
+    sectionScores,
+    completedSections,
+    attempts,
+  ]);
+
   const handleQuizComplete = useCallback((result) => {
-    setSectionScores((prev) => ({
-      ...prev,
-      [result.sectionId]: {
-        correct: result.correct,
-        total: result.total,
-        pointsEarned: result.pointsEarned,
-      },
-    }));
-    setTotalPoints((prev) => prev + result.pointsEarned);
+    setSectionScores((prev) => {
+      const next = applySectionResult(prev, result);
+      setTotalPoints(next.totalPoints);
+      return next.sectionScores;
+    });
     setCompletedSections((prev) =>
       prev.includes(result.sectionId) ? prev : [...prev, result.sectionId]
     );
@@ -54,21 +115,27 @@ function App() {
     setSpentPoints((prev) => prev + PIECE_COST);
   }, []);
 
-  const handleRetry = useCallback(() => {
-    setView(VIEWS.SECTIONS);
-    setActiveSection(null);
-  }, []);
-
   const handleFullReset = useCallback(() => {
-    setView(VIEWS.SECTIONS);
-    setActiveSection(null);
-    setTotalPoints(0);
-    setSpentPoints(0);
-    setAcquiredPieces([]);
-    setSectionScores({});
-    setCompletedSections([]);
-    setAttempts([]);
-  }, []);
+    if (wallet.address) clearProgress(wallet.address);
+    setView(EMPTY_PROGRESS.view);
+    setActiveSection(EMPTY_PROGRESS.activeSection);
+    setTotalPoints(EMPTY_PROGRESS.totalPoints);
+    setSpentPoints(EMPTY_PROGRESS.spentPoints);
+    setAcquiredPieces(EMPTY_PROGRESS.acquiredPieces);
+    setSectionScores(EMPTY_PROGRESS.sectionScores);
+    setCompletedSections(EMPTY_PROGRESS.completedSections);
+    setAttempts(EMPTY_PROGRESS.attempts);
+  }, [wallet.address]);
+
+  if (wallet.restoring) {
+    return (
+      <div className="landing">
+        <section className="landing-hero">
+          <p className="landing-subtitle">Restoring wallet session…</p>
+        </section>
+      </div>
+    );
+  }
 
   if (!wallet.isConnected) {
     return <Landing wallet={wallet} />;
@@ -134,6 +201,8 @@ function App() {
             acquiredPieces={acquiredPieces}
             sectionScores={sectionScores}
             getWalletClient={wallet.getWalletClient}
+            publicClient={wallet.publicClient}
+            switchToFuji={wallet.switchToFuji}
             onRetry={handleFullReset}
             userImage={userImage}
           />

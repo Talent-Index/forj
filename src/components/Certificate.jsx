@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   PUZZLE_SIZE,
   PUZZLE_LABELS,
@@ -10,7 +10,11 @@ import {
   CREDENTIAL_ABI,
   buildMintData,
   puzzleToMask,
+  FUJI_CHAIN_ID,
+  FUJI_EXPLORER_TX,
+  FUJI_EXPLORER_TOKEN,
 } from "../utils/contract";
+import { resolveCredentialImageUri } from "../utils/ipfs";
 import { playFinishSound } from "../utils/sounds";
 
 function getGrade(totalCorrect, totalQuestions) {
@@ -28,12 +32,16 @@ function Certificate({
   acquiredPieces,
   sectionScores,
   getWalletClient,
+  publicClient,
+  switchToFuji,
   onRetry,
   userImage,
 }) {
   const [minting, setMinting] = useState(false);
   const [mintTx, setMintTx] = useState(null);
   const [mintError, setMintError] = useState(null);
+  const [onChainCredential, setOnChainCredential] = useState(null);
+  const [loadingCredential, setLoadingCredential] = useState(false);
 
   const date = new Date().toLocaleDateString("en-US", {
     year: "numeric",
@@ -45,11 +53,69 @@ function Certificate({
   const mediumCorrect = sectionScores.medium?.correct ?? 0;
   const hardCorrect = sectionScores.hard?.correct ?? 0;
   const totalCorrect = easyCorrect + mediumCorrect + hardCorrect;
-  const totalQuestions = sections.reduce((sum, s) => sum + s.questions.length, 0);
+  const totalQuestions = sections.reduce((sum, s) => sum + Math.min(5, s.questions.length), 0);
 
   const certId = address
     ? `SF-${address.slice(2, 8).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`
     : `SF-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+
+  const loadOnChainCredential = useCallback(async () => {
+    if (!CONTRACT_ADDRESS || !publicClient || !address) {
+      setOnChainCredential(null);
+      return;
+    }
+
+    setLoadingCredential(true);
+    try {
+      const tokenId = await publicClient.readContract({
+        address: CONTRACT_ADDRESS,
+        abi: CREDENTIAL_ABI,
+        functionName: "credentialOf",
+        args: [address],
+      });
+
+      if (!tokenId || tokenId === 0n) {
+        setOnChainCredential(null);
+        return;
+      }
+
+      const [data, tokenURI] = await Promise.all([
+        publicClient.readContract({
+          address: CONTRACT_ADDRESS,
+          abi: CREDENTIAL_ABI,
+          functionName: "credentials",
+          args: [tokenId],
+        }),
+        publicClient.readContract({
+          address: CONTRACT_ADDRESS,
+          abi: CREDENTIAL_ABI,
+          functionName: "tokenURI",
+          args: [tokenId],
+        }),
+      ]);
+
+      setOnChainCredential({
+        tokenId: tokenId.toString(),
+        totalPoints: data[0].toString(),
+        puzzleMask: data[1].toString(),
+        easyCorrect: Number(data[2]),
+        mediumCorrect: Number(data[3]),
+        hardCorrect: Number(data[4]),
+        image: data[5],
+        mintedAt: Number(data[6]),
+        tokenURI,
+        explorerUrl: `${FUJI_EXPLORER_TOKEN}${CONTRACT_ADDRESS}?a=${tokenId.toString()}`,
+      });
+    } catch {
+      setOnChainCredential(null);
+    } finally {
+      setLoadingCredential(false);
+    }
+  }, [address, publicClient]);
+
+  useEffect(() => {
+    loadOnChainCredential();
+  }, [loadOnChainCredential]);
 
   async function handleMint() {
     if (!CONTRACT_ADDRESS) {
@@ -59,17 +125,23 @@ function Certificate({
     setMinting(true);
     setMintError(null);
     try {
+      await switchToFuji();
       const client = await getWalletClient();
       const [account] = await client.getAddresses();
+      const currentChainId = publicClient ? await publicClient.getChainId() : null;
+      if (currentChainId !== FUJI_CHAIN_ID) {
+        throw new Error("Please switch your wallet to Avalanche Fuji (43113) before minting.");
+      }
+
       const mask = puzzleToMask(acquiredPieces);
-      let imageUri = userImage || "";
+      const imageUri = resolveCredentialImageUri(userImage);
       const data = buildMintData({
         totalPoints,
         puzzleMask: mask,
         easyCorrect,
         mediumCorrect,
         hardCorrect,
-        imageData: imageUri || "",
+        imageData: imageUri,
       });
 
       const hash = await client.sendTransaction({
@@ -78,8 +150,17 @@ function Certificate({
         data,
         chain: client.chain,
       });
+
+      if (publicClient) {
+        const receipt = await publicClient.waitForTransactionReceipt({ hash });
+        if (receipt.status !== "success") {
+          throw new Error("Mint transaction failed on-chain.");
+        }
+      }
+
       setMintTx(hash);
       playFinishSound();
+      await loadOnChainCredential();
     } catch (err) {
       setMintError(err.shortMessage || err.message || "Mint failed");
     } finally {
@@ -95,7 +176,11 @@ function Certificate({
     <div className="certificate" style={certStyle}>
       <div className="certificate-icon">🏔️</div>
       <h1>Certificate of Avalanche Competence</h1>
-      <h2>SkillForge — Verifiable On-Chain Credential</h2>
+      <h2>SkillForge — On-Chain Record of Claimed Scores</h2>
+      <p className="cert-honesty">
+        This mint stores your claimed quiz and puzzle progress on Avalanche Fuji.
+        It is not a proctored exam credential.
+      </p>
 
       {address && (
         <p className="cert-wallet">Awarded to: {address.slice(0, 10)}...{address.slice(-8)}</p>
@@ -148,9 +233,32 @@ function Certificate({
         <span>Puzzle: {acquiredPieces.length}/{TOTAL_PIECES} pieces</span>
         <span>ID: {certId}</span>
         {mintTx && (
-          <span className="mint-success">✅ Minted! Tx: {mintTx.slice(0, 14)}...</span>
+          <span className="mint-success">
+            ✅ Minted!{" "}
+            <a href={`${FUJI_EXPLORER_TX}${mintTx}`} target="_blank" rel="noreferrer">
+              View on Snowtrace
+            </a>
+          </span>
         )}
       </div>
+
+      {(loadingCredential || onChainCredential) && (
+        <div className="onchain-credential">
+          <h3>Your On-Chain Credential</h3>
+          {loadingCredential && <p>Loading credential from Fuji…</p>}
+          {!loadingCredential && onChainCredential && (
+            <>
+              <p>Token #{onChainCredential.tokenId} · {onChainCredential.totalPoints} pts</p>
+              <p>
+                Scores: Easy {onChainCredential.easyCorrect}/5 · Medium {onChainCredential.mediumCorrect}/5 · Hard {onChainCredential.hardCorrect}/5
+              </p>
+              <a href={onChainCredential.explorerUrl} target="_blank" rel="noreferrer">
+                Open credential on Snowtrace
+              </a>
+            </>
+          )}
+        </div>
+      )}
 
       <div className="certificate-actions">
         <button

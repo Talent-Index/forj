@@ -1,11 +1,18 @@
 function Dashboard({ attempts, totalPoints, acquiredPieces }) {
-  if (attempts.length === 0) return null;
+  if (attempts.length === 0) {
+    return (
+      <div className="card">
+        <h3 className="dashboard-title">Your Progress Dashboard</h3>
+        <p className="dashboard-empty">Complete a quiz to start tracking attempts for this wallet.</p>
+      </div>
+    );
+  }
 
   const bestPoints = Math.max(...attempts.map((a) => a.pointsEarned ?? 0));
 
   return (
     <div className="card">
-      <h3 className="dashboard-title">📊 Your Progress Dashboard</h3>
+      <h3 className="dashboard-title">Your Progress Dashboard</h3>
 
       <div className="chart-container">
         {attempts.map((attempt, index) => {
@@ -13,7 +20,7 @@ function Dashboard({ attempts, totalPoints, acquiredPieces }) {
           const height = Math.max(pts * 2, 4);
           const isBest = pts === bestPoints;
           return (
-            <div className="chart-bar-wrapper" key={index}>
+            <div className="chart-bar-wrapper" key={`${attempt.sectionId}-${index}`}>
               <span className="chart-bar-value">{pts}pt</span>
               <div
                 className={`chart-bar ${isBest ? "best" : ""}`}

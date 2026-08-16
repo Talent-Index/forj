@@ -4,44 +4,46 @@ const FEATURES = [
   {
     icon: "📚",
     title: "Learn Avalanche",
-    desc: "Master consensus, subnets, staking & the X/P/C chains through bite-sized quizzes across three difficulty tiers.",
+    desc: "Master consensus, subnets, staking, ICM, and L1 design through bite-sized quizzes.",
   },
   {
     icon: "🧩",
     title: "Solve the Puzzle",
-    desc: "Every correct answer earns points. Spend them to reveal pieces of the Avalanche artwork and track your mastery.",
+    desc: "Earn points, redeem puzzle pieces, and build a certificate that reflects your progress.",
   },
   {
     icon: "⛓️",
-    title: "Mint a Credential",
-    desc: "Finish the quest and mint a verifiable on-chain credential to the Avalanche Fuji testnet — yours forever.",
+    title: "Mint On Fuji",
+    desc: "Record claimed scores as a soulbound credential on Avalanche Fuji with an explorer link.",
   },
-];
-
-const STEPS = [
-  { num: "01", title: "Connect Wallet", desc: "Link MetaMask or Core Wallet on Avalanche Fuji." },
-  { num: "02", title: "Master the Quiz", desc: "Answer Easy, Medium & Hard questions to earn points." },
-  { num: "03", title: "Mint On-Chain", desc: "Complete the puzzle and mint your verifiable credential." },
 ];
 
 function Landing({ wallet }) {
   return (
     <div className="landing">
-      <section className="landing-hero">
-        <div className="landing-badge">🏔️ Avalanche Fuji · Testnet</div>
+      <section className="landing-hero landing-hero-focus">
+        <div className="landing-badge">Avalanche Fuji · Testnet</div>
         <h1 className="landing-title">SkillForge</h1>
         <p className="landing-tagline">
-          Learn <span>Avalanche</span>. Earn <span>Credentials</span>.
+          Learn <span>Avalanche</span>. Mint a credential.
         </p>
         <p className="landing-subtitle">
-          A gamified learning quest that turns Avalanche knowledge into a
-          verifiable, on-chain credential. Quiz your way through consensus,
-          subnets and staking — then mint your proof of mastery.
+          A focused learning quest: quiz across difficulty tiers, unlock puzzle pieces,
+          then mint an on-chain record of your claimed scores on Fuji.
         </p>
+        <div className="landing-cta landing-cta-hero">
+          <WalletConnect
+            address={wallet.address}
+            connecting={wallet.connecting}
+            error={wallet.error}
+            onConnect={wallet.connect}
+            onDisconnect={wallet.disconnect}
+          />
+        </div>
       </section>
 
       <section className="landing-features">
-        <h2 className="landing-section-title">Why SkillForge</h2>
+        <h2 className="landing-section-title">What you get</h2>
         <div className="feature-grid">
           {FEATURES.map((f) => (
             <div className="feature-card" key={f.title}>
@@ -53,37 +55,10 @@ function Landing({ wallet }) {
         </div>
       </section>
 
-      <section className="landing-how">
-        <h2 className="landing-section-title">How it works</h2>
-        <div className="steps-row">
-          {STEPS.map((s, i) => (
-            <div className="step-card" key={s.num}>
-              <span className="step-num">{s.num}</span>
-              <h3 className="step-title">{s.title}</h3>
-              <p className="step-desc">{s.desc}</p>
-              {i < STEPS.length - 1 && <span className="step-arrow" aria-hidden>→</span>}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="landing-cta-section">
-        <h2 className="landing-section-title">Ready to begin?</h2>
-        <div className="landing-cta">
-          <WalletConnect
-            address={wallet.address}
-            connecting={wallet.connecting}
-            error={wallet.error}
-            onConnect={wallet.connect}
-            onDisconnect={wallet.disconnect}
-          />
-        </div>
-      </section>
-
       <footer className="landing-footer">
-        <span>🏔️ SkillForge</span>
+        <span>SkillForge</span>
         <span className="footer-sep">·</span>
-        <span>Verifiable on-chain credentials on Avalanche Fuji</span>
+        <span>On-chain claimed-score credentials on Avalanche Fuji</span>
       </footer>
     </div>
   );
