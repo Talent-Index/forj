@@ -9,7 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "compile": "hardhat compile",
-    "deploy:fuji": "hardhat run scripts/deploy.js --network fuji"
+    "test": "hardhat test",
+    "test:retry": "node scripts/check-retry-math.js",
+    "deploy:fuji": "hardhat run scripts/deploy.js --network fuji",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network avalanche"
   },
   "dependencies": {
     "dotenv": "^17.4.2",

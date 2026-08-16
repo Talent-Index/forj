@@ -55,9 +55,11 @@ function Certificate({
   const totalCorrect = easyCorrect + mediumCorrect + hardCorrect;
   const totalQuestions = sections.reduce((sum, s) => sum + Math.min(5, s.questions.length), 0);
 
-  const certId = address
-    ? `SF-${address.slice(2, 8).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`
-    : `SF-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+  const [certId] = useState(() =>
+    address
+      ? `SF-${address.slice(2, 8).toUpperCase()}-${puzzleToMask(acquiredPieces).toString(16).toUpperCase()}`
+      : "SF-LOCAL"
+  );
 
   const loadOnChainCredential = useCallback(async () => {
     if (!CONTRACT_ADDRESS || !publicClient || !address) {
