@@ -14,7 +14,7 @@ A gamified skills-credentialing dApp where users learn Avalanche concepts throug
 
 > Honesty note: the open `mintCredential` path stores **claimed** scores. It is not a proctored exam. Use the signed authorization path when you need issuer-attested mints.
 
-Product + tech sequencing lives in **[docs/ROADMAP.md](docs/ROADMAP.md)** (P1 correct mint → P3 attestation / CI / mainnet gate).
+Product + tech sequencing lives in **[docs/ROADMAP.md](docs/ROADMAP.md)** (foundation → credentials → mainnet → ecosystem).
 
 ---
 
@@ -96,7 +96,7 @@ skillforge/
 
 ## Roadmap
 
-See [docs/ROADMAP.md](docs/ROADMAP.md) for the dual-track plan (mint correctness → product depth → scale), phase status, and mainnet gate.
+See [docs/ROADMAP.md](docs/ROADMAP.md) for the full SkillForge roadmap (learning, GameFi, and credential tracks through mainnet and ecosystem scale).
 
 ## Tech Stack
 
