@@ -1,6 +1,10 @@
 import hre from "hardhat";
 
 async function main() {
+  if (!process.env.PRIVATE_KEY) {
+    throw new Error("PRIVATE_KEY is required. Copy .env.example to .env and provide a funded Fuji deployer key.");
+  }
+
   const [signer] = await hre.ethers.getSigners();
 
   // Many Fuji public RPCs do NOT support the "pending" block tag, which
@@ -31,6 +35,7 @@ async function main() {
   const address = await credential.getAddress();
   console.log("SkillForgeCredential deployed to:", address);
   console.log("Set VITE_CREDENTIAL_CONTRACT in .env to:", address);
+  console.log("Set VITE_CREDENTIAL_IMAGE_URI to a stable IPFS or HTTPS artwork URL before minting.");
 }
 
 main().catch((error) => {

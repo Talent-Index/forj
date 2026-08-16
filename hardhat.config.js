@@ -1,4 +1,8 @@
 import "@nomicfoundation/hardhat-toolbox";
+import "dotenv/config";
+
+const fujiUrl = process.env.FUJI_RPC_URL || "https://avalanche-fuji-c-chain.publicnode.com";
+const deployerAccounts = process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [];
 
 /** @type import('hardhat/config').HardhatUserConfig */
 export default {
@@ -11,14 +15,14 @@ export default {
   },
   networks: {
     fuji: {
-      url: "https://avalanche-fuji-c-chain.publicnode.com",
+      url: fujiUrl,
       chainId: 43113,
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      accounts: deployerAccounts,
     },
     avalanche: {
       url: "https://api.avax.network/ext/bc/C/rpc",
       chainId: 43114,
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      accounts: deployerAccounts,
     },
   },
   paths: {

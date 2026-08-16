@@ -4,11 +4,17 @@ pragma solidity ^0.8.26;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 
 /// @title SkillForgeCredential
 /// @notice Soulbound NFT credential for Avalanche learning achievements
-contract SkillForgeCredential is ERC721, Ownable {
+contract SkillForgeCredential is ERC721, Ownable, EIP712 {
     using Strings for uint256;
+
+    bytes32 private constant CREDENTIAL_TYPEHASH = keccak256(
+        "Credential(address learner,uint256 totalPoints,uint256 puzzleMask,uint8 easyCorrect,uint8 mediumCorrect,uint8 hardCorrect,bytes32 imageHash,uint256 nonce,uint256 deadline)"
+    );
 
     struct CredentialData {
         uint256 totalPoints;
@@ -20,9 +26,10 @@ contract SkillForgeCredential is ERC721, Ownable {
         uint256 mintedAt;
     }
 
-    uint256 private _nextTokenId;
+    uint256 private _nextTokenId = 1;
     mapping(uint256 => CredentialData) public credentials;
     mapping(address => uint256) public credentialOf;
+    mapping(address => uint256) public authorizationNonces;
 
     event CredentialMinted(
         address indexed learner,
@@ -31,7 +38,7 @@ contract SkillForgeCredential is ERC721, Ownable {
         uint256 puzzleMask
     );
 
-    constructor() ERC721("SkillForge Avalanche Credential", "SFAVAX") Ownable(msg.sender) {}
+    constructor() ERC721("SkillForge Avalanche Credential", "SFAVAX") Ownable(msg.sender) EIP712("SkillForgeCredential", "1") {}
 
     /// @notice Mint or upgrade a verifiable on-chain credential
     function mintCredential(
@@ -42,18 +49,65 @@ contract SkillForgeCredential is ERC721, Ownable {
         uint8 hardCorrect,
         string calldata imageData
     ) external {
+        _mintCredential(msg.sender, totalPoints, puzzleMask, easyCorrect, mediumCorrect, hardCorrect, imageData);
+    }
+
+    /// @notice Mint a credential authorized by the contract owner.
+    /// @dev Use this path once a trusted score issuer signs EIP-712 claims for learners.
+    function mintCredentialWithAuthorization(
+        uint256 totalPoints,
+        uint256 puzzleMask,
+        uint8 easyCorrect,
+        uint8 mediumCorrect,
+        uint8 hardCorrect,
+        string calldata imageData,
+        uint256 deadline,
+        bytes calldata signature
+    ) external {
+        require(block.timestamp <= deadline, "Authorization expired");
+
+        uint256 nonce = authorizationNonces[msg.sender]++;
+        bytes32 structHash = keccak256(
+            abi.encode(
+                CREDENTIAL_TYPEHASH,
+                msg.sender,
+                totalPoints,
+                puzzleMask,
+                easyCorrect,
+                mediumCorrect,
+                hardCorrect,
+                keccak256(bytes(imageData)),
+                nonce,
+                deadline
+            )
+        );
+        address signer = ECDSA.recover(_hashTypedDataV4(structHash), signature);
+        require(signer == owner(), "Invalid authorization");
+
+        _mintCredential(msg.sender, totalPoints, puzzleMask, easyCorrect, mediumCorrect, hardCorrect, imageData);
+    }
+
+    function _mintCredential(
+        address learner,
+        uint256 totalPoints,
+        uint256 puzzleMask,
+        uint8 easyCorrect,
+        uint8 mediumCorrect,
+        uint8 hardCorrect,
+        string calldata imageData
+    ) internal {
         require(totalPoints > 0, "No points earned");
         require(puzzleMask > 0 && puzzleMask <= 0xFFFF, "Invalid puzzle mask");
         require(easyCorrect <= 5 && mediumCorrect <= 5 && hardCorrect <= 5, "Invalid scores");
 
-        uint256 existingId = credentialOf[msg.sender];
+        uint256 existingId = credentialOf[learner];
         if (existingId != 0) {
             _burn(existingId);
             delete credentials[existingId];
         }
 
         uint256 tokenId = _nextTokenId++;
-        _safeMint(msg.sender, tokenId);
+        _safeMint(learner, tokenId);
 
         credentials[tokenId] = CredentialData({
             totalPoints: totalPoints,
@@ -65,8 +119,8 @@ contract SkillForgeCredential is ERC721, Ownable {
             mintedAt: block.timestamp
         });
 
-        credentialOf[msg.sender] = tokenId;
-        emit CredentialMinted(msg.sender, tokenId, totalPoints, puzzleMask);
+        credentialOf[learner] = tokenId;
+        emit CredentialMinted(learner, tokenId, totalPoints, puzzleMask);
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
