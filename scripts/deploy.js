@@ -10,6 +10,8 @@ function requirePrivateKey() {
         "PRIVATE_KEY is missing or empty.",
         "Add a funded Avalanche Fuji deployer key to .env (never commit it):",
         "  PRIVATE_KEY=0xyour64hexchars",
+        "If you use .env.local, either set PRIVATE_KEY there or remove the empty line",
+        "(an empty PRIVATE_KEY= in .env.local overrides .env).",
         "Then retry: npm run deploy:fuji",
         "Get test AVAX from a Fuji faucet if the account has no balance.",
       ].join("\n")
