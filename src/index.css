@@ -845,9 +845,14 @@ body {
   width: 100%;
 }
 
-.section-card:hover {
+.section-card:hover:not(:disabled) {
   transform: translateY(-2px);
   border-color: rgba(102, 126, 234, 0.4);
+}
+
+.section-card:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .section-easy { border-left: 4px solid #00c853; }
@@ -945,6 +950,17 @@ body {
   font-weight: 800;
   color: #f0f0ff;
   margin: 8px 0;
+}
+
+.quiz-error {
+  color: #ff8a80;
+  background: rgba(255, 23, 68, 0.12);
+  border: 1px solid rgba(255, 23, 68, 0.25);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .quiz-rules {
