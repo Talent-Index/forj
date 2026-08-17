@@ -2,6 +2,15 @@
 
 **Goal:** Evolve SkillForge from a Fuji-based Avalanche learning prototype into a reliable, issuer-attested, gamified skills-credentialing platform.
 
+> **Current progress:** Phase 1 is complete. Phases 2–3 are partially shipped (learning UX and on-chain credentials). See **[STATUS.md](./STATUS.md)** for the detailed implementation checklist.
+
+| Phase | Theme | Status |
+| --- | --- | --- |
+| **1** | Foundation & correctness | **Complete** |
+| **2** | Learning experience | **Partial** |
+| **3** | Credential system | **Partial** |
+| **4–10** | Gamification → ecosystem | Planned |
+
 ```mermaid
 flowchart LR
   P1[P1 Foundation] --> P2[P2 Learning]
@@ -17,50 +26,50 @@ flowchart LR
 
 ---
 
-## Phase 1 — Foundation & Correctness
+## Phase 1 — Foundation & Correctness ✅ *Complete*
 
-- Stabilize wallet connection and network switching
-- Validate MetaMask and Core Wallet flows
-- Harden quiz generation and randomization
-- Finalize Easy / Medium / Hard question banks
-- Verify retry-safe scoring across all quiz sections
-- Ensure localStorage state recovery is reliable
-- Validate puzzle-point redemption logic
-- Review contract ownership and access control
-- Fix and verify credential score handling
-- Add comprehensive smart-contract and frontend tests
-- Establish CI checks for linting, compilation, tests, and builds
-
----
-
-## Phase 2 — Learning Experience
-
-- Improve onboarding for new Avalanche learners
-- Introduce clearer learning objectives for each difficulty tier
-- Add explanations after quiz answers
-- Add Avalanche ecosystem learning references
-- Expand ICM and Avalanche L1 content
-- Improve quiz feedback and progress indicators
-- Add persistent learner progression
-- Introduce completion statistics
-- Improve puzzle redemption experience
-- Add certificate preview before minting
+- ✅ Stabilize wallet connection and network switching
+- ✅ Validate MetaMask and Core Wallet flows
+- ✅ Harden quiz generation and randomization
+- ✅ Finalize Easy / Medium / Hard question banks (8 questions per tier)
+- ✅ Verify retry-safe scoring across all quiz sections
+- ✅ Ensure localStorage state recovery is reliable
+- ✅ Validate puzzle-point redemption logic
+- ✅ Review contract ownership and access control
+- ✅ Fix and verify credential score handling
+- ✅ Add comprehensive smart-contract and frontend tests
+- ✅ Establish CI checks for linting, compilation, tests, and builds
 
 ---
 
-## Phase 3 — Credential System
+## Phase 2 — Learning Experience 🟡 *Partial*
 
-- Define the SkillForge credential data model
-- Finalize soulbound credential metadata
-- Use stable IPFS/HTTPS metadata and artwork
-- Separate claimed scores from issuer-attested scores
-- Implement `mintCredentialWithAuthorization` as the preferred verified path
-- Harden EIP-712 authorization and nonce handling
-- Prevent signature replay and unauthorized issuance
-- Define issuer-key management procedures
-- Add credential verification UI
-- Allow users to view their on-chain learning record
-- Establish credential versioning/revocation strategy
+- 🟡 Improve onboarding for new Avalanche learners *(landing page shipped; no guided tutorial)*
+- ✅ Introduce clearer learning objectives for each difficulty tier
+- 🟡 Add explanations after quiz answers *(hints + fun facts shipped; not full explanations)*
+- 🟡 Add Avalanche ecosystem learning references *(embedded in question copy)*
+- 🟡 Expand ICM and Avalanche L1 content *(present in banks; not structured paths)*
+- 🟡 Improve quiz feedback and progress indicators *(dashboard + achievements)*
+- ✅ Add persistent learner progression
+- 🟡 Introduce completion statistics
+- ✅ Improve puzzle redemption experience
+- 🟡 Add certificate preview before minting *(certificate view exists; polish remaining)*
+
+---
+
+## Phase 3 — Credential System 🟡 *Partial*
+
+- ✅ Define the SkillForge credential data model
+- ✅ Finalize soulbound credential metadata
+- 🟡 Use stable IPFS/HTTPS metadata and artwork *(operator sets `VITE_CREDENTIAL_IMAGE_URI`)*
+- ✅ Separate claimed scores from issuer-attested scores
+- ✅ Implement `mintCredentialWithAuthorization` as the preferred verified path *(contract; UI still self-claim)*
+- ✅ Harden EIP-712 authorization and nonce handling
+- ✅ Prevent signature replay and unauthorized issuance
+- 🟡 Define issuer-key management procedures
+- 🟡 Add credential verification UI *(on-chain read + attested label; no public verify page)*
+- ✅ Allow users to view their on-chain learning record
+- ⬜ Establish credential versioning/revocation strategy
 
 ---
 
@@ -121,18 +130,18 @@ flowchart LR
 
 ---
 
-## Phase 8 — Security & Smart-Contract Hardening
+## Phase 8 — Security & Smart-Contract Hardening 🟡 *Partial*
 
-- Perform comprehensive contract review
-- Add adversarial tests for mint authorization
-- Test replay, nonce, signature, and ownership scenarios
-- Review soulbound transfer restrictions
-- Review metadata immutability/security
-- Review issuer-key exposure risks
-- Remove unnecessary privileged operations
-- Add deployment verification
-- Establish contract upgrade policy, if upgrades are supported
-- Conduct an independent security audit before production credential issuance
+- 🟡 Perform comprehensive contract review *(internal review + expanded tests)*
+- ✅ Add adversarial tests for mint authorization
+- ✅ Test replay, nonce, signature, and ownership scenarios
+- ✅ Review soulbound transfer restrictions
+- ✅ Review metadata immutability/security *(OpenZeppelin Base64; invalid image rejected)*
+- 🟡 Review issuer-key exposure risks
+- ✅ Remove unnecessary privileged operations
+- 🟡 Add deployment verification
+- ⬜ Establish contract upgrade policy, if upgrades are supported
+- ⬜ Conduct an independent security audit before production credential issuance
 
 ---
 
@@ -270,6 +279,7 @@ flowchart LR
 
 ## Related docs
 
-- [README](../README.md) — quick start, env, deploy, mainnet gate
+- [STATUS.md](./STATUS.md) — what is shipped today (tests, contracts, UI)
+- [README](../README.md) — quick start, env, deploy, mainnet gate, CI
 - [`.env.example`](../.env.example) — required environment variables
 - Contract: [`contracts/SkillForgeCredential.sol`](../contracts/SkillForgeCredential.sol)

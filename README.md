@@ -16,7 +16,9 @@ A gamified skills-credentialing dApp where users learn Avalanche concepts throug
 
 > Honesty note: `mintCredential` is a **self-claimed** score record. `mintCredentialWithAuthorization` is **issuer-attested** via an owner EIP-712 signature. Both are soulbound; only the attested path is a privileged credential.
 
-Product + tech sequencing lives in **[docs/ROADMAP.md](docs/ROADMAP.md)** (foundation → credentials → mainnet → ecosystem).
+Product + tech sequencing lives in **[docs/ROADMAP.md](docs/ROADMAP.md)**. For what is already built, see **[docs/STATUS.md](docs/STATUS.md)**.
+
+**Current milestone:** Phase 1 (foundation) complete · Phases 2–3 partial · live on **Avalanche Fuji** testnet.
 
 ---
 
@@ -32,12 +34,22 @@ Open http://localhost:5173 and connect your wallet on Avalanche Fuji.
 
 ## Environment
 
+Copy the template and fill in deploy-time values:
+
+```bash
+cp .env.example .env
+# optional local overrides (non-empty values only override .env)
+cp .env.example .env.local
+```
+
 ```bash
 PRIVATE_KEY=                 # deployer only — never commit
 FUJI_RPC_URL=https://avalanche-fuji-c-chain.publicnode.com
-VITE_CREDENTIAL_CONTRACT=    # after deploy
+VITE_CREDENTIAL_CONTRACT=    # set by deploy:fuji or paste from deployments/fuji.json
 VITE_CREDENTIAL_IMAGE_URI=   # stable IPFS or HTTPS artwork URL
 ```
+
+If you use `.env.local`, leave `PRIVATE_KEY` out or set a real value — an empty `PRIVATE_KEY=` line used to wipe the key from `.env` (now prevented in Hardhat config).
 
 If a private key was ever committed historically, **rotate it immediately** and treat it as compromised.
 
@@ -48,13 +60,15 @@ npm run compile
 npm run deploy:fuji
 ```
 
-This writes `deployments/fuji.json` and sets `VITE_CREDENTIAL_CONTRACT` in your local `.env`. Also set:
+This writes `deployments/fuji.json` and sets `VITE_CREDENTIAL_CONTRACT` in your local `.env`. Deployment records are gitignored; commit `deployments/fuji.example.json` shape only.
+
+Also set:
 
 ```
 VITE_CREDENTIAL_IMAGE_URI=ipfs://...   # or https://...
 ```
 
-Restart the dev server to enable on-chain minting.
+Restart the dev server to enable on-chain minting. Verify the contract on [Snowtrace Fuji](https://testnet.snowtrace.io/).
 
 ## Mainnet Gate
 
@@ -135,20 +149,29 @@ npm run deploy:fuji    # Avalanche Fuji testnet
 
 ```
 skillforge/
-├── contracts/SkillForgeCredential.sol
-├── scripts/deploy.js
+├── contracts/
+│   └── SkillForgeCredential.sol   # soulbound ERC-721 + dual mint paths
+├── deployments/                   # local deploy records (*.json gitignored)
+├── docs/
+│   ├── ROADMAP.md                 # 10-phase product plan
+│   └── STATUS.md                  # implementation progress
+├── scripts/
+│   ├── deploy.js
+│   └── check-*.js                 # regression tests (quiz, retry, wallet, …)
 ├── test/
+│   └── SkillForgeCredential.js    # 11 Hardhat tests
 ├── .github/workflows/ci.yml
 └── src/
-    ├── components/
-    ├── data/questions.js
+    ├── components/                # Landing, Quiz, Puzzle, Certificate, …
+    ├── data/questions.js          # 8 questions × 3 tiers
     ├── hooks/useWallet.js
-    └── utils/
+    └── utils/                     # progress, puzzle, quiz, contract, wallet
 ```
 
-## Roadmap
+## Roadmap & status
 
-See [docs/ROADMAP.md](docs/ROADMAP.md) for the full SkillForge roadmap (learning, GameFi, and credential tracks through mainnet and ecosystem scale).
+- [docs/ROADMAP.md](docs/ROADMAP.md) — learning, GameFi, and credential tracks through mainnet and ecosystem scale
+- [docs/STATUS.md](docs/STATUS.md) — shipped features, phase checklist, test commands
 
 ## Tech Stack
 
