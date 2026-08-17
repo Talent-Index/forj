@@ -2,7 +2,7 @@ import { PIECE_COST, PUZZLE_SIZE, PUZZLE_LABELS, TOTAL_PIECES } from "../data/qu
 import { playCorrectSound } from "../utils/sounds";
 
 function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece, onContinue, onBack, userImage }) {
-  const available = totalPoints - spentPoints;
+  const available = Math.max(0, totalPoints - spentPoints);
 
   function handleAcquire(index) {
     if (acquiredPieces.includes(index)) return;

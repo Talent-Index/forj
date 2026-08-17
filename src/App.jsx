@@ -65,10 +65,10 @@ function App() {
 
     setView(saved.view || VIEWS.SECTIONS);
     setActiveSection(saved.activeSection || null);
+    setSectionScores(saved.sectionScores || {});
     setTotalPoints(saved.totalPoints || 0);
     setSpentPoints(saved.spentPoints || 0);
     setAcquiredPieces(saved.acquiredPieces || []);
-    setSectionScores(saved.sectionScores || {});
     setCompletedSections(saved.completedSections || []);
     setAttempts(saved.attempts || []);
   }, [wallet.address]);

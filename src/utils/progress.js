@@ -1,17 +1,59 @@
+import { getSectionById } from "../data/questions.js";
+import { QUESTIONS_PER_QUIZ } from "./quiz.js";
+
+export const SCORE_SECTIONS = ["easy", "medium", "hard"];
+
+function toNonNegativeInt(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 0) return 0;
+  return Math.floor(n);
+}
+
+export function emptySectionScores() {
+  return {};
+}
+
+export function normalizeSectionResult(result) {
+  const sectionId = result?.sectionId;
+  if (!SCORE_SECTIONS.includes(sectionId)) return null;
+
+  const section = getSectionById(sectionId);
+  if (!section) return null;
+
+  const total = QUESTIONS_PER_QUIZ;
+  const correct = Math.min(toNonNegativeInt(result.correct), total);
+  return {
+    sectionId,
+    correct,
+    total,
+    pointsEarned: correct * section.pointsPerQuestion,
+    wrong: Math.min(toNonNegativeInt(result.wrong), total),
+  };
+}
+
 export function recomputeTotalPoints(sectionScores) {
-  return Object.values(sectionScores).reduce(
-    (sum, score) => sum + (score?.pointsEarned ?? 0),
-    0
-  );
+  return SCORE_SECTIONS.reduce((sum, sectionId) => {
+    const score = sectionScores?.[sectionId];
+    return sum + toNonNegativeInt(score?.pointsEarned);
+  }, 0);
 }
 
 export function applySectionResult(sectionScores, result) {
+  const current = sectionScores && typeof sectionScores === "object" ? sectionScores : {};
+  const normalized = normalizeSectionResult(result);
+  if (!normalized) {
+    return {
+      sectionScores: { ...current },
+      totalPoints: recomputeTotalPoints(current),
+    };
+  }
+
   const nextScores = {
-    ...sectionScores,
-    [result.sectionId]: {
-      correct: result.correct,
-      total: result.total,
-      pointsEarned: result.pointsEarned,
+    ...current,
+    [normalized.sectionId]: {
+      correct: normalized.correct,
+      total: normalized.total,
+      pointsEarned: normalized.pointsEarned,
     },
   };
 
@@ -19,6 +61,13 @@ export function applySectionResult(sectionScores, result) {
     sectionScores: nextScores,
     totalPoints: recomputeTotalPoints(nextScores),
   };
+}
+
+export function applyAttemptHistory(attempts) {
+  return (attempts || []).reduce(
+    (state, result) => applySectionResult(state.sectionScores, result),
+    { sectionScores: emptySectionScores(), totalPoints: 0 }
+  );
 }
 
 export function progressStorageKey(address) {
@@ -30,7 +79,15 @@ export function loadProgress(address) {
   try {
     const raw = localStorage.getItem(progressStorageKey(address));
     if (!raw) return null;
-    return JSON.parse(raw);
+    const saved = JSON.parse(raw);
+    const sectionScores = saved.sectionScores && typeof saved.sectionScores === "object"
+      ? saved.sectionScores
+      : {};
+    return {
+      ...saved,
+      sectionScores,
+      totalPoints: recomputeTotalPoints(sectionScores),
+    };
   } catch {
     return null;
   }
