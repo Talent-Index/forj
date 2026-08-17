@@ -1,126 +1,226 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { createWalletClient, custom, createPublicClient } from "viem";
 import { avalancheFuji } from "viem/chains";
+import {
+  STORAGE_ADDRESS,
+  STORAGE_WALLET_ID,
+  WALLET_IDS,
+  WALLET_LABELS,
+  detectAvailableWallets,
+  findProvider,
+  formatWalletError,
+  identifyProvider,
+  isFujiChain,
+  isMobileUserAgent,
+  parseChainId,
+  requestChainId,
+  switchOrAddFuji,
+  walletDeepLink,
+  walletInstallUrl,
+} from "../utils/wallet";
 
-const STORAGE_KEY = "skillforge_wallet";
+function subscribe(provider, event, handler) {
+  if (!provider) return () => {};
+  if (typeof provider.on === "function") {
+    provider.on(event, handler);
+    return () => {
+      if (typeof provider.removeListener === "function") {
+        provider.removeListener(event, handler);
+      } else if (typeof provider.off === "function") {
+        provider.off(event, handler);
+      }
+    };
+  }
+  return () => {};
+}
+
+async function waitForInjectedProvider(timeoutMs = 1500) {
+  if (typeof window === "undefined") return;
+  if (window.ethereum || window.avalanche) return;
+
+  await new Promise((resolve) => {
+    const finish = () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("ethereum#initialized", finish);
+      resolve();
+    };
+    const timer = window.setTimeout(finish, timeoutMs);
+    window.addEventListener("ethereum#initialized", finish, { once: true });
+  });
+}
 
 export function useWallet() {
   const [address, setAddress] = useState(null);
   const [chainId, setChainId] = useState(null);
+  const [walletId, setWalletId] = useState(null);
+  const [provider, setProvider] = useState(null);
   const [connecting, setConnecting] = useState(false);
+  const [switching, setSwitching] = useState(false);
   const [error, setError] = useState(null);
   const [restoring, setRestoring] = useState(true);
+  const [available, setAvailable] = useState({ metamask: false, core: false, any: false });
+
+  const isMobile = useMemo(
+    () => (typeof navigator === "undefined" ? false : isMobileUserAgent(navigator.userAgent)),
+    []
+  );
+
+  const refreshAvailability = useCallback(() => {
+    if (typeof window === "undefined") return detectAvailableWallets({});
+    const next = detectAvailableWallets(window);
+    setAvailable(next);
+    return next;
+  }, []);
+
+  const rememberProvider = useCallback((nextProvider, id) => {
+    setProvider(nextProvider || null);
+    setWalletId(id || (nextProvider ? identifyProvider(nextProvider) : null));
+  }, []);
 
   const publicClient = useMemo(() => {
-    if (!window.ethereum) return null;
+    if (!provider) return null;
     return createPublicClient({
       chain: avalancheFuji,
-      transport: custom(window.ethereum),
+      transport: custom(provider),
     });
-  }, []);
+  }, [provider]);
 
   const getWalletClient = useCallback(async () => {
-    if (!window.ethereum) throw new Error("No wallet found. Install MetaMask or Core Wallet.");
+    const nextProvider = provider || findProvider(walletId, window);
+    if (!nextProvider) throw new Error("No wallet found. Install MetaMask or Core Wallet.");
     return createWalletClient({
       chain: avalancheFuji,
-      transport: custom(window.ethereum),
+      transport: custom(nextProvider),
     });
+  }, [provider, walletId]);
+
+  const persistSession = useCallback((nextAddress, nextWalletId) => {
+    if (nextAddress) localStorage.setItem(STORAGE_ADDRESS, nextAddress);
+    else localStorage.removeItem(STORAGE_ADDRESS);
+    if (nextWalletId) localStorage.setItem(STORAGE_WALLET_ID, nextWalletId);
+    else localStorage.removeItem(STORAGE_WALLET_ID);
   }, []);
+
+  const disconnect = useCallback(() => {
+    setProvider(null);
+    setAddress(null);
+    setChainId(null);
+    setWalletId(null);
+    setError(null);
+    persistSession(null, null);
+  }, [persistSession]);
 
   const switchToFuji = useCallback(async () => {
-    if (!window.ethereum) return;
-    try {
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xa869" }],
-      });
-    } catch (switchError) {
-      if (switchError.code === 4902) {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: "0xa869",
-              chainName: "Avalanche Fuji Testnet",
-              nativeCurrency: { name: "AVAX", symbol: "AVAX", decimals: 18 },
-              rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
-              blockExplorerUrls: ["https://testnet.snowtrace.io"],
-            },
-          ],
-        });
-      } else {
-        throw switchError;
-      }
+    const nextProvider = provider || findProvider(walletId, window);
+    if (!nextProvider) {
+      throw new Error("No wallet found. Install MetaMask or Core Wallet.");
     }
-  }, []);
+    setSwitching(true);
+    setError(null);
+    try {
+      await switchOrAddFuji(nextProvider);
+      const nextChainId = await requestChainId(nextProvider);
+      setChainId(nextChainId);
+      if (!isFujiChain(nextChainId)) {
+        throw new Error("Still not on Avalanche Fuji. Switch the network in your wallet, then try again.");
+      }
+      return nextChainId;
+    } catch (err) {
+      const message = formatWalletError(err, "switch");
+      setError(message);
+      throw Object.assign(err instanceof Error ? err : new Error(message), { displayMessage: message });
+    } finally {
+      setSwitching(false);
+    }
+  }, [provider, walletId]);
 
-  const connect = useCallback(async () => {
+  const connect = useCallback(async (preferredWalletId = null) => {
     setConnecting(true);
     setError(null);
     try {
-      if (!window.ethereum) {
-        throw new Error("No wallet detected. Install MetaMask or Avalanche Core Wallet.");
+      await waitForInjectedProvider();
+      const detected = refreshAvailability();
+      const nextProvider = findProvider(preferredWalletId, window);
+
+      if (!nextProvider) {
+        const target = preferredWalletId || WALLET_IDS.metamask;
+        if (isMobile) {
+          window.location.href = walletDeepLink(target, window.location.href);
+          throw new Error(`Opening ${WALLET_LABELS[target]}. Return here after connecting.`);
+        }
+        throw new Error(
+          detected.any
+            ? "That wallet is not available in this browser. Choose MetaMask or Core Wallet."
+            : "No wallet detected. Install MetaMask or Core Wallet, then refresh this page."
+        );
       }
 
-      const client = await getWalletClient();
-      const [acc] = await client.requestAddresses();
-      setAddress(acc);
-      localStorage.setItem(STORAGE_KEY, acc);
+      const selectedId = identifyProvider(nextProvider) || preferredWalletId;
+      rememberProvider(nextProvider, selectedId);
 
-      await switchToFuji();
+      const accounts = await nextProvider.request({ method: "eth_requestAccounts" });
+      const nextAddress = accounts?.[0];
+      if (!nextAddress) {
+        throw new Error("No account returned. Unlock your wallet and try again.");
+      }
 
-      const id = publicClient ? await publicClient.getChainId() : null;
-      setChainId(id);
+      setAddress(nextAddress);
+      persistSession(nextAddress, selectedId);
+
+      try {
+        await switchOrAddFuji(nextProvider);
+      } catch (switchError) {
+        const nextChainId = await requestChainId(nextProvider);
+        setChainId(nextChainId);
+        setError(formatWalletError(switchError, "switch"));
+        return;
+      }
+
+      const nextChainId = await requestChainId(nextProvider);
+      setChainId(nextChainId);
     } catch (err) {
-      if (err.code === 4100) {
-        setError("Account not authorized. Please approve the connection request in your wallet.");
-      } else if (err.code === 4001) {
-        setError("Connection request was rejected. Please approve the request to connect.");
-      } else if (err.code === -32002) {
-        setError("A connection request is already pending. Please check your wallet.");
-      } else {
-        setError(err.shortMessage || err.message || "Failed to connect wallet");
-      }
+      setError(formatWalletError(err, "connect"));
     } finally {
       setConnecting(false);
     }
-  }, [getWalletClient, publicClient, switchToFuji]);
-
-  const disconnect = useCallback(() => {
-    setAddress(null);
-    setChainId(null);
-    localStorage.removeItem(STORAGE_KEY);
-  }, []);
+  }, [isMobile, persistSession, refreshAvailability, rememberProvider]);
 
   useEffect(() => {
     let cancelled = false;
 
     async function restoreSession() {
-      if (!window.ethereum) {
-        if (!cancelled) setRestoring(false);
-        return;
-      }
-
       try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return;
+        await waitForInjectedProvider();
+        if (cancelled) return;
+        refreshAvailability();
 
-        const accounts = await window.ethereum.request({ method: "eth_accounts" });
-        const match = accounts.find((acc) => acc.toLowerCase() === saved.toLowerCase());
-        if (!match) {
-          localStorage.removeItem(STORAGE_KEY);
+        const savedAddress = localStorage.getItem(STORAGE_ADDRESS);
+        const savedWalletId = localStorage.getItem(STORAGE_WALLET_ID);
+        if (!savedAddress) return;
+
+        const nextProvider = findProvider(savedWalletId, window) || findProvider(null, window);
+        if (!nextProvider) {
+          persistSession(null, null);
           return;
         }
 
-        if (!cancelled) {
-          setAddress(match);
-          if (publicClient) {
-            const id = await publicClient.getChainId();
-            if (!cancelled) setChainId(id);
-          }
+        const accounts = await nextProvider.request({ method: "eth_accounts" });
+        const match = accounts.find((account) => account.toLowerCase() === savedAddress.toLowerCase())
+          || accounts[0];
+        if (!match) {
+          persistSession(null, null);
+          return;
         }
+
+        if (cancelled) return;
+        const selectedId = identifyProvider(nextProvider) || savedWalletId;
+        rememberProvider(nextProvider, selectedId);
+        setAddress(match);
+        persistSession(match, selectedId);
+        const nextChainId = await requestChainId(nextProvider);
+        if (!cancelled) setChainId(nextChainId);
       } catch {
-        localStorage.removeItem(STORAGE_KEY);
+        persistSession(null, null);
       } finally {
         if (!cancelled) setRestoring(false);
       }
@@ -130,42 +230,94 @@ export function useWallet() {
     return () => {
       cancelled = true;
     };
-  }, [publicClient]);
+  }, [persistSession, refreshAvailability, rememberProvider]);
 
   useEffect(() => {
-    if (!window.ethereum || !address) return;
+    if (!provider) return undefined;
 
     const handleAccounts = (accounts) => {
-      if (accounts.length === 0) {
+      if (!accounts || accounts.length === 0) {
         disconnect();
-      } else {
-        setAddress(accounts[0]);
-        localStorage.setItem(STORAGE_KEY, accounts[0]);
+        return;
       }
+      setAddress(accounts[0]);
+      persistSession(accounts[0], walletId || identifyProvider(provider));
+      setError(null);
     };
 
-    const handleChain = (id) => setChainId(Number(id));
+    const handleChain = (id) => {
+      setChainId(parseChainId(id));
+      setError(null);
+    };
 
-    window.ethereum.on("accountsChanged", handleAccounts);
-    window.ethereum.on("chainChanged", handleChain);
+    const handleDisconnect = () => {
+      disconnect();
+    };
+
+    const unsubAccounts = subscribe(provider, "accountsChanged", handleAccounts);
+    const unsubChain = subscribe(provider, "chainChanged", handleChain);
+    const unsubDisconnect = subscribe(provider, "disconnect", handleDisconnect);
 
     return () => {
-      window.ethereum.removeListener("accountsChanged", handleAccounts);
-      window.ethereum.removeListener("chainChanged", handleChain);
+      unsubAccounts();
+      unsubChain();
+      unsubDisconnect();
     };
-  }, [address, disconnect]);
+  }, [disconnect, persistSession, provider, walletId]);
+
+  useEffect(() => {
+    if (!address || !provider) return undefined;
+
+    async function syncFromWallet() {
+      if (!provider?.request) return;
+      try {
+        const accounts = await provider.request({ method: "eth_accounts" });
+        if (!accounts || accounts.length === 0) {
+          disconnect();
+          return;
+        }
+        if (accounts[0].toLowerCase() !== address.toLowerCase()) {
+          setAddress(accounts[0]);
+          persistSession(accounts[0], walletId || identifyProvider(provider));
+        }
+        const nextChainId = await requestChainId(provider);
+        setChainId(nextChainId);
+      } catch {
+        // Keep the restored session; the next user action will surface a wallet error.
+      }
+    }
+
+    const onVisible = () => {
+      if (document.visibilityState === "visible") syncFromWallet();
+    };
+
+    window.addEventListener("focus", syncFromWallet);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.removeEventListener("focus", syncFromWallet);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [address, disconnect, persistSession, provider, walletId]);
 
   return {
     address,
     chainId,
+    walletId,
+    walletName: walletId ? WALLET_LABELS[walletId] : null,
     connecting,
+    switching,
     restoring,
     error,
+    available,
+    isMobile,
     connect,
     disconnect,
     getWalletClient,
     publicClient,
     switchToFuji,
     isConnected: !!address,
+    isFuji: isFujiChain(chainId),
+    installUrl: (id) => walletInstallUrl(id),
+    deepLink: (id) => walletDeepLink(id, typeof window === "undefined" ? "" : window.location.href),
   };
 }

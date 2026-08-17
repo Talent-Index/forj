@@ -1,4 +1,5 @@
 import { encodeFunctionData } from "viem";
+import { FUJI_CHAIN_ID } from "./wallet";
 
 export const CREDENTIAL_ABI = [
   {
@@ -65,7 +66,7 @@ export const CREDENTIAL_ABI = [
 export const CONTRACT_ADDRESS = import.meta.env.VITE_CREDENTIAL_CONTRACT || "";
 export const FUJI_EXPLORER_TX = "https://testnet.snowtrace.io/tx/";
 export const FUJI_EXPLORER_TOKEN = "https://testnet.snowtrace.io/token/";
-export const FUJI_CHAIN_ID = 43113;
+export { FUJI_CHAIN_ID };
 
 export function buildMintData({
   totalPoints,

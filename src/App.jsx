@@ -8,6 +8,7 @@ import Certificate from "./components/Certificate";
 import Dashboard from "./components/Dashboard";
 import Achievements from "./components/Achievements";
 import Landing from "./components/Landing";
+import NetworkGate from "./components/NetworkGate";
 import { PIECE_COST } from "./data/questions";
 import puzzleImage from "../images.jpeg";
 import {
@@ -151,13 +152,29 @@ function App() {
         <WalletConnect
           address={wallet.address}
           connecting={wallet.connecting}
+          switching={wallet.switching}
           error={wallet.error}
+          chainId={wallet.chainId}
+          isFuji={wallet.isFuji}
+          walletName={wallet.walletName}
+          available={wallet.available}
+          isMobile={wallet.isMobile}
           onConnect={wallet.connect}
           onDisconnect={wallet.disconnect}
+          onSwitch={() => wallet.switchToFuji().catch(() => {})}
         />
       </header>
 
-      {view === VIEWS.SECTIONS && (
+      {!wallet.isFuji && (
+        <NetworkGate
+          chainId={wallet.chainId}
+          switching={wallet.switching}
+          error={wallet.error}
+          onSwitch={() => wallet.switchToFuji().catch(() => {})}
+        />
+      )}
+
+      {wallet.isFuji && view === VIEWS.SECTIONS && (
         <SectionSelect
           sectionScores={sectionScores}
           totalPoints={totalPoints}
@@ -170,7 +187,7 @@ function App() {
         />
       )}
 
-      {view === VIEWS.QUIZ && activeSection && (
+      {wallet.isFuji && view === VIEWS.QUIZ && activeSection && (
         <Quiz
           sectionId={activeSection}
           onComplete={handleQuizComplete}
@@ -181,7 +198,7 @@ function App() {
         />
       )}
 
-      {view === VIEWS.PUZZLE && (
+      {wallet.isFuji && view === VIEWS.PUZZLE && (
         <PuzzleBoard
           totalPoints={totalPoints}
           spentPoints={spentPoints}
@@ -193,7 +210,7 @@ function App() {
         />
       )}
 
-      {view === VIEWS.CERTIFICATE && (
+      {wallet.isFuji && view === VIEWS.CERTIFICATE && (
         <>
           <Certificate
             address={wallet.address}

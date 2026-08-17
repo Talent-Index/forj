@@ -35,9 +35,16 @@ function Landing({ wallet }) {
           <WalletConnect
             address={wallet.address}
             connecting={wallet.connecting}
+            switching={wallet.switching}
             error={wallet.error}
+            chainId={wallet.chainId}
+            isFuji={wallet.isFuji}
+            walletName={wallet.walletName}
+            available={wallet.available}
+            isMobile={wallet.isMobile}
             onConnect={wallet.connect}
             onDisconnect={wallet.disconnect}
+            onSwitch={() => wallet.switchToFuji().catch(() => {})}
           />
         </div>
       </section>

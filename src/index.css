@@ -718,13 +718,23 @@ body {
 
 .wallet-network {
   font-size: 0.75rem;
-  color: #8888aa;
   background: rgba(232, 65, 24, 0.15);
   padding: 4px 10px;
   border-radius: 20px;
   color: #ff8a65;
 }
 
+.wallet-network-ok {
+  background: rgba(0, 200, 83, 0.16);
+  color: #69f0ae;
+}
+
+.wallet-network-bad {
+  background: rgba(255, 23, 68, 0.18);
+  color: #ff8a80;
+}
+
+.btn-wallet-switch,
 .btn-wallet-disconnect {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -736,9 +746,53 @@ body {
   font-family: inherit;
 }
 
+.btn-wallet-switch {
+  border-color: rgba(255, 210, 0, 0.45);
+  color: #ffd200;
+}
+
+.btn-wallet-switch:hover:not(:disabled),
 .btn-wallet-disconnect:hover {
   border-color: rgba(255, 255, 255, 0.3);
   color: #fff;
+}
+
+.btn-wallet-switch:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.wallet-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-wallet-option {
+  width: 100%;
+  text-decoration: none;
+}
+
+.wallet-hint {
+  color: #a0a0c0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+
+.network-gate {
+  text-align: center;
+  max-width: 560px;
+}
+
+.network-gate h2 {
+  margin-bottom: 10px;
+}
+
+.network-gate p {
+  color: #a0a0c0;
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
 
 /* ===== SECTION SELECT ===== */
