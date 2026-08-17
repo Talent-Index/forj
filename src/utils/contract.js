@@ -50,6 +50,7 @@ export const CREDENTIAL_ABI = [
       { name: "hardCorrect", type: "uint8" },
       { name: "image", type: "string" },
       { name: "mintedAt", type: "uint256" },
+      { name: "attested", type: "bool" },
     ],
     stateMutability: "view",
     type: "function",

@@ -5,7 +5,15 @@ import hre from "hardhat";
 function requirePrivateKey() {
   const key = (process.env.PRIVATE_KEY || "").trim();
   if (!key) {
-    throw new Error("PRIVATE_KEY is required. Copy .env.example to .env and provide a funded deployer key.");
+    throw new Error(
+      [
+        "PRIVATE_KEY is missing or empty.",
+        "Add a funded Avalanche Fuji deployer key to .env (never commit it):",
+        "  PRIVATE_KEY=0xyour64hexchars",
+        "Then retry: npm run deploy:fuji",
+        "Get test AVAX from a Fuji faucet if the account has no balance.",
+      ].join("\n")
+    );
   }
 }
 

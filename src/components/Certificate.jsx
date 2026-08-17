@@ -106,6 +106,7 @@ function Certificate({
         hardCorrect: Number(data[4]),
         image: data[5],
         mintedAt: Number(data[6]),
+        attested: Boolean(data[7]),
         tokenURI,
         explorerUrl: `${FUJI_EXPLORER_TOKEN}${CONTRACT_ADDRESS}?a=${tokenId.toString()}`,
       });
@@ -252,6 +253,9 @@ function Certificate({
           {!loadingCredential && onChainCredential && (
             <>
               <p>Token #{onChainCredential.tokenId} · {onChainCredential.totalPoints} pts</p>
+              <p>
+                {onChainCredential.attested ? "Issuer-attested credential" : "Self-claimed score record"}
+              </p>
               <p>
                 Scores: Easy {onChainCredential.easyCorrect}/5 · Medium {onChainCredential.mediumCorrect}/5 · Hard {onChainCredential.hardCorrect}/5
               </p>
