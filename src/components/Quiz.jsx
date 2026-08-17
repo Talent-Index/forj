@@ -1,19 +1,18 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getSectionById } from "../data/questions";
+import { getQuestionBankStatus, QUESTIONS_PER_QUIZ, selectQuizQuestions } from "../utils/quiz";
 import { playCorrectSound, playWrongSound, playSectionCompleteSound } from "../utils/sounds";
 
 const OPTIONS_LETTERS = ["A", "B", "C", "D"];
 
 function Quiz({ sectionId, onComplete, onBack }) {
   const section = getSectionById(sectionId);
-  const questionsPool = section.questions;
-  const pointsPerQ = section.pointsPerQuestion;
-  const timePerQ = section.timePerQuestion;
+  const pointsPerQ = section?.pointsPerQuestion ?? 0;
+  const timePerQ = section?.timePerQuestion ?? 0;
+  const bank = getQuestionBankStatus(section, QUESTIONS_PER_QUIZ);
 
-  // pick a random subset of 5 questions each quiz attempt
-  const [quizQuestions, setQuizQuestions] = useState(() => []);
-  const NUM_PER_ATTEMPT = 5;
-
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  const [startError, setStartError] = useState(bank.error);
   const [phase, setPhase] = useState("intro");
   const [current, setCurrent] = useState(0);
   const [pointsEarned, setPointsEarned] = useState(0);
@@ -23,11 +22,12 @@ function Quiz({ sectionId, onComplete, onBack }) {
   const [answered, setAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(timePerQ);
   const [animState, setAnimState] = useState(null);
+  const [showHint, setShowHint] = useState(false);
   const timerRef = useRef(null);
 
-  const qCount = quizQuestions.length || NUM_PER_ATTEMPT;
-  const q = quizQuestions[current] || {};
-  const progress = ((current + (answered ? 1 : 0)) / qCount) * 100;
+  const qCount = quizQuestions.length;
+  const q = quizQuestions[current];
+  const progress = qCount === 0 ? 0 : ((current + (answered ? 1 : 0)) / qCount) * 100;
 
   const handleTimeUp = useCallback(() => {
     if (answered) return;
@@ -58,14 +58,16 @@ function Quiz({ sectionId, onComplete, onBack }) {
   }, [phase, current, answered, timePerQ, handleTimeUp]);
 
   function startQuiz() {
-    // sample random questions from pool
-    const pool = questionsPool.slice();
-    const chosen = [];
-    while (chosen.length < NUM_PER_ATTEMPT && pool.length > 0) {
-      const i = Math.floor(Math.random() * pool.length);
-      chosen.push(pool.splice(i, 1)[0]);
+    const result = selectQuizQuestions(section, { count: QUESTIONS_PER_QUIZ });
+    if (!result.ok) {
+      setStartError(result.error);
+      setQuizQuestions([]);
+      setPhase("intro");
+      return;
     }
-    setQuizQuestions(chosen);
+
+    setStartError(null);
+    setQuizQuestions(result.questions);
     setCurrent(0);
     setSelected(null);
     setAnswered(false);
@@ -73,13 +75,12 @@ function Quiz({ sectionId, onComplete, onBack }) {
     setCorrectCount(0);
     setWrongCount(0);
     setShowHint(false);
+    setTimeLeft(timePerQ);
     setPhase("quiz");
   }
 
-  const [showHint, setShowHint] = useState(false);
-
   function handleAnswer(option) {
-    if (answered) return;
+    if (answered || !q) return;
     clearInterval(timerRef.current);
 
     setSelected(option);
@@ -126,6 +127,16 @@ function Quiz({ sectionId, onComplete, onBack }) {
     return classes.join(" ");
   }
 
+  if (!section) {
+    return (
+      <div className="card quiz-intro">
+        <button className="btn-back" onClick={onBack}>← Back</button>
+        <h2>Unknown quiz</h2>
+        <p className="quiz-error">That difficulty is not available. Choose Easy, Medium, or Hard.</p>
+      </div>
+    );
+  }
+
   if (phase === "intro") {
     return (
       <div className="card quiz-intro">
@@ -137,14 +148,33 @@ function Quiz({ sectionId, onComplete, onBack }) {
         <h2>{section.name} Quiz</h2>
         <p>{section.description}</p>
         <ul className="quiz-rules">
-          <li>📝 {NUM_PER_ATTEMPT} questions (random)</li>
+          <li>📝 {QUESTIONS_PER_QUIZ} unique questions (random from this difficulty)</li>
           <li>⏱️ {timePerQ} seconds per question</li>
           <li>💰 {pointsPerQ} points per correct answer</li>
           <li>🔄 Retry anytime to improve your score</li>
         </ul>
-        <button className="btn-primary btn-start" onClick={startQuiz}>
+        {(startError || !bank.ok) && (
+          <p className="quiz-error">{startError || bank.error}</p>
+        )}
+        <button
+          className="btn-primary btn-start"
+          onClick={startQuiz}
+          disabled={!bank.ok}
+        >
           ▶️ Start Quiz
         </button>
+      </div>
+    );
+  }
+
+  if (!q || qCount !== QUESTIONS_PER_QUIZ) {
+    return (
+      <div className="card quiz-intro">
+        <button className="btn-back" onClick={onBack}>← Back</button>
+        <h2>{section.name} Quiz</h2>
+        <p className="quiz-error">
+          This attempt could not load exactly {QUESTIONS_PER_QUIZ} questions. Go back and start again.
+        </p>
       </div>
     );
   }
@@ -209,7 +239,7 @@ function Quiz({ sectionId, onComplete, onBack }) {
       <div className="options-grid">
         {q.options.map((option, idx) => (
           <button
-            key={option}
+            key={`${q.id}-${idx}`}
             className={getButtonClass(option)}
             onClick={() => handleAnswer(option)}
             disabled={answered}

@@ -1,3 +1,5 @@
+import { QUESTIONS_PER_QUIZ } from "../utils/quiz.js";
+
 export const sections = [
   {
     id: "easy",
@@ -271,10 +273,6 @@ export const sections = [
 export const PUZZLE_SIZE = 4;
 export const PIECE_COST = 5;
 export const TOTAL_PIECES = PUZZLE_SIZE * PUZZLE_SIZE;
-export const MAX_POINTS = sections.reduce(
-  (sum, s) => sum + s.pointsPerQuestion * Math.min(5, s.questions.length),
-  0
-);
 
 export const PUZZLE_LABELS = [
   "⛓️", "🔺", "❄️", "⚡",
@@ -286,3 +284,8 @@ export const PUZZLE_LABELS = [
 export function getSectionById(id) {
   return sections.find((s) => s.id === id);
 }
+
+export const MAX_POINTS = sections.reduce(
+  (sum, s) => sum + s.pointsPerQuestion * QUESTIONS_PER_QUIZ,
+  0
+);

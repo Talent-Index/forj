@@ -14,6 +14,7 @@ import {
   FUJI_EXPLORER_TX,
   FUJI_EXPLORER_TOKEN,
 } from "../utils/contract";
+import { QUESTIONS_PER_QUIZ } from "../utils/quiz";
 import { resolveCredentialImageUri } from "../utils/ipfs";
 import { playFinishSound } from "../utils/sounds";
 
@@ -53,7 +54,7 @@ function Certificate({
   const mediumCorrect = sectionScores.medium?.correct ?? 0;
   const hardCorrect = sectionScores.hard?.correct ?? 0;
   const totalCorrect = easyCorrect + mediumCorrect + hardCorrect;
-  const totalQuestions = sections.reduce((sum, s) => sum + Math.min(5, s.questions.length), 0);
+  const totalQuestions = sections.reduce((sum) => sum + QUESTIONS_PER_QUIZ, 0);
 
   const [certId] = useState(() =>
     address
