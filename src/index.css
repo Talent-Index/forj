@@ -1155,6 +1155,34 @@ body {
 .piece-icon { font-size: 1.8rem; }
 .piece-cost { font-size: 0.65rem; color: #8888aa; font-weight: 700; }
 
+.piece-state {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8888aa;
+}
+
+.puzzle-piece.acquired .piece-state {
+  color: #69f0ae;
+}
+
+.puzzle-error {
+  color: #ff8a80;
+  background: rgba(255, 23, 68, 0.12);
+  border: 1px solid rgba(255, 23, 68, 0.25);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+}
+
+.puzzle-hint {
+  color: #ffd200;
+  font-size: 0.85rem;
+  margin: 0 0 12px;
+}
+
 /* ===== CERTIFICATE PUZZLE ===== */
 .cert-wallet {
   color: #69f0ae;

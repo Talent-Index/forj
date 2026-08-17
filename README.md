@@ -46,10 +46,9 @@ npm run compile
 npm run deploy:fuji
 ```
 
-Set the deployed address in `.env`:
+This writes `deployments/fuji.json` and sets `VITE_CREDENTIAL_CONTRACT` in your local `.env`. Also set:
 
 ```
-VITE_CREDENTIAL_CONTRACT=0xYourContractAddress
 VITE_CREDENTIAL_IMAGE_URI=ipfs://...   # or https://...
 ```
 
@@ -66,7 +65,7 @@ Mainnet is intentionally gated:
 
 ```bash
 # Only after the checklist above
-npx hardhat run scripts/deploy.js --network avalanche
+CONFIRM_MAINNET=yes npm run deploy:mainnet
 ```
 
 ## Scripts

@@ -1,12 +1,20 @@
 import { PIECE_COST, PUZZLE_SIZE, PUZZLE_LABELS, TOTAL_PIECES } from "../data/questions";
+import { availablePoints, redeemPiece } from "../utils/puzzle";
 import { playCorrectSound } from "../utils/sounds";
+import { useState } from "react";
 
 function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece, onContinue, onBack, userImage }) {
-  const available = Math.max(0, totalPoints - spentPoints);
+  const [message, setMessage] = useState(null);
+  const available = availablePoints(totalPoints, acquiredPieces);
+  const spent = spentPoints ?? acquiredPieces.length * PIECE_COST;
 
   function handleAcquire(index) {
-    if (acquiredPieces.includes(index)) return;
-    if (available < PIECE_COST) return;
+    const result = redeemPiece({ totalPoints, acquiredPieces }, index);
+    if (!result.ok) {
+      setMessage(result.error);
+      return;
+    }
+    setMessage(null);
     playCorrectSound();
     onAcquirePiece(index);
   }
@@ -14,17 +22,23 @@ function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece,
   return (
     <div className="card puzzle-board">
       <button className="btn-back" onClick={onBack}>← Back</button>
-      <h2 className="puzzle-title">🧩 Avalanche Puzzle</h2>
+      <h2 className="puzzle-title">Avalanche Puzzle</h2>
       <p className="puzzle-desc">
-        Redeem your quiz points for puzzle pieces. Each piece costs {PIECE_COST} points.
-        Your completed puzzle appears on your certificate!
+        Redeem quiz points for puzzle pieces. Each piece costs {PIECE_COST} points and can be unlocked only once.
       </p>
 
       <div className="puzzle-stats">
-        <span>💰 Available: <strong>{available}</strong></span>
-        <span>🧩 Acquired: <strong>{acquiredPieces.length}/{TOTAL_PIECES}</strong></span>
-        <span>📉 Spent: <strong>{spentPoints}</strong></span>
+        <span>Remaining: <strong>{available}</strong></span>
+        <span>Unlocked: <strong>{acquiredPieces.length}/{TOTAL_PIECES}</strong></span>
+        <span>Spent: <strong>{spent}</strong></span>
       </div>
+
+      {message && <p className="puzzle-error">{message}</p>}
+      {available < PIECE_COST && acquiredPieces.length < TOTAL_PIECES && (
+        <p className="puzzle-hint">
+          Need {PIECE_COST} points to unlock another piece. Earn more from a quiz, then return here.
+        </p>
+      )}
 
       <div className="puzzle-grid" style={{ gridTemplateColumns: `repeat(${PUZZLE_SIZE}, 1fr)` }}>
         {Array.from({ length: TOTAL_PIECES }, (_, i) => {
@@ -36,7 +50,14 @@ function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece,
               className={`puzzle-piece ${acquired ? "acquired" : "locked"} ${!acquired && canAfford ? "affordable" : ""}`}
               onClick={() => handleAcquire(i)}
               disabled={acquired || !canAfford}
-              title={acquired ? "Acquired!" : `Cost: ${PIECE_COST} pts`}
+              title={
+                acquired
+                  ? "Unlocked"
+                  : canAfford
+                    ? `Unlock for ${PIECE_COST} pts`
+                    : `Locked · need ${PIECE_COST} pts`
+              }
+              aria-label={acquired ? `Piece ${i + 1} unlocked` : `Piece ${i + 1} locked`}
             >
               {acquired && userImage ? (
                 <div
@@ -50,7 +71,7 @@ function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece,
               ) : (
                 <span className="piece-icon">{acquired ? PUZZLE_LABELS[i] : "?"}</span>
               )}
-              {!acquired && <span className="piece-cost">{PIECE_COST}pts</span>}
+              <span className="piece-state">{acquired ? "Unlocked" : `${PIECE_COST} pts`}</span>
             </button>
           );
         })}
@@ -61,7 +82,7 @@ function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece,
         onClick={onContinue}
         disabled={acquiredPieces.length === 0}
       >
-        🏆 View Certificate
+        View Certificate
       </button>
     </div>
   );

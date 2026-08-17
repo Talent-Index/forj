@@ -1,5 +1,6 @@
-import { getSectionById, PIECE_COST, TOTAL_PIECES } from "../data/questions.js";
+import { getSectionById } from "../data/questions.js";
 import { QUESTIONS_PER_QUIZ } from "./quiz.js";
+import { spentPointsFor, normalizePieces } from "./puzzle.js";
 
 export const STORAGE_VERSION = 1;
 export const SCORE_SECTIONS = ["easy", "medium", "hard"];
@@ -114,19 +115,6 @@ function sanitizeCompletedSections(value, sectionScores) {
   return completed;
 }
 
-function sanitizePieces(value) {
-  const seen = new Set();
-  const pieces = [];
-  if (!Array.isArray(value)) return pieces;
-  for (const item of value) {
-    const index = toNonNegativeInt(item);
-    if (index >= TOTAL_PIECES || seen.has(index)) continue;
-    seen.add(index);
-    pieces.push(index);
-  }
-  return pieces;
-}
-
 function sanitizeAttempts(value) {
   if (!Array.isArray(value)) return [];
   const attempts = [];
@@ -154,7 +142,7 @@ export function sanitizeProgress(raw) {
       return emptyProgress();
     }
     const sectionScores = sanitizeSectionScores(raw.sectionScores);
-    const acquiredPieces = sanitizePieces(raw.acquiredPieces);
+    const acquiredPieces = normalizePieces(raw.acquiredPieces);
     const { view, activeSection } = sanitizeView(raw.view, raw.activeSection);
     return {
       version: STORAGE_VERSION,
@@ -164,7 +152,7 @@ export function sanitizeProgress(raw) {
       completedSections: sanitizeCompletedSections(raw.completedSections, sectionScores),
       attempts: sanitizeAttempts(raw.attempts),
       acquiredPieces,
-      spentPoints: acquiredPieces.length * PIECE_COST,
+      spentPoints: spentPointsFor(acquiredPieces),
       totalPoints: recomputeTotalPoints(sectionScores),
     };
   } catch {

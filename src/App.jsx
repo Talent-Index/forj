@@ -9,7 +9,6 @@ import Dashboard from "./components/Dashboard";
 import Achievements from "./components/Achievements";
 import Landing from "./components/Landing";
 import NetworkGate from "./components/NetworkGate";
-import { PIECE_COST } from "./data/questions";
 import puzzleImage from "../images.jpeg";
 import {
   PROGRESS_VIEWS,
@@ -20,6 +19,7 @@ import {
   normalizeAddress,
   saveProgress,
 } from "./utils/progress";
+import { redeemPiece } from "./utils/puzzle";
 
 const VIEWS = PROGRESS_VIEWS;
 
@@ -101,12 +101,12 @@ function App() {
 
   const handleAcquirePiece = useCallback((index) => {
     setAcquiredPieces((prev) => {
-      if (prev.includes(index)) return prev;
-      const next = [...prev, index];
-      setSpentPoints(next.length * PIECE_COST);
-      return next;
+      const result = redeemPiece({ totalPoints, acquiredPieces: prev }, index);
+      if (!result.ok) return prev;
+      setSpentPoints(result.spentPoints);
+      return result.acquiredPieces;
     });
-  }, []);
+  }, [totalPoints]);
 
   const handleFullReset = useCallback(() => {
     if (currentAddress) clearProgress(currentAddress);
