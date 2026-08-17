@@ -22,4 +22,5 @@ jobs:
       - run: npm run test:wallet
       - run: npm run test:quiz
       - run: npm run test:progress
+      - run: npm run test:puzzle
       - run: npm run build

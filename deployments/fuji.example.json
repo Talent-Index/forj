@@ -1,0 +1,9 @@
+{
+  "contract": "SkillForgeCredential",
+  "network": "fuji",
+  "chainId": 43113,
+  "address": "0x0000000000000000000000000000000000000000",
+  "deployer": "0x0000000000000000000000000000000000000000",
+  "txHash": null,
+  "deployedAt": "replace-after-npm-run-deploy:fuji"
+}

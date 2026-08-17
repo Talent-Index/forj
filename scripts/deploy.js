@@ -1,41 +1,88 @@
+import fs from "fs";
+import path from "path";
 import hre from "hardhat";
 
+function requirePrivateKey() {
+  const key = (process.env.PRIVATE_KEY || "").trim();
+  if (!key) {
+    throw new Error("PRIVATE_KEY is required. Copy .env.example to .env and provide a funded deployer key.");
+  }
+}
+
+function deploymentsPath(networkName) {
+  return path.join(process.cwd(), "deployments", `${networkName}.json`);
+}
+
+function upsertEnvValue(filePath, key, value) {
+  if (!fs.existsSync(filePath)) return false;
+  const source = fs.readFileSync(filePath, "utf8");
+  const pattern = new RegExp(`^${key}=.*$`, "m");
+  const next = pattern.test(source)
+    ? source.replace(pattern, `${key}=${value}`)
+    : `${source.trimEnd()}\n${key}=${value}\n`;
+  fs.writeFileSync(filePath, next);
+  return true;
+}
+
 async function main() {
-  if (!process.env.PRIVATE_KEY) {
-    throw new Error("PRIVATE_KEY is required. Copy .env.example to .env and provide a funded Fuji deployer key.");
+  const networkName = hre.network.name;
+  if (networkName !== "hardhat") {
+    requirePrivateKey();
+  }
+  if (networkName === "avalanche" && process.env.CONFIRM_MAINNET !== "yes") {
+    throw new Error("Mainnet deploy is gated. Set CONFIRM_MAINNET=yes after the security checklist.");
   }
 
   const [signer] = await hre.ethers.getSigners();
+  const deployer = await signer.getAddress();
+  const { chainId } = await hre.ethers.provider.getNetwork();
 
-  // Many Fuji public RPCs do NOT support the "pending" block tag, which
-  // makes Hardhat's default nonce/estimateGas flow fail with
-  // "state not available for pending block". Fetch nonce with "latest".
   const nonce = await hre.network.provider.send("eth_getTransactionCount", [
-    await signer.getAddress(),
+    deployer,
     "latest",
   ]);
 
   const Credential = await hre.ethers.getContractFactory("SkillForgeCredential");
-
-  // Estimate gas against "latest" (bypass pending-block queries) then add a
-  // generous buffer. We pass an explicit nonce + gasLimit to keep the signer
-  // from querying the pending block.
   const deployTx = await Credential.getDeployTransaction();
   const estimatedGas = await hre.network.provider.send("eth_estimateGas", [
-    { from: await signer.getAddress(), data: deployTx.data },
+    { from: deployer, data: deployTx.data },
     "latest",
   ]);
 
   const credential = await Credential.deploy({
     nonce,
-    gasLimit: BigInt(estimatedGas) * 12n / 10n, // +20% buffer
+    gasLimit: (BigInt(estimatedGas) * 12n) / 10n,
   });
+  const pending = credential.deploymentTransaction();
   await credential.waitForDeployment();
 
   const address = await credential.getAddress();
+  const record = {
+    contract: "SkillForgeCredential",
+    network: networkName,
+    chainId: Number(chainId),
+    address,
+    deployer,
+    txHash: pending?.hash || null,
+    deployedAt: new Date().toISOString(),
+  };
+
+  const outFile = deploymentsPath(networkName);
+  fs.mkdirSync(path.dirname(outFile), { recursive: true });
+  fs.writeFileSync(outFile, `${JSON.stringify(record, null, 2)}\n`);
+  if (networkName !== "hardhat") {
+    upsertEnvValue(path.join(process.cwd(), ".env"), "VITE_CREDENTIAL_CONTRACT", address);
+  }
+
   console.log("SkillForgeCredential deployed to:", address);
-  console.log("Set VITE_CREDENTIAL_CONTRACT in .env to:", address);
+  console.log("Deployment record:", outFile);
+  if (networkName !== "hardhat") {
+    console.log("VITE_CREDENTIAL_CONTRACT updated in .env when that file exists.");
+  }
   console.log("Set VITE_CREDENTIAL_IMAGE_URI to a stable IPFS or HTTPS artwork URL before minting.");
+  if (networkName === "fuji") {
+    console.log(`Snowtrace: https://testnet.snowtrace.io/address/${address}`);
+  }
 }
 
 main().catch((error) => {
