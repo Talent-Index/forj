@@ -12,29 +12,16 @@ import NetworkGate from "./components/NetworkGate";
 import { PIECE_COST } from "./data/questions";
 import puzzleImage from "../images.jpeg";
 import {
+  PROGRESS_VIEWS,
   applySectionResult,
   clearProgress,
+  emptyProgress,
   loadProgress,
+  normalizeAddress,
   saveProgress,
 } from "./utils/progress";
 
-const VIEWS = {
-  SECTIONS: "sections",
-  QUIZ: "quiz",
-  PUZZLE: "puzzle",
-  CERTIFICATE: "certificate",
-};
-
-const EMPTY_PROGRESS = {
-  view: VIEWS.SECTIONS,
-  activeSection: null,
-  totalPoints: 0,
-  spentPoints: 0,
-  acquiredPieces: [],
-  sectionScores: {},
-  completedSections: [],
-  attempts: [],
-};
+const VIEWS = PROGRESS_VIEWS;
 
 function App() {
   const wallet = useWallet();
@@ -46,36 +33,36 @@ function App() {
   const [sectionScores, setSectionScores] = useState({});
   const [completedSections, setCompletedSections] = useState([]);
   const [attempts, setAttempts] = useState([]);
+  const [hydratedAddress, setHydratedAddress] = useState(null);
   const userImage = puzzleImage;
+  const currentAddress = normalizeAddress(wallet.address);
+  const progressReady = Boolean(currentAddress && hydratedAddress === currentAddress);
+
+  const applyProgress = useCallback((snapshot) => {
+    const next = snapshot || emptyProgress();
+    setView(next.view);
+    setActiveSection(next.activeSection);
+    setTotalPoints(next.totalPoints);
+    setSpentPoints(next.spentPoints);
+    setAcquiredPieces(next.acquiredPieces);
+    setSectionScores(next.sectionScores);
+    setCompletedSections(next.completedSections);
+    setAttempts(next.attempts);
+  }, []);
 
   useEffect(() => {
-    if (!wallet.address) return;
-    const saved = loadProgress(wallet.address);
-    if (!saved) {
-      setView(VIEWS.SECTIONS);
-      setActiveSection(null);
-      setTotalPoints(0);
-      setSpentPoints(0);
-      setAcquiredPieces([]);
-      setSectionScores({});
-      setCompletedSections([]);
-      setAttempts([]);
+    if (!currentAddress) {
+      setHydratedAddress(null);
+      applyProgress(emptyProgress());
       return;
     }
-
-    setView(saved.view || VIEWS.SECTIONS);
-    setActiveSection(saved.activeSection || null);
-    setSectionScores(saved.sectionScores || {});
-    setTotalPoints(saved.totalPoints || 0);
-    setSpentPoints(saved.spentPoints || 0);
-    setAcquiredPieces(saved.acquiredPieces || []);
-    setCompletedSections(saved.completedSections || []);
-    setAttempts(saved.attempts || []);
-  }, [wallet.address]);
+    applyProgress(loadProgress(currentAddress));
+    setHydratedAddress(currentAddress);
+  }, [applyProgress, currentAddress]);
 
   useEffect(() => {
-    if (!wallet.address) return;
-    saveProgress(wallet.address, {
+    if (!progressReady) return;
+    saveProgress(currentAddress, {
       view,
       activeSection,
       totalPoints,
@@ -86,15 +73,16 @@ function App() {
       attempts,
     });
   }, [
-    wallet.address,
-    view,
     activeSection,
-    totalPoints,
-    spentPoints,
     acquiredPieces,
-    sectionScores,
-    completedSections,
     attempts,
+    completedSections,
+    currentAddress,
+    progressReady,
+    sectionScores,
+    spentPoints,
+    totalPoints,
+    view,
   ]);
 
   const handleQuizComplete = useCallback((result) => {
@@ -112,27 +100,24 @@ function App() {
   }, []);
 
   const handleAcquirePiece = useCallback((index) => {
-    setAcquiredPieces((prev) => [...prev, index]);
-    setSpentPoints((prev) => prev + PIECE_COST);
+    setAcquiredPieces((prev) => {
+      if (prev.includes(index)) return prev;
+      const next = [...prev, index];
+      setSpentPoints(next.length * PIECE_COST);
+      return next;
+    });
   }, []);
 
   const handleFullReset = useCallback(() => {
-    if (wallet.address) clearProgress(wallet.address);
-    setView(EMPTY_PROGRESS.view);
-    setActiveSection(EMPTY_PROGRESS.activeSection);
-    setTotalPoints(EMPTY_PROGRESS.totalPoints);
-    setSpentPoints(EMPTY_PROGRESS.spentPoints);
-    setAcquiredPieces(EMPTY_PROGRESS.acquiredPieces);
-    setSectionScores(EMPTY_PROGRESS.sectionScores);
-    setCompletedSections(EMPTY_PROGRESS.completedSections);
-    setAttempts(EMPTY_PROGRESS.attempts);
-  }, [wallet.address]);
+    if (currentAddress) clearProgress(currentAddress);
+    applyProgress(emptyProgress());
+  }, [applyProgress, currentAddress]);
 
-  if (wallet.restoring) {
+  if (wallet.restoring || (wallet.isConnected && !progressReady)) {
     return (
       <div className="landing">
         <section className="landing-hero">
-          <p className="landing-subtitle">Restoring wallet session…</p>
+          <p className="landing-subtitle">Restoring your progress…</p>
         </section>
       </div>
     );

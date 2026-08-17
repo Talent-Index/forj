@@ -21,4 +21,5 @@ jobs:
       - run: npm run test:retry
       - run: npm run test:wallet
       - run: npm run test:quiz
+      - run: npm run test:progress
       - run: npm run build
