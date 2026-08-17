@@ -1,5 +1,7 @@
 # SkillForge — Avalanche Learning GameFi
 
+[![CI](https://github.com/Talent-Index/SkillForge/actions/workflows/ci.yml/badge.svg)](https://github.com/Talent-Index/SkillForge/actions/workflows/ci.yml)
+
 A gamified skills-credentialing dApp where users learn Avalanche concepts through Easy, Medium, and Hard quizzes, redeem points for puzzle pieces, and mint an on-chain record of claimed scores on Avalanche Fuji.
 
 ## Features
@@ -68,14 +70,65 @@ Mainnet is intentionally gated:
 CONFIRM_MAINNET=yes npm run deploy:mainnet
 ```
 
-## Scripts
+## Testing & CI
+
+Every pull request runs the same checks as local `npm run verify`. A failing step blocks the workflow (and should block merge once branch protection is enabled).
+
+### Run everything locally (matches CI)
+
+From a clean install:
 
 ```bash
-npm run lint
+npm ci
+npm run verify
+```
+
+`verify` runs, in order: lint → compile → Hardhat unit tests → retry/wallet/quiz/progress/puzzle regression scripts → production frontend build.
+
+### Run individual checks
+
+| Command | What it validates |
+| --- | --- |
+| `npm run lint` | ESLint across the repo |
+| `npm run compile` | Solidity contracts compile (`hardhat compile`) |
+| `npm test` | Hardhat unit tests (`SkillForgeCredential`) |
+| `npm run test:retry` | Section retry scoring (no point stacking) |
+| `npm run test:wallet` | Wallet onboarding / Fuji network smoke test |
+| `npm run test:quiz` | Exactly 5 unique questions per difficulty |
+| `npm run test:progress` | Per-wallet progress persistence + sanitization |
+| `npm run test:puzzle` | Atomic puzzle piece redemption |
+| `npm run build` | Vite production build |
+
+Node **20** is required (see `.nvmrc`).
+
+### GitHub Actions
+
+Workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+
+On every **pull request** and every push to **main**:
+
+1. `npm ci` — install from lockfile in a clean environment
+2. `npm run verify` — lint, compile, all tests, frontend build
+
+Any step failure fails the job and marks the PR check red.
+
+### Block broken merges (repo admin)
+
+To enforce the acceptance criteria on GitHub:
+
+1. **Settings → Branches → Add branch protection rule** for `main`
+2. Enable **Require status checks to pass before merging**
+3. Select **`Lint, compile, test, build`** (the CI job name)
+4. Enable **Require branches to be up to date before merging**
+
+After that, a broken build or test suite cannot merge into `main`.
+
+## Deploy scripts
+
+```bash
 npm run compile
-npm test
-npm run test:retry
-npm run deploy:fuji
+npm run deploy:local   # Hardhat network, no PRIVATE_KEY needed
+npm run deploy:fuji    # Avalanche Fuji testnet
 ```
 
 ## Project Structure
