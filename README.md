@@ -12,7 +12,7 @@ A gamified skills-credentialing dApp where users learn Avalanche concepts throug
 - **On-chain credential** — soulbound NFT via `SkillForgeCredential.sol`
 - **Signed mint path** — `mintCredentialWithAuthorization` for owner EIP-712 attestations
 
-> Honesty note: the open `mintCredential` path stores **claimed** scores. It is not a proctored exam. Use the signed authorization path when you need issuer-attested mints.
+> Honesty note: `mintCredential` is a **self-claimed** score record. `mintCredentialWithAuthorization` is **issuer-attested** via an owner EIP-712 signature. Both are soulbound; only the attested path is a privileged credential.
 
 Product + tech sequencing lives in **[docs/ROADMAP.md](docs/ROADMAP.md)** (foundation → credentials → mainnet → ecosystem).
 

@@ -1,6 +1,14 @@
 import { expect } from "chai";
 import hre from "hardhat";
 
+const IMAGE = "ipfs://bafy-artwork";
+
+function decodeTokenURI(uri) {
+  const prefix = "data:application/json;base64,";
+  expect(uri.startsWith(prefix)).to.equal(true);
+  return JSON.parse(Buffer.from(uri.slice(prefix.length), "base64").toString("utf8"));
+}
+
 describe("SkillForgeCredential", function () {
   async function deployCredential() {
     const [owner, learner, other] = await hre.ethers.getSigners();
@@ -10,40 +18,95 @@ describe("SkillForgeCredential", function () {
     return { credential, owner, learner, other };
   }
 
-  async function mintFor(credential, learner, points = 15) {
-    await credential.connect(learner).mintCredential(points, 1, 5, 0, 0, "ipfs://bafy-artwork");
+  async function domainFor(credential) {
+    const { chainId } = await hre.ethers.provider.getNetwork();
+    return {
+      name: "SkillForgeCredential",
+      version: "1",
+      chainId,
+      verifyingContract: await credential.getAddress(),
+    };
   }
 
-  it("starts token IDs at one and stores the learner credential", async function () {
-    const { credential, learner } = await deployCredential();
+  const types = {
+    Credential: [
+      { name: "learner", type: "address" },
+      { name: "totalPoints", type: "uint256" },
+      { name: "puzzleMask", type: "uint256" },
+      { name: "easyCorrect", type: "uint8" },
+      { name: "mediumCorrect", type: "uint8" },
+      { name: "hardCorrect", type: "uint8" },
+      { name: "imageHash", type: "bytes32" },
+      { name: "nonce", type: "uint256" },
+      { name: "deadline", type: "uint256" },
+    ],
+  };
 
-    await mintFor(credential, learner);
+  async function signAttestation(credential, signer, learner, overrides = {}) {
+    const latest = (await hre.ethers.provider.getBlock("latest")).timestamp;
+    const value = {
+      learner: learner.address,
+      totalPoints: 15n,
+      puzzleMask: 1n,
+      easyCorrect: 5,
+      mediumCorrect: 0,
+      hardCorrect: 0,
+      imageHash: hre.ethers.keccak256(hre.ethers.toUtf8Bytes(IMAGE)),
+      nonce: 0n,
+      deadline: BigInt(latest + 3600),
+      ...overrides,
+    };
+    const signature = await signer.signTypedData(await domainFor(credential), types, value);
+    return { value, signature };
+  }
 
+  it("sets name, symbol, owner, and starts token IDs at one", async function () {
+    const { credential, owner, learner } = await deployCredential();
+
+    expect(await credential.name()).to.equal("SkillForge Avalanche Credential");
+    expect(await credential.symbol()).to.equal("SFAVAX");
+    expect(await credential.owner()).to.equal(owner.address);
+
+    await credential.connect(learner).mintCredential(15, 1, 5, 0, 0, IMAGE);
     expect(await credential.credentialOf(learner.address)).to.equal(1n);
     expect(await credential.ownerOf(1n)).to.equal(learner.address);
   });
 
+  it("stores claimed scores and marks the mint as self-claimed", async function () {
+    const { credential, learner } = await deployCredential();
+
+    await expect(credential.connect(learner).mintCredential(12, 3, 4, 0, 0, IMAGE))
+      .to.emit(credential, "CredentialMinted")
+      .withArgs(learner.address, 1n, 12n, 3n, false);
+
+    const data = await credential.credentials(1n);
+    expect(data.totalPoints).to.equal(12n);
+    expect(data.puzzleMask).to.equal(3n);
+    expect(data.easyCorrect).to.equal(4n);
+    expect(data.mediumCorrect).to.equal(0n);
+    expect(data.hardCorrect).to.equal(0n);
+    expect(data.image).to.equal(IMAGE);
+    expect(data.attested).to.equal(false);
+
+    const metadata = decodeTokenURI(await credential.tokenURI(1n));
+    expect(metadata.image).to.equal(IMAGE);
+    expect(metadata.description).to.match(/Self-claimed/);
+    expect(metadata.attributes.find((item) => item.trait_type === "Attestation").value).to.equal("Self claimed");
+    expect(metadata.attributes.find((item) => item.trait_type === "Puzzle Pieces").value).to.equal(2);
+  });
+
   it("replaces a learner's previous credential on remint", async function () {
     const { credential, learner } = await deployCredential();
-    await mintFor(credential, learner, 15);
-
-    await mintFor(credential, learner, 20);
+    await credential.connect(learner).mintCredential(15, 1, 5, 0, 0, IMAGE);
+    await credential.connect(learner).mintCredential(20, 2, 5, 1, 0, IMAGE);
 
     expect(await credential.credentialOf(learner.address)).to.equal(2n);
     await expect(credential.ownerOf(1n)).to.be.revertedWithCustomError(credential, "ERC721NonexistentToken");
+    expect((await credential.credentials(1n)).totalPoints).to.equal(0n);
     expect((await credential.credentials(2n)).totalPoints).to.equal(20n);
   });
 
-  it("rejects transfers while allowing mint and burn internals", async function () {
-    const { credential, learner, other } = await deployCredential();
-    await mintFor(credential, learner);
-
-    await expect(
-      credential.connect(learner).transferFrom(learner.address, other.address, 1n)
-    ).to.be.revertedWith("Soulbound: non-transferable");
-  });
-
-  it("rejects invalid credential values", async function () {
+  it("rejects invalid claimed mint values", async function () {
     const { credential, learner } = await deployCredential();
 
     await expect(
@@ -52,54 +115,175 @@ describe("SkillForgeCredential", function () {
     await expect(
       credential.connect(learner).mintCredential(1, 0, 0, 0, 0, "")
     ).to.be.revertedWith("Invalid puzzle mask");
+    await expect(
+      credential.connect(learner).mintCredential(1, 0x10000, 0, 0, 0, "")
+    ).to.be.revertedWith("Invalid puzzle mask");
+    await expect(
+      credential.connect(learner).mintCredential(1, 1, 6, 0, 0, "")
+    ).to.be.revertedWith("Invalid scores");
+    await expect(
+      credential.connect(learner).mintCredential(1, 1, 0, 0, 0, 'ipfs://"bad"')
+    ).to.be.revertedWith("Invalid image");
   });
 
-  it("accepts a non-replayable owner-signed credential authorization", async function () {
-    const { credential, owner, learner } = await deployCredential();
-    const { chainId } = await hre.ethers.provider.getNetwork();
-    const imageData = "ipfs://bafy-artwork";
-    const deadline = BigInt(Math.floor(Date.now() / 1000) + 3600);
-    const domain = {
-      name: "SkillForgeCredential",
-      version: "1",
-      chainId,
-      verifyingContract: await credential.getAddress(),
-    };
-    const types = {
-      Credential: [
-        { name: "learner", type: "address" },
-        { name: "totalPoints", type: "uint256" },
-        { name: "puzzleMask", type: "uint256" },
-        { name: "easyCorrect", type: "uint8" },
-        { name: "mediumCorrect", type: "uint8" },
-        { name: "hardCorrect", type: "uint8" },
-        { name: "imageHash", type: "bytes32" },
-        { name: "nonce", type: "uint256" },
-        { name: "deadline", type: "uint256" },
-      ],
-    };
-    const value = {
-      learner: learner.address,
-      totalPoints: 15n,
-      puzzleMask: 1n,
-      easyCorrect: 5,
-      mediumCorrect: 0,
-      hardCorrect: 0,
-      imageHash: hre.ethers.keccak256(hre.ethers.toUtf8Bytes(imageData)),
-      nonce: 0n,
-      deadline,
-    };
-    const signature = await owner.signTypedData(domain, types, value);
+  it("does not allow tokenURI reads for burned or missing tokens", async function () {
+    const { credential, learner } = await deployCredential();
+    await expect(credential.tokenURI(1n)).to.be.revertedWithCustomError(credential, "ERC721NonexistentToken");
+    await credential.connect(learner).mintCredential(15, 1, 5, 0, 0, IMAGE);
+    await credential.connect(learner).mintCredential(16, 1, 5, 0, 0, IMAGE);
+    await expect(credential.tokenURI(1n)).to.be.revertedWithCustomError(credential, "ERC721NonexistentToken");
+  });
 
-    await credential
-      .connect(learner)
-      .mintCredentialWithAuthorization(15, 1, 5, 0, 0, imageData, deadline, signature);
+  it("blocks transfers, approvals, and operator approvals", async function () {
+    const { credential, learner, other } = await deployCredential();
+    await credential.connect(learner).mintCredential(15, 1, 5, 0, 0, IMAGE);
 
-    expect(await credential.credentialOf(learner.address)).to.equal(1n);
     await expect(
-      credential
-        .connect(learner)
-        .mintCredentialWithAuthorization(15, 1, 5, 0, 0, imageData, deadline, signature)
+      credential.connect(learner).transferFrom(learner.address, other.address, 1n)
+    ).to.be.revertedWith("Soulbound: non-transferable");
+    await expect(
+      credential.connect(learner)["safeTransferFrom(address,address,uint256)"](learner.address, other.address, 1n)
+    ).to.be.revertedWith("Soulbound: non-transferable");
+    await expect(
+      credential.connect(learner).approve(other.address, 1n)
+    ).to.be.revertedWith("Soulbound: non-transferable");
+    await expect(
+      credential.connect(learner).setApprovalForAll(other.address, true)
+    ).to.be.revertedWith("Soulbound: non-transferable");
+  });
+
+  it("restricts ownership changes to the current owner", async function () {
+    const { credential, owner, learner, other } = await deployCredential();
+
+    await expect(
+      credential.connect(learner).transferOwnership(other.address)
+    ).to.be.revertedWithCustomError(credential, "OwnableUnauthorizedAccount");
+
+    await credential.connect(owner).transferOwnership(other.address);
+    expect(await credential.owner()).to.equal(other.address);
+  });
+
+  it("accepts owner-signed attestation and marks the mint as attested", async function () {
+    const { credential, owner, learner } = await deployCredential();
+    const { value, signature } = await signAttestation(credential, owner, learner);
+
+    await expect(
+      credential.connect(learner).mintCredentialWithAuthorization(
+        value.totalPoints,
+        value.puzzleMask,
+        value.easyCorrect,
+        value.mediumCorrect,
+        value.hardCorrect,
+        IMAGE,
+        value.deadline,
+        signature
+      )
+    ).to.emit(credential, "CredentialMinted").withArgs(learner.address, 1n, 15n, 1n, true);
+
+    expect(await credential.authorizationNonces(learner.address)).to.equal(1n);
+    expect((await credential.credentials(1n)).attested).to.equal(true);
+    const metadata = decodeTokenURI(await credential.tokenURI(1n));
+    expect(metadata.description).to.match(/Issuer-attested/);
+    expect(metadata.attributes.find((item) => item.trait_type === "Attestation").value).to.equal("Issuer attested");
+  });
+
+  it("rejects unauthorized and invalid attestations without consuming a nonce", async function () {
+    const { credential, owner, learner, other } = await deployCredential();
+    const latest = (await hre.ethers.provider.getBlock("latest")).timestamp;
+    const { value, signature } = await signAttestation(credential, owner, learner);
+    const outsider = await signAttestation(credential, other, learner);
+
+    await expect(
+      credential.connect(learner).mintCredentialWithAuthorization(
+        value.totalPoints,
+        value.puzzleMask,
+        value.easyCorrect,
+        value.mediumCorrect,
+        value.hardCorrect,
+        IMAGE,
+        value.deadline,
+        outsider.signature
+      )
     ).to.be.revertedWith("Invalid authorization");
+    expect(await credential.authorizationNonces(learner.address)).to.equal(0n);
+
+    await expect(
+      credential.connect(other).mintCredentialWithAuthorization(
+        value.totalPoints,
+        value.puzzleMask,
+        value.easyCorrect,
+        value.mediumCorrect,
+        value.hardCorrect,
+        IMAGE,
+        value.deadline,
+        signature
+      )
+    ).to.be.revertedWith("Invalid authorization");
+
+    await expect(
+      credential.connect(learner).mintCredentialWithAuthorization(
+        value.totalPoints,
+        value.puzzleMask,
+        value.easyCorrect,
+        value.mediumCorrect,
+        value.hardCorrect,
+        IMAGE,
+        BigInt(latest - 1),
+        signature
+      )
+    ).to.be.revertedWith("Authorization expired");
+    expect(await credential.authorizationNonces(learner.address)).to.equal(0n);
+  });
+
+  it("rejects replayed attestations after a successful mint", async function () {
+    const { credential, owner, learner } = await deployCredential();
+    const { value, signature } = await signAttestation(credential, owner, learner);
+
+    await credential.connect(learner).mintCredentialWithAuthorization(
+      value.totalPoints,
+      value.puzzleMask,
+      value.easyCorrect,
+      value.mediumCorrect,
+      value.hardCorrect,
+      IMAGE,
+      value.deadline,
+      signature
+    );
+
+    await expect(
+      credential.connect(learner).mintCredentialWithAuthorization(
+        value.totalPoints,
+        value.puzzleMask,
+        value.easyCorrect,
+        value.mediumCorrect,
+        value.hardCorrect,
+        IMAGE,
+        value.deadline,
+        signature
+      )
+    ).to.be.revertedWith("Invalid authorization");
+    expect(await credential.authorizationNonces(learner.address)).to.equal(1n);
+  });
+
+  it("does not consume a nonce when attested mint inputs are invalid", async function () {
+    const { credential, owner, learner } = await deployCredential();
+    const { value, signature } = await signAttestation(credential, owner, learner, {
+      totalPoints: 0n,
+      puzzleMask: 1n,
+    });
+
+    await expect(
+      credential.connect(learner).mintCredentialWithAuthorization(
+        0,
+        1,
+        value.easyCorrect,
+        value.mediumCorrect,
+        value.hardCorrect,
+        IMAGE,
+        value.deadline,
+        signature
+      )
+    ).to.be.revertedWith("No points earned");
+    expect(await credential.authorizationNonces(learner.address)).to.equal(0n);
   });
 });

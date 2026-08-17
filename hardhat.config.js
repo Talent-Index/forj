@@ -1,5 +1,19 @@
 import "@nomicfoundation/hardhat-toolbox";
-import "dotenv/config";
+import dotenv from "dotenv";
+import fs from "fs";
+
+dotenv.config({ path: ".env" });
+
+// Only apply .env.local values that are non-empty so placeholders do not wipe .env.
+const localEnvPath = ".env.local";
+if (fs.existsSync(localEnvPath)) {
+  const localEnv = dotenv.parse(fs.readFileSync(localEnvPath));
+  for (const [key, value] of Object.entries(localEnv)) {
+    if (String(value).trim() !== "") {
+      process.env[key] = value;
+    }
+  }
+}
 
 function deployerAccounts() {
   const key = (process.env.PRIVATE_KEY || "").trim();
