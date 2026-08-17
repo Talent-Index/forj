@@ -164,7 +164,7 @@ function Certificate({
       playFinishSound();
       await loadOnChainCredential();
     } catch (err) {
-      setMintError(err.shortMessage || err.message || "Mint failed");
+      setMintError(err.displayMessage || err.shortMessage || err.message || "Mint failed");
     } finally {
       setMinting(false);
     }

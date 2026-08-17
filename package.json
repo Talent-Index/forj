@@ -11,6 +11,7 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "test:retry": "node scripts/check-retry-math.js",
+    "test:wallet": "node scripts/check-wallet.js",
     "deploy:fuji": "hardhat run scripts/deploy.js --network fuji",
     "deploy:mainnet": "hardhat run scripts/deploy.js --network avalanche"
   },
