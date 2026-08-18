@@ -1,6 +1,7 @@
 import { TOTAL_PIECES, MAX_POINTS, getSectionById } from "../data/questions.js";
 import { QUESTIONS_PER_QUIZ } from "./quiz.js";
 import { SCORE_SECTIONS } from "./progress.js";
+import { availablePoints, spentPointsFor } from "./puzzle.js";
 
 export function shortAddress(address) {
   if (!address || typeof address !== "string") return "";
@@ -61,8 +62,8 @@ export function computeLearnerDashboard({
     ? Math.round((attemptTotals.correct / attemptTotals.asked) * 100)
     : 0;
 
-  const remainingPoints = Math.max(0, Number(totalPoints) || 0);
-  const spent = Number(spentPoints) || 0;
+  const earned = Number(totalPoints) || 0;
+  const spent = Number(spentPoints) || spentPointsFor(acquiredPieces);
 
   return {
     overallPercent,
@@ -70,9 +71,9 @@ export function computeLearnerDashboard({
     quizTotal,
     quizPercent,
     difficulties,
-    totalPoints: Number(totalPoints) || 0,
+    totalPoints: earned,
     maxPoints: MAX_POINTS,
-    remainingPoints,
+    remainingPoints: availablePoints(earned, acquiredPieces),
     spentPoints: spent,
     puzzleCount,
     puzzleTotal: TOTAL_PIECES,

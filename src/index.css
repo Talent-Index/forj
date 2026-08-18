@@ -564,6 +564,19 @@ img {
   gap: 12px;
 }
 
+.dashboard-difficulties {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.stat-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .stat-value {
   font-size: 20.23px;
   font-weight: 700;
@@ -1082,6 +1095,7 @@ img {
   .timeline,
   .trust-strip ul,
   .difficulty-grid,
+  .dashboard-difficulties,
   .sections-grid,
   .stat-row {
     grid-template-columns: 1fr;

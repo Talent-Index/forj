@@ -48,10 +48,22 @@ const ACHIEVEMENTS = [
     desc: "Complete at least 3 quiz attempts",
     check: (data) => data.attempts.length >= 3,
   },
+  {
+    id: "credential",
+    icon: "📜",
+    name: "On-chain Record",
+    desc: "Mint a soulbound credential on Fuji",
+    check: (data) => Boolean(data.hasCredential),
+  },
 ];
 
-function Achievements({ sectionScores, acquiredPieces, attempts }) {
-  const data = { sectionScores, acquiredPieces, attempts };
+function Achievements({
+  sectionScores = {},
+  acquiredPieces = [],
+  attempts = [],
+  hasCredential = false,
+}) {
+  const data = { sectionScores, acquiredPieces, attempts, hasCredential };
   const earnedCount = ACHIEVEMENTS.filter((ach) => ach.check(data)).length;
 
   return (

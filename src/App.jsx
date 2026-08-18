@@ -213,13 +213,22 @@ function App() {
       return (
         <ProgressPage
           address={wallet.address}
+          walletName={wallet.walletName}
+          chainId={wallet.chainId}
+          isFuji={wallet.isFuji}
           sectionScores={sectionScores}
-          completedSections={completedSections}
           totalPoints={totalPoints}
+          spentPoints={spentPoints}
           acquiredPieces={acquiredPieces}
           attempts={attempts}
+          publicClient={wallet.publicClient}
           onContinue={startSection}
           onLearn={goLearnHome}
+          onPuzzle={() => {
+            setView(VIEWS.PUZZLE);
+            setPage("learn");
+          }}
+          onCredentials={() => setPage("credentials")}
         />
       );
     }

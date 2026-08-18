@@ -9,6 +9,7 @@ import {
   CONTRACT_ADDRESS,
   buildMintData,
   puzzleToMask,
+  FUJI_CHAIN_ID,
   FUJI_EXPLORER_TX,
 } from "../utils/contract";
 import { QUESTIONS_PER_QUIZ } from "../utils/quiz";
