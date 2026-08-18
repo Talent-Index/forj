@@ -179,6 +179,7 @@ skillforge/
 
 - [docs/ROADMAP.md](docs/ROADMAP.md) — learning, GameFi, and credential tracks through mainnet and ecosystem scale
 - [docs/STATUS.md](docs/STATUS.md) — shipped features, phase checklist, test commands
+- [docs/CREDENTIAL.md](docs/CREDENTIAL.md) — versioned on-chain credential record (schema v1)
 
 ## Tech Stack
 

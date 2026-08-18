@@ -62,6 +62,13 @@ export const CREDENTIAL_ABI = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
 ];
 
 export const CONTRACT_ADDRESS = import.meta.env.VITE_CREDENTIAL_CONTRACT || "";

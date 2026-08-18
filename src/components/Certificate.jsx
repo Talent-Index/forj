@@ -18,6 +18,7 @@ import { playFinishSound } from "../utils/sounds";
 import { CREDENTIAL_EXPLAINER, EMPTY_STATES, ERROR_STATES } from "../utils/onboarding";
 import { useOnChainCredential } from "../hooks/useOnChainCredential";
 import EmptyState from "./EmptyState";
+import CredentialRecord from "./CredentialRecord";
 
 function Certificate({
   address,
@@ -198,18 +199,7 @@ function Certificate({
           <h3>Your On-Chain Credential</h3>
           {loadingCredential && <p>Loading credential from Fuji…</p>}
           {!loadingCredential && onChainCredential && (
-            <>
-              <p>Token #{onChainCredential.tokenId} · {onChainCredential.totalPoints} pts</p>
-              <p>
-                {onChainCredential.attested ? "Issuer-attested credential" : "Self-claimed score record"}
-              </p>
-              <p>
-                Scores: Easy {onChainCredential.easyCorrect}/5 · Medium {onChainCredential.mediumCorrect}/5 · Hard {onChainCredential.hardCorrect}/5
-              </p>
-              <a href={onChainCredential.explorerUrl} target="_blank" rel="noreferrer">
-                Open credential on Snowtrace
-              </a>
-            </>
+            <CredentialRecord credential={onChainCredential} />
           )}
         </div>
       )}

@@ -577,6 +577,12 @@ img {
   gap: 4px;
 }
 
+.credential-record {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .stat-value {
   font-size: 20.23px;
   font-weight: 700;

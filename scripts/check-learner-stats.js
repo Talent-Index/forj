@@ -158,7 +158,10 @@ const credential = mapOnChainCredential(
   CONTRACT
 );
 assert.equal(credential.tokenId, "7");
-assert.equal(credential.totalPoints, "80");
+assert.equal(credential.credentialId, "7");
+assert.equal(credential.totalPoints, 80);
+assert.equal(credential.score.totalPoints, 80);
+assert.equal(credential.schemaVersion, 1);
 assert.equal(credential.easyCorrect, 5);
 assert.equal(credential.mediumCorrect, 4);
 assert.equal(credential.hardCorrect, 3);

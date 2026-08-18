@@ -1,4 +1,3 @@
-import { QUESTIONS_PER_QUIZ } from "../../utils/quiz";
 import { EMPTY_STATES, PATH_COPY } from "../../utils/onboarding";
 import { computeLearnerDashboard, shortAddress, walletExplorerUrl } from "../../utils/learnerStats";
 import { FUJI_CHAIN_ID } from "../../utils/wallet";
@@ -6,6 +5,7 @@ import { useOnChainCredential } from "../../hooks/useOnChainCredential";
 import { Button, Card, ProgressBar } from "../ui/primitives";
 import EmptyState from "../EmptyState";
 import Achievements from "../Achievements";
+import CredentialRecord from "../CredentialRecord";
 
 function ProgressPage({
   address,
@@ -130,17 +130,7 @@ function ProgressPage({
         <h2>Credentials</h2>
         {credentialLoading && <p role="status">Loading credential from Fuji…</p>}
         {!credentialLoading && credential && (
-          <>
-            <p>
-              Token #{credential.tokenId} · {credential.attested ? "Issuer-attested" : "Self-claimed"} · {credential.totalPoints} pts
-            </p>
-            <p className="meta-line">
-              On-chain scores: Easy {credential.easyCorrect}/{QUESTIONS_PER_QUIZ} · Medium {credential.mediumCorrect}/{QUESTIONS_PER_QUIZ} · Hard {credential.hardCorrect}/{QUESTIONS_PER_QUIZ}
-            </p>
-            <p>
-              <a href={credential.explorerUrl} target="_blank" rel="noreferrer">Open on Snowtrace</a>
-            </p>
-          </>
+          <CredentialRecord credential={credential} />
         )}
         {!credentialLoading && !credential && (
           <EmptyState
