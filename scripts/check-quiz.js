@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { getSectionById, sections } from "../src/data/questions.js";
+import { QUESTION_TOPICS, getSectionById, sections } from "../src/data/questions.js";
 import {
   POST_SUBMIT_KEYS,
   QUESTIONS_PER_QUIZ,
@@ -146,11 +146,18 @@ for (const sectionId of ["easy", "medium", "hard"]) {
   const section = getSectionById(sectionId);
   const bank = getQuestionBankStatus(section);
   assert.equal(bank.ok, true, `${sectionId} bank too small`);
+  assert.ok(bank.size >= 16, `${sectionId} should expose an expanded bank (found ${bank.size})`);
   assert.ok(bank.size >= QUESTIONS_PER_QUIZ, `${sectionId} needs at least ${QUESTIONS_PER_QUIZ} questions`);
   assert.equal(section.questions.length, bank.size, `${sectionId} has questions missing explanations or references`);
 
+  const topics = new Set(section.questions.map((question) => question.topic));
+  for (const topic of QUESTION_TOPICS) {
+    assert.ok(topics.has(topic), `${sectionId} is missing topic ${topic}`);
+  }
+
   for (const question of section.questions) {
     assert.equal(isValidQuestion(question), true, `${question.id} is not a complete teachable question`);
+    assert.ok(QUESTION_TOPICS.includes(question.topic), `${question.id} has unknown topic ${question.topic}`);
     assert.equal(hintRevealsAnswer(question), false, `${question.id} hint reveals the answer`);
     assert.ok(question.explanation.length >= 24, `${question.id} needs a fuller explanation`);
     assert.equal(isValidReference(question.reference), true, `${question.id} needs an official Avalanche reference`);

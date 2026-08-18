@@ -31,7 +31,7 @@ flowchart LR
 - ✅ Stabilize wallet connection and network switching
 - ✅ Validate MetaMask and Core Wallet flows
 - ✅ Harden quiz generation and randomization
-- ✅ Finalize Easy / Medium / Hard question banks (8 questions per tier)
+- ✅ Finalize Easy / Medium / Hard question banks *(16 questions per tier; ICM, L1, C-Chain, tooling)*
 - ✅ Verify retry-safe scoring across all quiz sections
 - ✅ Ensure localStorage state recovery is reliable
 - ✅ Validate puzzle-point redemption logic
@@ -48,7 +48,7 @@ flowchart LR
 - ✅ Introduce clearer learning objectives for each difficulty tier
 - ✅ Add explanations after quiz answers *(select, then submit; explanations only after submit)*
 - ✅ Add Avalanche ecosystem learning references *(official Builder Hub / avax.network links)*
-- 🟡 Expand ICM and Avalanche L1 content *(present in banks; not structured paths)*
+- ✅ Expand ICM and Avalanche L1 content *(expanded question banks; structured paths still remaining)*
 - 🟡 Improve quiz feedback and progress indicators *(dashboard + achievements)*
 - ✅ Add persistent learner progression
 - 🟡 Introduce completion statistics

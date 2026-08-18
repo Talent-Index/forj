@@ -57,7 +57,7 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 ### Quiz system
 
 - Exactly **5 unique random questions** per Easy / Medium / Hard session (`src/utils/quiz.js`)
-- Question banks: **8 questions per tier** (`src/data/questions.js`) — enough for randomization
+- Question banks: **16 questions per tier** covering fundamentals, C-Chain, EVM, L1s, ICM, validators, consensus, tooling, and ecosystem (`src/data/questions.js`)
 - Fisher–Yates shuffle with injectable RNG (deterministic in tests)
 - Per-question **hints**, post-submit **explanations**, and official Avalanche **learn-more** links
 - Select an option, then submit — explanations and the correct answer stay hidden until submit
@@ -131,7 +131,7 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - [x] Wallet connection and Fuji network switching
 - [x] MetaMask and Core Wallet flows (automated smoke test)
 - [x] Quiz generation and randomization
-- [x] Easy / Medium / Hard question banks (8 each)
+- [x] Easy / Medium / Hard question banks (16 each)
 - [x] Retry-safe scoring
 - [x] localStorage state recovery
 - [x] Puzzle-point redemption logic
