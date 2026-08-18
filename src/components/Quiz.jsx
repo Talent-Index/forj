@@ -1,11 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getSectionById } from "../data/questions";
 import {
   QUESTIONS_PER_QUIZ,
+  canAcceptSubmit,
   findQuestionById,
   getAnswerFeedback,
   getQuestionBankStatus,
+  quizProgress,
   selectQuizQuestions,
+  summarizeAttempt,
 } from "../utils/quiz";
 import { playCorrectSound, playWrongSound, playSectionCompleteSound } from "../utils/sounds";
 import { ERROR_STATES, PATH_COPY } from "../utils/onboarding";
@@ -13,6 +16,21 @@ import { Button, ProgressBar } from "./ui/primitives";
 import EmptyState from "./EmptyState";
 
 const OPTIONS_LETTERS = ["A", "B", "C", "D"];
+
+function QuizError({ body, onBack, onRetry }) {
+  return (
+    <div className="card quiz-intro">
+      <Button variant="secondary" onClick={onBack}>Back</Button>
+      <EmptyState
+        variant="error"
+        title={ERROR_STATES.quiz.title}
+        body={body}
+        actionLabel={onRetry ? "Retry quiz" : "Back to paths"}
+        onAction={onRetry || onBack}
+      />
+    </div>
+  );
+}
 
 function Quiz({ sectionId, onComplete, onBack }) {
   const section = getSectionById(sectionId);
@@ -25,9 +43,6 @@ function Quiz({ sectionId, onComplete, onBack }) {
   const [startError, setStartError] = useState(bank.error);
   const [phase, setPhase] = useState("intro");
   const [current, setCurrent] = useState(0);
-  const [pointsEarned, setPointsEarned] = useState(0);
-  const [correctCount, setCorrectCount] = useState(0);
-  const [wrongCount, setWrongCount] = useState(0);
   const [selected, setSelected] = useState(null);
   const [answered, setAnswered] = useState(false);
   const [feedback, setFeedback] = useState(null);
@@ -36,38 +51,31 @@ function Quiz({ sectionId, onComplete, onBack }) {
   const [answerLog, setAnswerLog] = useState([]);
   const timerRef = useRef(null);
   const lockedRef = useRef(false);
-  const busyRef = useRef(false);
   const finishedRef = useRef(false);
+  const handleTimeUpRef = useRef(() => {});
 
   const qCount = quizQuestions.length;
   const q = quizQuestions[current];
-  const questionsDone = Math.min(qCount, current + (answered ? 1 : 0));
-  const progress = qCount === 0 ? 0 : (questionsDone / qCount) * 100;
+  const progress = quizProgress({ current, answered, total: qCount || QUESTIONS_PER_QUIZ });
+  const liveSummary = summarizeAttempt(answerLog, pointsPerQ, QUESTIONS_PER_QUIZ);
 
-  const lockAnswer = useCallback((option) => {
+  function lockAnswer(option) {
     if (lockedRef.current || !q) return null;
+    lockedRef.current = true;
     const source = findQuestionById(section, q.id);
     const result = getAnswerFeedback(source, option);
     if (!result) {
-      lockedRef.current = true;
       clearInterval(timerRef.current);
-      setStartError("This question could not be scored. Exit and retry the quiz.");
+      setStartError("This question could not be scored. Retry the quiz to start a new attempt.");
       setPhase("error");
       return null;
     }
-    lockedRef.current = true;
     clearInterval(timerRef.current);
     setSelected(option);
     setFeedback(result);
     setAnswered(true);
-    if (result.isCorrect) {
-      setCorrectCount((c) => c + 1);
-      setPointsEarned((p) => p + pointsPerQ);
-      playCorrectSound();
-    } else {
-      setWrongCount((w) => w + 1);
-      playWrongSound();
-    }
+    if (result.isCorrect) playCorrectSound();
+    else playWrongSound();
     setAnswerLog((log) => [
       ...log,
       {
@@ -79,12 +87,16 @@ function Quiz({ sectionId, onComplete, onBack }) {
       },
     ]);
     return result;
-  }, [q, section, pointsPerQ]);
+  }
 
-  const handleTimeUp = useCallback(() => {
+  function handleTimeUp() {
     if (answered || lockedRef.current) return;
     lockAnswer(null);
-  }, [answered, lockAnswer]);
+  }
+
+  useEffect(() => {
+    handleTimeUpRef.current = handleTimeUp;
+  });
 
   useEffect(() => {
     if (phase !== "quiz" || answered) return undefined;
@@ -93,51 +105,52 @@ function Quiz({ sectionId, onComplete, onBack }) {
       setTimeLeft((t) => {
         if (t <= 1) {
           clearInterval(timerRef.current);
-          handleTimeUp();
+          handleTimeUpRef.current();
           return 0;
         }
         return t - 1;
       });
     }, 1000);
     return () => clearInterval(timerRef.current);
-  }, [phase, current, answered, timePerQ, handleTimeUp]);
-
-  function resetAttemptFields() {
-    setCurrent(0);
-    setSelected(null);
-    setAnswered(false);
-    setFeedback(null);
-    setPointsEarned(0);
-    setCorrectCount(0);
-    setWrongCount(0);
-    setShowHint(false);
-    setTimeLeft(timePerQ);
-    setAnswerLog([]);
-    lockedRef.current = false;
-  }
+  }, [phase, current, answered, timePerQ]);
 
   function startQuiz() {
-    if (busyRef.current || !section || !bank.ok) return;
-    busyRef.current = true;
-    lockedRef.current = false;
+    if (phase === "loading" || !section || !bank.ok) return;
     finishedRef.current = false;
+    lockedRef.current = false;
     setStartError(null);
     setPhase("loading");
-    window.setTimeout(() => {
+  }
+
+  useEffect(() => {
+    if (phase !== "loading" || !section) return undefined;
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      if (cancelled) return;
       const result = selectQuizQuestions(section, { count: QUESTIONS_PER_QUIZ });
+      if (cancelled) return;
       if (!result.ok) {
         setStartError(result.error);
         setQuizQuestions([]);
         setPhase("intro");
-        busyRef.current = false;
         return;
       }
       setQuizQuestions(result.questions);
-      resetAttemptFields();
+      setCurrent(0);
+      setSelected(null);
+      setAnswered(false);
+      setFeedback(null);
+      setShowHint(false);
+      setTimeLeft(section.timePerQuestion);
+      setAnswerLog([]);
+      lockedRef.current = false;
       setPhase("quiz");
-      busyRef.current = false;
     }, 0);
-  }
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [phase, section]);
 
   function handleSelect(option) {
     if (answered || lockedRef.current || !q) return;
@@ -145,12 +158,12 @@ function Quiz({ sectionId, onComplete, onBack }) {
   }
 
   function handleSubmit() {
-    if (answered || lockedRef.current || !q || selected == null) return;
+    if (!canAcceptSubmit({ answered, locked: lockedRef.current, selected }) || !q) return;
     lockAnswer(selected);
   }
 
   function handleNext() {
-    if (!answered || busyRef.current) return;
+    if (!answered || finishedRef.current) return;
     if (current < qCount - 1) {
       setCurrent((c) => c + 1);
       setSelected(null);
@@ -160,25 +173,22 @@ function Quiz({ sectionId, onComplete, onBack }) {
       lockedRef.current = false;
       return;
     }
-    if (finishedRef.current) return;
     finishedRef.current = true;
-    busyRef.current = true;
+    const summary = summarizeAttempt(answerLog, pointsPerQ, qCount);
     playSectionCompleteSound();
     onComplete({
       sectionId,
-      correct: correctCount,
-      total: qCount,
-      pointsEarned,
-      wrong: wrongCount,
+      correct: summary.correct,
+      total: summary.total,
+      pointsEarned: summary.pointsEarned,
+      wrong: summary.wrong,
     });
     setPhase("results");
-    busyRef.current = false;
   }
 
   useEffect(() => {
     if (phase !== "quiz" || !q) return undefined;
     function onKey(event) {
-      if (busyRef.current) return;
       const key = event.key.toLowerCase();
       if (!answered && !lockedRef.current) {
         const idx = OPTIONS_LETTERS.findIndex((letter) => letter.toLowerCase() === key);
@@ -208,16 +218,10 @@ function Quiz({ sectionId, onComplete, onBack }) {
 
   if (!section) {
     return (
-      <div className="card quiz-intro">
-        <Button variant="secondary" onClick={onBack}>Back</Button>
-        <EmptyState
-          variant="error"
-          title={ERROR_STATES.quiz.title}
-          body="That difficulty is not available. Choose Easy, Medium, or Hard."
-          actionLabel="Back to paths"
-          onAction={onBack}
-        />
-      </div>
+      <QuizError
+        body="That difficulty is not available. Choose Easy, Medium, or Hard."
+        onBack={onBack}
+      />
     );
   }
 
@@ -236,16 +240,11 @@ function Quiz({ sectionId, onComplete, onBack }) {
 
   if (phase === "error") {
     return (
-      <div className="card quiz-intro">
-        <Button variant="secondary" onClick={onBack}>Back</Button>
-        <EmptyState
-          variant="error"
-          title={ERROR_STATES.quiz.title}
-          body={startError || ERROR_STATES.quiz.body}
-          actionLabel="Back to paths"
-          onAction={onBack}
-        />
-      </div>
+      <QuizError
+        body={startError || ERROR_STATES.quiz.body}
+        onBack={onBack}
+        onRetry={bank.ok ? startQuiz : undefined}
+      />
     );
   }
 
@@ -268,8 +267,8 @@ function Quiz({ sectionId, onComplete, onBack }) {
             variant="error"
             title={ERROR_STATES.quiz.title}
             body={startError || bank.error || ERROR_STATES.quiz.body}
-            actionLabel={bank.ok ? "Try again" : undefined}
-            onAction={bank.ok ? startQuiz : undefined}
+            actionLabel={bank.ok ? "Retry quiz" : "Back to paths"}
+            onAction={bank.ok ? startQuiz : onBack}
           />
         )}
         <Button onClick={startQuiz} disabled={!bank.ok}>
@@ -280,32 +279,30 @@ function Quiz({ sectionId, onComplete, onBack }) {
   }
 
   if (phase === "results") {
-    const pct = qCount ? Math.round((correctCount / qCount) * 100) : 0;
-    const timedOutCount = answerLog.filter((item) => item.timedOut).length;
-    const missedCount = answerLog.filter((item) => !item.correct && !item.timedOut).length;
+    const summary = summarizeAttempt(answerLog, pointsPerQ, qCount || QUESTIONS_PER_QUIZ);
     return (
       <div className="page quiz-results">
         <header className="page-header">
           <p className="kicker">Quiz complete</p>
           <h1>{path.title}</h1>
-          <p className="lede">{correctCount} of {qCount} correct · {pct}%</p>
+          <p className="lede">{summary.correct} of {summary.total} correct · {summary.percent}%</p>
         </header>
         <div className="quiz-score-grid" aria-label="Score breakdown">
           <div className="quiz-score-card">
             <p className="kicker">Correct</p>
-            <p className="stat-value">{correctCount}</p>
+            <p className="stat-value">{summary.correct}</p>
           </div>
           <div className="quiz-score-card">
             <p className="kicker">Incorrect</p>
-            <p className="stat-value">{missedCount}</p>
+            <p className="stat-value">{summary.incorrect}</p>
           </div>
           <div className="quiz-score-card">
             <p className="kicker">Timed out</p>
-            <p className="stat-value">{timedOutCount}</p>
+            <p className="stat-value">{summary.timedOut}</p>
           </div>
           <div className="quiz-score-card quiz-score-card-points">
             <p className="kicker">Points earned</p>
-            <p className="stat-value">+{pointsEarned}</p>
+            <p className="stat-value">+{summary.pointsEarned}</p>
             <p className="meta-line">{pointsPerQ} pts each</p>
           </div>
         </div>
@@ -333,30 +330,25 @@ function Quiz({ sectionId, onComplete, onBack }) {
 
   if (!q || qCount !== QUESTIONS_PER_QUIZ) {
     return (
-      <div className="card quiz-intro">
-        <Button variant="secondary" onClick={onBack}>Back</Button>
-        <EmptyState
-          variant="error"
-          title={ERROR_STATES.quiz.title}
-          body={`This attempt could not load exactly ${QUESTIONS_PER_QUIZ} questions.`}
-          actionLabel="Back"
-          onAction={onBack}
-        />
-      </div>
+      <QuizError
+        body={`This attempt could not load exactly ${QUESTIONS_PER_QUIZ} questions.`}
+        onBack={onBack}
+        onRetry={bank.ok ? startQuiz : undefined}
+      />
     );
   }
 
   const timerPct = timePerQ ? (timeLeft / timePerQ) * 100 : 0;
   const timerUrgent = timeLeft <= 5;
   const resultTitle = feedback?.timedOut ? "Time's up" : feedback?.isCorrect ? "Correct" : "Incorrect";
-  const canSubmit = !answered && selected != null;
+  const canSubmit = canAcceptSubmit({ answered, locked: false, selected });
 
   return (
     <div className="card quiz-active">
       <div className="quiz-header-row">
         <div>
           <p className="kicker">{path.title}</p>
-          <h2>Question {current + 1} of {qCount}</h2>
+          <h2>{progress.label}</h2>
         </div>
         <span className="badge">{path.kicker}</span>
       </div>
@@ -371,17 +363,17 @@ function Quiz({ sectionId, onComplete, onBack }) {
               aria-current={index === current ? "step" : undefined}
             >
               <span className="visually-hidden">
-                Question {index + 1}{done ? ", completed" : active ? ", current" : ""}
+                Question {index + 1} of {qCount}{done ? ", completed" : active ? ", current" : ""}
               </span>
             </li>
           );
         })}
       </ol>
-      <ProgressBar label={`Progress · ${questionsDone} of ${qCount}`} value={progress} />
+      <ProgressBar label={`Progress · ${progress.completed} of ${progress.total}`} value={progress.percent} />
       <div className="quiz-session-meta">
-        <span>{correctCount} correct</span>
-        <span>+{pointsEarned} pts</span>
-        <span>{Math.max(0, qCount - questionsDone)} left</span>
+        <span>{liveSummary.correct} correct</span>
+        <span>+{liveSummary.pointsEarned} pts</span>
+        <span>{progress.remaining} left</span>
       </div>
       <div className="quiz-timer-row">
         <span className={timerUrgent ? "quiz-timer-urgent" : ""}>

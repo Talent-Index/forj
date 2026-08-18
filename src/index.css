@@ -778,6 +778,11 @@ img {
   background: var(--surface-2);
 }
 
+.option-btn.selected .option-letter {
+  color: var(--text);
+  font-weight: 700;
+}
+
 .option-btn.correct {
   border-color: var(--success);
   background: var(--success-bg);
@@ -800,6 +805,7 @@ img {
 
 .quiz-step {
   flex: 1;
+  min-width: 0;
   height: 6px;
   background: var(--surface-2);
   border: 1px solid var(--border);
