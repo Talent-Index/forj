@@ -18,7 +18,9 @@ A gamified skills-credentialing dApp where users learn Avalanche concepts throug
 
 Product + tech sequencing lives in **[docs/ROADMAP.md](docs/ROADMAP.md)**. For what is already built, see **[docs/STATUS.md](docs/STATUS.md)**.
 
-**Current milestone:** Phase 1 (foundation) complete · Phases 2–3 partial · live on **Avalanche Fuji** testnet.
+**Current milestone:** Phase 1 (foundation) complete · Phases 2–3 partial · **`SkillForgeCredential` live on Avalanche Fuji**.
+
+Fuji contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df)
 
 ---
 
@@ -55,6 +57,10 @@ If a private key was ever committed historically, **rotate it immediately** and 
 
 ## Deploy Smart Contract (Fuji)
 
+**Live:** `SkillForgeCredential` is already on Fuji at [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df).
+
+To redeploy (new address):
+
 ```bash
 npm run compile
 npm run deploy:fuji
@@ -68,7 +74,7 @@ Also set:
 VITE_CREDENTIAL_IMAGE_URI=ipfs://...   # or https://...
 ```
 
-Restart the dev server to enable on-chain minting. Verify the contract on [Snowtrace Fuji](https://testnet.snowtrace.io/).
+Restart the dev server so Vite picks up the contract address and image URI.
 
 ## Mainnet Gate
 

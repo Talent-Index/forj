@@ -1,6 +1,6 @@
 # SkillForge — Implementation Status
 
-Last updated: August 2026 · Branch: `audit/smart-contract-correctness`
+Last updated: 18 August 2026
 
 This document tracks what is **shipped today** versus what remains on the [product roadmap](./ROADMAP.md).
 
@@ -13,9 +13,25 @@ This document tracks what is **shipped today** versus what remains on the [produ
 | **Phase 1 — Foundation** | **Complete** | Wallet, quiz, scoring, persistence, puzzle, contract fixes, CI |
 | **Phase 2 — Learning UX** | **Partial** | Hints/fun facts, dashboards; no full onboarding or answer explanations |
 | **Phase 3 — Credentials** | **Partial** | Dual mint paths on-chain; UI uses self-claim only |
+| **Fuji deploy** | **Live** | `SkillForgeCredential` on Avalanche Fuji |
 | **Phases 4–10** | **Planned** | Gamification, backend, issuer dashboard, mainnet, ecosystem |
 
-**Network:** Avalanche Fuji testnet (chain ID `43113`). Contract address lives in local `deployments/fuji.json` after `npm run deploy:fuji` and is copied into `.env` as `VITE_CREDENTIAL_CONTRACT`.
+---
+
+## Live Fuji deployment
+
+`SkillForgeCredential` is deployed on Avalanche Fuji (chain ID `43113`).
+
+| Field | Value |
+| --- | --- |
+| Address | [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) |
+| Deployer | `0x7c538b83D0295f94C4bBAf8302095d9ED4b2Ad5f` |
+| Deploy tx | [`0x7764050f3b6849cae40d971b945f7751caee5567e4dce1b7ae517f021a290e18`](https://testnet.snowtrace.io/tx/0x7764050f3b6849cae40d971b945f7751caee5567e4dce1b7ae517f021a290e18) |
+| Deployed at | 2026-08-17T21:50:03Z |
+
+Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at this address. Restart the Vite dev server after env changes.
+
+**Operator follow-up:** set `VITE_CREDENTIAL_IMAGE_URI` to a stable IPFS or HTTPS artwork URL before minting credentials with metadata artwork.
 
 ---
 
@@ -84,9 +100,11 @@ This document tracks what is **shipped today** versus what remains on the [produ
 ### Deploy & environment
 
 - `npm run deploy:local` — Hardhat network, no `PRIVATE_KEY`
-- `npm run deploy:fuji` — Fuji testnet; writes `deployments/fuji.json`, updates `.env`
+- `npm run deploy:fuji` — **done**; live address above
+- Deploy script writes `deployments/fuji.json` and updates `VITE_CREDENTIAL_CONTRACT` in `.env`
 - `.env` + `.env.local` merge: empty `.env.local` values no longer wipe `.env` secrets
 - `.gitignore` covers `.env`, `artifacts/`, `cache/`, `deployments/*` (except examples)
+- Mainnet remains gated (`CONFIRM_MAINNET=yes`)
 
 ### CI & quality
 
@@ -131,6 +149,7 @@ This document tracks what is **shipped today** versus what remains on the [produ
 - [x] `mintCredentialWithAuthorization` + EIP-712 nonces
 - [x] Replay and unauthorized issuance tests
 - [x] On-chain credential read in UI
+- [x] Fuji testnet deployment of `SkillForgeCredential`
 - [ ] Issuer-key management runbook
 - [ ] Frontend attested-mint path
 - [ ] Public verification links / QR

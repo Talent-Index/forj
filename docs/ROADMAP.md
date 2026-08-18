@@ -2,13 +2,13 @@
 
 **Goal:** Evolve SkillForge from a Fuji-based Avalanche learning prototype into a reliable, issuer-attested, gamified skills-credentialing platform.
 
-> **Current progress:** Phase 1 is complete. Phases 2–3 are partially shipped (learning UX and on-chain credentials). See **[STATUS.md](./STATUS.md)** for the detailed implementation checklist.
+> **Current progress:** Phase 1 is complete. Phases 2–3 are partially shipped. `SkillForgeCredential` is **live on Avalanche Fuji**. See **[STATUS.md](./STATUS.md)** for the live address and implementation checklist.
 
 | Phase | Theme | Status |
 | --- | --- | --- |
 | **1** | Foundation & correctness | **Complete** |
 | **2** | Learning experience | **Partial** |
-| **3** | Credential system | **Partial** |
+| **3** | Credential system | **Partial** — contract live on Fuji |
 | **4–10** | Gamification → ecosystem | Planned |
 
 ```mermaid
@@ -139,7 +139,7 @@ flowchart LR
 - ✅ Review metadata immutability/security *(OpenZeppelin Base64; invalid image rejected)*
 - 🟡 Review issuer-key exposure risks
 - ✅ Remove unnecessary privileged operations
-- 🟡 Add deployment verification
+- ✅ Add deployment verification *(Fuji live; Snowtrace record in STATUS.md)*
 - ⬜ Establish contract upgrade policy, if upgrades are supported
 - ⬜ Conduct an independent security audit before production credential issuance
 
