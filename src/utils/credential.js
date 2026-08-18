@@ -1,3 +1,6 @@
+import { FUJI_CHAIN_ID } from "./wallet.js";
+import { buildCredentialRecord } from "./credentialModel.js";
+
 const DEFAULT_EXPLORER = "https://testnet.snowtrace.io/token/";
 
 function toBigInt(value) {
@@ -14,7 +17,8 @@ export function mapOnChainCredential(
   tokenId,
   data,
   contractAddress = "",
-  explorerBase = DEFAULT_EXPLORER
+  explorerBase = DEFAULT_EXPLORER,
+  extras = {}
 ) {
   const id = toBigInt(tokenId);
   if (id == null || id === 0n) return null;
@@ -34,16 +38,21 @@ export function mapOnChainCredential(
       ];
 
   const token = id.toString();
-  return {
-    tokenId: token,
-    totalPoints: row[0] == null ? "0" : row[0].toString(),
-    puzzleMask: row[1] == null ? "0" : row[1].toString(),
-    easyCorrect: Number(row[2]) || 0,
-    mediumCorrect: Number(row[3]) || 0,
-    hardCorrect: Number(row[4]) || 0,
-    image: row[5] == null ? "" : String(row[5]),
-    mintedAt: Number(row[6]) || 0,
-    attested: Boolean(row[7]),
+  return buildCredentialRecord({
+    tokenId: id,
+    totalPoints: row[0],
+    puzzleMask: row[1],
+    easyCorrect: row[2],
+    mediumCorrect: row[3],
+    hardCorrect: row[4],
+    image: row[5],
+    mintedAt: row[6],
+    attested: row[7],
+    contractAddress,
+    chainId: extras.chainId ?? FUJI_CHAIN_ID,
+    walletAddress: extras.walletAddress || "",
+    metadataUri: extras.metadataUri || "",
+    issuerAddress: extras.issuerAddress || "",
     explorerUrl: contractAddress ? `${explorerBase}${contractAddress}?a=${token}` : "",
-  };
+  });
 }

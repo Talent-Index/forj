@@ -5,6 +5,26 @@ import {
   FUJI_EXPLORER_TOKEN,
 } from "../utils/contract";
 import { mapOnChainCredential } from "../utils/credential";
+import { FUJI_CHAIN_ID } from "../utils/wallet";
+
+async function readChainId(publicClient) {
+  try {
+    if (typeof publicClient.getChainId === "function") {
+      return await publicClient.getChainId();
+    }
+  } catch {
+    // Use Fuji when the client cannot report a chain.
+  }
+  return FUJI_CHAIN_ID;
+}
+
+async function readOptional(publicClient, request) {
+  try {
+    return await publicClient.readContract(request);
+  } catch {
+    return "";
+  }
+}
 
 export function useOnChainCredential(address, publicClient) {
   const [credential, setCredential] = useState(null);
@@ -34,20 +54,38 @@ export function useOnChainCredential(address, publicClient) {
         return null;
       }
 
-      const [data] = await Promise.all([
+      const [data, metadataUri, issuerAddress, chainId] = await Promise.all([
         publicClient.readContract({
           address: CONTRACT_ADDRESS,
           abi: CREDENTIAL_ABI,
           functionName: "credentials",
           args: [tokenId],
         }),
+        readOptional(publicClient, {
+          address: CONTRACT_ADDRESS,
+          abi: CREDENTIAL_ABI,
+          functionName: "tokenURI",
+          args: [tokenId],
+        }),
+        readOptional(publicClient, {
+          address: CONTRACT_ADDRESS,
+          abi: CREDENTIAL_ABI,
+          functionName: "owner",
+        }),
+        readChainId(publicClient),
       ]);
 
       const next = mapOnChainCredential(
         tokenId,
         data,
         CONTRACT_ADDRESS,
-        FUJI_EXPLORER_TOKEN
+        FUJI_EXPLORER_TOKEN,
+        {
+          walletAddress: address,
+          metadataUri,
+          issuerAddress,
+          chainId: Number(chainId) || FUJI_CHAIN_ID,
+        }
       );
       setCredential(next);
       return next;
