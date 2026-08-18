@@ -12,7 +12,7 @@ import {
   normalizeRecipientName,
   validateRecipientName,
 } from "../src/utils/recipient.js";
-import { highestDifficulty, quizPercent } from "../src/components/CertificateArtifact.jsx";
+import { highestDifficulty, quizPercent } from "../src/utils/certificateView.js";
 import {
   createMemoryStorage,
   createProgressStore,

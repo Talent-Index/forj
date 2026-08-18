@@ -15,11 +15,12 @@ import { validateRecipientName } from "../utils/recipient";
 import { CREDENTIAL_SCHEMA_VERSION } from "../utils/credentialModel";
 import EmptyState from "./EmptyState";
 import CredentialRecord from "./CredentialRecord";
-import CertificateArtifact, {
+import CertificateArtifact from "./CertificateArtifact";
+import {
   certificateId,
   highestDifficulty,
   quizPercent,
-} from "./CertificateArtifact";
+} from "../utils/certificateView";
 import JigsawBoard from "./JigsawBoard";
 import { Button } from "./ui/primitives";
 
