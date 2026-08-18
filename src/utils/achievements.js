@@ -67,17 +67,13 @@ function safeScores(sectionScores) {
   return sectionScores;
 }
 
-export function evaluateAchievements({
-  sectionScores = {},
-  acquiredPieces = [],
-  attempts = [],
-  hasCredential = false,
-} = {}) {
+export function evaluateAchievements(raw = {}) {
+  const input = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
   const data = {
-    sectionScores: safeScores(sectionScores),
-    acquiredPieces: normalizePieces(acquiredPieces),
-    attempts: Array.isArray(attempts) ? attempts : [],
-    hasCredential: Boolean(hasCredential),
+    sectionScores: safeScores(input.sectionScores),
+    acquiredPieces: normalizePieces(input.acquiredPieces),
+    attempts: Array.isArray(input.attempts) ? input.attempts : [],
+    hasCredential: Boolean(input.hasCredential),
   };
   return ACHIEVEMENTS.map((achievement) => ({
     ...achievement,
