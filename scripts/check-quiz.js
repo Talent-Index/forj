@@ -3,6 +3,7 @@ import { QUESTION_TOPICS, getSectionById, sections } from "../src/data/questions
 import {
   POST_SUBMIT_KEYS,
   QUESTIONS_PER_QUIZ,
+  canAcceptSubmit,
   findQuestionById,
   getAnswerFeedback,
   getQuestionBankStatus,
@@ -11,8 +12,10 @@ import {
   isLearnerQuestion,
   isValidQuestion,
   isValidReference,
+  quizProgress,
   selectQuizQuestions,
   shuffle,
+  summarizeAttempt,
   toLearnerQuestion,
 } from "../src/utils/quiz.js";
 
@@ -208,5 +211,53 @@ for (const { sectionId, question } of allQuestions) {
   assert.ok(prompt.length >= 12, `${question.id} prompt is too short`);
   void sectionId;
 }
+
+const start = quizProgress({ current: 0, answered: false, total: 5 });
+assert.equal(start.label, "Question 1 of 5");
+assert.equal(start.completed, 0);
+assert.equal(start.remaining, 5);
+assert.equal(start.percent, 0);
+
+const afterFirst = quizProgress({ current: 0, answered: true, total: 5 });
+assert.equal(afterFirst.label, "Question 1 of 5");
+assert.equal(afterFirst.completed, 1);
+assert.equal(afterFirst.percent, 20);
+
+const lastDone = quizProgress({ current: 4, answered: true, total: 5 });
+assert.equal(lastDone.label, "Question 5 of 5");
+assert.equal(lastDone.completed, 5);
+assert.equal(lastDone.percent, 100);
+
+assert.equal(canAcceptSubmit({ answered: false, locked: false, selected: "A" }), true);
+assert.equal(canAcceptSubmit({ answered: false, locked: false, selected: null }), false);
+assert.equal(canAcceptSubmit({ answered: false, locked: true, selected: "A" }), false);
+assert.equal(canAcceptSubmit({ answered: true, locked: false, selected: "A" }), false);
+
+let locked = false;
+function trySubmit(selected) {
+  if (!canAcceptSubmit({ answered: false, locked, selected })) return "ignored";
+  locked = true;
+  return "scored";
+}
+assert.equal(trySubmit("A"), "scored");
+assert.equal(trySubmit("B"), "ignored");
+
+const summary = summarizeAttempt(
+  [
+    { correct: true, timedOut: false },
+    { correct: false, timedOut: false },
+    { correct: false, timedOut: true },
+    { correct: true, timedOut: false },
+    { correct: false, timedOut: false },
+  ],
+  3,
+  5
+);
+assert.equal(summary.correct, 2);
+assert.equal(summary.incorrect, 2);
+assert.equal(summary.timedOut, 1);
+assert.equal(summary.wrong, 3);
+assert.equal(summary.pointsEarned, 6);
+assert.equal(summary.percent, 40);
 
 console.log("quiz selection tests passed");
