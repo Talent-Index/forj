@@ -114,7 +114,7 @@ npm run verify
 | `npm test` | Hardhat unit tests (`SkillForgeCredential`) |
 | `npm run test:retry` | Section retry scoring (no point stacking) |
 | `npm run test:wallet` | Wallet onboarding / Fuji network smoke test |
-| `npm run test:quiz` | Exactly 5 unique questions per difficulty |
+| `npm run test:quiz` | 5 unique questions per difficulty; explanations and references after submit |
 | `npm run test:progress` | Per-wallet progress persistence + sanitization |
 | `npm run test:puzzle` | Atomic puzzle piece redemption |
 | `npm run test:onboarding` | Product intro, first-run flow, empty/error copy |

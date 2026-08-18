@@ -1,16 +1,91 @@
 export const QUESTIONS_PER_QUIZ = 5;
 
-export function isValidQuestion(question) {
-  if (!question || typeof question !== "object") return false;
-  if (typeof question.question !== "string" || question.question.trim().length === 0) return false;
-  if (!Array.isArray(question.options) || question.options.length < 2) return false;
-  if (!question.options.every((option) => typeof option === "string" && option.trim().length > 0)) {
+export const POST_SUBMIT_KEYS = ["answer", "explanation", "funFact", "reference"];
+
+const OFFICIAL_REFERENCE_HOSTS = new Set([
+  "build.avax.network",
+  "docs.avax.network",
+  "www.avax.network",
+  "avax.network",
+  "academy.avax.network",
+]);
+
+function isNonEmptyString(value, minLength = 1) {
+  return typeof value === "string" && value.trim().length >= minLength;
+}
+
+export function isValidReference(reference) {
+  if (!reference || typeof reference !== "object") return false;
+  if (!isNonEmptyString(reference.title)) return false;
+  if (!isNonEmptyString(reference.url)) return false;
+  try {
+    const url = new URL(reference.url);
+    return url.protocol === "https:" && OFFICIAL_REFERENCE_HOSTS.has(url.hostname);
+  } catch {
     return false;
   }
+}
+
+export function hintRevealsAnswer(question) {
+  const hint = typeof question?.hint === "string" ? question.hint.trim().toLowerCase() : "";
+  const answer = typeof question?.answer === "string" ? question.answer.trim().toLowerCase() : "";
+  if (!hint || answer.length < 6) return false;
+  return hint.includes(answer);
+}
+
+export function isValidQuestion(question) {
+  if (!question || typeof question !== "object") return false;
+  if (!isNonEmptyString(question.question)) return false;
+  if (!Array.isArray(question.options) || question.options.length < 2) return false;
+  if (!question.options.every((option) => isNonEmptyString(option))) return false;
   if (!question.options.includes(question.answer)) return false;
+  if (!isNonEmptyString(question.explanation, 24)) return false;
+  if (!isValidReference(question.reference)) return false;
+  if (hintRevealsAnswer(question)) return false;
   const id = question.id;
-  if (id != null && (typeof id !== "string" || id.trim().length === 0)) return false;
+  if (id != null && !isNonEmptyString(id)) return false;
   return true;
+}
+
+export function isLearnerQuestion(question) {
+  if (!question || typeof question !== "object") return false;
+  if (!isNonEmptyString(question.question)) return false;
+  if (!Array.isArray(question.options) || question.options.length < 2) return false;
+  if (!question.options.every((option) => isNonEmptyString(option))) return false;
+  if (question.hint != null && typeof question.hint !== "string") return false;
+  for (const key of POST_SUBMIT_KEYS) {
+    if (question[key] != null) return false;
+  }
+  return true;
+}
+
+export function toLearnerQuestion(question, sectionId) {
+  return {
+    id: question.id,
+    question: question.question,
+    options: question.options.slice(),
+    hint: typeof question.hint === "string" ? question.hint : "",
+    sectionId: sectionId ?? question.sectionId ?? null,
+  };
+}
+
+export function findQuestionById(section, id) {
+  if (!section || id == null) return null;
+  return (section.questions || []).find((question) => question.id === id) || null;
+}
+
+export function getAnswerFeedback(bankQuestion, selectedOption) {
+  if (!isValidQuestion(bankQuestion)) return null;
+  const selected = selectedOption ?? null;
+  return {
+    isCorrect: selected === bankQuestion.answer,
+    timedOut: selected == null,
+    selected,
+    answer: bankQuestion.answer,
+    explanation: bankQuestion.explanation.trim(),
+    reference: bankQuestion.reference,
+    funFact: isNonEmptyString(bankQuestion.funFact) ? bankQuestion.funFact.trim() : null,
+  };
 }
 
 export function getValidQuestions(pool) {
@@ -85,9 +160,6 @@ export function selectQuizQuestions(section, options = {}) {
   return {
     ok: true,
     error: null,
-    questions: selected.map((question) => ({
-      ...question,
-      sectionId: section.id,
-    })),
+    questions: selected.map((question) => toLearnerQuestion(question, section.id)),
   };
 }

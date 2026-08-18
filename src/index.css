@@ -743,6 +743,11 @@ img {
   cursor: pointer;
 }
 
+.option-btn.selected {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
 .option-btn.correct {
   border-color: var(--success);
   background: var(--success-bg);
@@ -751,6 +756,29 @@ img {
 .option-btn.wrong {
   border-color: var(--danger);
   background: var(--danger-bg);
+}
+
+.option-btn:disabled {
+  cursor: default;
+}
+
+.quiz-feedback {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--success);
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quiz-feedback-wrong {
+  border-left-color: var(--danger);
+}
+
+.quiz-fun-fact {
+  color: var(--muted);
 }
 
 .option-letter {
