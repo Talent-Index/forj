@@ -11,11 +11,22 @@ import {
   CREDENTIAL_STANDARD,
   CREDENTIAL_TYPE,
   ISSUER_KIND,
+  OPTIONAL_FIELDS,
+  REQUIRED_FIELDS,
   VERIFICATION_STATUS,
   buildCredentialRecord,
+  canTransitionVerification,
+  credentialIdsAreUnique,
+  currentCredentialIdByWallet,
   describeMetadataUri,
+  isAddress,
+  isChainId,
+  isCredentialId,
   isCredentialRecord,
+  isUnixSeconds,
   puzzlePieceCount,
+  toIsoTimestamp,
+  validateCredentialRecord,
 } from "../src/utils/credentialModel.js";
 import { FUJI_CHAIN_ID } from "../src/utils/wallet.js";
 
@@ -170,5 +181,130 @@ assert.equal(clamped.completion.puzzlePieces, 16);
 
 assert.equal(isCredentialRecord(null), false);
 assert.equal(isCredentialRecord({ tokenId: "1" }), false);
+
+assert.deepEqual(REQUIRED_FIELDS.includes("credentialId"), true);
+assert.equal(OPTIONAL_FIELDS.includes("walletAddress"), true);
+assert.equal(OPTIONAL_FIELDS.includes("metadataUri"), true);
+assert.equal(REQUIRED_FIELDS.includes("walletAddress"), false);
+
+assert.equal(isAddress(WALLET), true);
+assert.equal(isAddress(WALLET.toUpperCase()), false);
+assert.equal(isAddress("0xabc"), false);
+assert.equal(isAddress("javascript:alert(1)"), false);
+assert.equal(isCredentialId("1"), true);
+assert.equal(isCredentialId("0"), false);
+assert.equal(isCredentialId("01"), false);
+assert.equal(isCredentialId("-1"), false);
+assert.equal(isChainId(43113), true);
+assert.equal(isChainId("0xa869"), true);
+assert.equal(isChainId(0), false);
+assert.equal(isChainId(43113.5), false);
+assert.equal(isChainId("fuji"), false);
+assert.equal(isUnixSeconds(1_700_000_000), true);
+assert.equal(isUnixSeconds(1_700_000_000_000), false);
+assert.equal(toIsoTimestamp(1_700_000_000), "2023-11-14T22:13:20.000Z");
+assert.equal(claimed.completion.mintedAtIso, "2023-11-14T22:13:20.000Z");
+
+assert.equal(validateCredentialRecord(claimed, { requireWallet: true, requireContract: true }).ok, true);
+
+const checksumWallet = buildCredentialRecord({
+  tokenId: 3,
+  walletAddress: "0x" + "A".repeat(40),
+  totalPoints: 3,
+  puzzleMask: 1,
+  easyCorrect: 1,
+  contractAddress: CONTRACT,
+});
+assert.equal(checksumWallet.walletAddress, WALLET);
+assert.equal(checksumWallet.contractAddress, CONTRACT.toLowerCase());
+
+const droppedJunk = buildCredentialRecord({
+  tokenId: 4,
+  walletAddress: "0xabc",
+  contractAddress: "not-a-contract",
+  chainId: "nope",
+  totalPoints: 3,
+  puzzleMask: 1,
+});
+assert.equal(droppedJunk.walletAddress, "");
+assert.equal(droppedJunk.contractAddress, "");
+assert.equal(droppedJunk.chainId, 0);
+assert.equal(isCredentialRecord(droppedJunk), false);
+assert.equal(validateCredentialRecord(droppedJunk, { requireWallet: true }).ok, false);
+
+const millis = buildCredentialRecord({
+  tokenId: 5,
+  totalPoints: 3,
+  puzzleMask: 1,
+  mintedAt: 1_700_000_000_000,
+});
+assert.equal(millis.completion.mintedAt, 1_700_000_000);
+assert.equal(millis.completion.mintedAtIso.endsWith("Z"), true);
+
+const overScore = { ...claimed, score: { ...claimed.score, easyCorrect: 6 } };
+assert.equal(validateCredentialRecord(overScore).ok, false);
+
+const zeroPoints = { ...claimed, score: { ...claimed.score, totalPoints: 0 } };
+assert.equal(validateCredentialRecord(zeroPoints).ok, false);
+
+const mixedType = {
+  ...claimed,
+  credentialType: CREDENTIAL_TYPE.ISSUER_ATTESTED,
+  verificationStatus: VERIFICATION_STATUS.CLAIMED,
+};
+assert.equal(validateCredentialRecord(mixedType).ok, false);
+
+const badIssuer = {
+  ...claimed,
+  issuer: { kind: ISSUER_KIND.SELF, address: OWNER },
+};
+assert.equal(validateCredentialRecord(badIssuer).ok, false);
+
+assert.equal(canTransitionVerification("none", "claimed"), true);
+assert.equal(canTransitionVerification("none", "attested"), true);
+assert.equal(canTransitionVerification("claimed", "attested", { sameCredentialId: true }), false);
+assert.equal(canTransitionVerification("attested", "claimed", { sameCredentialId: true }), false);
+assert.equal(canTransitionVerification("claimed", "attested", { sameCredentialId: false }), true);
+assert.equal(canTransitionVerification("attested", "claimed", { sameCredentialId: false }), true);
+assert.equal(canTransitionVerification("claimed", "none"), false);
+assert.equal(canTransitionVerification("attested", "none"), false);
+assert.equal(canTransitionVerification("claimed", "claimed", { sameCredentialId: true }), true);
+
+const first = buildCredentialRecord({
+  tokenId: 1,
+  walletAddress: WALLET,
+  totalPoints: 15,
+  puzzleMask: 1,
+  easyCorrect: 5,
+});
+const remint = buildCredentialRecord({
+  tokenId: 2,
+  walletAddress: WALLET,
+  totalPoints: 15,
+  puzzleMask: 1,
+  easyCorrect: 5,
+  attested: true,
+  issuerAddress: OWNER,
+});
+assert.equal(credentialIdsAreUnique([first, remint]), true);
+assert.equal(credentialIdsAreUnique([first, { ...remint, credentialId: "1" }]), false);
+assert.equal(currentCredentialIdByWallet([first, remint]).get(WALLET), "2");
+assert.equal(
+  canTransitionVerification(first.verificationStatus, remint.verificationStatus, {
+    sameCredentialId: first.credentialId === remint.credentialId,
+  }),
+  true
+);
+
+assert.equal(isCredentialRecord(clamped), true);
+assert.equal(clamped.version.eip712, "1");
+assert.equal(clamped.version.schema, 1);
+assert.equal(clamped.schemaVersion, clamped.version.schema);
+
+assert.match(doc, /Required vs optional/);
+assert.match(doc, /Score constraints/);
+assert.match(doc, /Verification-state transitions/);
+assert.match(doc, /Unix \*\*seconds\*\*/);
+assert.match(doc, /credentialIdsAreUnique/);
 
 console.log("credential data model tests passed");

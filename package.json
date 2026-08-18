@@ -18,9 +18,10 @@
     "test:quiz": "node scripts/check-quiz.js",
     "test:progress": "node scripts/check-progress.js",
     "test:learner": "node scripts/check-learner-stats.js",
+    "test:credential": "node scripts/check-credential-model.js",
     "test:puzzle": "node scripts/check-puzzle.js",
     "test:onboarding": "node scripts/check-onboarding.js",
-    "verify": "npm run lint && npm run compile && npm test && npm run test:retry && npm run test:wallet && npm run test:quiz && npm run test:progress && npm run test:learner && npm run test:puzzle && npm run test:onboarding && npm run build",
+    "verify": "npm run lint && npm run compile && npm test && npm run test:retry && npm run test:wallet && npm run test:quiz && npm run test:progress && npm run test:learner && npm run test:credential && npm run test:puzzle && npm run test:onboarding && npm run build",
     "deploy:fuji": "hardhat run scripts/deploy.js --network fuji",
     "deploy:local": "hardhat run scripts/deploy.js --network hardhat",
     "deploy:mainnet": "hardhat run scripts/deploy.js --network avalanche"

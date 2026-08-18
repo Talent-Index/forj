@@ -21,6 +21,39 @@ Source of truth in code: [`src/utils/credentialModel.js`](../src/utils/credentia
 
 Schema `1` matches the Fuji contract. Changing on-chain fields requires a new contract and a new schema version. Revocation is **not** in v1.
 
+`version` format:
+
+| Subfield | Type | Rule |
+| --- | --- | --- |
+| `schema` | integer `>= 1` | Must equal `schemaVersion` |
+| `eip712` | string | `/^[0-9]+$/` (currently `"1"`) |
+| `standard` | string | Exactly `SkillForgeCredential` |
+
+---
+
+## Required vs optional
+
+Every v1 object includes the keys in `CREDENTIAL_RECORD_FIELDS`. Empty string is not the same as missing.
+
+| Field | Presence | Empty allowed | Notes |
+| --- | --- | --- | --- |
+| `schemaVersion` | required | no | integer `>= 1` |
+| `credentialId` | required | no | decimal token id, `/^[1-9][0-9]{0,77}$/` |
+| `score` | required | no | object; see score constraints |
+| `difficulty` | required | no | `easy`, `medium`, `hard` entries |
+| `completion` | required | no | includes `mintedAt` Unix seconds |
+| `credentialType` | required | no | `self-claimed` \| `issuer-attested` |
+| `verificationStatus` | required | no | `claimed` \| `attested` |
+| `issuer` | required | kind no; address yes | address empty if owner not loaded |
+| `chainId` | required | no | positive 32-bit integer |
+| `version` | required | no | object, format above |
+| `walletAddress` | optional until loaded | yes | required for a complete on-chain read (`requireWallet`) |
+| `contractAddress` | optional until loaded | yes | required for a complete on-chain read (`requireContract`) |
+| `metadataUri` | optional | yes | ERC-721 `tokenURI`; often a data URI |
+| `imageUri` / `explorerUrl` | optional | yes | display helpers, not on-chain struct fields |
+
+Validate with `validateCredentialRecord(record)` or `validateCredentialRecord(record, { requireWallet: true, requireContract: true })`.
+
 ---
 
 ## Canonical record (schema v1)
@@ -86,7 +119,7 @@ Each of Easy, Medium, and Hard:
 }
 ```
 
-`puzzleMask` is a 16-bit bitmask (`1..0xFFFF`). `puzzlePieces` is the popcount. `mintedAt` is the Unix timestamp stored at mint.
+`puzzleMask` is a 16-bit bitmask (`1..0xFFFF`). `puzzlePieces` is the popcount. `mintedAt` is Unix **seconds** (`0` = unknown; not milliseconds). `mintedAtIso` is the matching UTC ISO-8601 string, or empty when `mintedAt` is `0`.
 
 ### `issuer`
 
@@ -100,6 +133,78 @@ v1 does **not** store the issuer address inside `CredentialData`. Attested mints
 ### `metadataUri`
 
 v1 `tokenURI` is an on-chain `data:application/json;base64,...` document (OpenZeppelin Base64), not a separate IPFS JSON file. Artwork lives in `CredentialData.image` / record `imageUri` (`ipfs://` or `https://` when configured).
+
+---
+
+## Validation rules
+
+Enforced by `validateCredentialRecord` in [`src/utils/credentialModel.js`](../src/utils/credentialModel.js).
+
+### Field types
+
+| Field | Type |
+| --- | --- |
+| `schemaVersion` | integer |
+| `credentialId` | string |
+| `walletAddress`, `contractAddress`, `issuer.address` | string (`""` or `0x` + 40 lowercase hex) |
+| `score.*Correct`, `score.totalPoints`, `chainId`, `completion.mintedAt` | integer |
+| `credentialType`, `verificationStatus`, `metadataUri` | string |
+| `score`, `difficulty`, `completion`, `issuer`, `version` | object |
+| `attested` | boolean (alias of verification status) |
+
+### Score constraints
+
+- Easy / Medium / Hard correct: integer `0–5` (contract rejects `> 5`; the record clamps)
+- `totalPoints`: integer `>= 1` (contract rejects `0`)
+- `totalPoints` is a claimed snapshot and is **not** required to equal `3×easy + 5×medium + 8×hard`
+- `maxPoints` is always `80`
+- Quiz total correct: `0–15` and equal to Easy + Medium + Hard
+- Puzzle mask: decimal string of an integer `1–65535`
+- Puzzle pieces: popcount of that mask, `1–16`
+
+### Address and chain formats
+
+- Wallet and contract: `normalizeAddress` → `^0x[a-f0-9]{40}$` (lowercase, 20 bytes). Invalid input becomes `""`, not a raw string.
+- Chain ID: positive integer `1–4294967295`. Fuji is `43113`. Invalid values become `0` and fail validation. Missing values default to Fuji.
+- Checksum mixed-case input is accepted and stored lowercase.
+
+### Completion timestamp
+
+- `completion.mintedAt`: Unix seconds, integer `0–4102444800` (through 2100-01-01 UTC)
+- Millisecond values (`> 4102444800`) are converted to seconds when building
+- `completion.mintedAtIso`: `YYYY-MM-DDTHH:mm:ss.sssZ` or `""`
+
+### Credential ID uniqueness
+
+- Token IDs start at `1` and increment (`_nextTokenId++`)
+- IDs are globally unique; a burned id is never reused
+- One **current** credential per wallet (`credentialOf[wallet]`). Remint burns the previous token and assigns a new id
+- `credentialIdsAreUnique(records)` checks a list. `currentCredentialIdByWallet` keeps the highest id per wallet
+
+### Credential type semantics
+
+| `attested` | `credentialType` | `verificationStatus` | `issuer.kind` |
+| --- | --- | --- | --- |
+| `false` | `self-claimed` | `claimed` | `self` (learner) |
+| `true` | `issuer-attested` | `attested` | `contract-owner` |
+
+These four must agree. Self-claimed issuer address, when present, must equal `walletAddress`.
+
+### Verification-state transitions
+
+Pre-mint state is `none` (no token). v1 has **no revoke**.
+
+| From | To | Same `credentialId` | Allowed |
+| --- | --- | --- | --- |
+| `none` | `claimed` or `attested` | n/a | yes (mint) |
+| `claimed` or `attested` | same status | yes | yes (no-op) |
+| `claimed` | `attested` | yes | **no** — flag is immutable on a token |
+| `attested` | `claimed` | yes | **no** |
+| `claimed` | `attested` | no (remint) | yes |
+| `attested` | `claimed` | no (remint) | yes (trust regression) |
+| any | `none` | any | **no** |
+
+`canTransitionVerification(from, to, { sameCredentialId })` encodes this.
 
 ---
 
@@ -154,7 +259,8 @@ Token IDs start at 1. The NFT is soulbound (no transfer or approve).
     "puzzlePieces": 4,
     "puzzleTotal": 16,
     "puzzleComplete": false,
-    "mintedAt": 1700000000
+    "mintedAt": 1700000000,
+    "mintedAtIso": "2023-11-14T22:13:20.000Z"
   },
   "credentialType": "self-claimed",
   "verificationStatus": "claimed",

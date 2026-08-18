@@ -59,7 +59,7 @@ flowchart LR
 
 ## Phase 3 — Credential System 🟡 *Partial*
 
-- ✅ Define the SkillForge credential data model
+- ✅ Define the SkillForge credential data model *([schema v1](./CREDENTIAL.md))*
 - ✅ Finalize soulbound credential metadata
 - 🟡 Use stable IPFS/HTTPS metadata and artwork *(operator sets `VITE_CREDENTIAL_IMAGE_URI`)*
 - ✅ Separate claimed scores from issuer-attested scores
@@ -280,6 +280,7 @@ flowchart LR
 ## Related docs
 
 - [STATUS.md](./STATUS.md) — what is shipped today (tests, contracts, UI)
+- [CREDENTIAL.md](./CREDENTIAL.md) — versioned credential record (schema v1)
 - [README](../README.md) — quick start, env, deploy, mainnet gate, CI
 - [`.env.example`](../.env.example) — required environment variables
 - Contract: [`contracts/SkillForgeCredential.sol`](../contracts/SkillForgeCredential.sol)

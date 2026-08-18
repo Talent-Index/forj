@@ -154,7 +154,7 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 
 ### Phase 3 — Credential System 🟡
 
-- [x] Credential data model (`CredentialData` + metadata JSON)
+- [x] Credential data model (schema v1 — [CREDENTIAL.md](./CREDENTIAL.md))
 - [x] Soulbound metadata and artwork URI field
 - [x] Claimed vs issuer-attested separation (`attested` flag)
 - [x] `mintCredentialWithAuthorization` + EIP-712 nonces
@@ -185,6 +185,8 @@ npm run test:retry      # scoring regression
 npm run test:wallet     # wallet smoke test
 npm run test:quiz       # quiz selection
 npm run test:progress   # localStorage persistence
+npm run test:learner    # dashboard stats
+npm run test:credential # credential schema v1
 npm run test:puzzle     # puzzle redemption
 npm run test:onboarding # first-time product loop copy
 npm run build           # Vite production build
@@ -196,4 +198,5 @@ npm run build           # Vite production build
 
 - [README](../README.md) — quick start, env, deploy, CI
 - [ROADMAP.md](./ROADMAP.md) — full 10-phase product plan
+- [CREDENTIAL.md](./CREDENTIAL.md) — versioned credential record (schema v1)
 - [`.env.example`](../.env.example) — environment template
