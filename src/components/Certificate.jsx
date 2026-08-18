@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState } from "react";
 import {
   PUZZLE_SIZE,
   PUZZLE_LABELS,
@@ -7,17 +7,15 @@ import {
 } from "../data/questions";
 import {
   CONTRACT_ADDRESS,
-  CREDENTIAL_ABI,
   buildMintData,
   puzzleToMask,
-  FUJI_CHAIN_ID,
   FUJI_EXPLORER_TX,
-  FUJI_EXPLORER_TOKEN,
 } from "../utils/contract";
 import { QUESTIONS_PER_QUIZ } from "../utils/quiz";
 import { resolveCredentialImageUri } from "../utils/ipfs";
 import { playFinishSound } from "../utils/sounds";
 import { CREDENTIAL_EXPLAINER, EMPTY_STATES, ERROR_STATES } from "../utils/onboarding";
+import { useOnChainCredential } from "../hooks/useOnChainCredential";
 import EmptyState from "./EmptyState";
 
 function Certificate({
@@ -34,8 +32,8 @@ function Certificate({
   const [minting, setMinting] = useState(false);
   const [mintTx, setMintTx] = useState(null);
   const [mintError, setMintError] = useState(null);
-  const [onChainCredential, setOnChainCredential] = useState(null);
-  const [loadingCredential, setLoadingCredential] = useState(Boolean(CONTRACT_ADDRESS));
+  const { credential: onChainCredential, loading: loadingCredential, reload: loadOnChainCredential } =
+    useOnChainCredential(address, publicClient);
 
   const date = new Date().toLocaleDateString("en-US", {
     year: "numeric",
@@ -54,65 +52,6 @@ function Certificate({
       ? `SF-${address.slice(2, 8).toUpperCase()}-${puzzleToMask(acquiredPieces).toString(16).toUpperCase()}`
       : "SF-LOCAL"
   );
-
-  const loadOnChainCredential = useCallback(async () => {
-    if (!CONTRACT_ADDRESS || !publicClient || !address) {
-      setOnChainCredential(null);
-      return;
-    }
-
-    setLoadingCredential(true);
-    try {
-      const tokenId = await publicClient.readContract({
-        address: CONTRACT_ADDRESS,
-        abi: CREDENTIAL_ABI,
-        functionName: "credentialOf",
-        args: [address],
-      });
-
-      if (!tokenId || tokenId === 0n) {
-        setOnChainCredential(null);
-        return;
-      }
-
-      const [data, tokenURI] = await Promise.all([
-        publicClient.readContract({
-          address: CONTRACT_ADDRESS,
-          abi: CREDENTIAL_ABI,
-          functionName: "credentials",
-          args: [tokenId],
-        }),
-        publicClient.readContract({
-          address: CONTRACT_ADDRESS,
-          abi: CREDENTIAL_ABI,
-          functionName: "tokenURI",
-          args: [tokenId],
-        }),
-      ]);
-
-      setOnChainCredential({
-        tokenId: tokenId.toString(),
-        totalPoints: data[0].toString(),
-        puzzleMask: data[1].toString(),
-        easyCorrect: Number(data[2]),
-        mediumCorrect: Number(data[3]),
-        hardCorrect: Number(data[4]),
-        image: data[5],
-        mintedAt: Number(data[6]),
-        attested: Boolean(data[7]),
-        tokenURI,
-        explorerUrl: `${FUJI_EXPLORER_TOKEN}${CONTRACT_ADDRESS}?a=${tokenId.toString()}`,
-      });
-    } catch {
-      setOnChainCredential(null);
-    } finally {
-      setLoadingCredential(false);
-    }
-  }, [address, publicClient]);
-
-  useEffect(() => {
-    loadOnChainCredential();
-  }, [loadOnChainCredential]);
 
   async function handleMint() {
     if (!CONTRACT_ADDRESS) {
