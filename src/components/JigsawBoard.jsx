@@ -40,7 +40,6 @@ function JigsawBoard({
           <g
             key={piece.index}
             className={`jigsaw-piece is-${state} ${lastUnlocked === piece.index ? "is-enter" : ""}`}
-            clipPath={`url(#jigsaw-clip-${piece.index})`}
             role={clickable ? "button" : "img"}
             tabIndex={clickable ? 0 : undefined}
             aria-label={
@@ -62,17 +61,20 @@ function JigsawBoard({
                 : undefined
             }
           >
-            <path className="jigsaw-fill" d={piece.d} />
             {acquired && artwork ? (
-              <image
-                href={artwork}
-                x="0"
-                y="0"
-                width={JIGSAW_BOARD}
-                height={JIGSAW_BOARD}
-                preserveAspectRatio="xMidYMid slice"
-              />
-            ) : null}
+              <g clipPath={`url(#jigsaw-clip-${piece.index})`}>
+                <image
+                  href={artwork}
+                  x="0"
+                  y="0"
+                  width={JIGSAW_BOARD}
+                  height={JIGSAW_BOARD}
+                  preserveAspectRatio="xMidYMid slice"
+                />
+              </g>
+            ) : (
+              <path className="jigsaw-fill" d={piece.d} />
+            )}
             <path className="jigsaw-stroke" d={piece.d} />
             {!acquired && (
               <g className="jigsaw-label" transform={`translate(${piece.cx} ${piece.cy})`}>

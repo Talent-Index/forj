@@ -35,7 +35,7 @@ export const LEARNING_PROGRESSION = [
   {
     step: 4,
     title: "Unlock puzzle pieces",
-    body: `Spend ${PIECE_COST} points per piece on a 4×4 certificate puzzle. Each piece can be unlocked only once.`,
+    body: `Spend ${PIECE_COST} points per piece on a 16-piece interlocking jigsaw. Completing it forges the SkillForge certificate.`,
   },
   {
     step: 5,
@@ -72,7 +72,7 @@ export const POINTS_EXPLAINER = {
 
 export const PUZZLE_EXPLAINER = {
   title: "Puzzle pieces",
-  body: `The certificate is a ${Math.sqrt(TOTAL_PIECES)}×${Math.sqrt(TOTAL_PIECES)} puzzle with ${TOTAL_PIECES} pieces. Each piece costs ${PIECE_COST} points. You cannot buy the same piece twice or go below zero remaining points.`,
+  body: `The certificate is a 16-piece interlocking jigsaw. Each piece costs ${PIECE_COST} points. You cannot buy the same piece twice or go below zero remaining points.`,
   pieceCost: PIECE_COST,
   totalPieces: TOTAL_PIECES,
 };

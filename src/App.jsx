@@ -14,7 +14,7 @@ import EmptyState from "./components/EmptyState";
 import AboutPage from "./components/pages/AboutPage";
 import SettingsPage from "./components/pages/SettingsPage";
 import ProgressPage from "./components/pages/ProgressPage";
-import puzzleImage from "../images.jpeg";
+import forgeCertificate from "./assets/forge-certificate.png";
 import {
   PROGRESS_VIEWS,
   applySectionResult,
@@ -48,9 +48,10 @@ function App() {
   const [sectionScores, setSectionScores] = useState({});
   const [completedSections, setCompletedSections] = useState([]);
   const [attempts, setAttempts] = useState([]);
+  const [recipientName, setRecipientName] = useState("");
   const [hydratedAddress, setHydratedAddress] = useState(null);
   const [guideDismissed, setGuideDismissed] = useState(false);
-  const userImage = puzzleImage;
+  const userImage = forgeCertificate;
   const currentAddress = normalizeAddress(wallet.address);
   const progressReady = Boolean(currentAddress && hydratedAddress === currentAddress);
 
@@ -64,6 +65,7 @@ function App() {
     setSectionScores(next.sectionScores);
     setCompletedSections(next.completedSections);
     setAttempts(next.attempts);
+    setRecipientName(next.recipientName || "");
   }, []);
 
   useEffect(() => {
@@ -91,6 +93,7 @@ function App() {
       sectionScores,
       completedSections,
       attempts,
+      recipientName,
     });
   }, [
     activeSection,
@@ -99,6 +102,7 @@ function App() {
     completedSections,
     currentAddress,
     progressReady,
+    recipientName,
     sectionScores,
     spentPoints,
     totalPoints,
@@ -239,6 +243,8 @@ function App() {
           totalPoints={totalPoints}
           acquiredPieces={acquiredPieces}
           sectionScores={sectionScores}
+          recipientName={recipientName}
+          onRecipientName={setRecipientName}
           getWalletClient={wallet.getWalletClient}
           publicClient={wallet.publicClient}
           switchToFuji={wallet.switchToFuji}

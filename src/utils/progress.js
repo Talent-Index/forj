@@ -1,6 +1,7 @@
 import { getSectionById } from "../data/questions.js";
 import { QUESTIONS_PER_QUIZ } from "./quiz.js";
 import { spentPointsFor, normalizePieces } from "./puzzle.js";
+import { validateRecipientName } from "./recipient.js";
 
 export const STORAGE_VERSION = 1;
 export const SCORE_SECTIONS = ["easy", "medium", "hard"];
@@ -49,6 +50,7 @@ export function emptyProgress() {
     sectionScores: {},
     completedSections: [],
     attempts: [],
+    recipientName: "",
   };
 }
 
@@ -144,6 +146,7 @@ export function sanitizeProgress(raw) {
     const sectionScores = sanitizeSectionScores(raw.sectionScores);
     const acquiredPieces = normalizePieces(raw.acquiredPieces);
     const { view, activeSection } = sanitizeView(raw.view, raw.activeSection);
+    const recipient = validateRecipientName(raw.recipientName);
     return {
       version: STORAGE_VERSION,
       view,
@@ -154,6 +157,7 @@ export function sanitizeProgress(raw) {
       acquiredPieces,
       spentPoints: spentPointsFor(acquiredPieces),
       totalPoints: recomputeTotalPoints(sectionScores),
+      recipientName: recipient.ok ? recipient.name : "",
     };
   } catch {
     return emptyProgress();

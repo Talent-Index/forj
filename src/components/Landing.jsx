@@ -89,7 +89,7 @@ function Landing({ onStart, onExplore }) {
             Locked pieces stay neutral.
           </p>
           <ol className="loop-list compact">
-            {["Quiz", "Points", "Puzzle pieces", "4 × 4 puzzle", "Certificate"].map((item, i) => (
+            {["Quiz", "Points", "Jigsaw pieces", "16-piece forge", "Certificate"].map((item, i) => (
               <li key={item}>
                 <span>{item}</span>
                 {i < 4 && <span className="loop-arrow" aria-hidden="true">↓</span>}
