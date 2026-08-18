@@ -4,6 +4,7 @@ import {
   CREDENTIAL_ABI,
   FUJI_EXPLORER_TOKEN,
 } from "../utils/contract";
+import { mapOnChainCredential } from "../utils/credential";
 
 export function useOnChainCredential(address, publicClient) {
   const [credential, setCredential] = useState(null);
@@ -42,18 +43,12 @@ export function useOnChainCredential(address, publicClient) {
         }),
       ]);
 
-      const next = {
-        tokenId: tokenId.toString(),
-        totalPoints: data[0].toString(),
-        puzzleMask: data[1].toString(),
-        easyCorrect: Number(data[2]),
-        mediumCorrect: Number(data[3]),
-        hardCorrect: Number(data[4]),
-        image: data[5],
-        mintedAt: Number(data[6]),
-        attested: Boolean(data[7]),
-        explorerUrl: `${FUJI_EXPLORER_TOKEN}${CONTRACT_ADDRESS}?a=${tokenId.toString()}`,
-      };
+      const next = mapOnChainCredential(
+        tokenId,
+        data,
+        CONTRACT_ADDRESS,
+        FUJI_EXPLORER_TOKEN
+      );
       setCredential(next);
       return next;
     } catch (err) {

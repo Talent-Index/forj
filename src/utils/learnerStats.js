@@ -1,12 +1,17 @@
 import { TOTAL_PIECES, MAX_POINTS, getSectionById } from "../data/questions.js";
 import { QUESTIONS_PER_QUIZ } from "./quiz.js";
-import { SCORE_SECTIONS } from "./progress.js";
-import { availablePoints, spentPointsFor } from "./puzzle.js";
+import { SCORE_SECTIONS, sanitizeProgress, normalizeAddress } from "./progress.js";
 
 export function shortAddress(address) {
-  if (!address || typeof address !== "string") return "";
-  if (address.length < 10) return address;
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  const normalized = normalizeAddress(address);
+  if (!normalized) return "";
+  return `${normalized.slice(0, 6)}...${normalized.slice(-4)}`;
+}
+
+export function walletExplorerUrl(address) {
+  const normalized = normalizeAddress(address);
+  if (!normalized) return "";
+  return `https://testnet.snowtrace.io/address/${normalized}`;
 }
 
 export function sectionCompletion(sectionScores, sectionId) {
@@ -30,24 +35,20 @@ export function sectionCompletion(sectionScores, sectionId) {
   };
 }
 
-export function computeLearnerDashboard({
-  sectionScores = {},
-  attempts = [],
-  acquiredPieces = [],
-  totalPoints = 0,
-  spentPoints = 0,
-} = {}) {
-  const difficulties = SCORE_SECTIONS.map((id) => sectionCompletion(sectionScores, id));
+export function computeLearnerDashboard(raw = {}) {
+  const progress = sanitizeProgress(raw);
+  const difficulties = SCORE_SECTIONS.map((id) => sectionCompletion(progress.sectionScores, id));
   const quizCorrect = difficulties.reduce((sum, row) => sum + row.correct, 0);
   const quizTotal = SCORE_SECTIONS.length * QUESTIONS_PER_QUIZ;
   const quizPercent = Math.round((quizCorrect / quizTotal) * 100);
-  const puzzleCount = Array.isArray(acquiredPieces) ? acquiredPieces.length : 0;
+  const puzzleCount = progress.acquiredPieces.length;
   const puzzlePercent = Math.round((puzzleCount / TOTAL_PIECES) * 100);
   const overallPercent = Math.round(
-    difficulties.reduce((sum, row) => sum + row.percent, puzzlePercent) / (difficulties.length + 1)
+    (difficulties.reduce((sum, row) => sum + row.percent, 0) + puzzlePercent) /
+      (difficulties.length + 1)
   );
 
-  const attemptRows = Array.isArray(attempts) ? attempts : [];
+  const attemptRows = progress.attempts;
   const attemptTotals = attemptRows.reduce(
     (acc, attempt) => {
       acc.correct += Number(attempt?.correct) || 0;
@@ -62,19 +63,16 @@ export function computeLearnerDashboard({
     ? Math.round((attemptTotals.correct / attemptTotals.asked) * 100)
     : 0;
 
-  const earned = Number(totalPoints) || 0;
-  const spent = Number(spentPoints) || spentPointsFor(acquiredPieces);
-
   return {
     overallPercent,
     quizCorrect,
     quizTotal,
     quizPercent,
     difficulties,
-    totalPoints: earned,
+    totalPoints: progress.totalPoints,
     maxPoints: MAX_POINTS,
-    remainingPoints: availablePoints(earned, acquiredPieces),
-    spentPoints: spent,
+    remainingPoints: Math.max(0, progress.totalPoints - progress.spentPoints),
+    spentPoints: progress.spentPoints,
     puzzleCount,
     puzzleTotal: TOTAL_PIECES,
     puzzlePercent,
@@ -83,6 +81,8 @@ export function computeLearnerDashboard({
     attemptsBySection: attemptTotals.bySection,
     accuracy,
     isNewLearner:
-      attemptRows.length === 0 && puzzleCount === 0 && difficulties.every((row) => !row.attempted),
+      attemptRows.length === 0 &&
+      puzzleCount === 0 &&
+      difficulties.every((row) => !row.attempted),
   };
 }

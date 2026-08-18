@@ -1,13 +1,11 @@
 import { QUESTIONS_PER_QUIZ } from "../../utils/quiz";
 import { EMPTY_STATES, PATH_COPY } from "../../utils/onboarding";
-import { computeLearnerDashboard, shortAddress } from "../../utils/learnerStats";
+import { computeLearnerDashboard, shortAddress, walletExplorerUrl } from "../../utils/learnerStats";
 import { FUJI_CHAIN_ID } from "../../utils/wallet";
 import { useOnChainCredential } from "../../hooks/useOnChainCredential";
 import { Button, Card, ProgressBar } from "../ui/primitives";
 import EmptyState from "../EmptyState";
 import Achievements from "../Achievements";
-
-const SNOWTRACE_ADDRESS = "https://testnet.snowtrace.io/address/";
 
 function ProgressPage({
   address,
@@ -35,6 +33,8 @@ function ProgressPage({
   const { credential, loading: credentialLoading, error: credentialError } =
     useOnChainCredential(address, publicClient);
   const next = stats.difficulties.find((row) => row.percent < 100) || stats.difficulties[0];
+  const displayAddress = shortAddress(address);
+  const explorerUrl = walletExplorerUrl(address);
 
   return (
     <div className="page">
@@ -68,7 +68,7 @@ function ProgressPage({
         <h2>Difficulty completion</h2>
         <div className="dashboard-difficulties">
         {stats.difficulties.map((row) => {
-          const copy = PATH_COPY[row.id];
+          const copy = PATH_COPY[row.id] || { kicker: row.name, title: row.name };
           return (
             <Card key={row.id} className={`difficulty-card difficulty-card-${row.id}`}>
               <p className="kicker">{copy.kicker}</p>
@@ -177,13 +177,13 @@ function ProgressPage({
 
       <section className="section-block">
         <h2>Wallet</h2>
-        <p>{shortAddress(address) || "Not connected"}</p>
+        <p>{displayAddress || "Not connected"}</p>
         <p className="meta-line">
           {walletName || "Wallet"} · {isFuji ? "Avalanche Fuji" : `Chain ${chainId || "unknown"}`} · ID {chainId || FUJI_CHAIN_ID}
         </p>
-        {address && (
+        {explorerUrl && (
           <p>
-            <a href={`${SNOWTRACE_ADDRESS}${address}`} target="_blank" rel="noreferrer">
+            <a href={explorerUrl} target="_blank" rel="noreferrer">
               View address on Snowtrace
             </a>
           </p>
@@ -203,7 +203,7 @@ function ProgressPage({
         <div className="quiz-nav quiz-nav-end">
           <Button variant="secondary" onClick={onLearn}>Back to Learn</Button>
           <Button onClick={() => onContinue(next.id)}>
-            Continue {PATH_COPY[next.id].kicker}
+            Continue {PATH_COPY[next?.id]?.kicker || next?.name}
           </Button>
         </div>
       )}
