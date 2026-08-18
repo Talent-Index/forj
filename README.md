@@ -170,7 +170,7 @@ skillforge/
 ├── .github/workflows/ci.yml
 └── src/
     ├── components/                # Landing, Quiz, Puzzle, Certificate, …
-    ├── data/questions.js          # 8 questions × 3 tiers
+    ├── data/questions.js          # 16 questions × 3 tiers
     ├── hooks/useWallet.js
     └── utils/                     # progress, puzzle, quiz, contract, wallet
 ```

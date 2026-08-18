@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { getSectionById, sections } from "../src/data/questions.js";
+import { QUESTION_TOPICS, getSectionById, sections } from "../src/data/questions.js";
 import {
   POST_SUBMIT_KEYS,
   QUESTIONS_PER_QUIZ,
@@ -146,11 +146,18 @@ for (const sectionId of ["easy", "medium", "hard"]) {
   const section = getSectionById(sectionId);
   const bank = getQuestionBankStatus(section);
   assert.equal(bank.ok, true, `${sectionId} bank too small`);
+  assert.ok(bank.size >= 16, `${sectionId} should expose an expanded bank (found ${bank.size})`);
   assert.ok(bank.size >= QUESTIONS_PER_QUIZ, `${sectionId} needs at least ${QUESTIONS_PER_QUIZ} questions`);
   assert.equal(section.questions.length, bank.size, `${sectionId} has questions missing explanations or references`);
 
+  const topics = new Set(section.questions.map((question) => question.topic));
+  for (const topic of QUESTION_TOPICS) {
+    assert.ok(topics.has(topic), `${sectionId} is missing topic ${topic}`);
+  }
+
   for (const question of section.questions) {
     assert.equal(isValidQuestion(question), true, `${question.id} is not a complete teachable question`);
+    assert.ok(QUESTION_TOPICS.includes(question.topic), `${question.id} has unknown topic ${question.topic}`);
     assert.equal(hintRevealsAnswer(question), false, `${question.id} hint reveals the answer`);
     assert.ok(question.explanation.length >= 24, `${question.id} needs a fuller explanation`);
     assert.equal(isValidReference(question.reference), true, `${question.id} needs an official Avalanche reference`);
@@ -173,4 +180,33 @@ for (const sectionId of ["easy", "medium", "hard"]) {
 }
 
 assert.deepEqual(sections.map((section) => section.id), ["easy", "medium", "hard"]);
+
+function normalizeText(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+const allQuestions = sections.flatMap((section) => section.questions.map((question) => ({ sectionId: section.id, question })));
+const ids = allQuestions.map((item) => item.question.id);
+assert.equal(new Set(ids).size, ids.length, "duplicate question id across banks");
+
+const prompts = allQuestions.map((item) => normalizeText(item.question.question));
+assert.equal(new Set(prompts).size, prompts.length, "duplicate question text across banks");
+
+for (const { sectionId, question } of allQuestions) {
+  assert.equal(question.options.length, 4, `${question.id} must have exactly 4 options`);
+  const optionKeys = question.options.map(normalizeText);
+  assert.equal(new Set(optionKeys).size, 4, `${question.id} has duplicate options`);
+  assert.equal(optionKeys.filter((option) => option === normalizeText(question.answer)).length, 1, `${question.id} must have exactly one matching correct option`);
+  assert.ok(question.explanation.trim().length >= 80, `${question.id} explanation is too thin`);
+  assert.equal(question.reference.url.startsWith("https://"), true, `${question.id} reference must be https`);
+  assert.ok(!hintRevealsAnswer(question), `${question.id} hint spoils the answer`);
+  assert.ok(QUESTION_TOPICS.includes(question.topic), `${question.id} topic`);
+  const prompt = normalizeText(question.question);
+  for (const option of optionKeys) {
+    assert.ok(option.length > 0, `${question.id} has an empty option`);
+  }
+  assert.ok(prompt.length >= 12, `${question.id} prompt is too short`);
+  void sectionId;
+}
+
 console.log("quiz selection tests passed");
