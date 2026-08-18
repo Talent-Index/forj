@@ -180,4 +180,33 @@ for (const sectionId of ["easy", "medium", "hard"]) {
 }
 
 assert.deepEqual(sections.map((section) => section.id), ["easy", "medium", "hard"]);
+
+function normalizeText(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+const allQuestions = sections.flatMap((section) => section.questions.map((question) => ({ sectionId: section.id, question })));
+const ids = allQuestions.map((item) => item.question.id);
+assert.equal(new Set(ids).size, ids.length, "duplicate question id across banks");
+
+const prompts = allQuestions.map((item) => normalizeText(item.question.question));
+assert.equal(new Set(prompts).size, prompts.length, "duplicate question text across banks");
+
+for (const { sectionId, question } of allQuestions) {
+  assert.equal(question.options.length, 4, `${question.id} must have exactly 4 options`);
+  const optionKeys = question.options.map(normalizeText);
+  assert.equal(new Set(optionKeys).size, 4, `${question.id} has duplicate options`);
+  assert.equal(optionKeys.filter((option) => option === normalizeText(question.answer)).length, 1, `${question.id} must have exactly one matching correct option`);
+  assert.ok(question.explanation.trim().length >= 80, `${question.id} explanation is too thin`);
+  assert.equal(question.reference.url.startsWith("https://"), true, `${question.id} reference must be https`);
+  assert.ok(!hintRevealsAnswer(question), `${question.id} hint spoils the answer`);
+  assert.ok(QUESTION_TOPICS.includes(question.topic), `${question.id} topic`);
+  const prompt = normalizeText(question.question);
+  for (const option of optionKeys) {
+    assert.ok(option.length > 0, `${question.id} has an empty option`);
+  }
+  assert.ok(prompt.length >= 12, `${question.id} prompt is too short`);
+  void sectionId;
+}
+
 console.log("quiz selection tests passed");
