@@ -44,7 +44,7 @@ flowchart LR
 
 ## Phase 2 — Learning Experience 🟡 *Partial*
 
-- 🟡 Improve onboarding for new Avalanche learners *(landing page shipped; no guided tutorial)*
+- ✅ Improve onboarding for new Avalanche learners *(product intro, first-run loop, empty/error states)*
 - ✅ Introduce clearer learning objectives for each difficulty tier
 - 🟡 Add explanations after quiz answers *(hints + fun facts shipped; not full explanations)*
 - 🟡 Add Avalanche ecosystem learning references *(embedded in question copy)*

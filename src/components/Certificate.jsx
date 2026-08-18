@@ -17,15 +17,8 @@ import {
 import { QUESTIONS_PER_QUIZ } from "../utils/quiz";
 import { resolveCredentialImageUri } from "../utils/ipfs";
 import { playFinishSound } from "../utils/sounds";
-
-function getGrade(totalCorrect, totalQuestions) {
-  const pct = (totalCorrect / totalQuestions) * 100;
-  if (pct >= 90) return "S — Avalanche Legend";
-  if (pct >= 75) return "A — Subnet Master";
-  if (pct >= 60) return "B — Chain Expert";
-  if (pct >= 40) return "C — AVAX Scholar";
-  return "D — Beginner";
-}
+import { CREDENTIAL_EXPLAINER, EMPTY_STATES, ERROR_STATES } from "../utils/onboarding";
+import EmptyState from "./EmptyState";
 
 function Certificate({
   address,
@@ -42,7 +35,7 @@ function Certificate({
   const [mintTx, setMintTx] = useState(null);
   const [mintError, setMintError] = useState(null);
   const [onChainCredential, setOnChainCredential] = useState(null);
-  const [loadingCredential, setLoadingCredential] = useState(false);
+  const [loadingCredential, setLoadingCredential] = useState(Boolean(CONTRACT_ADDRESS));
 
   const date = new Date().toLocaleDateString("en-US", {
     year: "numeric",
@@ -172,31 +165,47 @@ function Certificate({
     }
   }
 
-  const certStyle = userImage
-    ? { backgroundImage: `url(${userImage})`, backgroundSize: "cover", backgroundPosition: "center" }
-    : {};
+  const pct = totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+  const statusLabel = onChainCredential?.attested ? "Issuer attested" : "Claimed";
 
   return (
-    <div className="certificate" style={certStyle}>
-      <div className="certificate-icon">🏔️</div>
-      <h1>Certificate of Avalanche Competence</h1>
-      <h2>SkillForge — On-Chain Record of Claimed Scores</h2>
-      <p className="cert-honesty">
-        This mint stores your claimed quiz and puzzle progress on Avalanche Fuji.
-        It is not a proctored exam credential.
-      </p>
+    <div className="certificate">
+      <p className="kicker">Certificate unlocked</p>
+      <h1>Avalanche Fundamentals</h1>
+      <p className="cert-honesty">{CREDENTIAL_EXPLAINER.body}</p>
 
-      {address && (
-        <p className="cert-wallet">Awarded to: {address.slice(0, 10)}...{address.slice(-8)}</p>
+      {Object.keys(sectionScores).length === 0 && (
+        <EmptyState
+          icon="📜"
+          title={EMPTY_STATES.noQuizzes.title}
+          body="You can still preview this certificate. Take a quiz first if you want scores on-chain."
+        />
+      )}
+      {acquiredPieces.length === 0 && (
+        <EmptyState
+          icon="🧩"
+          title={EMPTY_STATES.noPieces.title}
+          body={EMPTY_STATES.noPieces.body}
+        />
       )}
 
-      <div className="certificate-score">{totalPoints} pts</div>
-      <p className="cert-grade">Grade: {getGrade(totalCorrect, totalQuestions)}</p>
+      {address && (
+        <p className="meta-line">Completed by {address.slice(0, 6)}...{address.slice(-4)}</p>
+      )}
 
-      <div className="cert-section-scores">
-        <span>🟢 Easy: {easyCorrect}/5</span>
-        <span>🟡 Medium: {mediumCorrect}/5</span>
-        <span>🔴 Hard: {hardCorrect}/5</span>
+      <div className="stat-row">
+        <div>
+          <p className="kicker">Score</p>
+          <p className="stat-value">{pct}%</p>
+        </div>
+        <div>
+          <p className="kicker">Points</p>
+          <p className="stat-value">{totalPoints}</p>
+        </div>
+        <div>
+          <p className="kicker">Credential status</p>
+          <p className={onChainCredential?.attested ? "status-attested" : "status-claimed"}>{statusLabel}</p>
+        </div>
       </div>
 
       <h3 className="cert-puzzle-title">Your Avalanche Puzzle</h3>
@@ -217,8 +226,6 @@ function Certificate({
                 backgroundImage: `url(${userImage})`,
                 backgroundSize: `${PUZZLE_SIZE * 100}% ${PUZZLE_SIZE * 100}%`,
                 backgroundPosition: bgPos,
-                borderColor: acquired ? "#b7f0c2" : undefined,
-                backgroundBlendMode: acquired ? "normal" : undefined,
               } : {}}
             >
               {!userImage && (acquired ? PUZZLE_LABELS[i] : "?")}
@@ -266,6 +273,13 @@ function Certificate({
           )}
         </div>
       )}
+      {!loadingCredential && !onChainCredential && !mintTx && (
+        <EmptyState
+          icon="⛓️"
+          title={EMPTY_STATES.noCredential.title}
+          body={EMPTY_STATES.noCredential.body}
+        />
+      )}
 
       <div className="certificate-actions">
         <button
@@ -285,7 +299,14 @@ function Certificate({
           🔄 Try Again
         </button>
       </div>
-      {mintError && <div className="mint-error">{mintError}</div>}
+      {mintError && (
+        <EmptyState
+          variant="error"
+          icon="⚠️"
+          title={ERROR_STATES.mint.title}
+          body={`${mintError} ${ERROR_STATES.mint.body}`}
+        />
+      )}
       {!CONTRACT_ADDRESS && (
         <p className="deploy-hint">
           Deploy the smart contract with <code>npm run deploy:fuji</code> to enable on-chain minting.

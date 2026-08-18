@@ -1,14 +1,19 @@
 import { useState, useCallback, useEffect } from "react";
 import { useWallet } from "./hooks/useWallet";
-import WalletConnect from "./components/WalletConnect";
+import { useTheme } from "./hooks/useTheme";
+import { useWalletModal } from "./hooks/useWalletModal";
+import AppShell from "./components/layout/AppShell";
 import SectionSelect from "./components/SectionSelect";
 import Quiz from "./components/Quiz";
 import PuzzleBoard from "./components/PuzzleBoard";
 import Certificate from "./components/Certificate";
-import Dashboard from "./components/Dashboard";
-import Achievements from "./components/Achievements";
 import Landing from "./components/Landing";
 import NetworkGate from "./components/NetworkGate";
+import FirstRunGuide from "./components/FirstRunGuide";
+import EmptyState from "./components/EmptyState";
+import AboutPage from "./components/pages/AboutPage";
+import SettingsPage from "./components/pages/SettingsPage";
+import ProgressPage from "./components/pages/ProgressPage";
 import puzzleImage from "../images.jpeg";
 import {
   PROGRESS_VIEWS,
@@ -20,11 +25,21 @@ import {
   saveProgress,
 } from "./utils/progress";
 import { redeemPiece } from "./utils/puzzle";
+import {
+  EMPTY_STATES,
+  dismissFirstRunGuide,
+  firstRunStatus,
+  isFirstRunGuideDismissed,
+} from "./utils/onboarding";
 
 const VIEWS = PROGRESS_VIEWS;
 
 function App() {
   const wallet = useWallet();
+  const theme = useTheme();
+  const { closeModal, openModal, open } = useWalletModal();
+  const walletModal = { open, openModal, closeModal };
+  const [page, setPage] = useState("landing");
   const [view, setView] = useState(VIEWS.SECTIONS);
   const [activeSection, setActiveSection] = useState(null);
   const [totalPoints, setTotalPoints] = useState(0);
@@ -34,6 +49,7 @@ function App() {
   const [completedSections, setCompletedSections] = useState([]);
   const [attempts, setAttempts] = useState([]);
   const [hydratedAddress, setHydratedAddress] = useState(null);
+  const [guideDismissed, setGuideDismissed] = useState(false);
   const userImage = puzzleImage;
   const currentAddress = normalizeAddress(wallet.address);
   const progressReady = Boolean(currentAddress && hydratedAddress === currentAddress);
@@ -54,11 +70,15 @@ function App() {
     if (!currentAddress) {
       setHydratedAddress(null);
       applyProgress(emptyProgress());
+      setPage((current) => (current === "about" || current === "landing" ? current : "landing"));
       return;
     }
     applyProgress(loadProgress(currentAddress));
     setHydratedAddress(currentAddress);
-  }, [applyProgress, currentAddress]);
+    setGuideDismissed(isFirstRunGuideDismissed(currentAddress));
+    setPage((current) => (current === "landing" ? "learn" : current));
+    closeModal();
+  }, [applyProgress, currentAddress, closeModal]);
 
   useEffect(() => {
     if (!progressReady) return;
@@ -85,6 +105,12 @@ function App() {
     view,
   ]);
 
+  const startSection = useCallback((id) => {
+    setActiveSection(id);
+    setView(VIEWS.QUIZ);
+    setPage("learn");
+  }, []);
+
   const handleQuizComplete = useCallback((result) => {
     setSectionScores((prev) => {
       const next = applySectionResult(prev, result);
@@ -95,8 +121,6 @@ function App() {
       prev.includes(result.sectionId) ? prev : [...prev, result.sectionId]
     );
     setAttempts((prev) => [...prev, result]);
-    setView(VIEWS.SECTIONS);
-    setActiveSection(null);
   }, []);
 
   const handleAcquirePiece = useCallback((index) => {
@@ -111,116 +135,174 @@ function App() {
   const handleFullReset = useCallback(() => {
     if (currentAddress) clearProgress(currentAddress);
     applyProgress(emptyProgress());
+    setView(VIEWS.SECTIONS);
+    setPage("learn");
   }, [applyProgress, currentAddress]);
 
-  if (wallet.restoring || (wallet.isConnected && !progressReady)) {
-    return (
-      <div className="landing">
-        <section className="landing-hero">
-          <p className="landing-subtitle">Restoring your progress…</p>
-        </section>
-      </div>
-    );
+  const goLearnHome = useCallback(() => {
+    setView(VIEWS.SECTIONS);
+    setActiveSection(null);
+    setPage("learn");
+  }, []);
+
+  function handleNavigate(nextPage) {
+    if (nextPage === "landing") {
+      setPage(wallet.isConnected ? "learn" : "landing");
+      return;
+    }
+    if (!wallet.isConnected && (nextPage === "learn" || nextPage === "progress" || nextPage === "credentials" || nextPage === "settings")) {
+      openModal();
+      setPage("landing");
+      return;
+    }
+    if (nextPage === "learn") {
+      setView(VIEWS.SECTIONS);
+      setActiveSection(null);
+    }
+    setPage(nextPage);
   }
 
-  if (!wallet.isConnected) {
-    return <Landing wallet={wallet} />;
-  }
+  const restoring = wallet.restoring || (wallet.isConnected && !progressReady);
 
-  return (
-    <div className="app">
-      <header className="app-header">
-        <h1>🏔️ SkillForge</h1>
-        <p className="tagline">
-          Learn <span>Avalanche</span>. Earn Credentials.
-        </p>
-        <WalletConnect
-          address={wallet.address}
-          connecting={wallet.connecting}
-          switching={wallet.switching}
-          error={wallet.error}
-          chainId={wallet.chainId}
-          isFuji={wallet.isFuji}
-          walletName={wallet.walletName}
-          available={wallet.available}
-          isMobile={wallet.isMobile}
-          onConnect={wallet.connect}
-          onDisconnect={wallet.disconnect}
-          onSwitch={() => wallet.switchToFuji().catch(() => {})}
+  function renderContent() {
+    if (restoring) {
+      return (
+        <EmptyState
+          title={EMPTY_STATES.restoring.title}
+          body={EMPTY_STATES.restoring.body}
         />
-      </header>
-
-      {!wallet.isFuji && (
+      );
+    }
+    if (page === "about") return <AboutPage />;
+    if (!wallet.isConnected || page === "landing") {
+      return (
+        <Landing
+          onStart={() => openModal()}
+          onExplore={() => {
+            const el = document.getElementById("how-it-works");
+            el?.scrollIntoView({ behavior: theme.reducedMotion ? "auto" : "smooth" });
+          }}
+        />
+      );
+    }
+    if (page === "settings") {
+      return (
+        <SettingsPage
+          address={wallet.address}
+          isFuji={wallet.isFuji}
+          theme={theme.theme}
+          onToggleTheme={theme.toggleTheme}
+          reducedMotion={theme.reducedMotion}
+          onToggleMotion={theme.setReducedMotion}
+          onReset={handleFullReset}
+          onDisconnect={wallet.disconnect}
+        />
+      );
+    }
+    if (!wallet.isFuji) {
+      return (
         <NetworkGate
           chainId={wallet.chainId}
           switching={wallet.switching}
           error={wallet.error}
           onSwitch={() => wallet.switchToFuji().catch(() => {})}
         />
-      )}
-
-      {wallet.isFuji && view === VIEWS.SECTIONS && (
-        <SectionSelect
+      );
+    }
+    if (page === "progress") {
+      return (
+        <ProgressPage
+          address={wallet.address}
           sectionScores={sectionScores}
-          totalPoints={totalPoints}
           completedSections={completedSections}
-          onSelectSection={(id) => {
-            setActiveSection(id);
-            setView(VIEWS.QUIZ);
-          }}
-          onGoToPuzzle={() => setView(VIEWS.PUZZLE)}
+          totalPoints={totalPoints}
+          acquiredPieces={acquiredPieces}
+          attempts={attempts}
+          onContinue={startSection}
+          onLearn={goLearnHome}
         />
-      )}
-
-      {wallet.isFuji && view === VIEWS.QUIZ && activeSection && (
+      );
+    }
+    if (page === "credentials") {
+      return (
+        <Certificate
+          address={wallet.address}
+          totalPoints={totalPoints}
+          acquiredPieces={acquiredPieces}
+          sectionScores={sectionScores}
+          getWalletClient={wallet.getWalletClient}
+          publicClient={wallet.publicClient}
+          switchToFuji={wallet.switchToFuji}
+          onRetry={handleFullReset}
+          userImage={userImage}
+        />
+      );
+    }
+    if (view === VIEWS.QUIZ && activeSection) {
+      return (
         <Quiz
           sectionId={activeSection}
           onComplete={handleQuizComplete}
-          onBack={() => {
-            setView(VIEWS.SECTIONS);
-            setActiveSection(null);
-          }}
+          onBack={goLearnHome}
         />
-      )}
-
-      {wallet.isFuji && view === VIEWS.PUZZLE && (
+      );
+    }
+    if (view === VIEWS.PUZZLE) {
+      return (
         <PuzzleBoard
           totalPoints={totalPoints}
           spentPoints={spentPoints}
           acquiredPieces={acquiredPieces}
           onAcquirePiece={handleAcquirePiece}
-          onContinue={() => setView(VIEWS.CERTIFICATE)}
-          onBack={() => setView(VIEWS.SECTIONS)}
+          onContinue={() => {
+            setView(VIEWS.CERTIFICATE);
+            setPage("credentials");
+          }}
+          onBack={goLearnHome}
           userImage={userImage}
         />
-      )}
+      );
+    }
+    return (
+      <>
+        {!guideDismissed && (
+          <FirstRunGuide
+            steps={firstRunStatus({
+              isConnected: wallet.isConnected,
+              isFuji: wallet.isFuji,
+              completedSections,
+              acquiredPieces,
+            })}
+            onStartEasy={() => startSection("easy")}
+            onDismiss={() => {
+              dismissFirstRunGuide(currentAddress);
+              setGuideDismissed(true);
+            }}
+          />
+        )}
+        <SectionSelect
+          sectionScores={sectionScores}
+          totalPoints={totalPoints}
+          completedSections={completedSections}
+          onSelectSection={startSection}
+          onGoToPuzzle={() => setView(VIEWS.PUZZLE)}
+        />
+      </>
+    );
+  }
 
-      {wallet.isFuji && view === VIEWS.CERTIFICATE && (
-        <>
-          <Certificate
-            address={wallet.address}
-            totalPoints={totalPoints}
-            acquiredPieces={acquiredPieces}
-            sectionScores={sectionScores}
-            getWalletClient={wallet.getWalletClient}
-            publicClient={wallet.publicClient}
-            switchToFuji={wallet.switchToFuji}
-            onRetry={handleFullReset}
-            userImage={userImage}
-          />
-          <Dashboard
-            attempts={attempts}
-            totalPoints={totalPoints}
-            acquiredPieces={acquiredPieces}
-          />
-          <Achievements
-            sectionScores={sectionScores}
-            acquiredPieces={acquiredPieces}
-            attempts={attempts}
-          />
-        </>
-      )}
-    </div>
+  return (
+    <AppShell
+      page={page === "landing" ? "learn" : page}
+      onNavigate={handleNavigate}
+      isConnected={wallet.isConnected}
+      wallet={wallet}
+      theme={theme.theme}
+      onToggleTheme={theme.toggleTheme}
+      walletModal={walletModal}
+    >
+      {renderContent()}
+    </AppShell>
   );
 }
 
