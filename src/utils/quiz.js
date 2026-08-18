@@ -88,6 +88,49 @@ export function getAnswerFeedback(bankQuestion, selectedOption) {
   };
 }
 
+export function quizProgress({ current = 0, answered = false, total = QUESTIONS_PER_QUIZ } = {}) {
+  const safeTotal = Math.max(0, toNonNegativeInt(total));
+  const index = Math.max(0, toNonNegativeInt(current));
+  const currentNumber = safeTotal === 0 ? 0 : Math.min(index + 1, safeTotal);
+  const completed = safeTotal === 0 ? 0 : Math.min(safeTotal, index + (answered ? 1 : 0));
+  return {
+    currentNumber,
+    total: safeTotal,
+    completed,
+    remaining: Math.max(0, safeTotal - completed),
+    percent: safeTotal === 0 ? 0 : (completed / safeTotal) * 100,
+    label: `Question ${currentNumber} of ${safeTotal}`,
+  };
+}
+
+function toNonNegativeInt(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 0) return 0;
+  return Math.floor(n);
+}
+
+export function summarizeAttempt(log, pointsPerQuestion, total = QUESTIONS_PER_QUIZ) {
+  const entries = Array.isArray(log) ? log : [];
+  const correct = entries.filter((item) => item.correct).length;
+  const timedOut = entries.filter((item) => item.timedOut).length;
+  const incorrect = entries.filter((item) => !item.correct && !item.timedOut).length;
+  const perQuestion = toNonNegativeInt(pointsPerQuestion);
+  const safeTotal = Math.max(1, toNonNegativeInt(total) || QUESTIONS_PER_QUIZ);
+  return {
+    correct,
+    incorrect,
+    timedOut,
+    wrong: incorrect + timedOut,
+    total: toNonNegativeInt(total) || QUESTIONS_PER_QUIZ,
+    pointsEarned: correct * perQuestion,
+    percent: Math.round((correct / safeTotal) * 100),
+  };
+}
+
+export function canAcceptSubmit({ answered = false, locked = false, selected = null } = {}) {
+  return !answered && !locked && selected != null;
+}
+
 export function getValidQuestions(pool) {
   const seen = new Set();
   const valid = [];
