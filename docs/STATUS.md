@@ -1,6 +1,6 @@
 # SkillForge — Implementation Status
 
-Last updated: 18 August 2026
+Last updated: 19 August 2026
 
 This document tracks what is **shipped today** versus what remains on the [product roadmap](./ROADMAP.md).
 
@@ -11,7 +11,7 @@ This document tracks what is **shipped today** versus what remains on the [produ
 | Area | Status | Notes |
 | --- | --- | --- |
 | **Phase 1 — Foundation** | **Complete** | Wallet, quiz, scoring, persistence, puzzle, contract fixes, CI |
-| **Phase 2 — Learning UX** | **Partial** | Product intro + first-run guide shipped; no full answer explanations |
+| **Phase 2 — Learning UX** | **Partial** | Product intro, first-run guide, post-submit explanations, and Avalanche references shipped |
 | **Phase 3 — Credentials** | **Partial** | Dual mint paths on-chain; UI uses self-claim only |
 | **Fuji deploy** | **Live** | `SkillForgeCredential` on Avalanche Fuji |
 | **Phases 4–10** | **Planned** | Gamification, backend, issuer dashboard, mainnet, ecosystem |
@@ -59,7 +59,9 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - Exactly **5 unique random questions** per Easy / Medium / Hard session (`src/utils/quiz.js`)
 - Question banks: **8 questions per tier** (`src/data/questions.js`) — enough for randomization
 - Fisher–Yates shuffle with injectable RNG (deterministic in tests)
-- Per-question **hints** and post-answer **fun facts** (`Quiz.jsx`)
+- Per-question **hints**, post-submit **explanations**, and official Avalanche **learn-more** links
+- Select an option, then submit — explanations and the correct answer stay hidden until submit
+- Easy, Medium, and Hard banks all include explanations (`src/data/questions.js`)
 - Smoke test: `npm run test:quiz`
 
 ### Scoring & retries
@@ -145,7 +147,8 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - [x] Dashboard and achievements views
 - [x] Persistent learner progression (localStorage)
 - [x] Dedicated onboarding tutorial
-- [ ] Post-answer explanations (beyond fun facts)
+- [x] Post-answer explanations (Easy / Medium / Hard)
+- [x] Avalanche learning references after submit
 - [ ] Structured beginner → advanced learning paths
 - [ ] Certificate preview polish before first mint
 

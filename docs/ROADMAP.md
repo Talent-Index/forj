@@ -46,8 +46,8 @@ flowchart LR
 
 - ✅ Improve onboarding for new Avalanche learners *(product intro, first-run loop, empty/error states)*
 - ✅ Introduce clearer learning objectives for each difficulty tier
-- 🟡 Add explanations after quiz answers *(hints + fun facts shipped; not full explanations)*
-- 🟡 Add Avalanche ecosystem learning references *(embedded in question copy)*
+- ✅ Add explanations after quiz answers *(select, then submit; explanations only after submit)*
+- ✅ Add Avalanche ecosystem learning references *(official Builder Hub / avax.network links)*
 - 🟡 Expand ICM and Avalanche L1 content *(present in banks; not structured paths)*
 - 🟡 Improve quiz feedback and progress indicators *(dashboard + achievements)*
 - ✅ Add persistent learner progression
