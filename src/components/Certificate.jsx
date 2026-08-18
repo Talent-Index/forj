@@ -20,15 +20,6 @@ import { playFinishSound } from "../utils/sounds";
 import { CREDENTIAL_EXPLAINER, EMPTY_STATES, ERROR_STATES } from "../utils/onboarding";
 import EmptyState from "./EmptyState";
 
-function getGrade(totalCorrect, totalQuestions) {
-  const pct = (totalCorrect / totalQuestions) * 100;
-  if (pct >= 90) return "S — Avalanche Legend";
-  if (pct >= 75) return "A — Subnet Master";
-  if (pct >= 60) return "B — Chain Expert";
-  if (pct >= 40) return "C — AVAX Scholar";
-  return "D — Beginner";
-}
-
 function Certificate({
   address,
   totalPoints,
@@ -174,15 +165,13 @@ function Certificate({
     }
   }
 
-  const certStyle = userImage
-    ? { backgroundImage: `url(${userImage})`, backgroundSize: "cover", backgroundPosition: "center" }
-    : {};
+  const pct = totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+  const statusLabel = onChainCredential?.attested ? "Issuer attested" : "Claimed";
 
   return (
-    <div className="certificate" style={certStyle}>
-      <div className="certificate-icon">🏔️</div>
-      <h1>Certificate of Avalanche Competence</h1>
-      <h2>SkillForge — On-Chain Record of Claimed Scores</h2>
+    <div className="certificate">
+      <p className="kicker">Certificate unlocked</p>
+      <h1>Avalanche Fundamentals</h1>
       <p className="cert-honesty">{CREDENTIAL_EXPLAINER.body}</p>
 
       {Object.keys(sectionScores).length === 0 && (
@@ -201,16 +190,22 @@ function Certificate({
       )}
 
       {address && (
-        <p className="cert-wallet">Awarded to: {address.slice(0, 10)}...{address.slice(-8)}</p>
+        <p className="meta-line">Completed by {address.slice(0, 6)}...{address.slice(-4)}</p>
       )}
 
-      <div className="certificate-score">{totalPoints} pts</div>
-      <p className="cert-grade">Grade: {getGrade(totalCorrect, totalQuestions)}</p>
-
-      <div className="cert-section-scores">
-        <span>🟢 Easy: {easyCorrect}/5</span>
-        <span>🟡 Medium: {mediumCorrect}/5</span>
-        <span>🔴 Hard: {hardCorrect}/5</span>
+      <div className="stat-row">
+        <div>
+          <p className="kicker">Score</p>
+          <p className="stat-value">{pct}%</p>
+        </div>
+        <div>
+          <p className="kicker">Points</p>
+          <p className="stat-value">{totalPoints}</p>
+        </div>
+        <div>
+          <p className="kicker">Credential status</p>
+          <p className={onChainCredential?.attested ? "status-attested" : "status-claimed"}>{statusLabel}</p>
+        </div>
       </div>
 
       <h3 className="cert-puzzle-title">Your Avalanche Puzzle</h3>
@@ -231,8 +226,6 @@ function Certificate({
                 backgroundImage: `url(${userImage})`,
                 backgroundSize: `${PUZZLE_SIZE * 100}% ${PUZZLE_SIZE * 100}%`,
                 backgroundPosition: bgPos,
-                borderColor: acquired ? "#b7f0c2" : undefined,
-                backgroundBlendMode: acquired ? "normal" : undefined,
               } : {}}
             >
               {!userImage && (acquired ? PUZZLE_LABELS[i] : "?")}

@@ -44,6 +44,12 @@ export const LEARNING_PROGRESSION = [
   },
 ];
 
+export const PATH_COPY = {
+  easy: { kicker: "Easy", title: "Avalanche Fundamentals" },
+  medium: { kicker: "Medium", title: "Ecosystem & Architecture" },
+  hard: { kicker: "Hard", title: "Advanced Avalanche Concepts" },
+};
+
 export const DIFFICULTY_LEVELS = sections.map((section) => ({
   id: section.id,
   name: section.name,

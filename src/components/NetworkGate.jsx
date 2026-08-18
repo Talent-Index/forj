@@ -7,18 +7,15 @@ function NetworkGate({ chainId, switching, error, onSwitch }) {
     <div className="card network-gate">
       <EmptyState
         variant="error"
-        icon="🌐"
-        title={ERROR_STATES.network.title}
-        body={`${ERROR_STATES.network.body} Your wallet is on ${networkLabel(chainId)}. ${FUJI_EXPLAINER.body}`}
+        title="Wrong network"
+        body={`${ERROR_STATES.network.body} Current network: ${networkLabel(chainId)}. ${FUJI_EXPLAINER.body}`}
+        actionLabel={switching ? "Switching…" : "Switch network"}
+        onAction={onSwitch}
       />
-      {error && <div className="wallet-error">{error}</div>}
-      <button className="btn-primary" onClick={onSwitch} disabled={switching}>
-        {switching ? "Switching..." : "Switch to Avalanche Fuji"}
-      </button>
-      <p className="wallet-hint">
-        If the request is rejected, open your wallet and select Avalanche Fuji Testnet, then return here.
-        Minting later also needs free test AVAX from the{" "}
-        <a href={FUJI_EXPLAINER.faucetUrl} target="_blank" rel="noreferrer">Fuji faucet</a>.
+      {error && <p className="note">{error}</p>}
+      <p className="note">
+        Need test AVAX?{" "}
+        <a href={FUJI_EXPLAINER.faucetUrl} target="_blank" rel="noreferrer">Fuji faucet</a>
       </p>
     </div>
   );

@@ -1,4 +1,4 @@
-import { PIECE_COST, PUZZLE_SIZE, PUZZLE_LABELS, TOTAL_PIECES } from "../data/questions";
+import { PIECE_COST, PUZZLE_SIZE, TOTAL_PIECES } from "../data/questions";
 import { availablePoints, redeemPiece } from "../utils/puzzle";
 import { playCorrectSound } from "../utils/sounds";
 import { EMPTY_STATES, ERROR_STATES, PUZZLE_EXPLAINER } from "../utils/onboarding";
@@ -6,11 +6,14 @@ import EmptyState from "./EmptyState";
 import { useState } from "react";
 
 function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece, onContinue, onBack, userImage }) {
+  const [selected, setSelected] = useState(null);
   const [message, setMessage] = useState(null);
   const available = availablePoints(totalPoints, acquiredPieces);
   const spent = spentPoints ?? acquiredPieces.length * PIECE_COST;
+  const complete = acquiredPieces.length === TOTAL_PIECES;
 
   function handleAcquire(index) {
+    setSelected(index);
     const result = redeemPiece({ totalPoints, acquiredPieces }, index);
     if (!result.ok) {
       setMessage(result.error);
@@ -23,84 +26,64 @@ function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece,
 
   return (
     <div className="card puzzle-board">
-      <button className="btn-back" onClick={onBack}>← Back</button>
-      <h2 className="puzzle-title">Avalanche Puzzle</h2>
-      <p className="puzzle-desc">{PUZZLE_EXPLAINER.body}</p>
-
-      <div className="puzzle-stats">
-        <span>Remaining: <strong>{available}</strong></span>
-        <span>Unlocked: <strong>{acquiredPieces.length}/{TOTAL_PIECES}</strong></span>
-        <span>Spent: <strong>{spent}</strong></span>
+      <button className="btn btn-secondary" onClick={onBack}>Back</button>
+      <div className="puzzle-layout">
+        <div>
+          <p className="kicker">Reward</p>
+          <h2>4 × 4 certificate puzzle</h2>
+          <p>{PUZZLE_EXPLAINER.body}</p>
+          {available < PIECE_COST && acquiredPieces.length === 0 && (
+            <EmptyState
+              title={EMPTY_STATES.noPoints.title}
+              body={EMPTY_STATES.noPoints.body}
+              actionLabel="Back to quizzes"
+              onAction={onBack}
+            />
+          )}
+          {message && (
+            <EmptyState variant="error" title={ERROR_STATES.puzzle.title} body={`${message} ${ERROR_STATES.puzzle.body}`} />
+          )}
+          <div className="puzzle-grid" style={{ gridTemplateColumns: `repeat(${PUZZLE_SIZE}, 1fr)` }}>
+            {Array.from({ length: TOTAL_PIECES }, (_, i) => {
+              const acquired = acquiredPieces.includes(i);
+              const canAfford = available >= PIECE_COST;
+              const state = acquired ? "acquired" : canAfford ? "affordable" : "locked";
+              return (
+                <button
+                  key={i}
+                  className={`puzzle-piece ${state} ${selected === i ? "selected" : ""} ${complete ? "complete" : ""}`}
+                  onClick={() => handleAcquire(i)}
+                  disabled={acquired || !canAfford}
+                  aria-label={acquired ? `Piece ${i + 1} unlocked` : `Piece ${i + 1} locked`}
+                >
+                  {acquired && userImage ? (
+                    <div
+                      className="piece-image"
+                      style={{
+                        backgroundImage: `url(${userImage})`,
+                        backgroundSize: `${PUZZLE_SIZE * 100}% ${PUZZLE_SIZE * 100}%`,
+                        backgroundPosition: `${((i % PUZZLE_SIZE) / (PUZZLE_SIZE - 1)) * 100}% ${((Math.floor(i / PUZZLE_SIZE)) / (PUZZLE_SIZE - 1)) * 100}%`,
+                      }}
+                    />
+                  ) : (
+                    <span>{acquired ? "✓" : ""}</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        <aside className="card">
+          <p className="kicker">Your points</p>
+          <p className="stat-value">{available}</p>
+          <p className="meta-line">Pieces unlocked {acquiredPieces.length} / {TOTAL_PIECES}</p>
+          <p className="meta-line">Next piece {PIECE_COST} points</p>
+          <p className="meta-line">Spent {spent}</p>
+          <button className="btn btn-primary" onClick={onContinue} disabled={acquiredPieces.length === 0}>
+            View certificate
+          </button>
+        </aside>
       </div>
-
-      {available < PIECE_COST && acquiredPieces.length === 0 && (
-        <EmptyState
-          icon="🧩"
-          title={EMPTY_STATES.noPoints.title}
-          body={EMPTY_STATES.noPoints.body}
-          actionLabel="Back to quizzes"
-          onAction={onBack}
-        />
-      )}
-
-      {message && (
-        <EmptyState
-          variant="error"
-          icon="⚠️"
-          title={ERROR_STATES.puzzle.title}
-          body={`${message} ${ERROR_STATES.puzzle.body}`}
-        />
-      )}
-      {available < PIECE_COST && acquiredPieces.length < TOTAL_PIECES && (
-        <p className="puzzle-hint">
-          Need {PIECE_COST} points to unlock another piece. Earn more from a quiz, then return here.
-        </p>
-      )}
-
-      <div className="puzzle-grid" style={{ gridTemplateColumns: `repeat(${PUZZLE_SIZE}, 1fr)` }}>
-        {Array.from({ length: TOTAL_PIECES }, (_, i) => {
-          const acquired = acquiredPieces.includes(i);
-          const canAfford = available >= PIECE_COST;
-          return (
-            <button
-              key={i}
-              className={`puzzle-piece ${acquired ? "acquired" : "locked"} ${!acquired && canAfford ? "affordable" : ""}`}
-              onClick={() => handleAcquire(i)}
-              disabled={acquired || !canAfford}
-              title={
-                acquired
-                  ? "Unlocked"
-                  : canAfford
-                    ? `Unlock for ${PIECE_COST} pts`
-                    : `Locked · need ${PIECE_COST} pts`
-              }
-              aria-label={acquired ? `Piece ${i + 1} unlocked` : `Piece ${i + 1} locked`}
-            >
-              {acquired && userImage ? (
-                <div
-                  className="piece-image"
-                  style={{
-                    backgroundImage: `url(${userImage})`,
-                    backgroundSize: `${PUZZLE_SIZE * 100}% ${PUZZLE_SIZE * 100}%`,
-                    backgroundPosition: `${((i % PUZZLE_SIZE) / (PUZZLE_SIZE - 1)) * 100}% ${((Math.floor(i / PUZZLE_SIZE)) / (PUZZLE_SIZE - 1)) * 100}%`,
-                  }}
-                />
-              ) : (
-                <span className="piece-icon">{acquired ? PUZZLE_LABELS[i] : "?"}</span>
-              )}
-              <span className="piece-state">{acquired ? "Unlocked" : `${PIECE_COST} pts`}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      <button
-        className="btn-primary"
-        onClick={onContinue}
-        disabled={acquiredPieces.length === 0}
-      >
-        View Certificate
-      </button>
     </div>
   );
 }

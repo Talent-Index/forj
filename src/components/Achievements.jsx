@@ -56,7 +56,7 @@ function Achievements({ sectionScores, acquiredPieces, attempts }) {
 
   return (
     <div className="card">
-      <h3 className="achievements-title">Achievements & Badges</h3>
+      <h3 className="achievements-title">Achievements</h3>
       <p className="achievements-summary">
         {earnedCount}/{ACHIEVEMENTS.length} unlocked from your saved progress
       </p>
@@ -69,9 +69,9 @@ function Achievements({ sectionScores, acquiredPieces, attempts }) {
               className={`achievement-item ${earned ? "earned" : "locked"}`}
               title={ach.desc}
             >
-              <span className="ach-icon">{ach.icon}</span>
               <span className="ach-name">{ach.name}</span>
-              <span className="ach-status">{earned ? "Earned" : "Locked"}</span>
+              <span className="meta-line">{ach.desc}</span>
+              <span className="ach-status">{earned ? "Unlocked" : "Locked"}</span>
             </div>
           );
         })}
