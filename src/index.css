@@ -1350,6 +1350,8 @@ img {
     flex-direction: column;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {

@@ -23,7 +23,7 @@ export function validateRecipientName(value) {
       error: `Keep the name under ${RECIPIENT_MAX} characters.`,
     };
   }
-  if (/https?:\/\//i.test(name) || /[<>]/.test(name) || /[\u0000-\u001f]/.test(name)) {
+  if (/https?:\/\//i.test(name) || /[<>]/.test(name) || Array.from(name).some((ch) => ch.charCodeAt(0) < 32)) {
     return { ok: false, name: "", error: "Use a person’s name, not a URL or markup." };
   }
   if (!NAME_RE.test(name)) {

@@ -14,7 +14,7 @@ import EmptyState from "./components/EmptyState";
 import AboutPage from "./components/pages/AboutPage";
 import SettingsPage from "./components/pages/SettingsPage";
 import ProgressPage from "./components/pages/ProgressPage";
-import forgeCertificate from "./assets/forge-certificate.png";
+import forgeCertificate from "./assets/forge-certificate.jpg";
 import {
   PROGRESS_VIEWS,
   applySectionResult,
