@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { getSectionById } from "../data/questions";
 import { getQuestionBankStatus, QUESTIONS_PER_QUIZ, selectQuizQuestions } from "../utils/quiz";
 import { playCorrectSound, playWrongSound, playSectionCompleteSound } from "../utils/sounds";
+import { ERROR_STATES } from "../utils/onboarding";
+import EmptyState from "./EmptyState";
 
 const OPTIONS_LETTERS = ["A", "B", "C", "D"];
 
@@ -132,7 +134,14 @@ function Quiz({ sectionId, onComplete, onBack }) {
       <div className="card quiz-intro">
         <button className="btn-back" onClick={onBack}>← Back</button>
         <h2>Unknown quiz</h2>
-        <p className="quiz-error">That difficulty is not available. Choose Easy, Medium, or Hard.</p>
+        <EmptyState
+          variant="error"
+          icon="⚠️"
+          title={ERROR_STATES.quiz.title}
+          body="That difficulty is not available. Choose Easy, Medium, or Hard."
+          actionLabel="Back to paths"
+          onAction={onBack}
+        />
       </div>
     );
   }
@@ -154,7 +163,12 @@ function Quiz({ sectionId, onComplete, onBack }) {
           <li>🔄 Retry anytime to improve your score</li>
         </ul>
         {(startError || !bank.ok) && (
-          <p className="quiz-error">{startError || bank.error}</p>
+          <EmptyState
+            variant="error"
+            icon="⚠️"
+            title={ERROR_STATES.quiz.title}
+            body={startError || bank.error || ERROR_STATES.quiz.body}
+          />
         )}
         <button
           className="btn-primary btn-start"

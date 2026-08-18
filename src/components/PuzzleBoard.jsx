@@ -1,6 +1,8 @@
 import { PIECE_COST, PUZZLE_SIZE, PUZZLE_LABELS, TOTAL_PIECES } from "../data/questions";
 import { availablePoints, redeemPiece } from "../utils/puzzle";
 import { playCorrectSound } from "../utils/sounds";
+import { EMPTY_STATES, ERROR_STATES, PUZZLE_EXPLAINER } from "../utils/onboarding";
+import EmptyState from "./EmptyState";
 import { useState } from "react";
 
 function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece, onContinue, onBack, userImage }) {
@@ -23,9 +25,7 @@ function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece,
     <div className="card puzzle-board">
       <button className="btn-back" onClick={onBack}>← Back</button>
       <h2 className="puzzle-title">Avalanche Puzzle</h2>
-      <p className="puzzle-desc">
-        Redeem quiz points for puzzle pieces. Each piece costs {PIECE_COST} points and can be unlocked only once.
-      </p>
+      <p className="puzzle-desc">{PUZZLE_EXPLAINER.body}</p>
 
       <div className="puzzle-stats">
         <span>Remaining: <strong>{available}</strong></span>
@@ -33,7 +33,24 @@ function PuzzleBoard({ totalPoints, spentPoints, acquiredPieces, onAcquirePiece,
         <span>Spent: <strong>{spent}</strong></span>
       </div>
 
-      {message && <p className="puzzle-error">{message}</p>}
+      {available < PIECE_COST && acquiredPieces.length === 0 && (
+        <EmptyState
+          icon="🧩"
+          title={EMPTY_STATES.noPoints.title}
+          body={EMPTY_STATES.noPoints.body}
+          actionLabel="Back to quizzes"
+          onAction={onBack}
+        />
+      )}
+
+      {message && (
+        <EmptyState
+          variant="error"
+          icon="⚠️"
+          title={ERROR_STATES.puzzle.title}
+          body={`${message} ${ERROR_STATES.puzzle.body}`}
+        />
+      )}
       {available < PIECE_COST && acquiredPieces.length < TOTAL_PIECES && (
         <p className="puzzle-hint">
           Need {PIECE_COST} points to unlock another piece. Earn more from a quiz, then return here.

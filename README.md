@@ -117,6 +117,7 @@ npm run verify
 | `npm run test:quiz` | Exactly 5 unique questions per difficulty |
 | `npm run test:progress` | Per-wallet progress persistence + sanitization |
 | `npm run test:puzzle` | Atomic puzzle piece redemption |
+| `npm run test:onboarding` | Product intro, first-run flow, empty/error copy |
 | `npm run build` | Vite production build |
 
 Node **20** is required (see `.nvmrc`).

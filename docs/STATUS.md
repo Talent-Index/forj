@@ -11,7 +11,7 @@ This document tracks what is **shipped today** versus what remains on the [produ
 | Area | Status | Notes |
 | --- | --- | --- |
 | **Phase 1 — Foundation** | **Complete** | Wallet, quiz, scoring, persistence, puzzle, contract fixes, CI |
-| **Phase 2 — Learning UX** | **Partial** | Hints/fun facts, dashboards; no full onboarding or answer explanations |
+| **Phase 2 — Learning UX** | **Partial** | Product intro + first-run guide shipped; no full answer explanations |
 | **Phase 3 — Credentials** | **Partial** | Dual mint paths on-chain; UI uses self-claim only |
 | **Fuji deploy** | **Live** | `SkillForgeCredential` on Avalanche Fuji |
 | **Phases 4–10** | **Planned** | Gamification, backend, issuer dashboard, mainnet, ecosystem |
@@ -36,6 +36,14 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 ---
 
 ## Shipped features
+
+### First-time onboarding
+
+- Product intro before wallet connect: loop, difficulties, points, puzzle, credentials, Fuji
+- Wallet connection guidance and install/open links
+- First-run guide after connect (`FirstRunGuide.jsx`), dismissible per wallet
+- Empty and error states for restore, quizzes, points, pieces, credentials, wallet, network, mint
+- Regression test: `npm run test:onboarding`
 
 ### Wallet & network
 
@@ -136,7 +144,7 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - [x] Hints and fun facts during/after quiz
 - [x] Dashboard and achievements views
 - [x] Persistent learner progression (localStorage)
-- [ ] Dedicated onboarding tutorial
+- [x] Dedicated onboarding tutorial
 - [ ] Post-answer explanations (beyond fun facts)
 - [ ] Structured beginner → advanced learning paths
 - [ ] Certificate preview polish before first mint
@@ -175,6 +183,7 @@ npm run test:wallet     # wallet smoke test
 npm run test:quiz       # quiz selection
 npm run test:progress   # localStorage persistence
 npm run test:puzzle     # puzzle redemption
+npm run test:onboarding # first-time product loop copy
 npm run build           # Vite production build
 ```
 

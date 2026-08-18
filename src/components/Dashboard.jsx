@@ -1,9 +1,16 @@
+import EmptyState from "./EmptyState";
+import { EMPTY_STATES } from "../utils/onboarding";
+
 function Dashboard({ attempts, totalPoints, acquiredPieces }) {
   if (attempts.length === 0) {
     return (
       <div className="card">
         <h3 className="dashboard-title">Your Progress Dashboard</h3>
-        <p className="dashboard-empty">Complete a quiz to start tracking attempts for this wallet.</p>
+        <EmptyState
+          icon="📊"
+          title={EMPTY_STATES.noAttempts.title}
+          body={EMPTY_STATES.noAttempts.body}
+        />
       </div>
     );
   }

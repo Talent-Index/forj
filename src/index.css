@@ -1612,3 +1612,189 @@ body {
   .landing-hero { padding: 24px 0 4px; }
   .landing-title { font-size: 2.2rem; }
 }
+
+/* ===== ONBOARDING / EMPTY / ERROR ===== */
+.skip-to-wallet {
+  margin-top: 8px;
+}
+
+.steps-row {
+  flex-wrap: wrap;
+}
+
+.step-card {
+  min-width: 160px;
+}
+
+.feature-meta {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #ffd200;
+  font-weight: 600;
+}
+
+.explainers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.explainer-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 22px 20px;
+}
+
+.explainer-card h3 {
+  color: #ffd200;
+  margin-bottom: 8px;
+}
+
+.explainer-card p,
+.explainer-card li {
+  color: #a0a0c0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.explainer-card ul {
+  margin: 10px 0 0 18px;
+}
+
+.explainer-card a,
+.wallet-hint a {
+  color: #ffd200;
+}
+
+.wallet-guidance-lead {
+  margin: 0 auto 12px;
+}
+
+.wallet-guidance-list {
+  max-width: 640px;
+  margin: 0 auto 18px;
+  color: #c8c8e0;
+  line-height: 1.6;
+  padding-left: 22px;
+  text-align: left;
+}
+
+.first-run-guide h2 {
+  margin-bottom: 8px;
+}
+
+.first-run-header p {
+  color: #a0a0c0;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.first-run-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+.first-run-steps-static {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.first-run-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.first-run-step.current {
+  border-color: rgba(255, 210, 0, 0.45);
+  background: rgba(255, 210, 0, 0.08);
+}
+
+.first-run-step.done {
+  opacity: 0.75;
+}
+
+.first-run-step p {
+  color: #a0a0c0;
+  font-size: 0.88rem;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.first-run-marker {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  background: rgba(255, 210, 0, 0.15);
+  color: #ffd200;
+}
+
+.first-run-step.done .first-run-marker {
+  background: rgba(105, 240, 174, 0.2);
+  color: #69f0ae;
+}
+
+.first-run-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 16px 14px;
+  border-radius: 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.03);
+  margin: 12px 0;
+}
+
+.empty-state-error {
+  border-style: solid;
+  border-color: rgba(239, 83, 80, 0.45);
+  background: rgba(239, 83, 80, 0.1);
+}
+
+.empty-state-icon {
+  font-size: 1.6rem;
+  margin-bottom: 6px;
+}
+
+.empty-state-title {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  color: #f0f0ff;
+}
+
+.empty-state-body {
+  color: #a0a0c0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+
+.empty-state .btn-primary,
+.empty-state .btn-secondary {
+  margin-top: 4px;
+}
+
+@media (max-width: 760px) {
+  .explainers-grid { grid-template-columns: 1fr; }
+}
+

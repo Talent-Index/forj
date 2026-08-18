@@ -1,7 +1,11 @@
 import { sections } from "../data/questions";
 import { QUESTIONS_PER_QUIZ, getQuestionBankStatus } from "../utils/quiz";
+import { EMPTY_STATES, POINTS_EXPLAINER } from "../utils/onboarding";
+import EmptyState from "./EmptyState";
 
 function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzzle, completedSections }) {
+  const hasStarted = completedSections.length > 0;
+
   return (
     <div className="card section-select">
       <h2 className="section-select-title">🏔️ Avalanche Learning Paths</h2>
@@ -9,10 +13,21 @@ function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzz
         Master Avalanche through Easy, Medium, and Hard quizzes — each attempt draws {QUESTIONS_PER_QUIZ} unique questions from that difficulty only.
         Earn points and redeem them for puzzle pieces on your certificate!
       </p>
+      <p className="section-select-desc">{POINTS_EXPLAINER.body}</p>
 
       <div className="points-banner">
         <span>💰 Total Points: <strong>{totalPoints}</strong></span>
       </div>
+
+      {!hasStarted && (
+        <EmptyState
+          icon="📚"
+          title={EMPTY_STATES.noQuizzes.title}
+          body={EMPTY_STATES.noQuizzes.body}
+          actionLabel="Start Easy quiz"
+          onAction={() => onSelectSection("easy")}
+        />
+      )}
 
       <div className="sections-grid">
         {sections.map((section) => {
@@ -44,11 +59,9 @@ function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzz
         })}
       </div>
 
-      {totalPoints > 0 && (
-        <button className="btn-primary puzzle-cta" onClick={onGoToPuzzle}>
-          🧩 Redeem Points for Puzzle Pieces
-        </button>
-      )}
+      <button className="btn-primary puzzle-cta" onClick={onGoToPuzzle}>
+        {totalPoints > 0 ? "🧩 Redeem Points for Puzzle Pieces" : "🧩 See how puzzle pieces work"}
+      </button>
     </div>
   );
 }

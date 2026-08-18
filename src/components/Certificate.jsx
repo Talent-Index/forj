@@ -17,6 +17,8 @@ import {
 import { QUESTIONS_PER_QUIZ } from "../utils/quiz";
 import { resolveCredentialImageUri } from "../utils/ipfs";
 import { playFinishSound } from "../utils/sounds";
+import { CREDENTIAL_EXPLAINER, EMPTY_STATES, ERROR_STATES } from "../utils/onboarding";
+import EmptyState from "./EmptyState";
 
 function getGrade(totalCorrect, totalQuestions) {
   const pct = (totalCorrect / totalQuestions) * 100;
@@ -42,7 +44,7 @@ function Certificate({
   const [mintTx, setMintTx] = useState(null);
   const [mintError, setMintError] = useState(null);
   const [onChainCredential, setOnChainCredential] = useState(null);
-  const [loadingCredential, setLoadingCredential] = useState(false);
+  const [loadingCredential, setLoadingCredential] = useState(Boolean(CONTRACT_ADDRESS));
 
   const date = new Date().toLocaleDateString("en-US", {
     year: "numeric",
@@ -181,10 +183,22 @@ function Certificate({
       <div className="certificate-icon">🏔️</div>
       <h1>Certificate of Avalanche Competence</h1>
       <h2>SkillForge — On-Chain Record of Claimed Scores</h2>
-      <p className="cert-honesty">
-        This mint stores your claimed quiz and puzzle progress on Avalanche Fuji.
-        It is not a proctored exam credential.
-      </p>
+      <p className="cert-honesty">{CREDENTIAL_EXPLAINER.body}</p>
+
+      {Object.keys(sectionScores).length === 0 && (
+        <EmptyState
+          icon="📜"
+          title={EMPTY_STATES.noQuizzes.title}
+          body="You can still preview this certificate. Take a quiz first if you want scores on-chain."
+        />
+      )}
+      {acquiredPieces.length === 0 && (
+        <EmptyState
+          icon="🧩"
+          title={EMPTY_STATES.noPieces.title}
+          body={EMPTY_STATES.noPieces.body}
+        />
+      )}
 
       {address && (
         <p className="cert-wallet">Awarded to: {address.slice(0, 10)}...{address.slice(-8)}</p>
@@ -266,6 +280,13 @@ function Certificate({
           )}
         </div>
       )}
+      {!loadingCredential && !onChainCredential && !mintTx && (
+        <EmptyState
+          icon="⛓️"
+          title={EMPTY_STATES.noCredential.title}
+          body={EMPTY_STATES.noCredential.body}
+        />
+      )}
 
       <div className="certificate-actions">
         <button
@@ -285,7 +306,14 @@ function Certificate({
           🔄 Try Again
         </button>
       </div>
-      {mintError && <div className="mint-error">{mintError}</div>}
+      {mintError && (
+        <EmptyState
+          variant="error"
+          icon="⚠️"
+          title={ERROR_STATES.mint.title}
+          body={`${mintError} ${ERROR_STATES.mint.body}`}
+        />
+      )}
       {!CONTRACT_ADDRESS && (
         <p className="deploy-hint">
           Deploy the smart contract with <code>npm run deploy:fuji</code> to enable on-chain minting.

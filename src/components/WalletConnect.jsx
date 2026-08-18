@@ -5,6 +5,8 @@ import {
   walletDeepLink,
   walletInstallUrl,
 } from "../utils/wallet";
+import { ERROR_STATES, WALLET_GUIDANCE } from "../utils/onboarding";
+import EmptyState from "./EmptyState";
 
 function shortenAddress(addr) {
   if (!addr) return "";
@@ -58,6 +60,7 @@ function WalletConnect({
   onConnect,
   onDisconnect,
   onSwitch,
+  guidance = false,
 }) {
   if (address) {
     return (
@@ -91,13 +94,25 @@ function WalletConnect({
       <div className="wallet-icon">👛</div>
       <h2>Connect Your Wallet</h2>
       <p className="wallet-desc">
-        Connect MetaMask or Core Wallet, then switch to Avalanche Fuji to use SkillForge.
+        {guidance
+          ? WALLET_GUIDANCE.body
+          : "Connect MetaMask or Core Wallet, then switch to Avalanche Fuji to use SkillForge."}
       </p>
-      {error && <div className="wallet-error">{error}</div>}
+      {error && (
+        <EmptyState
+          variant="error"
+          icon="⚠️"
+          title={ERROR_STATES.wallet.title}
+          body={`${error} ${ERROR_STATES.wallet.body}`}
+        />
+      )}
       {noWallet && (
-        <p className="wallet-hint">
-          No injected wallet found in this browser. Install one below, then refresh the page.
-        </p>
+        <EmptyState
+          variant="empty"
+          icon="🔌"
+          title="No wallet detected"
+          body={WALLET_GUIDANCE.noWallet}
+        />
       )}
       <div className="wallet-options">
         <WalletOption

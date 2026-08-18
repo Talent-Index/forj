@@ -9,6 +9,8 @@ import Dashboard from "./components/Dashboard";
 import Achievements from "./components/Achievements";
 import Landing from "./components/Landing";
 import NetworkGate from "./components/NetworkGate";
+import FirstRunGuide from "./components/FirstRunGuide";
+import EmptyState from "./components/EmptyState";
 import puzzleImage from "../images.jpeg";
 import {
   PROGRESS_VIEWS,
@@ -20,6 +22,12 @@ import {
   saveProgress,
 } from "./utils/progress";
 import { redeemPiece } from "./utils/puzzle";
+import {
+  EMPTY_STATES,
+  dismissFirstRunGuide,
+  firstRunStatus,
+  isFirstRunGuideDismissed,
+} from "./utils/onboarding";
 
 const VIEWS = PROGRESS_VIEWS;
 
@@ -34,6 +42,7 @@ function App() {
   const [completedSections, setCompletedSections] = useState([]);
   const [attempts, setAttempts] = useState([]);
   const [hydratedAddress, setHydratedAddress] = useState(null);
+  const [guideDismissed, setGuideDismissed] = useState(false);
   const userImage = puzzleImage;
   const currentAddress = normalizeAddress(wallet.address);
   const progressReady = Boolean(currentAddress && hydratedAddress === currentAddress);
@@ -58,6 +67,7 @@ function App() {
     }
     applyProgress(loadProgress(currentAddress));
     setHydratedAddress(currentAddress);
+    setGuideDismissed(isFirstRunGuideDismissed(currentAddress));
   }, [applyProgress, currentAddress]);
 
   useEffect(() => {
@@ -117,7 +127,11 @@ function App() {
     return (
       <div className="landing">
         <section className="landing-hero">
-          <p className="landing-subtitle">Restoring your progress…</p>
+          <EmptyState
+            icon="⏳"
+            title={EMPTY_STATES.restoring.title}
+            body={EMPTY_STATES.restoring.body}
+          />
         </section>
       </div>
     );
@@ -160,16 +174,36 @@ function App() {
       )}
 
       {wallet.isFuji && view === VIEWS.SECTIONS && (
-        <SectionSelect
-          sectionScores={sectionScores}
-          totalPoints={totalPoints}
-          completedSections={completedSections}
-          onSelectSection={(id) => {
-            setActiveSection(id);
-            setView(VIEWS.QUIZ);
-          }}
-          onGoToPuzzle={() => setView(VIEWS.PUZZLE)}
-        />
+        <>
+          {!guideDismissed && (
+            <FirstRunGuide
+              steps={firstRunStatus({
+                isConnected: wallet.isConnected,
+                isFuji: wallet.isFuji,
+                completedSections,
+                acquiredPieces,
+              })}
+              onStartEasy={() => {
+                setActiveSection("easy");
+                setView(VIEWS.QUIZ);
+              }}
+              onDismiss={() => {
+                dismissFirstRunGuide(currentAddress);
+                setGuideDismissed(true);
+              }}
+            />
+          )}
+          <SectionSelect
+            sectionScores={sectionScores}
+            totalPoints={totalPoints}
+            completedSections={completedSections}
+            onSelectSection={(id) => {
+              setActiveSection(id);
+              setView(VIEWS.QUIZ);
+            }}
+            onGoToPuzzle={() => setView(VIEWS.PUZZLE)}
+          />
+        </>
       )}
 
       {wallet.isFuji && view === VIEWS.QUIZ && activeSection && (
