@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -107,5 +108,26 @@ assert.match(docs, /ipfs:\/\//);
 assert.match(docs, /forge-certificate\.jpg/);
 assert.match(docs, /tokenURI/);
 assert.match(docs, /Pinata|web3\.storage|IPFS/);
+
+const pack = spawnSync(process.execPath, [join(root, "scripts/pack-metadata.js")], {
+  encoding: "utf8",
+  cwd: root,
+});
+assert.equal(pack.status, 0, pack.stderr || pack.stdout);
+assert.match(pack.stdout, /Packed artwork/);
+assert.match(pack.stdout, /credential-template\.json/);
+
+const packedTemplate = JSON.parse(
+  readFileSync(join(root, "metadata/packed/credential-template.json"), "utf8")
+);
+assert.equal(validateCredentialMetadata(packedTemplate).ok, true);
+
+const upload = spawnSync(process.execPath, [join(root, "scripts/upload-metadata.js")], {
+  encoding: "utf8",
+  cwd: root,
+  env: { ...process.env, PINATA_JWT: "" },
+});
+assert.equal(upload.status, 0, upload.stderr || upload.stdout);
+assert.match(upload.stdout, /PINATA_JWT is not set/);
 
 console.log("credential metadata tests passed");

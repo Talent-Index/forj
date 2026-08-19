@@ -37,7 +37,7 @@ Matches what the live Fuji contract emits:
 | `attributes` | The six traits above, in that order on-chain |
 
 Schema file: [`metadata/schema/v1.json`](../metadata/schema/v1.json)  
-Examples: [`metadata/examples/`](../metadata/examples/)  
+Examples: [`metadata/examples/`](../metadata/examples/) — the CID in those files is a **format fixture**, not SkillForge art. Production must pin `forge-certificate.jpg`.  
 Builder: [`src/utils/credentialMetadata.js`](../src/utils/credentialMetadata.js)
 
 Issuer-attested tokens use description `Issuer-attested SkillForge credential on Avalanche.` and trait `Issuer attested`.

@@ -103,7 +103,7 @@ npm ci
 npm run verify
 ```
 
-`verify` runs, in order: lint → compile → Hardhat unit tests → retry/wallet/quiz/progress/puzzle regression scripts → production frontend build.
+`verify` runs, in order: lint → compile → Hardhat unit tests → regression scripts (including metadata) → production frontend build.
 
 ### Run individual checks
 
@@ -116,6 +116,8 @@ npm run verify
 | `npm run test:wallet` | Wallet onboarding / Fuji network smoke test |
 | `npm run test:quiz` | 5 unique questions per difficulty; explanations and references after submit |
 | `npm run test:progress` | Per-wallet progress persistence + sanitization |
+| `npm run test:learner` | Learner dashboard stats |
+| `npm run test:credential` | Canonical credential record schema v1 |
 | `npm run test:puzzle` | Atomic puzzle piece redemption |
 | `npm run test:jigsaw` | Interlocking puzzle geometry and recipient name |
 | `npm run test:metadata` | ERC-721 metadata JSON, stable URIs, tokenURI encode/decode |

@@ -91,12 +91,16 @@ export function retrievalUrl(uri) {
 }
 
 function decodeBase64(value) {
-  if (typeof Buffer !== "undefined") return Buffer.from(value, "base64").toString("utf8");
+  if (typeof globalThis.Buffer !== "undefined") {
+    return globalThis.Buffer.from(value, "base64").toString("utf8");
+  }
   return atob(value);
 }
 
 function encodeBase64(value) {
-  if (typeof Buffer !== "undefined") return Buffer.from(value, "utf8").toString("base64");
+  if (typeof globalThis.Buffer !== "undefined") {
+    return globalThis.Buffer.from(value, "utf8").toString("base64");
+  }
   return btoa(value);
 }
 

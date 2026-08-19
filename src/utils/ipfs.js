@@ -1,5 +1,5 @@
 /** Stable artwork URI for on-chain token metadata. IPFS or HTTPS only. */
-import { isStableMediaUri } from "./credentialMetadata";
+import { isStableMediaUri } from "./credentialMetadata.js";
 
 function configuredImageUri() {
   try {
