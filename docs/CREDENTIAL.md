@@ -305,7 +305,7 @@ Token IDs start at 1. The NFT is soulbound (no transfer or approve).
 ## Trust notes
 
 - **Self-claimed** (`mintCredential`): the learner publishes their own scores. Anyone can mint for themselves.
-- **Issuer-attested** (`mintCredentialWithAuthorization`): the contract owner signs the scores (EIP-712). This is the higher-trust path. It is on-chain today; the learner UI still mints self-claimed only.
+- **Issuer-attested** (`mintCredentialWithAuthorization`): the contract owner signs the scores (EIP-712). This is the higher-trust path. It is on-chain today; the learner UI still mints self-claimed only. Domain, payload, nonce, and deadline rules: [AUTHORIZATION.md](./AUTHORIZATION.md).
 - This is not a proctored exam credential. Remint replaces the previous token for that wallet.
 
 ---
@@ -314,4 +314,5 @@ Token IDs start at 1. The NFT is soulbound (no transfer or approve).
 
 ```bash
 npm run test:credential
+npm run test:eip712
 ```

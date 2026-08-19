@@ -119,6 +119,7 @@ npm run verify
 | `npm run test:learner` | Learner dashboard stats |
 | `npm run test:credential` | Canonical credential record schema v1 |
 | `npm run test:status` | Claimed vs attested honesty labels |
+| `npm run test:eip712` | EIP-712 domain, payload fields, and typehash |
 | `npm run test:puzzle` | Atomic puzzle piece redemption |
 | `npm run test:jigsaw` | Interlocking puzzle geometry and recipient name |
 | `npm run test:metadata` | ERC-721 metadata JSON, stable URIs, tokenURI encode/decode |
@@ -168,6 +169,7 @@ skillforge/
 │   ├── ROADMAP.md                 # 10-phase product plan
 │   ├── STATUS.md                  # implementation progress
 │   ├── CREDENTIAL.md              # on-chain credential record (schema v1)
+│   ├── AUTHORIZATION.md           # EIP-712 attested mint domain and payload
 │   └── METADATA.md                # pin artwork + production metadata process
 ├── metadata/
 │   ├── schema/v1.json             # ERC-721 metadata JSON Schema
@@ -176,7 +178,8 @@ skillforge/
 │   ├── deploy.js
 │   └── check-*.js                 # regression tests (quiz, retry, wallet, …)
 ├── test/
-│   └── SkillForgeCredential.js    # 14 Hardhat tests
+│   ├── SkillForgeCredential.js    # soulbound mint and credential tests
+│   └── SkillForgeAuthorization.js # EIP-712 authorization and replay tests
 ├── .github/workflows/ci.yml
 └── src/
     ├── components/                # Landing, Quiz, Puzzle, Certificate, …
@@ -190,6 +193,7 @@ skillforge/
 - [docs/ROADMAP.md](docs/ROADMAP.md) — learning, GameFi, and credential tracks through mainnet and ecosystem scale
 - [docs/STATUS.md](docs/STATUS.md) — shipped features, phase checklist, test commands
 - [docs/CREDENTIAL.md](docs/CREDENTIAL.md) — versioned on-chain credential record (schema v1)
+- [docs/AUTHORIZATION.md](docs/AUTHORIZATION.md) — EIP-712 attested mint domain, payload, and replay rules
 - [docs/METADATA.md](docs/METADATA.md) — stable IPFS/HTTPS artwork and metadata process
 
 ## Tech Stack
