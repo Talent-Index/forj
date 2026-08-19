@@ -14,6 +14,7 @@ import EmptyState from "./components/EmptyState";
 import AboutPage from "./components/pages/AboutPage";
 import SettingsPage from "./components/pages/SettingsPage";
 import ProgressPage from "./components/pages/ProgressPage";
+import CredentialLookupPage from "./components/pages/CredentialLookupPage";
 import forgeCertificate from "./assets/forge-certificate.jpg";
 import {
   PROGRESS_VIEWS,
@@ -31,15 +32,24 @@ import {
   firstRunStatus,
   isFirstRunGuideDismissed,
 } from "./utils/onboarding";
+import { parseLookupQuery, lookupQueryString } from "./utils/credentialLookup";
 
 const VIEWS = PROGRESS_VIEWS;
+const PUBLIC_PAGES = new Set(["landing", "about", "lookup"]);
+
+function pageFromLocation() {
+  if (typeof window === "undefined") return "landing";
+  const query = parseLookupQuery(window.location.search);
+  if (query.tokenId || query.wallet) return "lookup";
+  return "landing";
+}
 
 function App() {
   const wallet = useWallet();
   const theme = useTheme();
   const { closeModal, openModal, open } = useWalletModal();
   const walletModal = { open, openModal, closeModal };
-  const [page, setPage] = useState("landing");
+  const [page, setPage] = useState(pageFromLocation);
   const [view, setView] = useState(VIEWS.SECTIONS);
   const [activeSection, setActiveSection] = useState(null);
   const [totalPoints, setTotalPoints] = useState(0);
@@ -72,13 +82,16 @@ function App() {
     if (!currentAddress) {
       setHydratedAddress(null);
       applyProgress(emptyProgress());
-      setPage((current) => (current === "about" || current === "landing" ? current : "landing"));
+      setPage((current) => (PUBLIC_PAGES.has(current) ? current : "landing"));
       return;
     }
     applyProgress(loadProgress(currentAddress));
     setHydratedAddress(currentAddress);
     setGuideDismissed(isFirstRunGuideDismissed(currentAddress));
-    setPage((current) => (current === "landing" ? "learn" : current));
+    setPage((current) => {
+      if (current === "about" || current === "lookup") return current;
+      return current === "landing" ? "learn" : current;
+    });
     closeModal();
   }, [applyProgress, currentAddress, closeModal]);
 
@@ -149,7 +162,30 @@ function App() {
     setPage("learn");
   }, []);
 
+  const openLookup = useCallback((tokenId = "", wallet = "") => {
+    const href = lookupQueryString({ tokenId, wallet });
+    if (typeof window !== "undefined" && href) {
+      window.history.pushState({}, "", href);
+    }
+    setPage("lookup");
+  }, []);
+
+  useEffect(() => {
+    function onPop() {
+      const query = parseLookupQuery(window.location.search);
+      if (query.tokenId || query.wallet) setPage("lookup");
+    }
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
   function handleNavigate(nextPage) {
+    if (typeof window !== "undefined" && nextPage !== "lookup") {
+      const query = parseLookupQuery(window.location.search);
+      if (query.tokenId || query.wallet) {
+        window.history.pushState({}, "", window.location.pathname);
+      }
+    }
     if (nextPage === "landing") {
       setPage(wallet.isConnected ? "learn" : "landing");
       return;
@@ -169,6 +205,14 @@ function App() {
   const restoring = wallet.restoring || (wallet.isConnected && !progressReady);
 
   function renderContent() {
+    if (page === "about") return <AboutPage />;
+    if (page === "lookup") {
+      return (
+        <CredentialLookupPage
+          initialQuery={typeof window !== "undefined" ? window.location.search : ""}
+        />
+      );
+    }
     if (restoring) {
       return (
         <EmptyState
@@ -177,7 +221,6 @@ function App() {
         />
       );
     }
-    if (page === "about") return <AboutPage />;
     if (!wallet.isConnected || page === "landing") {
       return (
         <Landing
@@ -233,6 +276,7 @@ function App() {
             setPage("learn");
           }}
           onCredentials={() => setPage("credentials")}
+          onLookup={openLookup}
         />
       );
     }
@@ -250,6 +294,7 @@ function App() {
           switchToFuji={wallet.switchToFuji}
           onRetry={handleFullReset}
           userImage={userImage}
+          onLookup={openLookup}
         />
       );
     }

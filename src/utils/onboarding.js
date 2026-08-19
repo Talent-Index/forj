@@ -154,6 +154,10 @@ export const EMPTY_STATES = {
     title: "No on-chain credential yet",
     body: "Mint when you want a Fuji record of your claimed scores. You can keep learning first.",
   },
+  noLookup: {
+    title: "No credential found",
+    body: "That token ID or wallet has no current SkillForge credential on Fuji. Burned remints are not kept.",
+  },
   noAttempts: {
     title: "No attempts logged",
     body: "Your dashboard fills in after the first quiz for this wallet.",

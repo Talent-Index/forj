@@ -65,7 +65,7 @@ assert.deepEqual(
   ["read", "connect", "quiz", "puzzle", "mint"]
 );
 
-for (const key of ["restoring", "noQuizzes", "noPoints", "noPieces", "noCredential", "noAttempts"]) {
+for (const key of ["restoring", "noQuizzes", "noPoints", "noPieces", "noCredential", "noLookup", "noAttempts"]) {
   assert.ok(EMPTY_STATES[key].title);
   assert.ok(EMPTY_STATES[key].body);
 }

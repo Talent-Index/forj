@@ -4,6 +4,7 @@ const NAV_ITEMS = [
   { id: "learn", label: "Learn" },
   { id: "progress", label: "Progress" },
   { id: "credentials", label: "Credentials" },
+  { id: "lookup", label: "Lookup" },
   { id: "about", label: "About" },
 ];
 

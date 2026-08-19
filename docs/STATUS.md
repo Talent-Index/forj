@@ -106,8 +106,9 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - Resolvable image URI helper (`src/utils/ipfs.js`) — set `VITE_CREDENTIAL_IMAGE_URI` for explorer artwork
 - ERC-721 metadata schema v1, pack/upload scripts, and URI checks (`docs/METADATA.md`, `npm run test:metadata`)
 - Honesty labels: `src/utils/credentialStatus.js` — unknown status fails closed to claimed
+- Public **Lookup** page: token ID or holder wallet; shows title, holder, score, difficulty, status, issuer, network, contract, token ID, mint tx, explorer, and metadata
 
-**Not in UI yet:** attested mint flow, issuer dashboard, public lookup pages.
+**Not in UI yet:** attested mint flow, issuer dashboard, QR lookup.
 
 ### Deploy & environment
 
@@ -167,8 +168,9 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - [x] On-chain credential read in UI
 - [x] Fuji testnet deployment of `SkillForgeCredential`
 - [ ] Issuer-key management runbook
+- [x] Public credential lookup (token ID or wallet; no QR)
 - [ ] Frontend attested-mint path
-- [ ] Public credential lookup / QR
+- [ ] QR-based credential lookup
 - [ ] Credential versioning or revocation policy
 
 ### Phases 4–10 — Not started
@@ -193,6 +195,7 @@ npm run test:progress   # localStorage persistence
 npm run test:learner    # dashboard stats
 npm run test:credential # credential schema v1
 npm run test:status     # claimed vs attested honesty labels
+npm run test:lookup     # credential lookup fields and URLs
 npm run test:eip712     # EIP-712 domain and payload
 npm run test:jigsaw     # interlocking puzzle + certificate name
 npm run test:metadata   # ERC-721 metadata JSON, URIs, tokenURI round-trip

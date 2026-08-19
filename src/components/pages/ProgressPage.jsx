@@ -22,6 +22,7 @@ function ProgressPage({
   onLearn,
   onPuzzle,
   onCredentials,
+  onLookup,
 }) {
   const stats = computeLearnerDashboard({
     sectionScores,
@@ -140,7 +141,19 @@ function ProgressPage({
             onAction={onCredentials}
           />
         )}
-        {credential && <Button variant="secondary" onClick={onCredentials}>View certificate</Button>}
+        {credential && (
+          <div className="quiz-nav">
+            <Button variant="secondary" onClick={onCredentials}>View certificate</Button>
+            {onLookup && (
+              <Button
+                variant="secondary"
+                onClick={() => onLookup(credential.credentialId, credential.walletAddress)}
+              >
+                Open lookup
+              </Button>
+            )}
+          </div>
+        )}
       </section>
 
       <section className="section-block">

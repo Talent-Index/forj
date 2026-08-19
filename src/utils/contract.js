@@ -1,5 +1,5 @@
 import { encodeFunctionData } from "viem";
-import { FUJI_CHAIN_ID } from "./wallet";
+import { FUJI_CHAIN_ID } from "./wallet.js";
 
 export const CREDENTIAL_ABI = [
   {
@@ -63,6 +63,13 @@ export const CREDENTIAL_ABI = [
     type: "function",
   },
   {
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    name: "ownerOf",
+    outputs: [{ name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "owner",
     outputs: [{ name: "", type: "address" }],
@@ -71,7 +78,15 @@ export const CREDENTIAL_ABI = [
   },
 ];
 
-export const CONTRACT_ADDRESS = import.meta.env.VITE_CREDENTIAL_CONTRACT || "";
+function configuredContract() {
+  try {
+    return String(import.meta.env?.VITE_CREDENTIAL_CONTRACT || "").trim();
+  } catch {
+    return "";
+  }
+}
+
+export const CONTRACT_ADDRESS = configuredContract();
 export const FUJI_EXPLORER_TX = "https://testnet.snowtrace.io/tx/";
 export const FUJI_EXPLORER_TOKEN = "https://testnet.snowtrace.io/token/";
 export { FUJI_CHAIN_ID };

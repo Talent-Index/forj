@@ -38,6 +38,7 @@ function Certificate({
   switchToFuji,
   onRetry,
   userImage,
+  onLookup,
 }) {
   const puzzleComplete = acquiredPieces.length >= TOTAL_PIECES;
   const savedName = validateRecipientName(recipientName);
@@ -256,7 +257,19 @@ function Certificate({
               <h2>On-chain record</h2>
               {loadingCredential && <p role="status">Loading credential from Fuji…</p>}
               {!loadingCredential && onChainCredential && (
-                <CredentialRecord credential={onChainCredential} />
+                <>
+                  <CredentialRecord credential={onChainCredential} />
+                  {onLookup && (
+                    <p>
+                      <Button
+                        variant="secondary"
+                        onClick={() => onLookup(onChainCredential.credentialId, onChainCredential.walletAddress)}
+                      >
+                        Open credential lookup
+                      </Button>
+                    </p>
+                  )}
+                </>
               )}
             </section>
           )}

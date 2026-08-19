@@ -12,6 +12,7 @@ A gamified skills-credentialing dApp where users learn Avalanche concepts throug
 - **Progress persistence** — quiz/puzzle state saved per wallet in localStorage
 - **Puzzle redemption** — spend points to unlock a 4×4 certificate puzzle
 - **On-chain credential** — soulbound NFT via `SkillForgeCredential.sol`
+- **Credential lookup** — public Fuji record by token ID or holder wallet
 - **Signed mint path** — `mintCredentialWithAuthorization` for owner EIP-712 attestations
 
 > Honesty note: `mintCredential` is a **self-claimed** score record. `mintCredentialWithAuthorization` is **issuer-attested** via an owner EIP-712 signature. Both are soulbound. A claimed score is not an issuer-attested assessment.
@@ -32,7 +33,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Open http://localhost:5173 and connect your wallet on Avalanche Fuji.
+Open http://localhost:5173 and connect your wallet on Avalanche Fuji. Credential lookup is public: `/` with `?token=1` or `?wallet=0x…` does not require a wallet.
 
 ## Environment
 
@@ -120,6 +121,7 @@ npm run verify
 | `npm run test:credential` | Canonical credential record schema v1 |
 | `npm run test:status` | Claimed vs attested honesty labels |
 | `npm run test:eip712` | EIP-712 domain, payload fields, and typehash |
+| `npm run test:lookup` | Credential lookup fields, URLs, claimed vs attested labels |
 | `npm run test:puzzle` | Atomic puzzle piece redemption |
 | `npm run test:jigsaw` | Interlocking puzzle geometry and recipient name |
 | `npm run test:metadata` | ERC-721 metadata JSON, stable URIs, tokenURI encode/decode |

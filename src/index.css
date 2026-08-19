@@ -1155,7 +1155,11 @@ img {
 
   .mobile-nav {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(4.4rem, 1fr));
+  }
+
+  .shell-main {
+    padding-bottom: 96px;
   }
 
   .path-continue {
@@ -1370,6 +1374,57 @@ img {
   margin: 0;
 }
 
+.credential-details {
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: var(--radius);
+}
+
+.credential-details-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.credential-details-head h2 {
+  margin: 0;
+  font-size: 16.1px;
+}
+
+.credential-details-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.credential-details-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+  margin: 16px 0 0;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.credential-details-list dt {
+  font-size: 8.67px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.credential-details-list dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.recipient-form .recipient-label {
+  display: block;
+  margin-top: 12px;
+}
+
 .certificate-reveal .certificate-artifact {
   animation: certificate-assemble 420ms ease-out;
 }
@@ -1387,6 +1442,7 @@ img {
 
 @media (max-width: 860px) {
   .certificate-meta,
+  .credential-details-list,
   .certificate-score-line {
     grid-template-columns: 1fr;
     flex-direction: column;

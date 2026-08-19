@@ -133,6 +133,8 @@ const uiFiles = [
   "src/components/ProductIntro.jsx",
   "src/components/pages/AboutPage.jsx",
   "src/components/pages/ProgressPage.jsx",
+  "src/components/pages/CredentialLookupPage.jsx",
+  "src/components/CredentialDetails.jsx",
 ];
 for (const relative of uiFiles) {
   const source = readFileSync(join(root, relative), "utf8");

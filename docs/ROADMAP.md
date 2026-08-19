@@ -67,8 +67,9 @@ flowchart LR
 - ✅ Harden EIP-712 authorization and nonce handling *([AUTHORIZATION.md](./AUTHORIZATION.md))*
 - ✅ Prevent signature replay and unauthorized issuance
 - 🟡 Define issuer-key management procedures
-- ✅ Show claimed vs attested status in credential UI *(learner mint stays self-claimed; no public lookup page)*
+- ✅ Show claimed vs attested status in credential UI
 - ✅ Allow users to view their on-chain learning record
+- ✅ Public credential lookup *(token ID or wallet; [Lookup](../src/components/pages/CredentialLookupPage.jsx))*
 - ⬜ Establish credential versioning/revocation strategy
 
 ---
@@ -104,11 +105,11 @@ flowchart LR
 ## Phase 6 — Attestation & Trust
 
 - ✅ Distinguish self-claimed scores from issuer-attested credentials *(UI, metadata, docs)*
+- ✅ Public credential lookup page *(token ID or wallet; no QR yet)*
 - Introduce issuer accounts
 - Create an issuer dashboard
 - Allow authorized organizations to issue credentials
 - Add issuer-specific signing keys
-- Build public credential lookup pages
 - Add QR-based credential lookup
 - Define credential authenticity and provenance rules
 - Document the attestation model clearly

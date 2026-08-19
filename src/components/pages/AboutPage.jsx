@@ -55,6 +55,14 @@ function AboutPage() {
         <p>{CREDENTIAL_EXPLAINER.body}</p>
         <p>{WALLET_GUIDANCE.body}</p>
       </section>
+      <section className="section-block">
+        <h2>Look up a credential</h2>
+        <p>
+          Anyone can open Lookup and read a Fuji credential by token ID or holder wallet.
+          The page shows title, holder, score, difficulty, status, issuer, network, contract,
+          token ID, mint transaction, explorer, and metadata. A lookup is not issuer attestation.
+        </p>
+      </section>
     </div>
   );
 }

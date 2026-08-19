@@ -207,6 +207,11 @@ Rules:
 - Unknown or missing status is treated as **claimed** (fail closed). Never upgrade a record to attested from labels such as “verified”.
 - Do not call claimed scores verified, certified, or accredited in the product UI.
 - Explorer links use **View on Snowtrace** (the token exists on-chain). That is not issuer attestation.
+- Public **Lookup** reads the same on-chain record by token ID or holder wallet. A lookup is not issuer attestation.
+
+URLs: `?token=<id>` and/or `?wallet=0x…`. Token ID wins if both are present. The page does not require a connected wallet.
+
+Displayed fields: credential title, holder wallet, score, difficulty, credential status, issuer, network, contract address, token ID, transaction hash, explorer link, metadata link. Missing mint logs show **Not indexed** rather than an invented hash.
 - Same `tokenId` cannot change status. Remint from the app replaces an attested token with a claimed one.
 
 Display copy lives in [`src/utils/credentialStatus.js`](../src/utils/credentialStatus.js). Metadata strings stay aligned with the live Fuji `tokenURI` renderer.
