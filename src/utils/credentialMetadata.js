@@ -61,6 +61,7 @@ export function isStableMediaUri(uri) {
     if (url.protocol !== "https:") return false;
     if (!url.hostname.includes(".")) return false;
     if (url.username || url.password) return false;
+    if (UNSTABLE_HOSTS.has(url.hostname)) return false;
     return true;
   } catch {
     return false;

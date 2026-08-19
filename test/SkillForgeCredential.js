@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import hre from "hardhat";
+import { validateCredentialMetadata } from "../src/utils/credentialMetadata.js";
 
-const IMAGE = "ipfs://bafy-artwork";
+const IMAGE = "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi";
 
 function decodeTokenURI(uri) {
   const prefix = "data:application/json;base64,";
@@ -90,6 +91,7 @@ describe("SkillForgeCredential", function () {
 
     const metadata = decodeTokenURI(await credential.tokenURI(1n));
     expect(metadata.image).to.equal(IMAGE);
+    expect(validateCredentialMetadata(metadata).ok).to.equal(true);
     expect(metadata.description).to.match(/Self-claimed/);
     expect(metadata.attributes.find((item) => item.trait_type === "Attestation").value).to.equal("Self claimed");
     expect(metadata.attributes.find((item) => item.trait_type === "Puzzle Pieces").value).to.equal(2);
@@ -184,6 +186,7 @@ describe("SkillForgeCredential", function () {
     expect((await credential.credentials(1n)).attested).to.equal(true);
     const metadata = decodeTokenURI(await credential.tokenURI(1n));
     expect(metadata.description).to.match(/Issuer-attested/);
+    expect(validateCredentialMetadata(metadata).ok).to.equal(true);
     expect(metadata.attributes.find((item) => item.trait_type === "Attestation").value).to.equal("Issuer attested");
   });
 

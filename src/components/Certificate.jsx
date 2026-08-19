@@ -83,6 +83,11 @@ function Certificate({
       }
 
       const imageUri = resolveCredentialImageUri(userImage);
+      if (!imageUri) {
+        setMintError("Set VITE_CREDENTIAL_IMAGE_URI to an ipfs:// or https:// artwork URL before minting.");
+        setMinting(false);
+        return;
+      }
       const data = buildMintData({
         totalPoints,
         puzzleMask: mask,
