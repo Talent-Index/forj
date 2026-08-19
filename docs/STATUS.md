@@ -103,7 +103,8 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - Self-claimed mint from `Certificate.jsx` → `mintCredential`
 - Reads on-chain credential; shows **Self-claimed** vs **Issuer-attested**
 - Snowtrace links for transaction and token
-- Resolvable image URI helper (`src/utils/ipfs.js`) — requires `VITE_CREDENTIAL_IMAGE_URI`
+- Resolvable image URI helper (`src/utils/ipfs.js`) — set `VITE_CREDENTIAL_IMAGE_URI` for explorer artwork
+- ERC-721 metadata schema v1, pack/upload scripts, and URI checks (`docs/METADATA.md`, `npm run test:metadata`)
 
 **Not in UI yet:** attested mint flow, issuer dashboard, public verification pages.
 
@@ -156,6 +157,7 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 
 - [x] Credential data model (schema v1 — [CREDENTIAL.md](./CREDENTIAL.md))
 - [x] Soulbound metadata and artwork URI field
+- [x] Stable IPFS/HTTPS artwork + metadata process ([METADATA.md](./METADATA.md))
 - [x] Claimed vs issuer-attested separation (`attested` flag)
 - [x] `mintCredentialWithAuthorization` + EIP-712 nonces
 - [x] Replay and unauthorized issuance tests
@@ -187,6 +189,8 @@ npm run test:quiz       # quiz selection
 npm run test:progress   # localStorage persistence
 npm run test:learner    # dashboard stats
 npm run test:credential # credential schema v1
+npm run test:jigsaw     # interlocking puzzle + certificate name
+npm run test:metadata   # ERC-721 metadata JSON, URIs, tokenURI round-trip
 npm run test:puzzle     # puzzle redemption
 npm run test:onboarding # first-time product loop copy
 npm run build           # Vite production build
@@ -199,4 +203,5 @@ npm run build           # Vite production build
 - [README](../README.md) — quick start, env, deploy, CI
 - [ROADMAP.md](./ROADMAP.md) — full 10-phase product plan
 - [CREDENTIAL.md](./CREDENTIAL.md) — versioned credential record (schema v1)
+- [METADATA.md](./METADATA.md) — pin artwork, URI rules, production metadata process
 - [`.env.example`](../.env.example) — environment template
