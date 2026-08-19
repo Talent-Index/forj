@@ -74,6 +74,9 @@ Rejected:
 - `javascript:`
 - quotes or backslashes (the contract rejects `"`)
 - local `/src/assets/...` paths
+- hotlink hosts (`images.unsplash.com`, `picsum.photos`, placeholders)
+
+`tokenURI` itself is an on-chain `data:application/json;base64,...` URI. Pin the **artwork**; do not replace Solidity `tokenURI` with an IPFS JSON URI unless you redeploy.
 
 `npm run test:metadata` checks packing, URI validation, data-URI retrieval, and tokenURI encode/decode.
 

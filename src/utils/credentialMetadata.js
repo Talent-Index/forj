@@ -39,6 +39,7 @@ const UNSTABLE_HOSTS = new Set([
   "placekitten.com",
   "via.placeholder.com",
 ]);
+const CID_V0 = /^Qm[1-9A-HJ-NP-Za-km-z]{44}$/;
 const CID_V1 = /^baf[a-z2-7]{20,}$/;
 const DATA_JSON_BASE64 = "data:application/json;base64,";
 

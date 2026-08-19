@@ -61,7 +61,7 @@ flowchart LR
 
 - ✅ Define the SkillForge credential data model *([schema v1](./CREDENTIAL.md))*
 - ✅ Finalize soulbound credential metadata
-- 🟡 Use stable IPFS/HTTPS metadata and artwork *(operator sets `VITE_CREDENTIAL_IMAGE_URI`)*
+- ✅ Use stable IPFS/HTTPS metadata and artwork *([METADATA.md](./METADATA.md); operator sets `VITE_CREDENTIAL_IMAGE_URI`)*
 - ✅ Separate claimed scores from issuer-attested scores
 - ✅ Implement `mintCredentialWithAuthorization` as the preferred verified path *(contract; UI still self-claim)*
 - ✅ Harden EIP-712 authorization and nonce handling

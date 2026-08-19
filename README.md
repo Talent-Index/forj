@@ -48,7 +48,7 @@ cp .env.example .env.local
 PRIVATE_KEY=                 # deployer only — never commit
 FUJI_RPC_URL=https://avalanche-fuji-c-chain.publicnode.com
 VITE_CREDENTIAL_CONTRACT=    # set by deploy:fuji or paste from deployments/fuji.json
-VITE_CREDENTIAL_IMAGE_URI=   # stable IPFS or HTTPS artwork URL
+VITE_CREDENTIAL_IMAGE_URI=   # stable IPFS or HTTPS artwork URL (see docs/METADATA.md)
 ```
 
 If you use `.env.local`, leave `PRIVATE_KEY` out or set a real value — an empty `PRIVATE_KEY=` line used to wipe the key from `.env` (now prevented in Hardhat config).
@@ -117,6 +117,8 @@ npm run verify
 | `npm run test:quiz` | 5 unique questions per difficulty; explanations and references after submit |
 | `npm run test:progress` | Per-wallet progress persistence + sanitization |
 | `npm run test:puzzle` | Atomic puzzle piece redemption |
+| `npm run test:jigsaw` | Interlocking puzzle geometry and recipient name |
+| `npm run test:metadata` | ERC-721 metadata JSON, stable URIs, tokenURI encode/decode |
 | `npm run test:onboarding` | Product intro, first-run flow, empty/error copy |
 | `npm run build` | Vite production build |
 
@@ -161,7 +163,12 @@ skillforge/
 ├── deployments/                   # local deploy records (*.json gitignored)
 ├── docs/
 │   ├── ROADMAP.md                 # 10-phase product plan
-│   └── STATUS.md                  # implementation progress
+│   ├── STATUS.md                  # implementation progress
+│   ├── CREDENTIAL.md              # on-chain credential record (schema v1)
+│   └── METADATA.md                # pin artwork + production metadata process
+├── metadata/
+│   ├── schema/v1.json             # ERC-721 metadata JSON Schema
+│   └── examples/                  # claimed and attested fixtures
 ├── scripts/
 │   ├── deploy.js
 │   └── check-*.js                 # regression tests (quiz, retry, wallet, …)
@@ -180,6 +187,7 @@ skillforge/
 - [docs/ROADMAP.md](docs/ROADMAP.md) — learning, GameFi, and credential tracks through mainnet and ecosystem scale
 - [docs/STATUS.md](docs/STATUS.md) — shipped features, phase checklist, test commands
 - [docs/CREDENTIAL.md](docs/CREDENTIAL.md) — versioned on-chain credential record (schema v1)
+- [docs/METADATA.md](docs/METADATA.md) — stable IPFS/HTTPS artwork and metadata process
 
 ## Tech Stack
 

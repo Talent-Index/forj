@@ -61,6 +61,7 @@ function Certificate({
   const difficulty = highestDifficulty(sectionScores);
   const verificationStatus = onChainCredential?.verificationStatus || "claimed";
   const issuedName = savedName.ok ? savedName.name : validateRecipientName(nameInput).name;
+  const onChainImageUri = resolveCredentialImageUri(userImage);
 
   async function handleMint() {
     if (!CONTRACT_ADDRESS) {
@@ -82,19 +83,13 @@ function Certificate({
         throw new Error("Please switch your wallet to Avalanche Fuji (43113) before minting.");
       }
 
-      const imageUri = resolveCredentialImageUri(userImage);
-      if (!imageUri) {
-        setMintError("Set VITE_CREDENTIAL_IMAGE_URI to an ipfs:// or https:// artwork URL before minting.");
-        setMinting(false);
-        return;
-      }
       const data = buildMintData({
         totalPoints,
         puzzleMask: mask,
         easyCorrect: sectionScores.easy?.correct ?? 0,
         mediumCorrect: sectionScores.medium?.correct ?? 0,
         hardCorrect: sectionScores.hard?.correct ?? 0,
-        imageData: imageUri,
+        imageData: onChainImageUri,
       });
 
       const hash = await client.sendTransaction({
@@ -221,6 +216,12 @@ function Certificate({
         <section className="section-block">
           {artifact}
           <p className="meta-line">This name will appear on your credential.</p>
+          {!onChainImageUri && (
+            <p className="meta-line">
+              On-chain artwork is empty until <code>VITE_CREDENTIAL_IMAGE_URI</code> is set to an
+              {" "}ipfs:// or https:// URL. The certificate still mints; explorers will not show the image.
+            </p>
+          )}
           <div className="quiz-nav quiz-nav-end">
             <Button variant="secondary" onClick={() => setPhase("name")}>Edit name</Button>
             <Button onClick={() => setPhase("issued")}>Confirm certificate</Button>
@@ -280,6 +281,12 @@ function Certificate({
               title={ERROR_STATES.mint.title}
               body={`${mintError} ${ERROR_STATES.mint.body}`}
             />
+          )}
+          {!onChainImageUri && (
+            <p className="meta-line">
+              Set <code>VITE_CREDENTIAL_IMAGE_URI</code> to a pinned ipfs:// or https:// artwork URL
+              so Snowtrace can load the certificate image.
+            </p>
           )}
           {!CONTRACT_ADDRESS && (
             <p className="deploy-hint">

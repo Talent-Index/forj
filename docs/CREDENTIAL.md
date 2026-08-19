@@ -132,7 +132,7 @@ v1 does **not** store the issuer address inside `CredentialData`. Attested mints
 
 ### `metadataUri`
 
-v1 `tokenURI` is an on-chain `data:application/json;base64,...` document (OpenZeppelin Base64), not a separate IPFS JSON file. Artwork lives in `CredentialData.image` / record `imageUri` (`ipfs://` or `https://` when configured).
+v1 `tokenURI` is an on-chain `data:application/json;base64,...` document (OpenZeppelin Base64), not a separate IPFS JSON file. Artwork lives in `CredentialData.image` / record `imageUri` (`ipfs://` or `https://` when configured). Pin and validate artwork with the process in [METADATA.md](./METADATA.md).
 
 ---
 
