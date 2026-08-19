@@ -64,7 +64,7 @@ flowchart LR
 - ✅ Use stable IPFS/HTTPS metadata and artwork *([METADATA.md](./METADATA.md); operator sets `VITE_CREDENTIAL_IMAGE_URI`)*
 - ✅ Separate claimed scores from issuer-attested scores
 - ✅ Implement `mintCredentialWithAuthorization` as the issuer-attested path *(contract; UI still self-claim)*
-- ✅ Harden EIP-712 authorization and nonce handling
+- ✅ Harden EIP-712 authorization and nonce handling *([AUTHORIZATION.md](./AUTHORIZATION.md))*
 - ✅ Prevent signature replay and unauthorized issuance
 - 🟡 Define issuer-key management procedures
 - ✅ Show claimed vs attested status in credential UI *(learner mint stays self-claimed; no public lookup page)*

@@ -89,14 +89,14 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 | --- | --- |
 | Soulbound ERC-721 (no transfer/approve) | Shipped |
 | Self-claimed mint — `mintCredential` | Shipped |
-| Issuer-attested mint — `mintCredentialWithAuthorization` (EIP-712) | Shipped (contract only) |
+| Issuer-attested mint — `mintCredentialWithAuthorization` (EIP-712) | Shipped (contract only; hardened recover, nonce-before-mint) |
 | `attested` flag on credential + event | Shipped |
 | Nonce increments only after successful attested mint | Shipped |
 | Token IDs start at 1; remint replaces prior credential | Shipped |
 | On-chain JSON metadata via OpenZeppelin Base64 | Shipped |
 | Mainnet deploy gated (`CONFIRM_MAINNET=yes`) | Shipped |
 
-**Hardhat tests:** 14 passing (`npm test`) — ownership, claimed/attested mints, no self-promotion to attested, per-wallet isolation, replay, invalid inputs, soulbound restrictions, `tokenURI`.
+**Hardhat tests:** 28 passing (`npm test`) — ownership, claimed/attested mints, EIP-712 domain/signer/chain/contract/nonce/deadline, no self-promotion to attested, per-wallet isolation, replay, invalid inputs, soulbound restrictions, `tokenURI`.
 
 ### Frontend mint & credential display
 
@@ -162,6 +162,7 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - [x] Claimed vs issuer-attested separation (`attested` flag)
 - [x] Claimed vs attested labels in credential UI ([CREDENTIAL.md](./CREDENTIAL.md#claimed-vs-attested-honesty))
 - [x] `mintCredentialWithAuthorization` + EIP-712 nonces
+- [x] EIP-712 domain, payload, and replay protections ([AUTHORIZATION.md](./AUTHORIZATION.md))
 - [x] Replay and unauthorized issuance tests
 - [x] On-chain credential read in UI
 - [x] Fuji testnet deployment of `SkillForgeCredential`
@@ -184,7 +185,7 @@ npm run verify          # full CI suite
 
 npm run lint            # ESLint
 npm run compile         # Hardhat compile
-npm test                # 14 contract tests
+npm test                # 28 contract tests
 npm run test:retry      # scoring regression
 npm run test:wallet     # wallet smoke test
 npm run test:quiz       # quiz selection
@@ -192,6 +193,7 @@ npm run test:progress   # localStorage persistence
 npm run test:learner    # dashboard stats
 npm run test:credential # credential schema v1
 npm run test:status     # claimed vs attested honesty labels
+npm run test:eip712     # EIP-712 domain and payload
 npm run test:jigsaw     # interlocking puzzle + certificate name
 npm run test:metadata   # ERC-721 metadata JSON, URIs, tokenURI round-trip
 npm run test:puzzle     # puzzle redemption
@@ -206,5 +208,6 @@ npm run build           # Vite production build
 - [README](../README.md) — quick start, env, deploy, CI
 - [ROADMAP.md](./ROADMAP.md) — full 10-phase product plan
 - [CREDENTIAL.md](./CREDENTIAL.md) — versioned credential record (schema v1)
+- [AUTHORIZATION.md](./AUTHORIZATION.md) — EIP-712 attested mint domain and payload
 - [METADATA.md](./METADATA.md) — pin artwork, URI rules, production metadata process
 - [`.env.example`](../.env.example) — environment template
