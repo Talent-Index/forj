@@ -176,7 +176,7 @@ skillforge/
 │   ├── deploy.js
 │   └── check-*.js                 # regression tests (quiz, retry, wallet, …)
 ├── test/
-│   └── SkillForgeCredential.js    # 11 Hardhat tests
+│   └── SkillForgeCredential.js    # 14 Hardhat tests
 ├── .github/workflows/ci.yml
 └── src/
     ├── components/                # Landing, Quiz, Puzzle, Certificate, …

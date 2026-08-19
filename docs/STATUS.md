@@ -96,7 +96,7 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 | On-chain JSON metadata via OpenZeppelin Base64 | Shipped |
 | Mainnet deploy gated (`CONFIRM_MAINNET=yes`) | Shipped |
 
-**Hardhat tests:** 11 passing (`npm test`) — ownership, claimed/attested mints, replay, invalid inputs, soulbound restrictions, `tokenURI`.
+**Hardhat tests:** 14 passing (`npm test`) — ownership, claimed/attested mints, no self-promotion to attested, per-wallet isolation, replay, invalid inputs, soulbound restrictions, `tokenURI`.
 
 ### Frontend mint & credential display
 
@@ -184,7 +184,7 @@ npm run verify          # full CI suite
 
 npm run lint            # ESLint
 npm run compile         # Hardhat compile
-npm test                # 11 contract tests
+npm test                # 14 contract tests
 npm run test:retry      # scoring regression
 npm run test:wallet     # wallet smoke test
 npm run test:quiz       # quiz selection

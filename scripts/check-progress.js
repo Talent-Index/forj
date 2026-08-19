@@ -40,12 +40,13 @@ assert.equal(normalizeAddress("not-an-address"), null);
 assert.equal(progressStorageKey("nope"), null);
 assert.equal(store.save("nope", snapshot()), false);
 
-assert.equal(store.save(WALLET_A, snapshot()), true);
+assert.equal(store.save(WALLET_A, snapshot({ recipientName: "Alex Mwangi" })), true);
 assert.equal(store.save(WALLET_B, snapshot({
   sectionScores: { medium: { correct: 5, total: 5, pointsEarned: 25 } },
   completedSections: ["medium"],
   acquiredPieces: [1],
   totalPoints: 25,
+  recipientName: "Sam O'neil",
 })), true);
 
 const loadedA = store.load(WALLET_A);
@@ -55,9 +56,11 @@ assert.equal(loadedA.completedSections.includes("easy"), true);
 assert.equal(loadedA.totalPoints, 12);
 assert.deepEqual(loadedA.acquiredPieces, [0, 3]);
 assert.equal(loadedA.spentPoints, 10);
+assert.equal(loadedA.recipientName, "Alex Mwangi");
 assert.equal(loadedA.sectionScores.medium, undefined);
 assert.equal(loadedB.sectionScores.medium.correct, 5);
 assert.equal(loadedB.totalPoints, 25);
+assert.equal(loadedB.recipientName, "Sam O'neil");
 assert.notDeepEqual(loadedA.sectionScores, loadedB.sectionScores);
 
 const restoredAfterRefresh = createProgressStore(storage).load(WALLET_A_CHECKSUM);
@@ -66,7 +69,9 @@ assert.equal(restoredAfterRefresh.view, PROGRESS_VIEWS.PUZZLE);
 
 store.clear(WALLET_A);
 assert.deepEqual(store.load(WALLET_A).sectionScores, {});
+assert.equal(store.load(WALLET_A).recipientName, "");
 assert.equal(store.load(WALLET_B).totalPoints, 25);
+assert.equal(store.load(WALLET_B).recipientName, "Sam O'neil");
 
 const malformedStore = createProgressStore(storage);
 storage.setItem(progressStorageKey(WALLET_A), "{not json");
