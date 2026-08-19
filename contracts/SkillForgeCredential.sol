@@ -13,9 +13,13 @@ import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 /// @dev Two mint paths:
 ///      - mintCredential: self-claimed scores. Anyone can mint for themselves.
 ///      - mintCredentialWithAuthorization: issuer-attested scores. Requires an EIP-712
-///        signature from the contract owner. Nonces increment only after a successful mint.
+///        signature from the contract owner. The learner nonce is consumed before mint
+///        and rolls back if the transaction reverts.
 contract SkillForgeCredential is ERC721, Ownable, EIP712 {
     using Strings for uint256;
+
+    string public constant EIP712_NAME = "SkillForgeCredential";
+    string public constant EIP712_VERSION = "1";
 
     bytes32 private constant CREDENTIAL_TYPEHASH = keccak256(
         "Credential(address learner,uint256 totalPoints,uint256 puzzleMask,uint8 easyCorrect,uint8 mediumCorrect,uint8 hardCorrect,bytes32 imageHash,uint256 nonce,uint256 deadline)"
@@ -45,7 +49,7 @@ contract SkillForgeCredential is ERC721, Ownable, EIP712 {
         bool attested
     );
 
-    constructor() ERC721("SkillForge Avalanche Credential", "SFAVAX") Ownable(msg.sender) EIP712("SkillForgeCredential", "1") {}
+    constructor() ERC721("SkillForge Avalanche Credential", "SFAVAX") Ownable(msg.sender) EIP712(EIP712_NAME, EIP712_VERSION) {}
 
     /// @notice Mint a self-claimed credential for the caller.
     function mintCredential(
@@ -87,11 +91,24 @@ contract SkillForgeCredential is ERC721, Ownable, EIP712 {
                 deadline
             )
         );
-        address signer = ECDSA.recover(_hashTypedDataV4(structHash), signature);
+        address signer = _recoverIssuer(_hashTypedDataV4(structHash), signature);
         require(signer == owner(), "Invalid authorization");
 
-        _mintCredential(msg.sender, totalPoints, puzzleMask, easyCorrect, mediumCorrect, hardCorrect, imageData, true);
+        // Consume the nonce before mint so a reentrant receiver cannot reuse this signature.
+        // If mint later reverts, the whole transaction rolls back and the nonce is not spent.
         authorizationNonces[msg.sender] = nonce + 1;
+        _mintCredential(msg.sender, totalPoints, puzzleMask, easyCorrect, mediumCorrect, hardCorrect, imageData, true);
+    }
+
+    function _recoverIssuer(bytes32 digest, bytes calldata signature) private pure returns (address signer) {
+        if (signature.length != 65) {
+            revert("Invalid authorization");
+        }
+        ECDSA.RecoverError error;
+        (signer, error, ) = ECDSA.tryRecover(digest, signature);
+        if (error != ECDSA.RecoverError.NoError || signer == address(0)) {
+            revert("Invalid authorization");
+        }
     }
 
     function _mintCredential(
