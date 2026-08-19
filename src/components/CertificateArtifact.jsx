@@ -1,6 +1,7 @@
 import { shortAddress } from "../utils/learnerStats";
 import { describeMetadataUri } from "../utils/credentialModel";
-import { TRUST_COPY } from "../utils/certificateView";
+import { EXPLORER_LINK_LABEL, resolveCredentialStatus } from "../utils/credentialStatus";
+import CredentialStatusBadge from "./CredentialStatusBadge";
 
 function CertificateArtifact({
   artwork,
@@ -17,10 +18,10 @@ function CertificateArtifact({
   explorerUrl,
   compact = false,
 }) {
-  const trust = verificationStatus === "attested" ? TRUST_COPY.attested : TRUST_COPY.claimed;
+  const trust = resolveCredentialStatus(verificationStatus);
 
   return (
-    <article className={`certificate-artifact ${compact ? "is-compact" : ""}`}>
+    <article className={`certificate-artifact status-${trust.id} ${compact ? "is-compact" : ""}`}>
       <p className="certificate-brand">SkillForge</p>
       <h2 className="certificate-title">Certificate of Achievement</h2>
       <div className="certificate-art-frame">
@@ -37,15 +38,15 @@ function CertificateArtifact({
         Score · {scorePercent}%
         <span>Difficulty · {difficulty}</span>
       </p>
-      <p className={`certificate-trust status-${verificationStatus === "attested" ? "attested" : "claimed"}`}>
-        {trust.title}
+      <p className="certificate-trust">
+        <CredentialStatusBadge status={trust} />
       </p>
       <p className="certificate-trust-body">{trust.body}</p>
       {!compact && (
         <dl className="certificate-meta">
           <div><dt>Credential ID</dt><dd>{credentialId}</dd></div>
           <div><dt>Network</dt><dd>Avalanche Fuji · {chainId || 43113}</dd></div>
-          <div><dt>Status</dt><dd>{trust.title}</dd></div>
+          <div><dt>Status</dt><dd>{trust.label}</dd></div>
           <div><dt>Wallet</dt><dd>{shortAddress(walletAddress) || "—"}</dd></div>
           <div><dt>Contract</dt><dd>{shortAddress(contractAddress) || "—"}</dd></div>
           <div><dt>Version</dt><dd>Schema v{schemaVersion || 1}</dd></div>
@@ -53,8 +54,8 @@ function CertificateArtifact({
         </dl>
       )}
       {explorerUrl && (
-        <p className="certificate-verify">
-          <a href={explorerUrl} target="_blank" rel="noreferrer">Verify on Snowtrace</a>
+        <p className="certificate-explorer">
+          <a href={explorerUrl} target="_blank" rel="noreferrer">{EXPLORER_LINK_LABEL}</a>
         </p>
       )}
     </article>

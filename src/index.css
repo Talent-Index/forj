@@ -504,11 +504,13 @@ img {
   border-left: 4px solid var(--text);
 }
 
-.credential-paths .card:first-child {
+.credential-paths .card:first-child,
+.credential-path-claimed {
   border-top: 3px solid var(--muted);
 }
 
-.credential-paths .card:last-child {
+.credential-paths .card:last-child,
+.credential-path-attested {
   border-top: 3px solid var(--accent);
 }
 
@@ -581,6 +583,28 @@ img {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: var(--radius);
+}
+
+.credential-record-claimed {
+  border-color: var(--muted);
+}
+
+.credential-record-attested {
+  border-color: var(--accent);
+}
+
+.credential-record-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.credential-record-honesty {
+  margin: 0;
 }
 
 .stat-value {
@@ -1016,6 +1040,7 @@ img {
   font-weight: 700;
 }
 
+.credential-status,
 .status-claimed,
 .status-attested {
   display: inline-block;
@@ -1026,9 +1051,26 @@ img {
   text-transform: uppercase;
 }
 
+.credential-status-claimed,
+.status-claimed {
+  border-color: var(--muted);
+  color: var(--muted);
+  background: var(--surface-2);
+}
+
+.credential-status-attested,
 .status-attested {
-  border-color: var(--success);
-  color: var(--success);
+  border-color: var(--accent);
+  color: var(--accent);
+  background: transparent;
+}
+
+.certificate-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 8px;
 }
 
 .achievements-grid {

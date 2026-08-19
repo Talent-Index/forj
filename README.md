@@ -14,7 +14,7 @@ A gamified skills-credentialing dApp where users learn Avalanche concepts throug
 - **On-chain credential** — soulbound NFT via `SkillForgeCredential.sol`
 - **Signed mint path** — `mintCredentialWithAuthorization` for owner EIP-712 attestations
 
-> Honesty note: `mintCredential` is a **self-claimed** score record. `mintCredentialWithAuthorization` is **issuer-attested** via an owner EIP-712 signature. Both are soulbound; only the attested path is a privileged credential.
+> Honesty note: `mintCredential` is a **self-claimed** score record. `mintCredentialWithAuthorization` is **issuer-attested** via an owner EIP-712 signature. Both are soulbound. A claimed score is not an issuer-attested assessment.
 
 Product + tech sequencing lives in **[docs/ROADMAP.md](docs/ROADMAP.md)**. For what is already built, see **[docs/STATUS.md](docs/STATUS.md)**.
 
@@ -118,6 +118,7 @@ npm run verify
 | `npm run test:progress` | Per-wallet progress persistence + sanitization |
 | `npm run test:learner` | Learner dashboard stats |
 | `npm run test:credential` | Canonical credential record schema v1 |
+| `npm run test:status` | Claimed vs attested honesty labels |
 | `npm run test:puzzle` | Atomic puzzle piece redemption |
 | `npm run test:jigsaw` | Interlocking puzzle geometry and recipient name |
 | `npm run test:metadata` | ERC-721 metadata JSON, stable URIs, tokenURI encode/decode |

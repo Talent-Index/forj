@@ -304,6 +304,7 @@ assert.equal(clamped.schemaVersion, clamped.version.schema);
 assert.match(doc, /Required vs optional/);
 assert.match(doc, /Score constraints/);
 assert.match(doc, /Verification-state transitions/);
+assert.match(doc, /Claimed vs attested/);
 assert.match(doc, /Unix \*\*seconds\*\*/);
 assert.match(doc, /credentialIdsAreUnique/);
 

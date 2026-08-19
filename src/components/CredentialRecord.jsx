@@ -1,23 +1,30 @@
 import { describeMetadataUri } from "../utils/credentialModel";
 import { shortAddress } from "../utils/learnerStats";
 import { QUESTIONS_PER_QUIZ } from "../utils/quiz";
+import { EXPLORER_LINK_LABEL, resolveCredentialStatus } from "../utils/credentialStatus";
+import CredentialStatusBadge from "./CredentialStatusBadge";
 
 function CredentialRecord({ credential }) {
   if (!credential) return null;
 
+  const state = resolveCredentialStatus(credential);
   const issuerLabel =
-    credential.issuer?.kind === "contract-owner"
-      ? `Contract owner${credential.issuer.address ? ` ${shortAddress(credential.issuer.address)}` : ""}`
+    state.id === "attested"
+      ? `Contract owner${credential.issuer?.address ? ` ${shortAddress(credential.issuer.address)}` : ""}`
       : `Learner${credential.walletAddress ? ` ${shortAddress(credential.walletAddress)}` : ""}`;
   const metadata = describeMetadataUri(credential.metadataUri);
 
   return (
-    <div className="credential-record">
-      <p>
-        Token #{credential.credentialId} · {credential.credentialType} · {credential.score.totalPoints} pts
-      </p>
+    <div className={`credential-record credential-record-${state.id}`}>
+      <div className="credential-record-head">
+        <CredentialStatusBadge status={state} />
+        <p>
+          Token #{credential.credentialId} · {state.title} · {credential.score.totalPoints} pts
+        </p>
+      </div>
+      <p className="credential-record-honesty">{state.body}</p>
       <p className="meta-line">
-        Verification: {credential.verificationStatus}
+        Status · {state.label}
         {credential.walletAddress ? ` · Wallet ${shortAddress(credential.walletAddress)}` : ""}
       </p>
       <p className="meta-line">
@@ -44,7 +51,7 @@ function CredentialRecord({ credential }) {
       {metadata && <p className="meta-line">Metadata: {metadata}</p>}
       {credential.explorerUrl && (
         <p>
-          <a href={credential.explorerUrl} target="_blank" rel="noreferrer">Open on Snowtrace</a>
+          <a href={credential.explorerUrl} target="_blank" rel="noreferrer">{EXPLORER_LINK_LABEL}</a>
         </p>
       )}
     </div>

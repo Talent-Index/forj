@@ -190,6 +190,27 @@ Enforced by `validateCredentialRecord` in [`src/utils/credentialModel.js`](../sr
 
 These four must agree. Self-claimed issuer address, when present, must equal `walletAddress`.
 
+---
+
+## Claimed vs attested (honesty)
+
+A learner-minted score is **self-claimed**. It must not be presented as an issuer-attested assessment.
+
+| State | Who mints | On-chain flag | User-facing label | Metadata `Attestation` |
+| --- | --- | --- | --- | --- |
+| **Claimed** | The learner, via `mintCredential` | `attested = false` | **Self-claimed** | `Self claimed` |
+| **Attested** | The learner, only with an owner EIP-712 signature via `mintCredentialWithAuthorization` | `attested = true` | **Issuer-attested** | `Issuer attested` |
+
+Rules:
+
+- The learner UI mints **only** claimed credentials.
+- Unknown or missing status is treated as **claimed** (fail closed). Never upgrade a record to attested from labels such as “verified”.
+- Do not call claimed scores verified, certified, or accredited in the product UI.
+- Explorer links use **View on Snowtrace** (the token exists on-chain). That is not issuer attestation.
+- Same `tokenId` cannot change status. Remint from the app replaces an attested token with a claimed one.
+
+Display copy lives in [`src/utils/credentialStatus.js`](../src/utils/credentialStatus.js). Metadata strings stay aligned with the live Fuji `tokenURI` renderer.
+
 ### Verification-state transitions
 
 Pre-mint state is `none` (no token). v1 has **no revoke**.

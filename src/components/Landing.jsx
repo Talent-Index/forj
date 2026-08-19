@@ -1,13 +1,15 @@
 import { DIFFICULTY_LEVELS, PATH_COPY, PUZZLE_EXPLAINER } from "../utils/onboarding";
+import { CREDENTIAL_STATES } from "../utils/credentialStatus";
 import { TOTAL_PIECES } from "../data/questions";
 import { Badge, Button, Card } from "./ui/primitives";
+import CredentialStatusBadge from "./CredentialStatusBadge";
 
 const LOOP = ["Learn", "Quiz", "Earn points", "Unlock", "Credential"];
 const HOW = [
   { n: "01", title: "Learn", body: "Explore Avalanche concepts and ecosystem fundamentals." },
   { n: "02", title: "Challenge", body: "Test your knowledge through Easy, Medium, and Hard quizzes." },
   { n: "03", title: "Progress", body: "Earn points, unlock puzzle pieces, and complete learning paths." },
-  { n: "04", title: "Credential", body: "Claim or receive an issuer-attested on-chain credential." },
+  { n: "04", title: "Credential", body: "Mint a self-claimed on-chain score record. Issuer-attested credentials require a separate owner signature." },
 ];
 
 function Landing({ onStart, onExplore }) {
@@ -19,11 +21,11 @@ function Landing({ onStart, onExplore }) {
           <h1 className="display">
             Learn Avalanche.
             <br />
-            Prove what you know.
+            Record what you learn.
           </h1>
           <p className="lede">
             Master Avalanche concepts through interactive challenges, earn points,
-            complete learning paths, and build verifiable on-chain credentials.
+            complete learning paths, and mint a self-claimed on-chain score record.
           </p>
           <div className="hero-actions">
             <Button onClick={onStart}>Start learning</Button>
@@ -107,26 +109,26 @@ function Landing({ onStart, onExplore }) {
       <section className="section-block">
         <h2>Credentials</h2>
         <div className="credential-paths">
-          <Card>
-            <Badge>Claimed</Badge>
-            <h3>User-claimed learning record</h3>
+          <Card className="credential-path-claimed">
+            <CredentialStatusBadge status={CREDENTIAL_STATES.claimed} />
+            <h3>{CREDENTIAL_STATES.claimed.title}</h3>
             <ol className="loop-list compact">
               <li>User completes quiz</li>
               <li>User claims score</li>
-              <li>On-chain record</li>
+              <li>On-chain self-claimed record</li>
             </ol>
-            <p className="note">Not an independently verified examination.</p>
+            <p className="note">{CREDENTIAL_STATES.claimed.body}</p>
           </Card>
-          <Card>
-            <Badge tone="success">Issuer attested</Badge>
-            <h3>Issuer-attested credential</h3>
+          <Card className="credential-path-attested">
+            <CredentialStatusBadge status={CREDENTIAL_STATES.attested} />
+            <h3>{CREDENTIAL_STATES.attested.title}</h3>
             <ol className="loop-list compact">
               <li>Learning result</li>
               <li>Issuer review</li>
               <li>EIP-712 authorization</li>
-              <li>On-chain credential</li>
+              <li>On-chain issuer-attested credential</li>
             </ol>
-            <p className="note">Requires an owner signature. Not used in the learner mint UI yet.</p>
+            <p className="note">{CREDENTIAL_STATES.attested.body}</p>
           </Card>
         </div>
       </section>
