@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skillforge.local/metadata/schema/v1.json",
+  "title": "SkillForge credential ERC-721 metadata",
+  "description": "JSON written by SkillForgeCredential.tokenURI (schema v1). Image must be ipfs:// or https://.",
+  "type": "object",
+  "required": ["name", "description", "attributes"],
+  "additionalProperties": true,
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^SkillForge Avalanche Credential #[1-9][0-9]*$"
+    },
+    "description": {
+      "type": "string",
+      "enum": [
+        "Self-claimed SkillForge score record on Avalanche.",
+        "Issuer-attested SkillForge credential on Avalanche."
+      ]
+    },
+    "image": {
+      "type": "string",
+      "description": "ipfs:// CID or stable HTTPS artwork URL. Omit when empty."
+    },
+    "external_url": {
+      "type": "string"
+    },
+    "attributes": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["trait_type", "value"],
+        "properties": {
+          "trait_type": { "type": "string" },
+          "value": {}
+        }
+      }
+    }
+  }
+}
