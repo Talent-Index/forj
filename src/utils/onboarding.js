@@ -1,6 +1,7 @@
 import { PIECE_COST, TOTAL_PIECES, sections } from "../data/questions.js";
 import { QUESTIONS_PER_QUIZ } from "./quiz.js";
 import { normalizeAddress } from "./progress.js";
+import { CREDENTIAL_STATES } from "./credentialStatus.js";
 
 export const FUJI_CHAIN_ID = 43113;
 export const FUJI_FAUCET_URL = "https://core.app/tools/testnet-faucet/";
@@ -80,8 +81,8 @@ export const PUZZLE_EXPLAINER = {
 export const CREDENTIAL_EXPLAINER = {
   title: "Credentials",
   body: "Minting writes your claimed quiz scores and puzzle progress to a soulbound NFT on Avalanche Fuji. It cannot be transferred. The app mints a self-claimed record — anyone can mint their own scores. An issuer-attested mint exists on-chain for later privileged issuance. This is not a proctored exam credential.",
-  claimed: "Self-claimed: you submit your scores from this app.",
-  attested: "Issuer-attested: requires an owner EIP-712 signature (not used in the learner UI yet).",
+  claimed: CREDENTIAL_STATES.claimed.summary,
+  attested: CREDENTIAL_STATES.attested.summary,
 };
 
 export const FUJI_EXPLAINER = {

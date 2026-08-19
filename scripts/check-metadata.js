@@ -94,7 +94,15 @@ const localViteAsset = resolveCredentialImageUri("/src/assets/forge-certificate.
 assert.equal(localViteAsset, "");
 assert.equal(resolveCredentialImageUri("https://example.com/forge.jpg"), "https://example.com/forge.jpg");
 
-assert.equal(validateCredentialMetadata({ name: "Nope" }).ok, false);
+assert.equal(
+  validateCredentialMetadata({
+    ...claimedExample,
+    attributes: claimedExample.attributes.map((row) =>
+      row.trait_type === "Attestation" ? { ...row, value: "Verified" } : row
+    ),
+  }).ok,
+  false
+);
 assert.equal(
   validateCredentialMetadata({
     ...built,

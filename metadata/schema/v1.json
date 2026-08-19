@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://skillforge.local/metadata/schema/v1.json",
   "title": "SkillForge credential ERC-721 metadata",
-  "description": "JSON written by SkillForgeCredential.tokenURI (schema v1). Image must be ipfs:// or https://.",
+  "description": "JSON written by SkillForgeCredential.tokenURI (schema v1). Image must be ipfs:// or https://. Attestation is Self claimed or Issuer attested — never verified or certified.",
   "type": "object",
   "required": ["name", "description", "attributes"],
   "additionalProperties": true,

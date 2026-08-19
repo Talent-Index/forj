@@ -96,17 +96,18 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 | On-chain JSON metadata via OpenZeppelin Base64 | Shipped |
 | Mainnet deploy gated (`CONFIRM_MAINNET=yes`) | Shipped |
 
-**Hardhat tests:** 11 passing (`npm test`) — ownership, claimed/attested mints, replay, invalid inputs, soulbound restrictions, `tokenURI`.
+**Hardhat tests:** 14 passing (`npm test`) — ownership, claimed/attested mints, no self-promotion to attested, per-wallet isolation, replay, invalid inputs, soulbound restrictions, `tokenURI`.
 
 ### Frontend mint & credential display
 
 - Self-claimed mint from `Certificate.jsx` → `mintCredential`
-- Reads on-chain credential; shows **Self-claimed** vs **Issuer-attested**
-- Snowtrace links for transaction and token
+- Reads on-chain credential; shows **Self-claimed** vs **Issuer-attested** with distinct silver/gold status
+- Snowtrace links say **View on Snowtrace** (on-chain presence, not issuer attestation)
 - Resolvable image URI helper (`src/utils/ipfs.js`) — set `VITE_CREDENTIAL_IMAGE_URI` for explorer artwork
 - ERC-721 metadata schema v1, pack/upload scripts, and URI checks (`docs/METADATA.md`, `npm run test:metadata`)
+- Honesty labels: `src/utils/credentialStatus.js` — unknown status fails closed to claimed
 
-**Not in UI yet:** attested mint flow, issuer dashboard, public verification pages.
+**Not in UI yet:** attested mint flow, issuer dashboard, public lookup pages.
 
 ### Deploy & environment
 
@@ -159,13 +160,14 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - [x] Soulbound metadata and artwork URI field
 - [x] Stable IPFS/HTTPS artwork + metadata process ([METADATA.md](./METADATA.md))
 - [x] Claimed vs issuer-attested separation (`attested` flag)
+- [x] Claimed vs attested labels in credential UI ([CREDENTIAL.md](./CREDENTIAL.md#claimed-vs-attested-honesty))
 - [x] `mintCredentialWithAuthorization` + EIP-712 nonces
 - [x] Replay and unauthorized issuance tests
 - [x] On-chain credential read in UI
 - [x] Fuji testnet deployment of `SkillForgeCredential`
 - [ ] Issuer-key management runbook
 - [ ] Frontend attested-mint path
-- [ ] Public verification links / QR
+- [ ] Public credential lookup / QR
 - [ ] Credential versioning or revocation policy
 
 ### Phases 4–10 — Not started
@@ -182,13 +184,14 @@ npm run verify          # full CI suite
 
 npm run lint            # ESLint
 npm run compile         # Hardhat compile
-npm test                # 11 contract tests
+npm test                # 14 contract tests
 npm run test:retry      # scoring regression
 npm run test:wallet     # wallet smoke test
 npm run test:quiz       # quiz selection
 npm run test:progress   # localStorage persistence
 npm run test:learner    # dashboard stats
 npm run test:credential # credential schema v1
+npm run test:status     # claimed vs attested honesty labels
 npm run test:jigsaw     # interlocking puzzle + certificate name
 npm run test:metadata   # ERC-721 metadata JSON, URIs, tokenURI round-trip
 npm run test:puzzle     # puzzle redemption

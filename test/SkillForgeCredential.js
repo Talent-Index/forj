@@ -289,4 +289,71 @@ describe("SkillForgeCredential", function () {
     ).to.be.revertedWith("No points earned");
     expect(await credential.authorizationNonces(learner.address)).to.equal(0n);
   });
+
+  it("does not let a learner promote a claimed credential to attested", async function () {
+    const { credential, learner } = await deployCredential();
+    await credential.connect(learner).mintCredential(15, 1, 5, 0, 0, IMAGE);
+    expect((await credential.credentials(1n)).attested).to.equal(false);
+
+    const selfSigned = await signAttestation(credential, learner, learner);
+    await expect(
+      credential.connect(learner).mintCredentialWithAuthorization(
+        selfSigned.value.totalPoints,
+        selfSigned.value.puzzleMask,
+        selfSigned.value.easyCorrect,
+        selfSigned.value.mediumCorrect,
+        selfSigned.value.hardCorrect,
+        IMAGE,
+        selfSigned.value.deadline,
+        selfSigned.signature
+      )
+    ).to.be.revertedWith("Invalid authorization");
+
+    expect(await credential.credentialOf(learner.address)).to.equal(1n);
+    expect((await credential.credentials(1n)).attested).to.equal(false);
+    const metadata = decodeTokenURI(await credential.tokenURI(1n));
+    expect(metadata.attributes.find((item) => item.trait_type === "Attestation").value).to.equal("Self claimed");
+  });
+
+  it("writes a new claimed credential when a learner remints after attestation", async function () {
+    const { credential, owner, learner } = await deployCredential();
+    const { value, signature } = await signAttestation(credential, owner, learner);
+    await credential.connect(learner).mintCredentialWithAuthorization(
+      value.totalPoints,
+      value.puzzleMask,
+      value.easyCorrect,
+      value.mediumCorrect,
+      value.hardCorrect,
+      IMAGE,
+      value.deadline,
+      signature
+    );
+    expect((await credential.credentials(1n)).attested).to.equal(true);
+
+    await credential.connect(learner).mintCredential(20, 3, 5, 1, 0, IMAGE);
+    expect(await credential.credentialOf(learner.address)).to.equal(2n);
+    await expect(credential.ownerOf(1n)).to.be.revertedWithCustomError(credential, "ERC721NonexistentToken");
+    expect((await credential.credentials(2n)).attested).to.equal(false);
+    const metadata = decodeTokenURI(await credential.tokenURI(2n));
+    expect(metadata.description).to.match(/Self-claimed/);
+  });
+
+  it("keeps credential data isolated per wallet", async function () {
+    const { credential, learner, other } = await deployCredential();
+    await credential.connect(learner).mintCredential(15, 1, 5, 0, 0, IMAGE);
+    await credential.connect(other).mintCredential(40, 7, 5, 5, 0, IMAGE);
+
+    expect(await credential.credentialOf(learner.address)).to.equal(1n);
+    expect(await credential.credentialOf(other.address)).to.equal(2n);
+    expect((await credential.credentials(1n)).totalPoints).to.equal(15n);
+    expect((await credential.credentials(1n)).attested).to.equal(false);
+    expect((await credential.credentials(2n)).totalPoints).to.equal(40n);
+    expect((await credential.credentials(2n)).easyCorrect).to.equal(5n);
+    expect((await credential.credentials(2n)).mediumCorrect).to.equal(5n);
+
+    await credential.connect(learner).mintCredential(18, 3, 5, 1, 0, IMAGE);
+    expect(await credential.credentialOf(learner.address)).to.equal(3n);
+    expect(await credential.credentialOf(other.address)).to.equal(2n);
+    expect((await credential.credentials(2n)).totalPoints).to.equal(40n);
+  });
 });

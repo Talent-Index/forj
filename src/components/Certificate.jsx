@@ -13,9 +13,11 @@ import { CREDENTIAL_EXPLAINER, EMPTY_STATES, ERROR_STATES } from "../utils/onboa
 import { useOnChainCredential } from "../hooks/useOnChainCredential";
 import { validateRecipientName } from "../utils/recipient";
 import { CREDENTIAL_SCHEMA_VERSION } from "../utils/credentialModel";
+import { CREDENTIAL_STATES, LEARNER_MINT_STATUS, resolveCredentialStatus } from "../utils/credentialStatus";
 import EmptyState from "./EmptyState";
 import CredentialRecord from "./CredentialRecord";
 import CertificateArtifact from "./CertificateArtifact";
+import CredentialStatusBadge from "./CredentialStatusBadge";
 import {
   certificateId,
   highestDifficulty,
@@ -59,7 +61,9 @@ function Certificate({
   );
   const scorePercent = quizPercent(sectionScores);
   const difficulty = highestDifficulty(sectionScores);
-  const verificationStatus = onChainCredential?.verificationStatus || "claimed";
+  const onChainStatus = resolveCredentialStatus(onChainCredential);
+  const previewStatus = CREDENTIAL_STATES[LEARNER_MINT_STATUS];
+  const artifactStatus = onChainCredential ? onChainStatus : previewStatus;
   const issuedName = savedName.ok ? savedName.name : validateRecipientName(nameInput).name;
   const onChainImageUri = resolveCredentialImageUri(userImage);
 
@@ -136,7 +140,7 @@ function Certificate({
       scorePercent={scorePercent}
       difficulty={difficulty}
       credentialId={onChainCredential?.credentialId ? `#${onChainCredential.credentialId}` : certId}
-      verificationStatus={verificationStatus}
+      verificationStatus={artifactStatus.id}
       walletAddress={address}
       chainId={onChainCredential?.chainId || FUJI_CHAIN_ID}
       contractAddress={onChainCredential?.contractAddress || CONTRACT_ADDRESS}
@@ -161,6 +165,14 @@ function Certificate({
                 : "Forged certificate"}
         </h1>
         <p className="lede">{CREDENTIAL_EXPLAINER.body}</p>
+        <p className="certificate-status-row">
+          <CredentialStatusBadge status={artifactStatus} />
+          {onChainCredential ? (
+            <span className="meta-line">On-chain status for this wallet</span>
+          ) : (
+            <span className="meta-line">Learner mint is always self-claimed</span>
+          )}
+        </p>
       </header>
 
       {Object.keys(sectionScores).length === 0 && (
@@ -216,6 +228,10 @@ function Certificate({
         <section className="section-block">
           {artifact}
           <p className="meta-line">This name will appear on your credential.</p>
+          <p className="meta-line">{previewStatus.body}</p>
+          {onChainStatus.id === "attested" && (
+            <p className="meta-line" role="status">{previewStatus.remintNote}</p>
+          )}
           {!onChainImageUri && (
             <p className="meta-line">
               On-chain artwork is empty until <code>VITE_CREDENTIAL_IMAGE_URI</code> is set to an
@@ -270,7 +286,7 @@ function Certificate({
                 : mintTx
                   ? "Minted on-chain"
                   : CONTRACT_ADDRESS
-                    ? "Claim credential on Fuji"
+                    ? "Claim self-claimed credential on Fuji"
                     : "Mint (deploy contract first)"}
             </Button>
             <Button variant="secondary" onClick={onRetry}>Start over</Button>

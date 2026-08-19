@@ -195,6 +195,15 @@ export function validateCredentialMetadata(metadata) {
     if (!attested && metadata.description === DESCRIPTION.attested) {
       errors.push({ field: "description", message: "Claimed traits must use the claimed description." });
     }
+    const honestyText = [metadata.name, metadata.description, attestation]
+      .filter(Boolean)
+      .join(" ");
+    if (/\bverif(?:y|ied|ication|iable)\b|\bcertified\b/i.test(honestyText)) {
+      errors.push({
+        field: "description",
+        message: "Must not use verified or certified language. Use self-claimed or issuer-attested.",
+      });
+    }
   }
   return { ok: errors.length === 0, errors };
 }

@@ -5,6 +5,8 @@ import {
   INTRODUCTION,
   WALLET_GUIDANCE,
 } from "../../utils/onboarding";
+import { CREDENTIAL_STATES } from "../../utils/credentialStatus";
+import CredentialStatusBadge from "../CredentialStatusBadge";
 
 function AboutPage() {
   return (
@@ -24,15 +26,17 @@ function AboutPage() {
       </section>
 
       <section className="section-block split">
-        <Card>
-          <h3>Claimed credential</h3>
+        <Card className="credential-path-claimed">
+          <CredentialStatusBadge status={CREDENTIAL_STATES.claimed} />
+          <h3>{CREDENTIAL_STATES.claimed.title}</h3>
           <p>{CREDENTIAL_EXPLAINER.claimed}</p>
-          <p className="note">User-claimed learning record. Not an independently verified examination.</p>
+          <p className="note">{CREDENTIAL_STATES.claimed.body}</p>
         </Card>
-        <Card>
-          <h3>Issuer-attested credential</h3>
+        <Card className="credential-path-attested">
+          <CredentialStatusBadge status={CREDENTIAL_STATES.attested} />
+          <h3>{CREDENTIAL_STATES.attested.title}</h3>
           <p>{CREDENTIAL_EXPLAINER.attested}</p>
-          <p className="note">Higher-trust path. Requires an owner EIP-712 signature.</p>
+          <p className="note">{CREDENTIAL_STATES.attested.body}</p>
         </Card>
       </section>
 

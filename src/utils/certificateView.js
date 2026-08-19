@@ -1,14 +1,15 @@
 import { QUESTIONS_PER_QUIZ } from "./quiz.js";
 import { SCORE_SECTIONS } from "./progress.js";
+import { CREDENTIAL_STATES } from "./credentialStatus.js";
 
 export const TRUST_COPY = {
   claimed: {
-    title: "Claimed",
-    body: "This credential records a score claimed by the recipient. It is not an independently proctored assessment.",
+    title: CREDENTIAL_STATES.claimed.label,
+    body: CREDENTIAL_STATES.claimed.body,
   },
   attested: {
-    title: "Issuer attested",
-    body: "This credential was authorized by a recognized SkillForge issuer.",
+    title: CREDENTIAL_STATES.attested.label,
+    body: CREDENTIAL_STATES.attested.body,
   },
 };
 

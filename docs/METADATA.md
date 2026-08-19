@@ -42,6 +42,8 @@ Builder: [`src/utils/credentialMetadata.js`](../src/utils/credentialMetadata.js)
 
 Issuer-attested tokens use description `Issuer-attested SkillForge credential on Avalanche.` and trait `Issuer attested`.
 
+Do not put “verified”, “certified”, or similar in `name`, `description`, or `Attestation`. Claimed metadata must stay self-claimed; attested metadata must stay issuer-attested. See [CREDENTIAL.md](./CREDENTIAL.md#claimed-vs-attested-honesty).
+
 ---
 
 ## Production process
@@ -54,7 +56,7 @@ Issuer-attested tokens use description `Issuer-attested SkillForge credential on
    - Durable HTTPS on your own host (not a CDN thumbnail with tracking params)
 4. **Configure** — `VITE_CREDENTIAL_IMAGE_URI=ipfs://<cid>` or `https://...` in `.env`. Restart Vite.
 5. **Mint** — the app writes that URI into `CredentialData.image`. `tokenURI` embeds it in on-chain JSON.
-6. **Verify** — open the token on Snowtrace, confirm `tokenURI` JSON, then confirm the image loads from IPFS/HTTPS.
+6. **Confirm** — open the token on Snowtrace, read `tokenURI` JSON, then confirm the image loads from IPFS/HTTPS. Snowtrace listing is not issuer attestation.
 
 The Fuji contract is already deployed. You do **not** redeploy to change artwork; remint with the new image URI. Remint burns the previous token.
 

@@ -63,11 +63,11 @@ flowchart LR
 - ✅ Finalize soulbound credential metadata
 - ✅ Use stable IPFS/HTTPS metadata and artwork *([METADATA.md](./METADATA.md); operator sets `VITE_CREDENTIAL_IMAGE_URI`)*
 - ✅ Separate claimed scores from issuer-attested scores
-- ✅ Implement `mintCredentialWithAuthorization` as the preferred verified path *(contract; UI still self-claim)*
+- ✅ Implement `mintCredentialWithAuthorization` as the issuer-attested path *(contract; UI still self-claim)*
 - ✅ Harden EIP-712 authorization and nonce handling
 - ✅ Prevent signature replay and unauthorized issuance
 - 🟡 Define issuer-key management procedures
-- 🟡 Add credential verification UI *(on-chain read + attested label; no public verify page)*
+- ✅ Show claimed vs attested status in credential UI *(learner mint stays self-claimed; no public lookup page)*
 - ✅ Allow users to view their on-chain learning record
 - ⬜ Establish credential versioning/revocation strategy
 
@@ -101,18 +101,17 @@ flowchart LR
 
 ---
 
-## Phase 6 — Verification & Trust
+## Phase 6 — Attestation & Trust
 
-- Establish distinction between self-claimed and verified credentials
+- ✅ Distinguish self-claimed scores from issuer-attested credentials *(UI, metadata, docs)*
 - Introduce issuer accounts
 - Create an issuer dashboard
 - Allow authorized organizations to issue credentials
 - Add issuer-specific signing keys
-- Build credential verification links/pages
-- Add QR-based credential verification
-- Provide public credential lookup
+- Build public credential lookup pages
+- Add QR-based credential lookup
 - Define credential authenticity and provenance rules
-- Document the verification model clearly
+- Document the attestation model clearly
 
 ---
 
@@ -203,7 +202,7 @@ flowchart TD
   Quiz --> Points[Earn points]
   Points --> Puzzle[Unlock puzzle pieces]
   Puzzle --> Cert[Complete certificate]
-  Cert --> Score[Claim or verify score]
+  Cert --> Score[Claim or attest score]
   Score --> Mint[Mint credential]
   Mint --> Record[Build on-chain learning record]
 ```
@@ -261,7 +260,7 @@ The roadmap maintains three parallel tracks:
 |-------|-------------------|
 | **Learning** | Make SkillForge an effective Avalanche learning experience |
 | **GameFi** | Make progression, points, puzzles, and achievements engaging |
-| **Credentials** | Make on-chain achievements trustworthy and verifiable |
+| **Credentials** | Keep claimed scores honest; issuer-attested credentials remain a separate privileged path |
 
 ```mermaid
 flowchart LR
