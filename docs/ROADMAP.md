@@ -69,7 +69,7 @@ flowchart LR
 - 🟡 Define issuer-key management procedures
 - ✅ Show claimed vs attested status in credential UI
 - ✅ Allow users to view their on-chain learning record
-- ✅ Public credential lookup *(token ID or wallet; [Lookup](../src/components/pages/CredentialLookupPage.jsx))*
+- ✅ Public credential lookup *(token ID or wallet; `/credential/<id>`; QR + share URL; [Lookup](../src/components/pages/CredentialLookupPage.jsx))*
 - ⬜ Establish credential versioning/revocation strategy
 
 ---

@@ -1459,6 +1459,94 @@ img {
   overflow-wrap: anywhere;
 }
 
+.verification-state {
+  border: 1px solid var(--border);
+  background: var(--success-bg);
+  padding: 16px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+}
+
+.verification-state h2 {
+  font-size: 16.1px;
+  margin: 0 0 4px;
+}
+
+.verification-state p {
+  margin: 0;
+}
+
+.verification-state .meta-line {
+  margin-top: 8px;
+}
+
+.verification-state-none,
+.verification-ownership-mismatch {
+  background: var(--danger-bg);
+}
+
+.verification-ownership-unknown {
+  background: var(--warning-bg);
+}
+
+.credential-metadata,
+.credential-share {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.credential-metadata h3,
+.credential-share h3 {
+  font-size: 14.45px;
+  font-weight: 650;
+  margin: 0 0 8px;
+}
+
+.credential-share-url {
+  overflow-wrap: anywhere;
+  margin: 0 0 12px;
+}
+
+.credential-share .btn {
+  margin-bottom: 12px;
+}
+
+.credential-traits {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  margin: 12px 0 0;
+}
+
+.credential-traits li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.credential-traits span {
+  font-size: 8.67px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.credential-qr {
+  width: 168px;
+  padding: 8px;
+  background: #fffefb;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.credential-qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .recipient-form .recipient-label {
   display: block;
   margin-top: 12px;
@@ -1482,6 +1570,7 @@ img {
 @media (max-width: 860px) {
   .certificate-meta,
   .credential-details-list,
+  .credential-traits,
   .certificate-score-line {
     grid-template-columns: 1fr;
     flex-direction: column;

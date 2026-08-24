@@ -12,6 +12,7 @@ import { normalizeAddress } from "../../utils/progress";
 import { CREDENTIAL_STATES } from "../../utils/credentialStatus";
 import {
   buildCredentialVerificationView,
+  evaluateCredentialVerification,
   loadCredentialLookup,
   lookupShareUrl,
   parseCredentialLocation,
@@ -105,6 +106,10 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
         : null,
     [credential, transactionHash, query]
   );
+  const missingVerification = useMemo(
+    () => (credential ? null : evaluateCredentialVerification(null)),
+    [credential]
+  );
 
   function submit(event) {
     event.preventDefault();
@@ -193,10 +198,18 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
       {loading && <p role="status">Reading credential from Fuji…</p>}
 
       {!loading && error === "not-found" && (
-        <EmptyState
-          title={EMPTY_STATES.noLookup.title}
-          body={EMPTY_STATES.noLookup.body}
-        />
+        <>
+          <div className="verification-state verification-state-none verification-ownership-unknown">
+            <p className="kicker">Credential verification</p>
+            <h2>Verification state</h2>
+            <p>Not found</p>
+            <p className="meta-line">{missingVerification?.summary}</p>
+          </div>
+          <EmptyState
+            title={EMPTY_STATES.noLookup.title}
+            body={EMPTY_STATES.noLookup.body}
+          />
+        </>
       )}
       {!loading && error === "invalid" && (
         <EmptyState
@@ -209,7 +222,7 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
         <EmptyState
           variant="error"
           title="Holder does not match"
-          body="This token exists on Fuji, but the connected holder is not the wallet in the URL."
+          body="This token exists on Fuji, but the on-chain holder is not the wallet in the URL."
         />
       )}
       {!loading && !error && !view && (
@@ -220,7 +233,8 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
         <section className="section-block">
           {verification && (
             <div className={`verification-state verification-state-${verification.statusId} verification-ownership-${verification.ownership}`}>
-              <p className="kicker">Verification state</p>
+              <p className="kicker">Credential verification</p>
+              <h2>Verification state</h2>
               <p>
                 {verification.onChain ? "On-chain record found" : "Not found"}
                 {verification.statusLabel ? ` · ${verification.statusLabel}` : ""}

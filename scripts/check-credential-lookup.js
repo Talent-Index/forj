@@ -7,9 +7,12 @@ import {
   VERIFICATION_FIELDS,
   VERIFICATION_LABELS,
   buildCredentialVerificationView,
+  evaluateCredentialVerification,
   lookupQueryString,
   lookupShareUrl,
+  parseCredentialLocation,
   parseLookupQuery,
+  publicCredentialPath,
 } from "../src/utils/credentialLookup.js";
 import { EXPLORER_LINK_LABEL, hasAmbiguousTrustLanguage } from "../src/utils/credentialStatus.js";
 
@@ -54,7 +57,34 @@ assert.deepEqual(parseLookupQuery("?token=7&wallet=0xAAAAaaaaaaaaaaaaaaaaaaaaaaa
 });
 assert.deepEqual(parseLookupQuery("token=0"), { tokenId: "", wallet: "" });
 assert.equal(lookupQueryString({ tokenId: "7", wallet: WALLET }), `?token=7&wallet=${WALLET}`);
-assert.equal(lookupShareUrl({ tokenId: "3" }, "https://skillforge.example"), "https://skillforge.example/?token=3");
+assert.equal(publicCredentialPath({ tokenId: "3" }), "/credential/3");
+assert.equal(publicCredentialPath({ wallet: WALLET }), `/credential?wallet=${WALLET}`);
+assert.equal(publicCredentialPath({ tokenId: "3", wallet: WALLET }), `/credential/3?wallet=${WALLET}`);
+assert.equal(lookupShareUrl({ tokenId: "3" }, "https://skillforge.example"), "https://skillforge.example/credential/3");
+assert.equal(
+  lookupShareUrl({ tokenId: "3", wallet: WALLET }, "https://skillforge.example"),
+  `https://skillforge.example/credential/3?wallet=${WALLET}`
+);
+
+assert.deepEqual(parseCredentialLocation("/credential/4", ""), {
+  isPublicRoute: true,
+  tokenId: "4",
+  wallet: "",
+  invalidPathId: false,
+});
+assert.deepEqual(parseCredentialLocation("/credential/nope", ""), {
+  isPublicRoute: true,
+  tokenId: "",
+  wallet: "",
+  invalidPathId: true,
+});
+assert.deepEqual(parseCredentialLocation("/", "?token=9"), {
+  isPublicRoute: true,
+  tokenId: "9",
+  wallet: "",
+  invalidPathId: false,
+});
+assert.equal(parseCredentialLocation("/about", "").isPublicRoute, false);
 
 const claimed = buildCredentialRecord({
   tokenId: 7,
@@ -95,6 +125,19 @@ assert.equal(claimedView.explorerLabel, EXPLORER_LINK_LABEL);
 assert.equal(claimedView.metadataUrl.startsWith("data:application/json"), true);
 assert.equal(hasAmbiguousTrustLanguage(claimedView.status), false);
 assert.equal(hasAmbiguousTrustLanguage(claimedView.statusBody), false);
+assert.equal(claimedView.verification.onChain, true);
+assert.equal(claimedView.verification.ownership, "on-chain");
+assert.equal(claimedView.verification.statusId, "claimed");
+assert.match(claimedView.verification.summary, /On-chain record/);
+assert.equal(hasAmbiguousTrustLanguage(claimedView.verification.summary), false);
+assert.equal(claimedView.metadata.name, claimedView.title);
+
+const missing = evaluateCredentialVerification(null);
+assert.equal(missing.found, false);
+assert.equal(missing.onChain, false);
+assert.equal(missing.statusLabel, "Not found");
+assert.equal(evaluateCredentialVerification(claimed, { wallet: WALLET }).ownership, "match");
+assert.equal(evaluateCredentialVerification(claimed, { wallet: OWNER }).ownership, "mismatch");
 
 const attested = buildCredentialRecord({
   tokenId: 2,
@@ -115,9 +158,25 @@ assert.equal(attestedView.difficulty, "Easy");
 const page = readFileSync(join(root, "src/components/pages/CredentialLookupPage.jsx"), "utf8");
 assert.match(page, /Credential lookup/);
 assert.match(page, /Credential verification/);
+assert.match(page, /Public credential verification/);
+assert.match(page, /Verification state/);
+assert.match(page, /Shareable URL/);
+assert.match(page, /CredentialQr/);
+assert.match(page, /not-found/);
+assert.match(page, /owner-mismatch/);
+assert.match(page, /EMPTY_STATES\.noLookup/);
 assert.doesNotMatch(page, /Verify on Snowtrace/);
 assert.doesNotMatch(page, /verifiable on-chain/i);
 assert.match(page, /does not make a self-claimed score issuer-attested/);
+
+const app = readFileSync(join(root, "src/App.jsx"), "utf8");
+assert.match(app, /parseCredentialLocation/);
+assert.match(app, /publicCredentialPath/);
+assert.match(app, /\/credential/);
+
+const qr = readFileSync(join(root, "src/components/CredentialQr.jsx"), "utf8");
+assert.match(qr, /qrcode/);
+assert.match(qr, /QR code/);
 
 const details = readFileSync(join(root, "src/components/CredentialDetails.jsx"), "utf8");
 assert.match(details, /VERIFICATION_LABELS/);

@@ -106,9 +106,9 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - Resolvable image URI helper (`src/utils/ipfs.js`) — set `VITE_CREDENTIAL_IMAGE_URI` for explorer artwork
 - ERC-721 metadata schema v1, pack/upload scripts, and URI checks (`docs/METADATA.md`, `npm run test:metadata`)
 - Honesty labels: `src/utils/credentialStatus.js` — unknown status fails closed to claimed
-- Public **Lookup** page: token ID or holder wallet; shows title, holder, score, difficulty, status, issuer, network, contract, token ID, mint tx, explorer, and metadata
+- Public **Lookup** page at `/credential/<id>`: token ID or holder wallet; shows title, holder, score, difficulty, status, issuer, network, contract, token ID, mint tx, explorer, metadata, verification state, shareable URL, and QR
 
-**Not in UI yet:** attested mint flow, issuer dashboard, QR lookup.
+**Not in UI yet:** attested mint flow, issuer dashboard.
 
 ### Deploy & environment
 
@@ -168,9 +168,9 @@ Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at th
 - [x] On-chain credential read in UI
 - [x] Fuji testnet deployment of `SkillForgeCredential`
 - [ ] Issuer-key management runbook
-- [x] Public credential lookup (token ID or wallet; no QR)
+- [x] Public credential lookup (token ID or wallet; `/credential/<id>`)
 - [ ] Frontend attested-mint path
-- [ ] QR-based credential lookup
+- [x] QR-based credential lookup
 - [ ] Credential versioning or revocation policy
 
 ### Phases 4–10 — Not started

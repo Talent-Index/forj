@@ -33,7 +33,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Open http://localhost:5173 and connect your wallet on Avalanche Fuji. Credential lookup is public: `/` with `?token=1` or `?wallet=0x…` does not require a wallet.
+Open http://localhost:5173 and connect your wallet on Avalanche Fuji. Credential lookup is public: `/credential/1` or `/credential?wallet=0x…` does not require a wallet. Legacy `/?token=1` still works.
 
 ## Environment
 
