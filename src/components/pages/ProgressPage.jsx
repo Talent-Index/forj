@@ -24,6 +24,7 @@ function ProgressPage({
   onPuzzle,
   onCredentials,
   onLookup,
+  progression,
 }) {
   const stats = computeLearnerDashboard({
     sectionScores,
@@ -59,6 +60,30 @@ function ProgressPage({
           onAction={() => onContinue("easy")}
         />
       )}
+
+      <section className="section-block">
+        <h2>Progression</h2>
+        <div className="stat-row">
+          <Card className="stat-compact">
+            <p className="kicker">Level</p>
+            <p className="stat-value">{progression?.level?.level ?? 1}</p>
+            <p className="meta-line">{progression?.summary?.xp ?? 0} XP · {progression?.level?.xpForNextLevel ?? 0} to next</p>
+          </Card>
+          <Card className="stat-compact">
+            <p className="kicker">Streak</p>
+            <p className="stat-value">{progression?.streakCurrent ?? 0}</p>
+            <p className="meta-line">Longest {progression?.streakLongest ?? 0} days (UTC)</p>
+          </Card>
+          <Card className="stat-compact">
+            <p className="kicker">Path</p>
+            <p className="stat-value">{progression?.path?.percent ?? 0}%</p>
+            <p className="meta-line">{progression?.nextItem?.title || "Start the fundamentals track"}</p>
+          </Card>
+        </div>
+        {progression?.level && (
+          <ProgressBar label={`Level ${progression.level.level}`} value={progression.level.percent} />
+        )}
+      </section>
 
       <section className="section-block">
         <h2>Overall progress</h2>

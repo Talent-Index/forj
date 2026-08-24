@@ -51,6 +51,8 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
     setState(loaded);
     setHydrated(true);
     migratedFor.current = id;
+    // Hydrate once per learner. Migration is idempotent if called again from dispatch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- quizSnapshot is read once on account switch
   }, [learnerId, ready, store]);
 
   const persist = useCallback((next) => {

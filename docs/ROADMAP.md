@@ -74,21 +74,20 @@ flowchart LR
 
 ---
 
-## Phase 4 — Gamification
+## Phase 4 — Gamification ✅ *Shipped (client preview)*
 
-- Introduce XP and achievement mechanics
-- Add badges for learning milestones
-- Create streak and completion mechanics
-- Add achievement-based puzzle pieces
-- Introduce multiple certificate/puzzle collections
-- Add learner levels
-- Create optional challenges beyond the core quizzes
-- Add leaderboards where appropriate
-- Prevent gamification mechanics from compromising credential integrity
+- ✅ Central progression events (`docs/PROGRESSION.md`)
+- ✅ XP and deterministic levels
+- ✅ Event-driven achievements / badges
+- ✅ UTC learning streaks
+- ✅ Avalanche tracks + path engine
+- ✅ 4×4 interlocking puzzle + certificate reveal
+- ✅ Opt-in local leaderboard preview (not a competitive authority)
+- ⬜ Server-backed rankings and multi-device sync
 
 ---
 
-## Phase 5 — Avalanche Learning Expansion
+## Phase 5 — Avalanche Learning Expansion ✅ *Initial tracks shipped*
 
 - Expand Avalanche fundamentals
 - Add Avalanche L1 concepts

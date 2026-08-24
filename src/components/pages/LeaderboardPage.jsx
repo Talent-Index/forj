@@ -16,7 +16,7 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
       window: windowName,
       trackId: windowName === "track" ? trackId : undefined,
     }),
-    [windowName, trackId, optedIn, progression?.state?.xp]
+    [windowName, trackId]
   );
 
   return (

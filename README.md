@@ -9,15 +9,19 @@ A gamified skills-credentialing dApp where users learn Avalanche concepts throug
 - **Wallet connect** — MetaMask or Core Wallet on Avalanche Fuji
 - **3 difficulty tiers** — random 5-question quizzes with expanded ICM / L1 content
 - **Retry-safe scoring** — section retries replace prior points instead of stacking
-- **Progress persistence** — quiz/puzzle state saved per wallet in localStorage
-- **Puzzle redemption** — spend points to unlock a 4×4 certificate puzzle
+- **Progress persistence** — quiz/puzzle state saved per learner account (wallet optional until mint)
+- **Learning path** — data-driven Avalanche tracks, lessons, and gated quizzes
+- **XP and levels** — event-sourced, retry-safe (no quiz XP farming)
+- **Achievements and UTC streaks** — unlocked from the same progression events
+- **Puzzle redemption** — spend points to unlock a 4×4 interlocking certificate jigsaw
+- **Local leaderboard preview** — opt-in, not a competitive authority
 - **On-chain credential** — soulbound NFT via `SkillForgeCredential.sol`
 - **Credential lookup** — public Fuji record by token ID or holder wallet
 - **Signed mint path** — `mintCredentialWithAuthorization` for owner EIP-712 attestations
 
 > Honesty note: `mintCredential` is a **self-claimed** score record. `mintCredentialWithAuthorization` is **issuer-attested** via an owner EIP-712 signature. Both are soulbound. A claimed score is not an issuer-attested assessment.
 
-Product + tech sequencing lives in **[docs/ROADMAP.md](docs/ROADMAP.md)**. For what is already built, see **[docs/STATUS.md](docs/STATUS.md)**.
+Product + tech sequencing lives in **[docs/ROADMAP.md](docs/ROADMAP.md)**. Progression architecture: **[docs/PROGRESSION.md](docs/PROGRESSION.md)**. For what is already built, see **[docs/STATUS.md](docs/STATUS.md)**.
 
 **Current milestone:** Phase 1 (foundation) complete · Phases 2–3 partial · **`SkillForgeCredential` live on Avalanche Fuji**.
 

@@ -6,7 +6,6 @@ import { useWalletModal } from "./hooks/useWalletModal";
 import { useAuth } from "./hooks/useAuth";
 import { useProgression } from "./hooks/useProgression";
 import AppShell from "./components/layout/AppShell";
-import SectionSelect from "./components/SectionSelect";
 import Quiz from "./components/Quiz";
 import PuzzleBoard from "./components/PuzzleBoard";
 import Certificate from "./components/Certificate";
@@ -198,7 +197,8 @@ function App() {
     setActiveSection(id);
     setView(VIEWS.QUIZ);
     setPage("learn");
-  }, []);
+    progression.startQuiz(id);
+  }, [progression]);
 
   const handleQuizComplete = useCallback((result) => {
     setSectionScores((prev) => {
@@ -211,23 +211,27 @@ function App() {
     );
     setAttempts((prev) => [...prev, result]);
     progression.completeQuiz(result);
-  }, []);
+  }, [progression]);
 
   const handleAcquirePiece = useCallback((index) => {
     setAcquiredPieces((prev) => {
       const result = redeemPiece({ totalPoints, acquiredPieces: prev }, index);
       if (!result.ok) return prev;
       setSpentPoints(result.spentPoints);
+      progression.unlockPiece(index);
       return result.acquiredPieces;
     });
-  }, [totalPoints]);
+  }, [progression, totalPoints]);
 
   const handleFullReset = useCallback(() => {
-    if (ownerId) clearProgress(ownerId);
+    if (ownerId) {
+      clearProgress(ownerId);
+      progression.clear();
+    }
     applyProgress(emptyProgress());
     setView(VIEWS.SECTIONS);
     setPage("learn");
-  }, [applyProgress, ownerId]);
+  }, [applyProgress, ownerId, progression]);
 
   const goLearnHome = useCallback(() => {
     setView(VIEWS.SECTIONS);
@@ -292,7 +296,7 @@ function App() {
         requestAnimationFrame(() => scrollToId("credential", theme.reducedMotion));
         return;
       }
-      if (nextPage === "progress" || nextPage === "settings") {
+      if (nextPage === "progress" || nextPage === "settings" || nextPage === "leaderboard") {
         openAuth("signin");
         return;
       }
@@ -407,6 +411,17 @@ function App() {
           }}
           onCredentials={() => setPage("credentials")}
           onLookup={openLookup}
+          progression={progression}
+        />
+      );
+    }
+    if (page === "leaderboard") {
+      return (
+        <LeaderboardPage
+          learnerId={ownerId}
+          progression={progression}
+          onToggleOptIn={(optIn) => progression.setLeaderboardPreference({ optIn, displayName: account?.name || "Learner" })}
+          onLearn={goLearnHome}
         />
       );
     }
@@ -434,6 +449,7 @@ function App() {
             onRetry={handleFullReset}
             userImage={userImage}
             onLookup={openLookup}
+            onClaimed={progression.claimCredential}
           />
         </>
       );
@@ -482,12 +498,14 @@ function App() {
             }}
           />
         )}
-        <SectionSelect
+        <LearnPage
+          progression={progression}
           sectionScores={sectionScores}
           totalPoints={totalPoints}
           completedSections={completedSections}
           onSelectSection={startSection}
           onGoToPuzzle={() => setView(VIEWS.PUZZLE)}
+          onCompleteLesson={progression.completeLesson}
         />
       </>
     );
@@ -522,6 +540,21 @@ function App() {
           },
         }}
       >
+        {progression.feedback?.length > 0 && (
+          <div className="feedback-banner" role="status">
+            {progression.feedback.slice(0, 3).map((item, index) => (
+              <p key={`${item.kind}-${index}`}>
+                {item.kind === "xp" && `+${item.amount} XP`}
+                {item.kind === "level-up" && `Level ${item.level}`}
+                {item.kind === "achievement" && `Achievement: ${item.name}`}
+                {item.kind === "unlock" && `Unlocked ${item.scope}`}
+                {item.kind === "streak-milestone" && `${item.days}-day streak`}
+                {item.kind === "puzzle-complete" && "Puzzle complete"}
+              </p>
+            ))}
+            <button type="button" className="btn btn-ghost" onClick={progression.clearFeedback}>Dismiss</button>
+          </div>
+        )}
         {renderAppContent()}
       </AppShell>
       <AuthModal
