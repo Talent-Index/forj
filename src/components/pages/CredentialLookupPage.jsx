@@ -91,7 +91,7 @@ function CredentialLookupPage({ initialQuery = "" }) {
     <div className="page credential-lookup">
       <header className="page-header">
         <p className="kicker">Credential verification</p>
-        <h1>Look up a credential</h1>
+        <h1>Credential lookup</h1>
         <p className="lede">
           Read a SkillForge credential from Avalanche Fuji by token ID or holder wallet.
           Looking it up does not make a self-claimed score issuer-attested.

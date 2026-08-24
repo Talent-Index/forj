@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { buildCredentialRecord } from "../src/utils/credentialModel.js";
 import {
   VERIFICATION_FIELDS,
+  VERIFICATION_LABELS,
   buildCredentialVerificationView,
   lookupQueryString,
   lookupShareUrl,
@@ -30,6 +31,21 @@ assert.deepEqual(VERIFICATION_FIELDS, [
   "transactionHash",
   "explorerUrl",
   "metadataUrl",
+]);
+assert.deepEqual(Object.keys(VERIFICATION_LABELS), VERIFICATION_FIELDS);
+assert.deepEqual(Object.values(VERIFICATION_LABELS), [
+  "Credential title",
+  "Holder wallet",
+  "Score",
+  "Difficulty",
+  "Credential status",
+  "Issuer",
+  "Network",
+  "Contract address",
+  "Token ID",
+  "Transaction hash",
+  "Explorer link",
+  "Metadata link",
 ]);
 
 assert.deepEqual(parseLookupQuery("?token=7&wallet=0xAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), {

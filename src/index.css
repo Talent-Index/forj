@@ -1417,6 +1417,16 @@ img {
   margin-bottom: 8px;
 }
 
+.credential-details-head .kicker {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.credential-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.95em;
+}
+
 .credential-details-head h2 {
   margin: 0;
   font-size: 16.1px;
