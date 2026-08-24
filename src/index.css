@@ -74,7 +74,7 @@ img {
 }
 
 .shell {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -379,13 +379,29 @@ img {
   padding: 0;
 }
 
-.theme-toggle {
+.theme-toggle,
+.zoom-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.theme-icon {
+.zoom-toggle {
+  width: auto;
+  min-width: 44px;
+  gap: 4px;
+  padding: 0 10px;
+}
+
+.zoom-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.theme-icon,
+.zoom-icon {
   width: 20px;
   height: 20px;
   display: block;

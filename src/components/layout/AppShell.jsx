@@ -10,6 +10,8 @@ function AppShell({
   wallet,
   theme,
   onToggleTheme,
+  zoom,
+  onCycleZoom,
   walletModal,
   onOpenAuth,
   children,
@@ -24,6 +26,8 @@ function AppShell({
         wallet={wallet}
         theme={theme}
         onToggleTheme={onToggleTheme}
+        zoom={zoom}
+        onCycleZoom={onCycleZoom}
         walletModal={walletModal}
         onOpenAuth={onOpenAuth}
       />

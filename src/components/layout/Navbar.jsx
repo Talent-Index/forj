@@ -25,6 +25,29 @@ function BrandMark() {
   );
 }
 
+function ZoomToggle({ zoom = 100, onCycleZoom }) {
+  return (
+    <button
+      className="btn btn-ghost btn-icon zoom-toggle"
+      onClick={onCycleZoom}
+      aria-label={`Browser-style page zoom ${zoom} percent. Click to cycle 100, 125, 150, 175.`}
+      title={`Zoom ${zoom}%`}
+    >
+      <svg viewBox="0 0 24 24" className="zoom-icon" aria-hidden="true">
+        <circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" strokeWidth="1.6" />
+        <path
+          d="M15 15.2 20 20.2M10.5 8v5M8 10.5h5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="zoom-label">{zoom}%</span>
+    </button>
+  );
+}
+
 function ThemeToggle({ theme, onToggleTheme }) {
   const isDark = theme === "dark";
   return (
@@ -68,6 +91,8 @@ function Navbar({
   wallet,
   theme,
   onToggleTheme,
+  zoom,
+  onCycleZoom,
   walletModal,
   onOpenAuth,
 }) {
@@ -97,6 +122,7 @@ function Navbar({
           ))}
         </nav>
         <div className="nav-actions">
+          <ZoomToggle zoom={zoom} onCycleZoom={onCycleZoom} />
           <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
           {!isAuthenticated ? (
             <>
@@ -135,4 +161,4 @@ function Navbar({
 }
 
 export default Navbar;
-export { LOGGED_OUT_LINKS, LOGGED_IN_LINKS, BrandMark, ThemeToggle };
+export { LOGGED_OUT_LINKS, LOGGED_IN_LINKS, BrandMark, ThemeToggle, ZoomToggle };

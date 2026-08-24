@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useWallet } from "./hooks/useWallet";
 import { useTheme } from "./hooks/useTheme";
+import { useZoom } from "./hooks/useZoom";
 import { useWalletModal } from "./hooks/useWalletModal";
 import { useAuth } from "./hooks/useAuth";
 import AppShell from "./components/layout/AppShell";
@@ -55,6 +56,7 @@ function App() {
   const auth = useAuth();
   const wallet = useWallet();
   const theme = useTheme();
+  const zoom = useZoom();
   const { closeModal, openModal, open } = useWalletModal();
   const walletModal = { open, openModal, closeModal };
   const [page, setPage] = useState(pageFromLocation);
@@ -329,6 +331,8 @@ function App() {
           isFuji={wallet.isFuji}
           theme={theme.theme}
           onToggleTheme={theme.toggleTheme}
+          zoom={zoom.zoom}
+          onCycleZoom={zoom.cycleZoom}
           reducedMotion={theme.reducedMotion}
           onToggleMotion={theme.setReducedMotion}
           onReset={handleFullReset}
@@ -449,18 +453,22 @@ function App() {
   }
 
   return (
-    <AppShell
-      page={page}
-      onNavigate={handleNavigate}
-      isAuthenticated={isAuthenticated}
-      account={account}
-      wallet={wallet}
-      theme={theme.theme}
-      onToggleTheme={theme.toggleTheme}
-      walletModal={walletModal}
-      onOpenAuth={openAuth}
-    >
-      {renderAppContent()}
+    <>
+      <AppShell
+        page={page}
+        onNavigate={handleNavigate}
+        isAuthenticated={isAuthenticated}
+        account={account}
+        wallet={wallet}
+        theme={theme.theme}
+        onToggleTheme={theme.toggleTheme}
+        zoom={zoom.zoom}
+        onCycleZoom={zoom.cycleZoom}
+        walletModal={walletModal}
+        onOpenAuth={openAuth}
+      >
+        {renderAppContent()}
+      </AppShell>
       <AuthModal
         open={authOpen}
         view={authView}
@@ -469,7 +477,7 @@ function App() {
         auth={auth}
         pendingEmail={account?.email}
       />
-    </AppShell>
+    </>
   );
 }
 

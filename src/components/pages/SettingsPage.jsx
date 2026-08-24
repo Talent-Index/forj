@@ -1,5 +1,5 @@
 import { Button, Card } from "../ui/primitives";
-import { ThemeToggle } from "../layout/Navbar";
+import { ThemeToggle, ZoomToggle } from "../layout/Navbar";
 import { shortAddress } from "../../utils/learnerStats";
 
 function SettingsPage({
@@ -8,6 +8,8 @@ function SettingsPage({
   isFuji,
   theme,
   onToggleTheme,
+  zoom,
+  onCycleZoom,
   reducedMotion,
   onToggleMotion,
   onReset,
@@ -52,6 +54,10 @@ function SettingsPage({
         <div className="settings-row">
           <span>Theme</span>
           <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
+        </div>
+        <div className="settings-row">
+          <span>Page zoom</span>
+          <ZoomToggle zoom={zoom} onCycleZoom={onCycleZoom} />
         </div>
         <div className="settings-row">
           <span>Reduced motion</span>
