@@ -39,7 +39,6 @@ import { AUTH_WRITE_TIMEOUT_MS, FIRESTORE_TIMEOUT_MS, withTimeout } from "../uti
 import {
   applyProfileCompletion,
   applySignupIdentity,
-  applyWalletPromptDismissed,
   mergeHydratedProfile,
 } from "../utils/profileOnboarding";
 import { validateRecipientName } from "../utils/recipient";
@@ -280,14 +279,6 @@ export function useAuth() {
 
   const updateAvatar = useCallback((avatarUrl) => updateLearnerProfile({ avatarUrl: avatarUrl || "" }), [updateLearnerProfile]);
 
-  const dismissWalletPrompt = useCallback(async () => {
-    const next = applyWalletPromptDismissed(account || (auth.currentUser ? profileFromDoc(auth.currentUser, {}) : null));
-    if (!next.ok) return next;
-    setAccount(next.account);
-    void persistProfilePatch({ walletPromptSeen: true });
-    return { ok: true, account: next.account };
-  }, [account, persistProfilePatch]);
-
   const linkWallet = useCallback(async (address) => {
     if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
     try {
@@ -361,7 +352,6 @@ export function useAuth() {
     completeProfile,
     updateProfile: updateLearnerProfile,
     updateAvatar,
-    dismissWalletPrompt,
     linkWallet,
     unlinkWallet,
     changeEmail,

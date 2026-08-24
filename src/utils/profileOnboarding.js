@@ -39,8 +39,6 @@ export const AUTH_FLOW_BUTTONS = Object.freeze({
   verified: { label: "I have verified my email" },
   resend: { label: "Resend email" },
   confirmName: { label: "Continue" },
-  connectWallet: { label: "Connect wallet" },
-  skipWallet: { label: "Continue without wallet" },
 });
 
 export function normalizeLearningGoal(value) {
@@ -101,17 +99,6 @@ export function applySignupIdentity(account, name) {
       avatarUrl: account.avatarUrl,
     }),
     complete: true,
-  };
-}
-
-export function applyWalletPromptDismissed(account) {
-  if (!account) return { ok: false, error: "Sign in to continue." };
-  return {
-    ok: true,
-    account: {
-      ...account,
-      walletPromptSeen: true,
-    },
   };
 }
 

@@ -1,5 +1,5 @@
 import { createMemoryStorage, normalizeAddress, progressOwnerId } from "./progress.js";
-import { applyProfileCompletion, applyWalletPromptDismissed } from "./profileOnboarding.js";
+import { applyProfileCompletion } from "./profileOnboarding.js";
 import { validateRecipientName } from "./recipient.js";
 
 export const AUTH_STORAGE_VERSION = 1;
@@ -412,12 +412,6 @@ export function createAuthStore(storage = defaultStorage()) {
       return { ok: true, account: publicAccount(next) };
     },
 
-    dismissWalletPrompt(accountId) {
-      const next = applyWalletPromptDismissed(getAccountById(accountId));
-      if (!next.ok) return next;
-      return { ok: true, account: publicAccount(replaceAccount(next.account)) };
-    },
-
     linkWallet(accountId, address) {
       const account = getAccountById(accountId);
       const normalized = normalizeAddress(address);
@@ -464,5 +458,3 @@ export function createAuthStore(storage = defaultStorage()) {
 
   return store;
 }
-
-export const authStore = createAuthStore();

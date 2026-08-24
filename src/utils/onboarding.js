@@ -1,11 +1,9 @@
 import { PIECE_COST, TOTAL_PIECES, sections } from "../data/questions.js";
 import { QUESTIONS_PER_QUIZ } from "./quiz.js";
-import { progressOwnerId } from "./progress.js";
 import { CREDENTIAL_STATES } from "./credentialStatus.js";
 
 export const FUJI_CHAIN_ID = 43113;
 export const FUJI_FAUCET_URL = "https://core.app/tools/testnet-faucet/";
-export const ONBOARDING_STORAGE_VERSION = 1;
 
 export const INTRODUCTION = {
   title: "SkillForge",
@@ -105,34 +103,6 @@ export const WALLET_GUIDANCE = {
   noWallet: "No injected wallet was found in this browser. Install MetaMask or Core, then refresh.",
 };
 
-export const FIRST_TIME_FLOW = [
-  {
-    id: "account",
-    title: "Create your SkillForge account",
-    body: "Sign in with Google or email. You can start learning without a wallet.",
-  },
-  {
-    id: "quiz",
-    title: "Start with Easy",
-    body: "Take the Easy quiz first. You can retry any section later; the new score replaces the old one.",
-  },
-  {
-    id: "puzzle",
-    title: "Redeem a puzzle piece",
-    body: `When you have at least ${PIECE_COST} points, open the puzzle and unlock a piece.`,
-  },
-  {
-    id: "wallet",
-    title: "Connect a wallet when you are ready",
-    body: "Optional. Connect MetaMask or Core Wallet to record credentials on Avalanche Fuji.",
-  },
-  {
-    id: "mint",
-    title: "Mint when you are ready",
-    body: "Preview your certificate, then approve a Fuji mint. You can remint later; the new credential replaces the previous one.",
-  },
-];
-
 export const EMPTY_STATES = {
   restoring: {
     title: "Restoring your session",
@@ -187,54 +157,6 @@ export const ERROR_STATES = {
   },
 };
 
-export function onboardingStorageKey(ownerId, version = ONBOARDING_STORAGE_VERSION) {
-  const normalized = progressOwnerId(ownerId);
-  if (!normalized) return null;
-  return `skillforge.onboarding.v${version}.${normalized}`;
-}
-
-export function isFirstRunGuideDismissed(address, storage = globalThis.localStorage) {
-  const key = onboardingStorageKey(address);
-  if (!key || !storage) return false;
-  try {
-    return storage.getItem(key) === "dismissed";
-  } catch {
-    return false;
-  }
-}
-
-export function dismissFirstRunGuide(address, storage = globalThis.localStorage) {
-  const key = onboardingStorageKey(address);
-  if (!key || !storage) return false;
-  try {
-    storage.setItem(key, "dismissed");
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function firstRunStatus({
-  isAuthenticated = false,
-  isConnected = false,
-  isFuji = false,
-  walletSkipped = false,
-  completedSections = [],
-  acquiredPieces = [],
-  hasMinted = false,
-} = {}) {
-  const completed = new Set(completedSections);
-  return FIRST_TIME_FLOW.map((step) => {
-    let done = false;
-    if (step.id === "account") done = Boolean(isAuthenticated);
-    if (step.id === "quiz") done = completed.has("easy") || completed.size > 0;
-    if (step.id === "puzzle") done = Array.isArray(acquiredPieces) && acquiredPieces.length > 0;
-    if (step.id === "wallet") done = Boolean((isConnected && isFuji) || walletSkipped);
-    if (step.id === "mint") done = Boolean(hasMinted);
-    return { ...step, done };
-  });
-}
-
 export function requiredOnboardingTopics() {
   return [
     "introduction",
@@ -245,7 +167,6 @@ export function requiredOnboardingTopics() {
     "credentials",
     "fujiTestnet",
     "walletGuidance",
-    "firstTimeFlow",
     "emptyStates",
     "errorStates",
   ];

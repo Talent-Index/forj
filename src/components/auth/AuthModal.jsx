@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LEARNING_GOALS, MIN_PASSWORD_LENGTH } from "../../utils/auth";
+import { MIN_PASSWORD_LENGTH } from "../../utils/auth";
 import { validateRecipientName } from "../../utils/recipient";
 import { Button, Modal } from "../ui/primitives";
 
@@ -324,7 +324,7 @@ export function ProfileSetup({ account, onContinue, busy = false, error = "" }) 
       return;
     }
     setLocalError("");
-    onContinue({ name: recipient.name, learningGoal: goal });
+    onContinue({ name: recipient.name });
   }
 
   const shownError = localError || error;
@@ -336,22 +336,6 @@ export function ProfileSetup({ account, onContinue, busy = false, error = "" }) 
       <form className="auth-form onboard-form" onSubmit={handleSubmit}>
         {shownError && <p className="auth-error" role="alert">{shownError}</p>}
         <Field id="profile-name" label="Your name" value={name} onChange={(value) => { setLocalError(""); setName(value); }} autoComplete="name" placeholder="Your name" />
-        <fieldset className="auth-goals">
-          <legend>Choose your learning goal</legend>
-          <p className="note">Optional. This does not change the quizzes.</p>
-          {LEARNING_GOALS.map((item) => (
-            <label key={item.id} className="auth-goal">
-              <input
-                type="radio"
-                name="learning-goal"
-                value={item.id}
-                checked={goal === item.id}
-                onChange={() => setGoal(item.id)}
-              />
-              {item.label}
-            </label>
-          ))}
-        </fieldset>
         <Button type="submit" disabled={busy}>{busy ? "Saving…" : "Continue"}</Button>
       </form>
     </section>

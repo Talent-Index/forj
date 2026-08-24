@@ -33,7 +33,6 @@ import {
 import { redeemPiece } from "./utils/puzzle";
 import {
   EMPTY_STATES,
-  dismissFirstRunGuide,
 } from "./utils/onboarding";
 import { legalPageFromPath } from "./utils/legal";
 import {
@@ -142,7 +141,6 @@ function App() {
       if (cancelled) return;
       applyProgress(snapshot);
       setHydratedOwner(ownerId);
-      dismissFirstRunGuide(ownerId);
       if (snapshot.recipientName === "" && account?.name) {
         setRecipientName(account.name);
       }
