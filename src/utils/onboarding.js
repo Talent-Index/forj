@@ -1,6 +1,6 @@
 import { PIECE_COST, TOTAL_PIECES, sections } from "../data/questions.js";
 import { QUESTIONS_PER_QUIZ } from "./quiz.js";
-import { normalizeAddress } from "./progress.js";
+import { progressOwnerId } from "./progress.js";
 import { CREDENTIAL_STATES } from "./credentialStatus.js";
 
 export const FUJI_CHAIN_ID = 43113;
@@ -9,11 +9,11 @@ export const ONBOARDING_STORAGE_VERSION = 1;
 
 export const INTRODUCTION = {
   title: "SkillForge",
-  tagline: "Learn Avalanche. Earn points. Mint a credential.",
+  tagline: "Learn Avalanche. Forge your skills. Earn your credential.",
   body: [
-    "SkillForge is a guided Avalanche learning quest on Fuji testnet.",
-    "You take short quizzes, earn points, unlock puzzle pieces, then mint a soulbound on-chain record of your claimed scores.",
-    "Nothing here spends real AVAX. You only need a wallet and free Fuji test AVAX if you mint.",
+    "SkillForge is a guided Avalanche learning quest.",
+    "Create an account, take short quizzes, earn points, unlock puzzle pieces, then mint a soulbound on-chain record of your claimed scores when you connect a wallet.",
+    "Learning does not require a wallet. Fuji test AVAX is only needed if you mint.",
   ].join(" "),
 };
 
@@ -94,12 +94,12 @@ export const FUJI_EXPLAINER = {
 };
 
 export const WALLET_GUIDANCE = {
-  title: "Connect a wallet",
-  body: "Connect MetaMask or Core Wallet so SkillForge can save progress to this browser for your address and, later, send a mint transaction you must approve.",
+  title: "Connect a wallet when you need on-chain features",
+  body: "A SkillForge account lets you learn immediately. Connect MetaMask or Core Wallet later to save credentials on Avalanche Fuji and send a mint transaction you must approve.",
   steps: [
     "Install MetaMask or Core Wallet if you do not have one.",
     "Click Connect and approve the request in your wallet.",
-    "Switch to Avalanche Fuji when asked. Rejecting the switch blocks quizzes and minting.",
+    "Switch to Avalanche Fuji when asked. Rejecting the switch only blocks minting, not quizzes.",
     "If a request stays pending, open the wallet extension and finish or reject it, then retry.",
   ],
   noWallet: "No injected wallet was found in this browser. Install MetaMask or Core, then refresh.",
@@ -107,14 +107,9 @@ export const WALLET_GUIDANCE = {
 
 export const FIRST_TIME_FLOW = [
   {
-    id: "read",
-    title: "Read how SkillForge works",
-    body: "You are here. Understand quizzes, points, puzzle pieces, credentials, and Fuji before connecting.",
-  },
-  {
-    id: "connect",
-    title: "Connect on Fuji",
-    body: "Connect MetaMask or Core Wallet and switch to Avalanche Fuji testnet.",
+    id: "account",
+    title: "Create your SkillForge account",
+    body: "Sign in with Google or email. You can start learning without a wallet.",
   },
   {
     id: "quiz",
@@ -127,6 +122,11 @@ export const FIRST_TIME_FLOW = [
     body: `When you have at least ${PIECE_COST} points, open the puzzle and unlock a piece.`,
   },
   {
+    id: "wallet",
+    title: "Connect a wallet when you are ready",
+    body: "Optional. Connect MetaMask or Core Wallet to record credentials on Avalanche Fuji.",
+  },
+  {
     id: "mint",
     title: "Mint when you are ready",
     body: "Preview your certificate, then approve a Fuji mint. You can remint later; the new credential replaces the previous one.",
@@ -136,11 +136,11 @@ export const FIRST_TIME_FLOW = [
 export const EMPTY_STATES = {
   restoring: {
     title: "Restoring your session",
-    body: "Checking for a connected wallet and loading any saved progress for this address.",
+    body: "Checking for a SkillForge account and loading any saved progress.",
   },
   noQuizzes: {
     title: "No quizzes yet",
-    body: "Start with Easy to earn your first points. Progress is saved in this browser for your wallet.",
+    body: "Start with Easy to earn your first points. Progress is saved in this browser for your account.",
   },
   noPoints: {
     title: "No points to spend",
@@ -160,7 +160,7 @@ export const EMPTY_STATES = {
   },
   noAttempts: {
     title: "No attempts logged",
-    body: "Your dashboard fills in after the first quiz for this wallet.",
+    body: "Your dashboard fills in after the first quiz for this account.",
   },
 };
 
@@ -171,7 +171,7 @@ export const ERROR_STATES = {
   },
   network: {
     title: "Wrong network",
-    body: "SkillForge cannot run quizzes, puzzle redemption, or minting until your wallet is on Avalanche Fuji.",
+    body: "On-chain minting needs Avalanche Fuji. You can keep taking quizzes and unlocking puzzle pieces in the meantime.",
   },
   quiz: {
     title: "Quiz could not start",
@@ -187,8 +187,8 @@ export const ERROR_STATES = {
   },
 };
 
-export function onboardingStorageKey(address, version = ONBOARDING_STORAGE_VERSION) {
-  const normalized = normalizeAddress(address);
+export function onboardingStorageKey(ownerId, version = ONBOARDING_STORAGE_VERSION) {
+  const normalized = progressOwnerId(ownerId);
   if (!normalized) return null;
   return `skillforge.onboarding.v${version}.${normalized}`;
 }
@@ -215,8 +215,10 @@ export function dismissFirstRunGuide(address, storage = globalThis.localStorage)
 }
 
 export function firstRunStatus({
+  isAuthenticated = false,
   isConnected = false,
   isFuji = false,
+  walletSkipped = false,
   completedSections = [],
   acquiredPieces = [],
   hasMinted = false,
@@ -224,10 +226,10 @@ export function firstRunStatus({
   const completed = new Set(completedSections);
   return FIRST_TIME_FLOW.map((step) => {
     let done = false;
-    if (step.id === "read") done = true;
-    if (step.id === "connect") done = Boolean(isConnected && isFuji);
+    if (step.id === "account") done = Boolean(isAuthenticated);
     if (step.id === "quiz") done = completed.has("easy") || completed.size > 0;
     if (step.id === "puzzle") done = Array.isArray(acquiredPieces) && acquiredPieces.length > 0;
+    if (step.id === "wallet") done = Boolean((isConnected && isFuji) || walletSkipped);
     if (step.id === "mint") done = Boolean(hasMinted);
     return { ...step, done };
   });

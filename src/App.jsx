@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useWallet } from "./hooks/useWallet";
 import { useTheme } from "./hooks/useTheme";
 import { useWalletModal } from "./hooks/useWalletModal";
+import { useAuth } from "./hooks/useAuth";
 import AppShell from "./components/layout/AppShell";
 import SectionSelect from "./components/SectionSelect";
 import Quiz from "./components/Quiz";
@@ -15,14 +16,15 @@ import AboutPage from "./components/pages/AboutPage";
 import SettingsPage from "./components/pages/SettingsPage";
 import ProgressPage from "./components/pages/ProgressPage";
 import CredentialLookupPage from "./components/pages/CredentialLookupPage";
+import AuthModal, { ProfileSetup, WalletOptional } from "./components/auth/AuthModal";
 import forgeCertificate from "./assets/forge-certificate.jpg";
 import {
   PROGRESS_VIEWS,
   applySectionResult,
   clearProgress,
   emptyProgress,
+  isEmptyProgress,
   loadProgress,
-  normalizeAddress,
   saveProgress,
 } from "./utils/progress";
 import { redeemPiece } from "./utils/puzzle";
@@ -44,7 +46,13 @@ function pageFromLocation() {
   return "landing";
 }
 
+function scrollToId(id, reducedMotion) {
+  const el = document.getElementById(id);
+  el?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+}
+
 function App() {
+  const auth = useAuth();
   const wallet = useWallet();
   const theme = useTheme();
   const { closeModal, openModal, open } = useWalletModal();
@@ -59,11 +67,17 @@ function App() {
   const [completedSections, setCompletedSections] = useState([]);
   const [attempts, setAttempts] = useState([]);
   const [recipientName, setRecipientName] = useState("");
-  const [hydratedAddress, setHydratedAddress] = useState(null);
+  const [hydratedOwner, setHydratedOwner] = useState(null);
   const [guideDismissed, setGuideDismissed] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authView, setAuthView] = useState("signup");
+  const [onboardError, setOnboardError] = useState("");
   const userImage = forgeCertificate;
-  const currentAddress = normalizeAddress(wallet.address);
-  const progressReady = Boolean(currentAddress && hydratedAddress === currentAddress);
+  const account = auth.account;
+  const ownerId = account?.id || null;
+  const isAuthenticated = Boolean(account?.emailVerified);
+  const progressReady = Boolean(ownerId && hydratedOwner === ownerId);
+  const stage = auth.stage;
 
   const applyProgress = useCallback((snapshot) => {
     const next = snapshot || emptyProgress();
@@ -79,25 +93,31 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!currentAddress) {
-      setHydratedAddress(null);
+    if (!ownerId) {
+      setHydratedOwner(null);
       applyProgress(emptyProgress());
       setPage((current) => (PUBLIC_PAGES.has(current) ? current : "landing"));
       return;
     }
-    applyProgress(loadProgress(currentAddress));
-    setHydratedAddress(currentAddress);
-    setGuideDismissed(isFirstRunGuideDismissed(currentAddress));
-    setPage((current) => {
-      if (current === "about" || current === "lookup") return current;
-      return current === "landing" ? "learn" : current;
-    });
-    closeModal();
-  }, [applyProgress, currentAddress, closeModal]);
+    let snapshot = loadProgress(ownerId);
+    if (isEmptyProgress(snapshot) && wallet.address) {
+      const fromWallet = loadProgress(wallet.address);
+      if (!isEmptyProgress(fromWallet)) {
+        saveProgress(ownerId, fromWallet);
+        snapshot = fromWallet;
+      }
+    }
+    applyProgress(snapshot);
+    setHydratedOwner(ownerId);
+    setGuideDismissed(isFirstRunGuideDismissed(ownerId));
+    if (snapshot.recipientName === "" && account?.name) {
+      setRecipientName(account.name);
+    }
+  }, [account?.name, applyProgress, ownerId, wallet.address]);
 
   useEffect(() => {
     if (!progressReady) return;
-    saveProgress(currentAddress, {
+    saveProgress(ownerId, {
       view,
       activeSection,
       totalPoints,
@@ -113,7 +133,7 @@ function App() {
     acquiredPieces,
     attempts,
     completedSections,
-    currentAddress,
+    ownerId,
     progressReady,
     recipientName,
     sectionScores,
@@ -121,6 +141,28 @@ function App() {
     totalPoints,
     view,
   ]);
+
+  useEffect(() => {
+    if (account && wallet.address && account.walletAddress !== wallet.address) {
+      auth.linkWallet(wallet.address);
+    }
+  }, [account, auth, wallet.address]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const params = new URLSearchParams(window.location.search);
+    const verifyToken = params.get("verifyEmail");
+    const resetToken = params.get("reset");
+    if (verifyToken) {
+      auth.verifyEmail(verifyToken);
+      params.delete("verifyEmail");
+      window.history.replaceState({}, "", `${window.location.pathname}${params.toString() ? `?${params}` : ""}`);
+    } else if (resetToken) {
+      setAuthView("reset");
+      setAuthOpen(true);
+    }
+    return undefined;
+  }, [auth]);
 
   const startSection = useCallback((id) => {
     setActiveSection(id);
@@ -150,11 +192,11 @@ function App() {
   }, [totalPoints]);
 
   const handleFullReset = useCallback(() => {
-    if (currentAddress) clearProgress(currentAddress);
+    if (ownerId) clearProgress(ownerId);
     applyProgress(emptyProgress());
     setView(VIEWS.SECTIONS);
     setPage("learn");
-  }, [applyProgress, currentAddress]);
+  }, [applyProgress, ownerId]);
 
   const goLearnHome = useCallback(() => {
     setView(VIEWS.SECTIONS);
@@ -162,13 +204,25 @@ function App() {
     setPage("learn");
   }, []);
 
-  const openLookup = useCallback((tokenId = "", wallet = "") => {
-    const href = lookupQueryString({ tokenId, wallet });
+  const openLookup = useCallback((tokenId = "", walletAddress = "") => {
+    const href = lookupQueryString({ tokenId, wallet: walletAddress });
     if (typeof window !== "undefined" && href) {
       window.history.pushState({}, "", href);
     }
     setPage("lookup");
   }, []);
+
+  function openAuth(nextView = "signup") {
+    setAuthView(nextView);
+    setAuthOpen(true);
+  }
+
+  function closeAuth() {
+    setAuthOpen(false);
+    if (auth.account?.emailVerified && auth.stage === "profile") {
+      setPage("learn");
+    }
+  }
 
   useEffect(() => {
     function onPop() {
@@ -186,12 +240,23 @@ function App() {
         window.history.pushState({}, "", window.location.pathname);
       }
     }
-    if (nextPage === "landing") {
-      setPage(wallet.isConnected ? "learn" : "landing");
-      return;
+    if (!isAuthenticated) {
+      if (nextPage === "learn") {
+        setPage("landing");
+        requestAnimationFrame(() => scrollToId("how-it-works", theme.reducedMotion));
+        return;
+      }
+      if (nextPage === "credentials") {
+        setPage("landing");
+        requestAnimationFrame(() => scrollToId("credential", theme.reducedMotion));
+        return;
+      }
+      if (nextPage === "progress" || nextPage === "settings") {
+        openAuth("signin");
+        return;
+      }
     }
-    if (!wallet.isConnected && (nextPage === "learn" || nextPage === "progress" || nextPage === "credentials" || nextPage === "settings")) {
-      openModal();
+    if (nextPage === "landing") {
       setPage("landing");
       return;
     }
@@ -202,9 +267,15 @@ function App() {
     setPage(nextPage);
   }
 
-  const restoring = wallet.restoring || (wallet.isConnected && !progressReady);
+  const restoring = auth.restoring || (isAuthenticated && !progressReady);
 
-  function renderContent() {
+  async function handleProfileContinue(input) {
+    setOnboardError("");
+    const result = await auth.completeProfile(input);
+    if (!result.ok) setOnboardError(result.error);
+  }
+
+  function renderAppContent() {
     if (page === "about") return <AboutPage />;
     if (page === "lookup") {
       return (
@@ -221,20 +292,39 @@ function App() {
         />
       );
     }
-    if (!wallet.isConnected || page === "landing") {
+    if (!isAuthenticated || page === "landing") {
       return (
         <Landing
-          onStart={() => openModal()}
-          onExplore={() => {
-            const el = document.getElementById("how-it-works");
-            el?.scrollIntoView({ behavior: theme.reducedMotion ? "auto" : "smooth" });
+          onStart={() => (isAuthenticated ? goLearnHome() : openAuth("signup"))}
+          onSignIn={() => openAuth("signin")}
+          onExploreCredentials={() => handleNavigate("lookup")}
+        />
+      );
+    }
+    if (stage === "profile") {
+      return (
+        <ProfileSetup
+          account={account}
+          error={onboardError}
+          onContinue={handleProfileContinue}
+        />
+      );
+    }
+    if (stage === "wallet-optional") {
+      return (
+        <WalletOptional
+          onConnect={() => {
+            openModal();
+            auth.dismissWalletPrompt();
           }}
+          onSkip={() => auth.dismissWalletPrompt()}
         />
       );
     }
     if (page === "settings") {
       return (
         <SettingsPage
+          account={account}
           address={wallet.address}
           isFuji={wallet.isFuji}
           theme={theme.theme}
@@ -242,17 +332,12 @@ function App() {
           reducedMotion={theme.reducedMotion}
           onToggleMotion={theme.setReducedMotion}
           onReset={handleFullReset}
-          onDisconnect={wallet.disconnect}
-        />
-      );
-    }
-    if (!wallet.isFuji) {
-      return (
-        <NetworkGate
-          chainId={wallet.chainId}
-          switching={wallet.switching}
-          error={wallet.error}
-          onSwitch={() => wallet.switchToFuji().catch(() => {})}
+          onConnectWallet={openModal}
+          onDisconnectWallet={wallet.disconnect}
+          onSignOut={() => {
+            auth.signOut();
+            setPage("landing");
+          }}
         />
       );
     }
@@ -282,20 +367,30 @@ function App() {
     }
     if (page === "credentials") {
       return (
-        <Certificate
-          address={wallet.address}
-          totalPoints={totalPoints}
-          acquiredPieces={acquiredPieces}
-          sectionScores={sectionScores}
-          recipientName={recipientName}
-          onRecipientName={setRecipientName}
-          getWalletClient={wallet.getWalletClient}
-          publicClient={wallet.publicClient}
-          switchToFuji={wallet.switchToFuji}
-          onRetry={handleFullReset}
-          userImage={userImage}
-          onLookup={openLookup}
-        />
+        <>
+          {wallet.isConnected && !wallet.isFuji && (
+            <NetworkGate
+              chainId={wallet.chainId}
+              switching={wallet.switching}
+              error={wallet.error}
+              onSwitch={() => wallet.switchToFuji().catch(() => {})}
+            />
+          )}
+          <Certificate
+            address={wallet.address}
+            totalPoints={totalPoints}
+            acquiredPieces={acquiredPieces}
+            sectionScores={sectionScores}
+            recipientName={recipientName || account?.name || ""}
+            onRecipientName={setRecipientName}
+            getWalletClient={wallet.getWalletClient}
+            publicClient={wallet.publicClient}
+            switchToFuji={wallet.switchToFuji}
+            onRetry={handleFullReset}
+            userImage={userImage}
+            onLookup={openLookup}
+          />
+        </>
       );
     }
     if (view === VIEWS.QUIZ && activeSection) {
@@ -328,14 +423,16 @@ function App() {
         {!guideDismissed && (
           <FirstRunGuide
             steps={firstRunStatus({
+              isAuthenticated,
               isConnected: wallet.isConnected,
               isFuji: wallet.isFuji,
+              walletSkipped: Boolean(account?.walletPromptSeen && !wallet.address),
               completedSections,
               acquiredPieces,
             })}
             onStartEasy={() => startSection("easy")}
             onDismiss={() => {
-              dismissFirstRunGuide(currentAddress);
+              dismissFirstRunGuide(ownerId);
               setGuideDismissed(true);
             }}
           />
@@ -353,15 +450,25 @@ function App() {
 
   return (
     <AppShell
-      page={page === "landing" ? "learn" : page}
+      page={page}
       onNavigate={handleNavigate}
-      isConnected={wallet.isConnected}
+      isAuthenticated={isAuthenticated}
+      account={account}
       wallet={wallet}
       theme={theme.theme}
       onToggleTheme={theme.toggleTheme}
       walletModal={walletModal}
+      onOpenAuth={openAuth}
     >
-      {renderContent()}
+      {renderAppContent()}
+      <AuthModal
+        open={authOpen}
+        view={authView}
+        onChangeView={setAuthView}
+        onClose={closeAuth}
+        auth={auth}
+        pendingEmail={account?.email}
+      />
     </AppShell>
   );
 }

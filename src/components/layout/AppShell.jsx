@@ -1,31 +1,41 @@
-import Navbar from "./Navbar";
+import Navbar, { LOGGED_IN_LINKS, LOGGED_OUT_LINKS } from "./Navbar";
 import Footer from "./Footer";
 import MobileNav from "./MobileNav";
 
 function AppShell({
   page,
   onNavigate,
-  isConnected,
+  isAuthenticated,
+  account,
   wallet,
   theme,
   onToggleTheme,
   walletModal,
+  onOpenAuth,
   children,
 }) {
   return (
-    <div className={`shell ${isConnected ? "shell-auth" : ""}`}>
+    <div className={`shell ${isAuthenticated ? "shell-auth" : ""} ${page === "landing" ? "shell-landing" : ""}`}>
       <Navbar
         page={page}
         onNavigate={onNavigate}
-        isConnected={isConnected}
+        isAuthenticated={isAuthenticated}
+        account={account}
         wallet={wallet}
         theme={theme}
         onToggleTheme={onToggleTheme}
         walletModal={walletModal}
+        onOpenAuth={onOpenAuth}
       />
-      <main className="shell-main">{children}</main>
-      <Footer />
-      <MobileNav page={page} onNavigate={onNavigate} isConnected={isConnected} />
+      <main className={`shell-main ${page === "landing" ? "is-landing" : ""}`}>{children}</main>
+      <Footer onNavigate={onNavigate} />
+      <MobileNav
+        page={page}
+        onNavigate={onNavigate}
+        isAuthenticated={isAuthenticated}
+        loggedInLinks={LOGGED_IN_LINKS}
+        loggedOutLinks={LOGGED_OUT_LINKS}
+      />
     </div>
   );
 }

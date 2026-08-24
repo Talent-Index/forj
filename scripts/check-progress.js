@@ -109,4 +109,11 @@ const migrated = createProgressStore(storage).load(WALLET_B);
 assert.equal(migrated.sectionScores.hard.pointsEarned, 8);
 assert.equal(storage.getItem(progressStorageKey(WALLET_B)) != null, true);
 
+const ACCOUNT_ID = `acc_${"c".repeat(24)}`;
+assert.equal(progressStorageKey(ACCOUNT_ID), `skillforge.progress.v${STORAGE_VERSION}.account.${ACCOUNT_ID}`);
+assert.equal(store.save(ACCOUNT_ID, snapshot({ recipientName: "Dana Learner" })), true);
+assert.equal(store.load(ACCOUNT_ID).recipientName, "Dana Learner");
+assert.equal(store.load(WALLET_B).sectionScores.hard.pointsEarned, 8);
+assert.equal(store.load(ACCOUNT_ID).sectionScores.easy.correct, 4);
+
 console.log("progress storage tests passed");

@@ -1,136 +1,161 @@
-import { DIFFICULTY_LEVELS, PATH_COPY, PUZZLE_EXPLAINER } from "../utils/onboarding";
-import { CREDENTIAL_STATES } from "../utils/credentialStatus";
-import { TOTAL_PIECES } from "../data/questions";
-import { Badge, Button, Card } from "./ui/primitives";
-import CredentialStatusBadge from "./CredentialStatusBadge";
+import { useState } from "react";
+import { DIFFICULTY_LEVELS, PATH_COPY } from "../utils/onboarding";
+import { Button } from "./ui/primitives";
+import JigsawBoard from "./JigsawBoard";
+import forgeCertificate from "../assets/forge-certificate.jpg";
 
-const LOOP = ["Learn", "Quiz", "Earn points", "Unlock", "Credential"];
-const HOW = [
-  { n: "01", title: "Learn", body: "Explore Avalanche concepts and ecosystem fundamentals." },
-  { n: "02", title: "Challenge", body: "Test your knowledge through Easy, Medium, and Hard quizzes." },
-  { n: "03", title: "Progress", body: "Earn points, unlock puzzle pieces, and complete learning paths." },
-  { n: "04", title: "Credential", body: "Mint a self-claimed on-chain score record. Issuer-attested credentials require a separate owner signature." },
+const HOW_STEPS = [
+  {
+    n: "01",
+    title: "LEARN",
+    body: "Explore Avalanche concepts through structured learning.",
+  },
+  {
+    n: "02",
+    title: "CHALLENGE",
+    body: "Test your knowledge with interactive quizzes.",
+  },
+  {
+    n: "03",
+    title: "FORGE",
+    body: "Complete your puzzle and earn your credential.",
+  },
 ];
 
-function Landing({ onStart, onExplore }) {
+const FORGE_STEPS = [
+  "Earn points",
+  "Unlock pieces",
+  "Complete the puzzle",
+  "Reveal your certificate",
+];
+
+const PREVIEW_PIECES = [0, 1, 2, 4, 5, 8];
+
+const LEVEL_BODY = {
+  easy: "Learn the core concepts behind Avalanche, C-Chain, validators, wallets, and the ecosystem.",
+  medium: "Go deeper into validators, C-Chain IDs, Subnet-EVM, ICM, and L1 architecture.",
+  hard: "Study Snow protocols, Coreth, Teleporter, ACP-77, and validator economics.",
+};
+
+function Landing({ onStart, onSignIn, onExploreCredentials }) {
+  const [levelId, setLevelId] = useState("easy");
+  const level = DIFFICULTY_LEVELS.find((item) => item.id === levelId) || DIFFICULTY_LEVELS[0];
+  const copy = PATH_COPY[level.id];
+
   return (
-    <div className="page landing">
-      <section className="section-block hero">
-        <div className="hero-copy">
-          <Badge>Avalanche Fuji Testnet</Badge>
-          <h1 className="display">
-            Learn Avalanche.
+    <div className="landing-page">
+      <section className="landing-hero">
+        <div className="landing-hero-copy">
+          <p className="landing-kicker">Avalanche learning platform</p>
+          <h1 className="landing-display">
+            LEARN.
             <br />
-            Record what you learn.
+            FORGE.
+            <br />
+            PROVE.
           </h1>
-          <p className="lede">
-            Master Avalanche concepts through interactive challenges, earn points,
-            complete learning paths, and mint a self-claimed on-chain score record.
+          <p className="landing-lede">
+            Master Avalanche through interactive challenges and turn your progress
+            into a verifiable on-chain credential.
           </p>
-          <div className="hero-actions">
-            <Button onClick={onStart}>Start learning</Button>
-            <Button variant="secondary" onClick={onExplore}>Explore how it works</Button>
+          <div className="landing-hero-actions">
+            <Button className="btn-solid" onClick={onStart}>Start Learning →</Button>
+            <p className="landing-secondary">
+              Already have an account?{" "}
+              <button type="button" className="text-link" onClick={onSignIn}>Sign in</button>
+            </p>
           </div>
+          <p className="landing-built">Built on Avalanche</p>
         </div>
-        <Card className="hero-diagram" aria-label="SkillForge progression">
-          <p className="kicker">Product loop</p>
-          <ol className="loop-list">
-            {LOOP.map((item, i) => (
-              <li key={item}>
-                <span>{item}</span>
-                {i < LOOP.length - 1 && <span className="loop-arrow" aria-hidden="true">↓</span>}
-              </li>
-            ))}
-          </ol>
-        </Card>
       </section>
 
-      <section className="section-block trust-strip">
-        <p className="kicker">Built for Avalanche</p>
-        <ul>
-          <li>Avalanche Fuji Testnet</li>
-          <li>Wallet-based progression</li>
-          <li>On-chain credentials</li>
-          <li>Interactive learning</li>
-        </ul>
-      </section>
-
-      <section id="how-it-works" className="section-block">
-        <h2>How SkillForge works</h2>
-        <div className="timeline">
-          {HOW.map((step) => (
-            <article className="timeline-item" key={step.n}>
-              <span className="kicker">{step.n}</span>
-              <h3>{step.title}</h3>
+      <section id="how-it-works" className="landing-section">
+        <p className="landing-kicker">How SkillForge works</p>
+        <div className="landing-steps">
+          {HOW_STEPS.map((step) => (
+            <article key={step.n} className="landing-step">
+              <span className="landing-step-n">{step.n}</span>
+              <h2>{step.title}</h2>
               <p>{step.body}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="section-block">
-        <h2>Difficulty</h2>
-        <div className="difficulty-grid">
-          {DIFFICULTY_LEVELS.map((level) => (
-            <Card key={level.id} className={`difficulty-card difficulty-card-${level.id}`}>
-              <p className="kicker">{PATH_COPY[level.id].kicker}</p>
-              <h3>{PATH_COPY[level.id].title}</h3>
-              <p>{level.description}</p>
-              <p className="meta-line">{level.questionsPerQuiz} questions · {level.pointsPerQuestion} pts each</p>
-              <Button onClick={onStart}>Start</Button>
-            </Card>
+      <section id="learning-levels" className="landing-section">
+        <p className="landing-kicker">Learning levels</p>
+        <div className="level-switch" role="tablist" aria-label="Learning levels">
+          {DIFFICULTY_LEVELS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={item.id === levelId}
+              className={`level-tab ${item.id === levelId ? "is-active" : ""}`}
+              onClick={() => setLevelId(item.id)}
+            >
+              {item.name}
+            </button>
           ))}
+        </div>
+        <div className="level-panel">
+          <p className="landing-kicker">{copy.kicker}</p>
+          <h2>{copy.title}</h2>
+          <p>{LEVEL_BODY[level.id]}</p>
+          <p className="meta-line">{level.questionsPerQuiz} questions</p>
+          <Button className="btn-solid" onClick={onStart}>
+            Start {level.name} Quiz →
+          </Button>
         </div>
       </section>
 
-      <section className="section-block split">
+      <section id="the-forge" className="landing-section landing-split">
+        <div className="landing-puzzle" aria-hidden="true">
+          <JigsawBoard
+            artwork={forgeCertificate}
+            acquiredPieces={PREVIEW_PIECES}
+            showLabels={false}
+          />
+        </div>
         <div>
-          <h2>Game progression</h2>
-          <p>
-            {PUZZLE_EXPLAINER.body} Unlocked pieces use the Avalanche accent.
-            Locked pieces stay neutral.
-          </p>
-          <ol className="loop-list compact">
-            {["Quiz", "Points", "Jigsaw pieces", "16-piece forge", "Certificate"].map((item, i) => (
-              <li key={item}>
-                <span>{item}</span>
-                {i < 4 && <span className="loop-arrow" aria-hidden="true">↓</span>}
+          <h2 className="landing-heading">Your progress becomes the certificate.</h2>
+          <ol className="forge-ladder">
+            {FORGE_STEPS.map((step, index) => (
+              <li key={step}>
+                <span>{step}</span>
+                {index < FORGE_STEPS.length - 1 && <span className="forge-arrow" aria-hidden="true">↓</span>}
               </li>
             ))}
           </ol>
         </div>
-        <div className="preview-grid" aria-hidden="true">
-          {Array.from({ length: TOTAL_PIECES }, (_, i) => (
-            <div key={i} className={`preview-cell ${i % 3 === 0 ? "on" : ""}`} />
-          ))}
+      </section>
+
+      <section id="credential" className="landing-section landing-credential">
+        <div>
+          <p className="landing-kicker">Forged, not just claimed.</p>
+          <h2 className="landing-heading">Your certificate</h2>
+          <p>
+            A unique certificate is revealed when your puzzle is complete.
+            Personalize it with the recipient's name and record your achievement on Avalanche.
+          </p>
+          <dl className="credential-distinction">
+            <div>
+              <dt>Claimed</dt>
+              <dd>User-recorded achievement.</dd>
+            </div>
+            <div>
+              <dt>Attested</dt>
+              <dd>Issuer-authorized achievement.</dd>
+            </div>
+          </dl>
+          <Button variant="secondary" onClick={onExploreCredentials}>Explore Credentials →</Button>
         </div>
       </section>
 
-      <section className="section-block">
-        <h2>Credentials</h2>
-        <div className="credential-paths">
-          <Card className="credential-path-claimed">
-            <CredentialStatusBadge status={CREDENTIAL_STATES.claimed} />
-            <h3>{CREDENTIAL_STATES.claimed.title}</h3>
-            <ol className="loop-list compact">
-              <li>User completes quiz</li>
-              <li>User claims score</li>
-              <li>On-chain self-claimed record</li>
-            </ol>
-            <p className="note">{CREDENTIAL_STATES.claimed.body}</p>
-          </Card>
-          <Card className="credential-path-attested">
-            <CredentialStatusBadge status={CREDENTIAL_STATES.attested} />
-            <h3>{CREDENTIAL_STATES.attested.title}</h3>
-            <ol className="loop-list compact">
-              <li>Learning result</li>
-              <li>Issuer review</li>
-              <li>EIP-712 authorization</li>
-              <li>On-chain issuer-attested credential</li>
-            </ol>
-            <p className="note">{CREDENTIAL_STATES.attested.body}</p>
-          </Card>
-        </div>
+      <section className="landing-finale">
+        <h2>Ready to forge?</h2>
+        <p>Learn Avalanche. Build your skills. Earn your credential.</p>
+        <Button className="btn-solid-inverse" onClick={onStart}>Start Learning →</Button>
       </section>
     </div>
   );

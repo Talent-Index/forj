@@ -1,9 +1,20 @@
-function Footer() {
+import { BrandMark } from "./Navbar";
+
+function Footer({ onNavigate }) {
   return (
     <footer className="site-footer">
-      <span>SkillForge</span>
-      <span className="footer-sep">·</span>
-      <span>Avalanche Fuji · claimed scores are not proctored exams</span>
+      <div className="footer-brand">
+        <BrandMark />
+        <p>Learn Avalanche. Forge your skills.</p>
+      </div>
+      <nav className="footer-links" aria-label="Footer">
+        <button type="button" onClick={() => onNavigate("learn")}>Learn</button>
+        <button type="button" onClick={() => onNavigate("credentials")}>Credentials</button>
+        <button type="button" onClick={() => onNavigate("about")}>About</button>
+        <a href="https://github.com/Talent-Index/SkillForge" target="_blank" rel="noreferrer">GitHub</a>
+        <button type="button" onClick={() => onNavigate("about")}>Documentation</button>
+      </nav>
+      <p className="footer-note">Built on Avalanche · claimed scores are not proctored exams</p>
     </footer>
   );
 }

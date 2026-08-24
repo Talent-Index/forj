@@ -62,7 +62,7 @@ assert.match(WALLET_GUIDANCE.body, /MetaMask|Core/);
 assert.equal(WALLET_GUIDANCE.steps.length >= 4, true);
 assert.deepEqual(
   FIRST_TIME_FLOW.map((step) => step.id),
-  ["read", "connect", "quiz", "puzzle", "mint"]
+  ["account", "quiz", "puzzle", "wallet", "mint"]
 );
 
 for (const key of ["restoring", "noQuizzes", "noPoints", "noPieces", "noCredential", "noLookup", "noAttempts"]) {
@@ -75,20 +75,23 @@ for (const key of ["wallet", "network", "quiz", "puzzle", "mint"]) {
   assert.ok(ERROR_STATES[key].body);
 }
 
-const beforeConnect = firstRunStatus({});
-assert.equal(beforeConnect.find((s) => s.id === "read").done, true);
-assert.equal(beforeConnect.find((s) => s.id === "connect").done, false);
+const beforeAccount = firstRunStatus({});
+assert.equal(beforeAccount.find((s) => s.id === "account").done, false);
+assert.equal(beforeAccount.find((s) => s.id === "wallet").done, false);
 
 const midLoop = firstRunStatus({
-  isConnected: true,
-  isFuji: true,
+  isAuthenticated: true,
+  isConnected: false,
+  isFuji: false,
+  walletSkipped: true,
   completedSections: ["easy"],
   acquiredPieces: [0],
   hasMinted: false,
 });
-assert.equal(midLoop.find((s) => s.id === "connect").done, true);
+assert.equal(midLoop.find((s) => s.id === "account").done, true);
 assert.equal(midLoop.find((s) => s.id === "quiz").done, true);
 assert.equal(midLoop.find((s) => s.id === "puzzle").done, true);
+assert.equal(midLoop.find((s) => s.id === "wallet").done, true);
 assert.equal(midLoop.find((s) => s.id === "mint").done, false);
 
 const address = "0x7c538b83D0295f94C4bBAf8302095d9ED4b2Ad5f";

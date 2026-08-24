@@ -27,10 +27,22 @@ export function normalizeAddress(address) {
   return /^0x[a-f0-9]{40}$/.test(value) ? value : null;
 }
 
-export function progressStorageKey(address, version = STORAGE_VERSION) {
-  const normalized = normalizeAddress(address);
-  if (!normalized) return null;
-  return `skillforge.progress.v${version}.${normalized}`;
+export function normalizeAccountId(ownerId) {
+  if (typeof ownerId !== "string") return null;
+  const value = ownerId.trim().toLowerCase();
+  return /^acc_[a-f0-9]{24}$/.test(value) ? value : null;
+}
+
+export function progressOwnerId(ownerId) {
+  return normalizeAddress(ownerId) || normalizeAccountId(ownerId);
+}
+
+export function progressStorageKey(ownerId, version = STORAGE_VERSION) {
+  const address = normalizeAddress(ownerId);
+  if (address) return `skillforge.progress.v${version}.${address}`;
+  const accountId = normalizeAccountId(ownerId);
+  if (accountId) return `skillforge.progress.v${version}.account.${accountId}`;
+  return null;
 }
 
 export function legacyProgressStorageKey(address) {
@@ -196,9 +208,9 @@ export function applyAttemptHistory(attempts) {
   );
 }
 
-function readRaw(storage, address) {
-  const currentKey = progressStorageKey(address);
-  const legacyKey = legacyProgressStorageKey(address);
+function readRaw(storage, ownerId) {
+  const currentKey = progressStorageKey(ownerId);
+  const legacyKey = legacyProgressStorageKey(ownerId);
   if (!currentKey) return null;
   try {
     const current = storage.getItem(currentKey);
@@ -245,10 +257,21 @@ function defaultStorage() {
   return createMemoryStorage();
 }
 
+export function isEmptyProgress(progress) {
+  const next = sanitizeProgress(progress);
+  return (
+    next.totalPoints === 0 &&
+    next.acquiredPieces.length === 0 &&
+    next.completedSections.length === 0 &&
+    next.attempts.length === 0 &&
+    !next.recipientName
+  );
+}
+
 export function createProgressStore(storage = defaultStorage()) {
   return {
-    load(address) {
-      const normalized = normalizeAddress(address);
+    load(ownerId) {
+      const normalized = progressOwnerId(ownerId);
       if (!normalized) return emptyProgress();
       const record = readRaw(storage, normalized);
       if (!record) return emptyProgress();
@@ -265,8 +288,8 @@ export function createProgressStore(storage = defaultStorage()) {
       }
       return progress;
     },
-    save(address, progress) {
-      const key = progressStorageKey(address);
+    save(ownerId, progress) {
+      const key = progressStorageKey(ownerId);
       if (!key) return false;
       try {
         storage.setItem(key, JSON.stringify(sanitizeProgress(progress)));
@@ -275,9 +298,9 @@ export function createProgressStore(storage = defaultStorage()) {
         return false;
       }
     },
-    clear(address) {
-      const key = progressStorageKey(address);
-      const legacyKey = legacyProgressStorageKey(address);
+    clear(ownerId) {
+      const key = progressStorageKey(ownerId);
+      const legacyKey = legacyProgressStorageKey(ownerId);
       if (!key) return false;
       try {
         storage.removeItem(key);

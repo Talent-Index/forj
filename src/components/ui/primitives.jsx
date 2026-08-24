@@ -41,12 +41,12 @@ export function ProgressBar({ value = 0, label }) {
   );
 }
 
-export function Modal({ open, title, onClose, children }) {
+export function Modal({ open, title, onClose, className = "", children }) {
   if (!open) return null;
   return (
     <div className="modal-root" role="presentation">
       <button className="modal-backdrop" aria-label="Close dialog" onClick={onClose} />
-      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div className={`modal ${className}`.trim()} role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div className="modal-header">
           <h2 id="modal-title">{title}</h2>
           <button className="btn btn-ghost btn-icon" onClick={onClose} aria-label="Close">

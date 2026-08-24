@@ -16,6 +16,7 @@ function JigsawBoard({
   complete = false,
   interactive = false,
   lastUnlocked = null,
+  showLabels = true,
   onSelect,
 }) {
   return (
@@ -76,7 +77,7 @@ function JigsawBoard({
               <path className="jigsaw-fill" d={piece.d} />
             )}
             <path className="jigsaw-stroke" d={piece.d} />
-            {!acquired && (
+            {!acquired && showLabels && (
               <g className="jigsaw-label" transform={`translate(${piece.cx} ${piece.cy})`}>
                 <text textAnchor="middle" dy="-4">{state === "available" ? "Unlock" : "Locked"}</text>
                 <text textAnchor="middle" dy="14">{PIECE_COST} pts</text>
