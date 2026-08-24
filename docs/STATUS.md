@@ -20,7 +20,7 @@ Fuji contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.sn
 
 ## Identity
 
-Learners use an **account** (email or Google). Progress follows that account across browsers and devices. A **wallet** is optional until the learner mints. Switching wallets does not move another person’s XP or puzzle. Signing out does not leave progress on the next session’s account.
+Learners use an **account** (email or Google). The preferred name is collected once at signup. Progress follows that account across browsers and devices. A **wallet** is optional until the learner mints and is not a signup gate. Switching wallets does not move another person’s XP or puzzle. Signing out does not leave progress on the next session’s account.
 
 Existing browser progress is moved onto the account once, so a returning learner does not start from zero.
 
@@ -54,7 +54,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 
 ## Leaderboard
 
-Opt-in ranking among signed-in learners. Standing is derived from an append-only log of first-time learning events. Learners cannot write XP or rank. Quiz retries do not farm standing.
+New learners appear on the live board under their display name. They can hide. Standing is derived from an append-only log of first-time learning events. Learners cannot write XP or rank. Quiz retries do not farm standing.
 
 It is not a league with an issuer, not on-chain, and not a verified exam. A claimed credential remains distinct from this board.
 

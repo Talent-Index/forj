@@ -12,12 +12,14 @@ import {
   AUTH_FLOW_BUTTONS,
   LEARNER_PROFILE_REQUIRED_KEYS,
   applyProfileCompletion,
+  applySignupIdentity,
   applyWalletPromptDismissed,
   learnerProfileFields,
   mergeHydratedProfile,
   normalizeLearningGoal,
   pickLearnerProfilePatch,
 } from "../src/utils/profileOnboarding.js";
+import { LEGAL_PAGES, legalPageFromPath } from "../src/utils/legal.js";
 import { withTimeout } from "../src/utils/backend/timeout.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -66,6 +68,11 @@ assertIncludes(app, "LegalPage", "App has Privacy and Terms pages");
 assertIncludes(app, "goLearnHome()", "Signed-in learners leave landing");
 assertIncludes(app, 'onStart={() => (isAuthenticated ? goLearnHome() : openAuth("signup"))}', "Start Learning opens signup");
 assertIncludes(app, 'onSignIn={() => openAuth("signin")}', "Landing Sign in opens signin");
+
+assert.equal(legalPageFromPath("/privacy"), "privacy");
+assert.equal(legalPageFromPath("/terms"), "terms");
+assert.ok(LEGAL_PAGES.privacy.sections.length >= 3);
+assert.ok(LEGAL_PAGES.terms.sections.length >= 3);
 
 assertIncludes(useAuth, "applyProfileCompletion", "Firebase auth uses local profile completion");
 assertIncludes(useAuth, "setAccount(next.account)", "Continue updates local account immediately");
@@ -120,6 +127,11 @@ assert.equal(numbered.ok, false);
 const unsigned = applyProfileCompletion(null, { name: "Dana Learner" });
 assert.equal(unsigned.ok, false);
 
+const fromSignup = applySignupIdentity(incomplete, "Dana Learner");
+assert.equal(fromSignup.complete, true);
+assert.equal(onboardingStage(fromSignup.account), "ready");
+assert.equal(applySignupIdentity(incomplete, "").complete, false);
+
 const skipped = applyWalletPromptDismissed(named.account);
 assert.equal(skipped.ok, true);
 assert.equal(skipped.account.walletPromptSeen, true);
@@ -136,7 +148,7 @@ const afterFailedRead = mergeHydratedProfile(named.account, {
 });
 assert.equal(afterFailedRead.profileComplete, true);
 assert.equal(afterFailedRead.name, "Dana Learner");
-assert.equal(onboardingStage(afterFailedRead), "wallet-optional");
+assert.equal(onboardingStage(afterFailedRead), "ready");
 
 const afterSkipThenFailedRead = mergeHydratedProfile(skipped.account, {
   ...incomplete,
@@ -183,19 +195,19 @@ const registered = await auth.registerWithEmail({
 assert.equal(onboardingStage(registered.account), "verify-email");
 
 const verified = auth.verifyEmail(registered.verificationToken);
-assert.equal(onboardingStage(verified.account), "profile");
+assert.equal(onboardingStage(verified.account), "ready");
 
 const blocked = auth.completeProfile(verified.account.id, { name: "" });
 assert.equal(blocked.ok, false);
-assert.equal(onboardingStage(auth.currentAccount()), "profile");
+assert.equal(onboardingStage(auth.currentAccount()), "ready");
 
 const continued = auth.completeProfile(verified.account.id, {
   name: "Dana Learner",
   learningGoal: "credentials",
 });
 assert.equal(continued.ok, true);
-assert.equal(onboardingStage(continued.account), "wallet-optional");
-assert.equal(onboardingStage(auth.currentAccount()), "wallet-optional");
+assert.equal(onboardingStage(continued.account), "ready");
+assert.equal(onboardingStage(auth.currentAccount()), "ready");
 
 const google = auth.signInWithGoogle({
   email: "forge@gmail.com",
@@ -203,10 +215,10 @@ const google = auth.signInWithGoogle({
   googleId: "google-sub-buttons",
 });
 assert.equal(google.account.provider, AUTH_PROVIDERS.google);
-assert.equal(onboardingStage(google.account), "profile");
+assert.equal(onboardingStage(google.account), "ready");
 const googleContinued = auth.completeProfile(google.account.id, { name: "Forge Google" });
 assert.equal(googleContinued.ok, true);
-assert.equal(onboardingStage(googleContinued.account), "wallet-optional");
+assert.equal(onboardingStage(googleContinued.account), "ready");
 const googleSkipped = auth.dismissWalletPrompt(googleContinued.account.id);
 assert.equal(onboardingStage(googleSkipped.account), "ready");
 

@@ -63,7 +63,7 @@ Rules: no duplicate unlock, no spending below zero, no invented piece ids. Compl
 
 ## Leaderboard
 
-An opt-in **live board** among signed-in learners. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
+An opt-in **live board** among signed-in learners. New learners are included by default and can hide. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
 
 Standing is derived from the append-only learning event log. One completion per source. Quiz retries do not farm XP. Learners cannot write XP or rank.
 
