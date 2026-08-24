@@ -63,11 +63,45 @@ export function lookupQueryString({ tokenId = "", wallet = "" } = {}) {
   return encoded ? `?${encoded}` : "";
 }
 
+export const PUBLIC_CREDENTIAL_PATH = "/credential";
+
+export function parseCredentialLocation(pathname = "/", search = "") {
+  const query = parseLookupQuery(search);
+  const path = String(pathname || "/").replace(/\/+$/, "") || "/";
+  const match = path.match(/^\/credential(?:\/([^/]+))?$/i);
+  if (!match) {
+    return {
+      isPublicRoute: Boolean(query.tokenId || query.wallet),
+      tokenId: query.tokenId,
+      wallet: query.wallet,
+      invalidPathId: false,
+    };
+  }
+  const raw = match[1] ? decodeURIComponent(match[1]) : "";
+  const pathTokenId = isCredentialId(raw) ? raw : "";
+  return {
+    isPublicRoute: true,
+    tokenId: pathTokenId || query.tokenId,
+    wallet: query.wallet,
+    invalidPathId: Boolean(raw) && !pathTokenId && !query.tokenId,
+  };
+}
+
+export function publicCredentialPath({ tokenId = "", wallet = "" } = {}) {
+  const id = isCredentialId(String(tokenId)) ? String(tokenId) : "";
+  const path = id ? `${PUBLIC_CREDENTIAL_PATH}/${id}` : PUBLIC_CREDENTIAL_PATH;
+  const params = new URLSearchParams();
+  const normalized = normalizeAddress(wallet);
+  if (normalized) params.set("wallet", normalized);
+  const encoded = params.toString();
+  return encoded ? `${path}?${encoded}` : path;
+}
+
 export function lookupShareUrl({ tokenId = "", wallet = "" } = {}, origin = "") {
-  const query = lookupQueryString({ tokenId, wallet });
-  if (!query) return "";
+  const path = publicCredentialPath({ tokenId, wallet });
   const base = origin || (typeof window !== "undefined" ? window.location.origin : "");
-  return `${base}/${query}`;
+  if (!base) return path;
+  return `${String(base).replace(/\/$/, "")}${path}`;
 }
 
 function contractAddress() {
@@ -174,9 +208,51 @@ export async function loadCredentialByWallet(client, wallet, address = contractA
 
 export async function loadCredentialLookup(client, query, address = contractAddress()) {
   if (!address) return { credential: null, transactionHash: "", error: "no-contract" };
-  if (query?.tokenId) return loadCredentialByTokenId(client, query.tokenId, address);
+  if (query?.tokenId) {
+    const result = await loadCredentialByTokenId(client, query.tokenId, address);
+    if (result.credential && query.wallet) {
+      const holder = normalizeAddress(result.credential.walletAddress);
+      const expected = normalizeAddress(query.wallet);
+      if (holder && expected && holder !== expected) {
+        return { ...result, error: "owner-mismatch" };
+      }
+    }
+    return result;
+  }
   if (query?.wallet) return loadCredentialByWallet(client, query.wallet, address);
   return { credential: null, transactionHash: "", error: "empty" };
+}
+
+export function evaluateCredentialVerification(credential, query = {}) {
+  if (!credential) {
+    return {
+      found: false,
+      onChain: false,
+      ownership: "unknown",
+      statusId: "none",
+      statusLabel: "Not found",
+      summary: "No SkillForge credential exists for this identifier on Fuji.",
+    };
+  }
+  const status = resolveCredentialStatus(credential);
+  const holder = normalizeAddress(credential.walletAddress);
+  const queried = normalizeAddress(query.wallet);
+  const ownership = queried ? (holder && queried === holder ? "match" : "mismatch") : "on-chain";
+  const tokenLabel = credential.credentialId ? `#${credential.credentialId}` : "this token";
+  let summary = `On-chain record ${tokenLabel} is held by ${shortAddress(holder) || "an unknown wallet"}. Status is ${status.label}.`;
+  if (ownership === "match") {
+    summary = `On-chain record ${tokenLabel} is held by the wallet in this URL. Status is ${status.label}.`;
+  } else if (ownership === "mismatch") {
+    summary = `On-chain record ${tokenLabel} exists, but the holder is not the wallet in this URL.`;
+  }
+  return {
+    found: true,
+    onChain: true,
+    ownership,
+    statusId: status.id,
+    statusLabel: status.label,
+    summary,
+  };
 }
 
 export function buildCredentialVerificationView(credential, extras = {}) {
@@ -211,6 +287,13 @@ export function buildCredentialVerificationView(credential, extras = {}) {
   const metadataUri = credential?.metadataUri || "";
   const metadataUrl = retrievalUrl(metadataUri) || metadataUri;
   const transactionHash = extras.transactionHash || credential?.transactionHash || "";
+  const verification = evaluateCredentialVerification(credential, extras.query || {});
+  const metadata = {
+    name: decoded?.name || title,
+    description: decoded?.description || "",
+    image: decoded?.image || "",
+    attributes: Array.isArray(decoded?.attributes) ? decoded.attributes : [],
+  };
 
   return {
     title,
@@ -236,5 +319,7 @@ export function buildCredentialVerificationView(credential, extras = {}) {
     explorerLabel: EXPLORER_LINK_LABEL,
     metadataUrl,
     metadataLabel: describeMetadataUri(metadataUri),
+    metadata,
+    verification,
   };
 }

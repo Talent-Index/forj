@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "dotenv": "^17.4.2",
+    "qrcode": "^1.5.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "viem": "^2.31.0"
