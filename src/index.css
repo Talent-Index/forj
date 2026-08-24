@@ -136,7 +136,9 @@ img {
 }
 
 .nav-link.active,
-.mobile-nav-item.active {
+.nav-link.is-active,
+.mobile-nav-item.active,
+.mobile-nav-item.is-active {
   color: var(--text);
   font-weight: 600;
 }
@@ -375,6 +377,12 @@ img {
 .btn-icon {
   width: 44px;
   padding: 0;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-icon {
@@ -1764,7 +1772,7 @@ img {
 
 .onboard-screen {
   max-width: 520px;
-  margin: 48px auto;
+  margin: 48px 0;
 }
 
 .auth-goals {
