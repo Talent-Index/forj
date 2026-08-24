@@ -55,8 +55,8 @@ function Landing({ onStart, onSignIn, onExploreCredentials }) {
             PROVE.
           </h1>
           <p className="landing-lede">
-            Master Avalanche through interactive challenges and turn your progress
-            into a verifiable on-chain credential.
+            Master Avalanche through interactive challenges. Record a claimed score
+            on-chain, or wait for an issuer-attested credential.
           </p>
           <div className="landing-hero-actions">
             <Button className="btn-solid" onClick={onStart}>Start Learning →</Button>
@@ -139,11 +139,11 @@ function Landing({ onStart, onSignIn, onExploreCredentials }) {
             Personalize it with the recipient's name and record your achievement on Avalanche.
           </p>
           <dl className="credential-distinction">
-            <div>
+            <div className="credential-path-claimed">
               <dt>Claimed</dt>
               <dd>User-recorded achievement.</dd>
             </div>
-            <div>
+            <div className="credential-path-attested">
               <dt>Attested</dt>
               <dd>Issuer-authorized achievement.</dd>
             </div>
