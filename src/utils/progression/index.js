@@ -81,6 +81,7 @@ export {
   LEADERBOARD_DISCLAIMER,
   LEADERBOARD_PREFERENCE_KEYS,
   applyLeaderboardPreference,
+  joinLeaderboardByDefault,
   snapshotFromProgression,
   compareLearners,
   rankLearners,

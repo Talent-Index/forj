@@ -14,6 +14,7 @@ import {
   getLevelProgress,
   getXPHistory,
   applyLeaderboardPreference,
+  joinLeaderboardByDefault,
 } from "../utils/progression/index.js";
 import { isClientEventType } from "../utils/backend/schema.js";
 import { writeProgressEvent, setProgressEventsOptIn } from "../utils/backend/progressSync.js";
@@ -53,26 +54,26 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
     readLeaderboardPreference(id)
       .then(async (pref) => {
         if (migratedFor.current !== id || !stateRef.current) return;
-        if (pref) {
+        const joined = joinLeaderboardByDefault(
+          pref,
+          displayName || stateRef.current.leaderboard?.displayName
+        );
+        if (!joined.ok) return;
+        if (!joined.applied) {
           const next = {
             ...stateRef.current,
-            leaderboard: { ...stateRef.current.leaderboard, ...pref },
+            leaderboard: { ...stateRef.current.leaderboard, ...joined.preference },
           };
           stateRef.current = next;
           setState(next);
           store.save(id, next);
           return;
         }
-        const applied = applyLeaderboardPreference(stateRef.current.leaderboard, {
-          optIn: true,
-          displayName: displayName || stateRef.current.leaderboard?.displayName,
-        });
-        if (!applied.ok) return;
-        await writeLeaderboardPreference(id, applied.preference).catch(() => {});
+        await writeLeaderboardPreference(id, joined.preference).catch(() => {});
         await setProgressEventsOptIn(id, true).catch(() => {});
         const next = {
           ...stateRef.current,
-          leaderboard: { ...stateRef.current.leaderboard, ...applied.preference },
+          leaderboard: { ...stateRef.current.leaderboard, ...joined.preference },
         };
         stateRef.current = next;
         setState(next);

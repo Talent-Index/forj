@@ -72,6 +72,15 @@ export function applyLeaderboardPreference(current = {}, patch = {}, extras = {}
   };
 }
 
+export function joinLeaderboardByDefault(existingPreference, displayName) {
+  if (existingPreference) {
+    return { ok: true, applied: false, preference: existingPreference };
+  }
+  const applied = applyLeaderboardPreference({}, { optIn: true, displayName });
+  if (!applied.ok) return { ...applied, applied: false };
+  return { ok: true, applied: true, preference: applied.preference };
+}
+
 export function snapshotFromProgression(state, extras = {}) {
   const path = getPathProgress(state);
   const unlocked = Object.values(state?.achievements || {});

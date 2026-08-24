@@ -164,10 +164,6 @@ img {
   white-space: nowrap;
   z-index: 30;
 }
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
 .wallet-cluster {
   display: flex;

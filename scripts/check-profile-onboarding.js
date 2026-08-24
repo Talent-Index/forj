@@ -66,6 +66,11 @@ assertIncludes(app, "busy={onboardBusy}", "App passes busy to onboarding");
 assertIncludes(app, "auth.completeProfile(input)", "Continue calls completeProfile");
 assertIncludes(app, "LegalPage", "App has Privacy and Terms pages");
 assertIncludes(app, "goLearnHome()", "Signed-in learners leave landing");
+assert.equal(app.includes("FirstRunGuide"), false, "SkillForge loop card stays hidden after sign-in");
+assertIncludes(app, "dismissFirstRunGuide(ownerId)", "Login dismisses the first-run loop");
+assertIncludes(readSrc("src/components/layout/Navbar.jsx"), ">Connected<", "Connected toast after wallet");
+assertIncludes(readSrc("src/components/layout/Footer.jsx"), 'onNavigate("privacy")', "Footer Privacy");
+assertIncludes(readSrc("src/components/layout/Footer.jsx"), 'onNavigate("terms")', "Footer Terms");
 assertIncludes(app, 'onStart={() => (isAuthenticated ? goLearnHome() : openAuth("signup"))}', "Start Learning opens signup");
 assertIncludes(app, 'onSignIn={() => openAuth("signin")}', "Landing Sign in opens signin");
 

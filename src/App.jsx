@@ -88,7 +88,6 @@ function App() {
   const [locationKey, setLocationKey] = useState(() =>
     typeof window === "undefined" ? "/" : `${window.location.pathname}${window.location.search}`
   );
-  const reconnectAttempted = useRef(false);
   const authActionHandled = useRef(false);
   const userImage = forgeCertificate;
   const account = auth.account;
@@ -191,18 +190,6 @@ function App() {
   useEffect(() => {
     if (wallet.address && open) closeModal();
   }, [closeModal, open, wallet.address]);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      reconnectAttempted.current = false;
-      return;
-    }
-    if (reconnectAttempted.current || wallet.address || wallet.restoring || wallet.connecting) return;
-    const lastId = wallet.lastWalletId;
-    if (!lastId || !wallet.available?.[lastId]) return;
-    reconnectAttempted.current = true;
-    wallet.connect(lastId);
-  }, [isAuthenticated, wallet]);
 
   useEffect(() => {
     if (typeof window === "undefined" || authActionHandled.current) return undefined;

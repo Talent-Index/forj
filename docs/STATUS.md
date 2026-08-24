@@ -22,6 +22,8 @@ Fuji contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.sn
 
 Learners use an **account** (email or Google). The preferred name is collected once at signup. Progress follows that account across browsers and devices. A **wallet** is optional until the learner mints and is not a signup gate. Switching wallets does not move another person’s XP or puzzle. Signing out does not leave progress on the next session’s account.
 
+Privacy Policy and Terms of Service are linked from signup and the footer.
+
 Existing browser progress is moved onto the account once, so a returning learner does not start from zero.
 
 ## Learning

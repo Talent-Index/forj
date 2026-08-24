@@ -5,6 +5,7 @@ import {
   LEADERBOARD_AUTHORITY,
   LEADERBOARD_PREFERENCE_KEYS,
   applyLeaderboardPreference,
+  joinLeaderboardByDefault,
   buildLiveLeaderboard,
   compareLearners,
   rankLearners,
@@ -47,6 +48,19 @@ assert.equal(LEADERBOARD_PREFERENCE_KEYS.includes("xp"), false);
 const hidden = applyLeaderboardPreference(named.preference, { optIn: false });
 assert.equal(hidden.ok, true);
 assert.equal(hidden.preference.optIn, false);
+
+const autoJoin = joinLeaderboardByDefault(null, "Dana Learner");
+assert.equal(autoJoin.ok, true);
+assert.equal(autoJoin.applied, true);
+assert.equal(autoJoin.preference.optIn, true);
+
+const keepHidden = joinLeaderboardByDefault(hidden.preference, "Dana Learner");
+assert.equal(keepHidden.applied, false);
+assert.equal(keepHidden.preference.optIn, false);
+
+const unnamedJoin = joinLeaderboardByDefault(null, "");
+assert.equal(unnamedJoin.ok, false);
+assert.equal(unnamedJoin.applied, false);
 
 const t0 = Date.UTC(2026, 0, 5, 12);
 function complete(state, type, sourceId, timestamp, metadata = {}) {
