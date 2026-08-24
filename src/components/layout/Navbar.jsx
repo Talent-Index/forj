@@ -12,7 +12,6 @@ const LOGGED_IN_LINKS = [
   { id: "learn", label: "Learn" },
   { id: "progress", label: "Progress" },
   { id: "credentials", label: "Credentials" },
-  { id: "lookup", label: "Lookup" },
 ];
 
 function BrandMark() {
