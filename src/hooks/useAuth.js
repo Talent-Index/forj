@@ -20,7 +20,6 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import {
-  LEARNING_GOALS,
   MIN_PASSWORD_LENGTH,
   isValidEmail,
   normalizeEmail,
@@ -31,11 +30,17 @@ import { mapAuthError } from "../utils/backend/authErrors";
 import {
   ensureLearnerDocuments,
   linkWalletRecord,
-  patchLearnerProfile,
   profileFromDoc,
   readLearnerProfile,
   unlinkWalletRecord,
+  upsertLearnerProfile,
 } from "../utils/backend/learner";
+import { AUTH_WRITE_TIMEOUT_MS, FIRESTORE_TIMEOUT_MS, withTimeout } from "../utils/backend/timeout";
+import {
+  applyProfileCompletion,
+  applyWalletPromptDismissed,
+  mergeHydratedProfile,
+} from "../utils/profileOnboarding";
 import { validateRecipientName } from "../utils/recipient";
 
 const googleProvider = new GoogleAuthProvider();
@@ -74,8 +79,12 @@ export function useAuth() {
     }
     const profile = await safeProfile(nextUser);
     setUser(nextUser);
-    setAccount(profile);
-    return profile;
+    let merged = profile;
+    setAccount((previous) => {
+      merged = mergeHydratedProfile(previous, profile);
+      return merged;
+    });
+    return merged;
   }, []);
 
   useEffect(() => {
@@ -104,7 +113,7 @@ export function useAuth() {
       const credential = await createUserWithEmailAndPassword(auth, normalized, password);
       await updateProfile(credential.user, { displayName: recipient.name });
       const profile = await safeProfile(credential.user);
-      await patchLearnerProfile(credential.user.uid, { name: recipient.name }).catch(() => {});
+      await upsertLearnerProfile(credential.user, { name: recipient.name }).catch(() => {});
       await sendEmailVerification(credential.user, { url: actionUrl() });
       const accountState = { ...profile, name: recipient.name, emailVerified: false };
       setAccount(accountState);
@@ -205,39 +214,57 @@ export function useAuth() {
     }
   }, [refreshUser]);
 
-  const completeProfile = useCallback(async ({ name, learningGoal = "", avatarUrl } = {}) => {
-    const recipient = validateRecipientName(name);
-    if (!recipient.ok) return { ok: false, error: recipient.error };
-    if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
-    const goal = LEARNING_GOALS.some((item) => item.id === learningGoal) ? learningGoal : "";
+  const persistProfilePatch = useCallback(async (patch) => {
+    if (!auth.currentUser) return;
     try {
-      await updateProfile(auth.currentUser, { displayName: recipient.name });
-      await patchLearnerProfile(auth.currentUser.uid, {
-        name: recipient.name,
-        learningGoal: goal,
-        profileComplete: true,
-        avatarUrl: avatarUrl == null ? account?.avatarUrl || "" : avatarUrl,
-      });
-      return refreshUser();
-    } catch (error) {
-      return { ok: false, error: mapAuthError(error) };
+      if (patch.name) {
+        await withTimeout(
+          updateProfile(auth.currentUser, { displayName: patch.name }),
+          AUTH_WRITE_TIMEOUT_MS
+        );
+      }
+      await withTimeout(upsertLearnerProfile(auth.currentUser, patch), FIRESTORE_TIMEOUT_MS);
+    } catch {
+      // Local account already advanced; cloud write can catch up later.
     }
-  }, [account, refreshUser]);
+  }, []);
+
+  const completeProfile = useCallback(async ({ name, learningGoal = "", avatarUrl } = {}) => {
+    const base = account || (auth.currentUser ? profileFromDoc(auth.currentUser, {}) : null);
+    const next = applyProfileCompletion(base, { name, learningGoal, avatarUrl });
+    if (!next.ok) return next;
+    setAccount(next.account);
+    void persistProfilePatch({
+      name: next.account.name,
+      learningGoal: next.account.learningGoal,
+      profileComplete: true,
+      avatarUrl: next.account.avatarUrl,
+    });
+    return { ok: true, account: next.account };
+  }, [account, persistProfilePatch]);
 
   const updateLearnerProfile = useCallback(async (patch) => {
-    if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
-    try {
-      if (patch.name) await updateProfile(auth.currentUser, { displayName: patch.name });
-      await patchLearnerProfile(auth.currentUser.uid, patch);
-      return refreshUser();
-    } catch (error) {
-      return { ok: false, error: mapAuthError(error) };
+    if (!account && !auth.currentUser) return { ok: false, error: "Sign in to continue." };
+    let nextAccount = { ...(account || profileFromDoc(auth.currentUser, {})), ...patch };
+    if (patch.name != null) {
+      const recipient = validateRecipientName(patch.name);
+      if (!recipient.ok) return { ok: false, error: recipient.error };
+      nextAccount = { ...nextAccount, name: recipient.name };
     }
-  }, [refreshUser]);
+    setAccount(nextAccount);
+    void persistProfilePatch(nextAccount.name ? { ...patch, name: nextAccount.name } : patch);
+    return { ok: true, account: nextAccount };
+  }, [account, persistProfilePatch]);
 
   const updateAvatar = useCallback((avatarUrl) => updateLearnerProfile({ avatarUrl: avatarUrl || "" }), [updateLearnerProfile]);
 
-  const dismissWalletPrompt = useCallback(() => updateLearnerProfile({ walletPromptSeen: true }), [updateLearnerProfile]);
+  const dismissWalletPrompt = useCallback(async () => {
+    const next = applyWalletPromptDismissed(account || (auth.currentUser ? profileFromDoc(auth.currentUser, {}) : null));
+    if (!next.ok) return next;
+    setAccount(next.account);
+    void persistProfilePatch({ walletPromptSeen: true });
+    return { ok: true, account: next.account };
+  }, [account, persistProfilePatch]);
 
   const linkWallet = useCallback(async (address) => {
     if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };

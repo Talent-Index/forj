@@ -84,6 +84,7 @@ function App() {
   const [authView, setAuthView] = useState("signup");
   const [authOobCode, setAuthOobCode] = useState("");
   const [onboardError, setOnboardError] = useState("");
+  const [onboardBusy, setOnboardBusy] = useState(false);
   const [locationKey, setLocationKey] = useState(() =>
     typeof window === "undefined" ? "/" : `${window.location.pathname}${window.location.search}`
   );
@@ -343,9 +344,32 @@ function App() {
   const restoring = auth.restoring || (isAuthenticated && !progressReady);
 
   async function handleProfileContinue(input) {
+    if (onboardBusy) return;
     setOnboardError("");
-    const result = await auth.completeProfile(input);
-    if (!result.ok) setOnboardError(result.error);
+    setOnboardBusy(true);
+    try {
+      const result = await auth.completeProfile(input);
+      if (!result.ok) setOnboardError(result.error || "Could not save your name.");
+    } catch (error) {
+      setOnboardError(error.message || "Could not save your name.");
+    } finally {
+      setOnboardBusy(false);
+    }
+  }
+
+  async function handleWalletSkip() {
+    if (onboardBusy) return;
+    setOnboardBusy(true);
+    try {
+      await auth.dismissWalletPrompt();
+    } finally {
+      setOnboardBusy(false);
+    }
+  }
+
+  function handleWalletConnect() {
+    void auth.dismissWalletPrompt();
+    openModal();
   }
 
   function renderAppContent() {
@@ -380,6 +404,7 @@ function App() {
       return (
         <ProfileSetup
           account={account}
+          busy={onboardBusy}
           error={onboardError}
           onContinue={handleProfileContinue}
         />
@@ -388,11 +413,9 @@ function App() {
     if (stage === "wallet-optional") {
       return (
         <WalletOptional
-          onConnect={() => {
-            openModal();
-            auth.dismissWalletPrompt();
-          }}
-          onSkip={() => auth.dismissWalletPrompt()}
+          busy={onboardBusy}
+          onConnect={handleWalletConnect}
+          onSkip={handleWalletSkip}
         />
       );
     }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { LEARNING_GOALS, MIN_PASSWORD_LENGTH } from "../../utils/auth";
+import { validateRecipientName } from "../../utils/recipient";
 import { Button, Modal } from "../ui/primitives";
 
 const EMPTY_SIGNUP = { name: "", email: "", password: "", confirmPassword: "" };
@@ -86,94 +87,121 @@ function AuthModal({
     event.preventDefault();
     setBusy(true);
     setError("");
-    const result = await auth.registerWithEmail(signup);
-    setBusy(false);
-    if (!result.ok) {
-      setError(result.error);
-      return;
+    try {
+      const result = await auth.registerWithEmail(signup);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      onChangeView("verify");
+    } finally {
+      setBusy(false);
     }
-    onChangeView("verify");
   }
 
   async function handleSignin(event) {
     event.preventDefault();
     setBusy(true);
     setError("");
-    const result = await auth.signInWithEmail(signin);
-    setBusy(false);
-    if (!result.ok) {
-      setError(result.error);
-      return;
+    try {
+      const result = await auth.signInWithEmail(signin);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      if (!result.account?.emailVerified) {
+        await auth.resendVerification();
+        onChangeView("verify");
+        return;
+      }
+      onClose();
+    } finally {
+      setBusy(false);
     }
-    if (!result.account?.emailVerified) {
-      await auth.resendVerification();
-      onChangeView("verify");
-      return;
-    }
-    onClose();
   }
 
   async function handleForgot(event) {
     event.preventDefault();
     setBusy(true);
     setError("");
-    const result = await auth.requestPasswordReset(forgotEmail);
-    setBusy(false);
-    if (!result.ok) {
-      setError(result.error);
-      return;
+    try {
+      const result = await auth.requestPasswordReset(forgotEmail);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      setInfo("If an account exists for that email, a reset link is on its way.");
+    } finally {
+      setBusy(false);
     }
-    setInfo("If an account exists for that email, a reset link is on its way.");
   }
 
   async function handleReset(event) {
     event.preventDefault();
     setBusy(true);
     setError("");
-    const result = await auth.resetPassword({
-      oobCode,
-      password: reset.password,
-      confirmPassword: reset.confirmPassword,
-    });
-    setBusy(false);
-    if (!result.ok) {
-      setError(result.error);
-      return;
+    try {
+      const result = await auth.resetPassword({
+        oobCode,
+        password: reset.password,
+        confirmPassword: reset.confirmPassword,
+      });
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      setInfo("Password updated. Sign in with your new password.");
+      onChangeView("signin");
+    } finally {
+      setBusy(false);
     }
-    setInfo("Password updated. Sign in with your new password.");
-    onChangeView("signin");
   }
 
   async function handleVerify() {
     setBusy(true);
     setError("");
-    const result = await auth.verifyEmail(oobCode);
-    setBusy(false);
-    if (!result.ok) {
-      setError(result.error);
-      return;
+    try {
+      const result = await auth.verifyEmail(oobCode);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      if (result.account?.emailVerified) onClose();
+    } finally {
+      setBusy(false);
     }
-    if (result.account?.emailVerified) onClose();
   }
 
   async function handleResend() {
-    const result = await auth.resendVerification();
-    if (!result.ok) {
-      setError(result.error);
-      return;
+    setBusy(true);
+    setError("");
+    try {
+      const result = await auth.resendVerification();
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      setInfo(`Verification email sent to ${auth.account?.email || pendingEmail || signup.email}.`);
+    } finally {
+      setBusy(false);
     }
-    setInfo(`Verification email sent to ${auth.account?.email || pendingEmail || signup.email}.`);
   }
 
   async function handleChangeEmail(event) {
     event.preventDefault();
-    const result = await auth.changeEmail(changeEmailValue);
-    if (!result.ok) {
-      setError(result.error);
-      return;
+    setBusy(true);
+    setError("");
+    try {
+      const result = await auth.changeEmail(changeEmailValue);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      setInfo(`Verification email sent to ${changeEmailValue}.`);
+      setChangeEmailValue("");
+    } finally {
+      setBusy(false);
     }
-    setInfo(`Verification email sent to ${changeEmailValue}.`);
-    setChangeEmailValue("");
   }
 
   const title = {
@@ -262,7 +290,7 @@ function AuthModal({
           </Button>
           <form onSubmit={handleChangeEmail}>
             <Field id="change-email" label="Change email" type="email" value={changeEmailValue} onChange={setChangeEmailValue} placeholder="new@example.com" />
-            <Button variant="ghost" type="submit">Update email</Button>
+            <Button variant="ghost" type="submit" disabled={busy}>Update email</Button>
           </form>
         </div>
       )}
@@ -273,20 +301,34 @@ function AuthModal({
 export function ProfileSetup({ account, onContinue, busy = false, error = "" }) {
   const [name, setName] = useState(account?.name || "");
   const [goal, setGoal] = useState(account?.learningGoal || "");
+  const [localError, setLocalError] = useState("");
+
+  useEffect(() => {
+    if (account?.name) setName((current) => current || account.name);
+    if (account?.learningGoal) setGoal((current) => current || account.learningGoal);
+  }, [account?.name, account?.learningGoal]);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    if (busy) return;
+    const recipient = validateRecipientName(name);
+    if (!recipient.ok) {
+      setLocalError(recipient.error);
+      return;
+    }
+    setLocalError("");
+    onContinue({ name: recipient.name, learningGoal: goal });
+  }
+
+  const shownError = localError || error;
 
   return (
     <section className="onboard-screen">
       <p className="kicker">Welcome to SkillForge</p>
       <h1>What should we call you?</h1>
-      <form
-        className="auth-form onboard-form"
-        onSubmit={(event) => {
-          event.preventDefault();
-          onContinue({ name, learningGoal: goal });
-        }}
-      >
-        {error && <p className="auth-error" role="alert">{error}</p>}
-        <Field id="profile-name" label="Your name" value={name} onChange={setName} autoComplete="name" placeholder="Your name" />
+      <form className="auth-form onboard-form" onSubmit={handleSubmit}>
+        {shownError && <p className="auth-error" role="alert">{shownError}</p>}
+        <Field id="profile-name" label="Your name" value={name} onChange={(value) => { setLocalError(""); setName(value); }} autoComplete="name" placeholder="Your name" />
         <fieldset className="auth-goals">
           <legend>Choose your learning goal</legend>
           <p className="note">Optional. This does not change the quizzes.</p>
@@ -309,7 +351,7 @@ export function ProfileSetup({ account, onContinue, busy = false, error = "" }) 
   );
 }
 
-export function WalletOptional({ onConnect, onSkip }) {
+export function WalletOptional({ onConnect, onSkip, busy = false }) {
   return (
     <section className="onboard-screen">
       <p className="kicker">Your account is ready</p>
@@ -319,8 +361,8 @@ export function WalletOptional({ onConnect, onSkip }) {
         Quizzes, points, and the puzzle do not require a wallet.
       </p>
       <div className="hero-actions">
-        <Button onClick={onConnect}>Connect wallet</Button>
-        <Button variant="secondary" onClick={onSkip}>Continue without wallet</Button>
+        <Button onClick={onConnect} disabled={busy}>Connect wallet</Button>
+        <Button variant="secondary" onClick={onSkip} disabled={busy}>Continue without wallet</Button>
       </div>
     </section>
   );

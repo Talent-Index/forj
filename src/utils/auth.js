@@ -1,4 +1,5 @@
 import { createMemoryStorage, normalizeAddress, progressOwnerId } from "./progress.js";
+import { applyProfileCompletion, applyWalletPromptDismissed } from "./profileOnboarding.js";
 import { validateRecipientName } from "./recipient.js";
 
 export const AUTH_STORAGE_VERSION = 1;
@@ -373,18 +374,9 @@ export function createAuthStore(storage = defaultStorage()) {
 
     completeProfile(accountId, { name, learningGoal = "", avatarUrl } = {}) {
       const account = getAccountById(accountId);
-      if (!account) return { ok: false, error: "Sign in to continue." };
-      const recipient = validateRecipientName(name);
-      if (!recipient.ok) return { ok: false, error: recipient.error };
-      const goal = LEARNING_GOALS.some((item) => item.id === learningGoal) ? learningGoal : "";
-      const next = replaceAccount({
-        ...account,
-        name: recipient.name,
-        learningGoal: goal,
-        profileComplete: true,
-        avatarUrl: avatarUrl == null ? account.avatarUrl || "" : avatarUrl,
-      });
-      return { ok: true, account: publicAccount(next) };
+      const next = applyProfileCompletion(account, { name, learningGoal, avatarUrl });
+      if (!next.ok) return next;
+      return { ok: true, account: publicAccount(replaceAccount(next.account)) };
     },
 
     updateProfile(accountId, { name, learningGoal, avatarUrl } = {}) {
@@ -420,9 +412,9 @@ export function createAuthStore(storage = defaultStorage()) {
     },
 
     dismissWalletPrompt(accountId) {
-      const account = getAccountById(accountId);
-      if (!account) return { ok: false, error: "Sign in to continue." };
-      return { ok: true, account: publicAccount(replaceAccount({ ...account, walletPromptSeen: true })) };
+      const next = applyWalletPromptDismissed(getAccountById(accountId));
+      if (!next.ok) return next;
+      return { ok: true, account: publicAccount(replaceAccount(next.account)) };
     },
 
     linkWallet(accountId, address) {

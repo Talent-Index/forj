@@ -11,8 +11,10 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { learnerProfileFields, pickLearnerProfilePatch } from "../profileOnboarding";
 import { normalizeAddress } from "../progress";
 import { COLLECTIONS, SCHEMA_VERSION, WALLET_STATUSES, walletDocId } from "./schema";
+import { FIRESTORE_TIMEOUT_MS, withTimeout } from "./timeout";
 
 function stamp() {
   return serverTimestamp();
@@ -41,10 +43,32 @@ export function profileFromDoc(user, data = {}) {
   };
 }
 
+function asAuthUser(user) {
+  if (user && typeof user === "object") return user;
+  return { uid: user, displayName: "", photoURL: "", providerData: [] };
+}
+
+function fullLearnerProfile(user, existing, patch) {
+  return {
+    ...learnerProfileFields(asAuthUser(user), existing, patch),
+    createdAt: existing.createdAt ?? stamp(),
+    updatedAt: stamp(),
+  };
+}
+
 export async function ensureLearnerDocuments(user) {
   const userRef = doc(db, COLLECTIONS.users, user.uid);
   const profileRef = doc(db, COLLECTIONS.learnerProfiles, user.uid);
-  const [userSnap, profileSnap] = await Promise.all([getDoc(userRef), getDoc(profileRef)]);
+  let userSnap;
+  let profileSnap;
+  try {
+    [userSnap, profileSnap] = await withTimeout(
+      Promise.all([getDoc(userRef), getDoc(profileRef)]),
+      FIRESTORE_TIMEOUT_MS
+    );
+  } catch {
+    return profileFromDoc(user, {});
+  }
   const writes = [];
   if (!userSnap.exists()) {
     writes.push(setDoc(userRef, {
@@ -56,35 +80,57 @@ export async function ensureLearnerDocuments(user) {
     }));
   }
   if (!profileSnap.exists()) {
-    writes.push(setDoc(profileRef, {
-      schemaVersion: SCHEMA_VERSION,
-      userId: user.uid,
-      name: (user.displayName || "").slice(0, 80),
-      learningGoal: "",
-      profileComplete: false,
-      walletPromptSeen: false,
-      walletAddress: null,
-      avatarUrl: user.photoURL || "",
-      migratedFrom: null,
-      migratedAt: null,
-      createdAt: stamp(),
-      updatedAt: stamp(),
-    }));
+    writes.push(setDoc(profileRef, fullLearnerProfile(user, {}, {})));
   }
-  await Promise.all(writes);
-  const fresh = profileSnap.exists() ? profileSnap : await getDoc(profileRef);
-  return profileFromDoc(user, fresh.data() || {});
+  try {
+    await withTimeout(Promise.all(writes), FIRESTORE_TIMEOUT_MS);
+  } catch {
+    return profileFromDoc(user, profileSnap.exists() ? profileSnap.data() : {});
+  }
+  const fresh = profileSnap.exists() ? profileSnap : await withTimeout(getDoc(profileRef), FIRESTORE_TIMEOUT_MS).catch(() => profileSnap);
+  return profileFromDoc(user, fresh?.data?.() || {});
 }
 
 export async function readLearnerProfile(user) {
   const profileRef = doc(db, COLLECTIONS.learnerProfiles, user.uid);
-  const snap = await getDoc(profileRef);
+  const snap = await withTimeout(getDoc(profileRef), FIRESTORE_TIMEOUT_MS);
   return profileFromDoc(user, snap.exists() ? snap.data() : {});
 }
 
+export async function upsertLearnerProfile(user, patch) {
+  const authUser = asAuthUser(user);
+  const profileRef = doc(db, COLLECTIONS.learnerProfiles, authUser.uid);
+  const patchFields = { ...pickLearnerProfilePatch(patch), updatedAt: stamp() };
+
+  let existing;
+  try {
+    const snap = await withTimeout(getDoc(profileRef), 4000);
+    existing = snap.exists() ? snap.data() : null;
+  } catch {
+    existing = undefined;
+  }
+
+  if (existing === null) {
+    const data = fullLearnerProfile(authUser, {}, patch);
+    await setDoc(profileRef, data);
+    return data;
+  }
+  if (existing) {
+    await setDoc(profileRef, patchFields, { merge: true });
+    return { ...existing, ...patchFields };
+  }
+  try {
+    const data = fullLearnerProfile(authUser, {}, patch);
+    await setDoc(profileRef, data);
+    return data;
+  } catch {
+    await setDoc(profileRef, patchFields, { merge: true });
+    return patchFields;
+  }
+}
+
 export async function patchLearnerProfile(userId, patch) {
-  const profileRef = doc(db, COLLECTIONS.learnerProfiles, userId);
-  await updateDoc(profileRef, { ...patch, updatedAt: stamp() });
+  return upsertLearnerProfile(userId, patch);
 }
 
 export async function markMigrated(userId, migratedFrom) {
@@ -98,7 +144,7 @@ export async function linkWalletRecord(userId, address) {
   const walletId = walletDocId(address) || normalizeAddress(address);
   if (!walletId) return { ok: false, error: "Connect a valid wallet address." };
   const walletRef = doc(db, COLLECTIONS.wallets, walletId);
-  const existing = await getDoc(walletRef);
+  const existing = await withTimeout(getDoc(walletRef), FIRESTORE_TIMEOUT_MS);
   if (existing.exists()) {
     const owner = existing.data()?.userId;
     const status = existing.data()?.status;
@@ -133,7 +179,7 @@ export async function unlinkWalletRecord(userId, address) {
   const walletId = walletDocId(address) || normalizeAddress(address);
   if (walletId) {
     const walletRef = doc(db, COLLECTIONS.wallets, walletId);
-    const existing = await getDoc(walletRef);
+    const existing = await withTimeout(getDoc(walletRef), FIRESTORE_TIMEOUT_MS);
     if (existing.exists() && existing.data()?.userId === userId) {
       await updateDoc(walletRef, {
         status: WALLET_STATUSES.released,

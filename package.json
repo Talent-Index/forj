@@ -29,9 +29,10 @@
     "metadata:upload": "node scripts/pack-metadata.js && node scripts/upload-metadata.js",
     "test:onboarding": "node scripts/check-onboarding.js",
     "test:auth": "node scripts/check-auth.js",
+    "test:profile": "node scripts/check-profile-onboarding.js",
     "test:backend": "node scripts/check-backend.js",
     "test:progression": "node scripts/check-progression.js",
-    "verify": "npm run lint && npm run compile && npm test && npm run test:retry && npm run test:wallet && npm run test:quiz && npm run test:progress && npm run test:learner && npm run test:credential && npm run test:status && npm run test:eip712 && npm run test:lookup && npm run test:puzzle && npm run test:jigsaw && npm run test:metadata && npm run test:onboarding && npm run test:auth && npm run test:backend && npm run test:progression && npm run build",
+    "verify": "npm run lint && npm run compile && npm test && npm run test:retry && npm run test:wallet && npm run test:quiz && npm run test:progress && npm run test:learner && npm run test:credential && npm run test:status && npm run test:eip712 && npm run test:lookup && npm run test:puzzle && npm run test:jigsaw && npm run test:metadata && npm run test:onboarding && npm run test:auth && npm run test:profile && npm run test:backend && npm run test:progression && npm run build",
     "deploy:fuji": "hardhat run scripts/deploy.js --network fuji",
     "deploy:local": "hardhat run scripts/deploy.js --network hardhat",
     "deploy:mainnet": "hardhat run scripts/deploy.js --network avalanche"
