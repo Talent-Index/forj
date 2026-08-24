@@ -6,6 +6,7 @@ export const AUTH_ACCOUNTS_KEY = `skillforge.auth.v${AUTH_STORAGE_VERSION}.accou
 export const AUTH_SESSION_KEY = `skillforge.auth.v${AUTH_STORAGE_VERSION}.session`;
 export const AUTH_TOKENS_KEY = `skillforge.auth.v${AUTH_STORAGE_VERSION}.tokens`;
 export const MIN_PASSWORD_LENGTH = 8;
+export const MAX_AVATAR_BYTES = 350_000;
 
 export const AUTH_PROVIDERS = {
   email: "email",
@@ -54,6 +55,16 @@ export function isValidEmail(email) {
   return EMAIL_RE.test(normalizeEmail(email));
 }
 
+export function passwordIssue(password, confirmPassword) {
+  if (typeof password !== "string" || password.length < MIN_PASSWORD_LENGTH) {
+    return `Use at least ${MIN_PASSWORD_LENGTH} characters for your password.`;
+  }
+  if (confirmPassword != null && password !== confirmPassword) {
+    return "Passwords do not match.";
+  }
+  return "";
+}
+
 async function sha256Hex(value) {
   const data = new TextEncoder().encode(value);
   const digest = await crypto.subtle.digest("SHA-256", data);
@@ -81,9 +92,14 @@ function writeJson(storage, key, value) {
 
 function publicAccount(account) {
   if (!account) return null;
-  return Object.fromEntries(
+  const safe = Object.fromEntries(
     Object.entries(account).filter(([key]) => key !== "passwordHash" && key !== "passwordSalt")
   );
+  return {
+    ...safe,
+    hasPassword: Boolean(account.passwordHash),
+    avatarUrl: account.avatarUrl || "",
+  };
 }
 
 function findAccount(accounts, email) {
@@ -163,7 +179,30 @@ export function createAuthStore(storage = defaultStorage()) {
     return match;
   }
 
-  return {
+  function persistVerifyToken(account) {
+    const verify = makeToken("verify", account.id, account.email);
+    saveTokens([
+      ...loadTokens().filter((item) => !(item.accountId === account.id && item.type === "verify")),
+      verify,
+    ]);
+    return verify.token;
+  }
+
+  async function writePassword(account, password, confirmPassword) {
+    const issue = passwordIssue(password, confirmPassword);
+    if (issue) return { ok: false, error: issue };
+    const passwordSalt = randomHex(16);
+    return {
+      ok: true,
+      account: replaceAccount({
+        ...account,
+        passwordSalt,
+        passwordHash: await hashPassword(password, passwordSalt),
+      }),
+    };
+  }
+
+  const store = {
     currentAccount() {
       const session = readJson(storage, AUTH_SESSION_KEY, null);
       if (!session?.accountId) return null;
@@ -175,10 +214,8 @@ export function createAuthStore(storage = defaultStorage()) {
       if (!recipient.ok) return { ok: false, error: recipient.error };
       const normalized = normalizeEmail(email);
       if (!isValidEmail(normalized)) return { ok: false, error: "Enter a valid email address." };
-      if (typeof password !== "string" || password.length < MIN_PASSWORD_LENGTH) {
-        return { ok: false, error: `Use at least ${MIN_PASSWORD_LENGTH} characters for your password.` };
-      }
-      if (password !== confirmPassword) return { ok: false, error: "Passwords do not match." };
+      const issue = passwordIssue(password, confirmPassword);
+      if (issue) return { ok: false, error: issue };
 
       const accounts = loadAccounts();
       if (findAccount(accounts, normalized)) {
@@ -197,20 +234,23 @@ export function createAuthStore(storage = defaultStorage()) {
         profileComplete: false,
         walletPromptSeen: false,
         walletAddress: null,
+        avatarUrl: "",
         passwordSalt,
         passwordHash: await hashPassword(password, passwordSalt),
         createdAt: now(),
       };
       saveAccounts([...accounts, account]);
-      const verify = makeToken("verify", account.id, account.email);
-      saveTokens([...loadTokens(), verify]);
+      const verificationToken = persistVerifyToken(account);
       setSession(account.id);
-      return { ok: true, account: publicAccount(account), verificationToken: verify.token };
+      return { ok: true, account: publicAccount(account), verificationToken };
     },
 
     async signInWithEmail({ email, password }) {
       const account = findAccount(loadAccounts(), email);
-      if (!account || account.provider !== AUTH_PROVIDERS.email) {
+      if (!account?.passwordHash) {
+        if (account?.provider === AUTH_PROVIDERS.google) {
+          return { ok: false, error: "This account uses Google. Continue with Google, or create a password from your profile." };
+        }
         return { ok: false, error: "Email or password is incorrect." };
       }
       const hash = await hashPassword(password, account.passwordSalt);
@@ -221,7 +261,7 @@ export function createAuthStore(storage = defaultStorage()) {
       return { ok: true, account: publicAccount(account) };
     },
 
-    signInWithGoogle({ email, name, googleId }) {
+    signInWithGoogle({ email, name, googleId, avatarUrl = "" }) {
       const normalized = normalizeEmail(email);
       if (!isValidEmail(normalized)) return { ok: false, error: "Google did not return a valid email." };
       const accounts = loadAccounts();
@@ -233,6 +273,7 @@ export function createAuthStore(storage = defaultStorage()) {
           googleId: googleId || account.googleId,
           emailVerified: true,
           name: account.name || (recipient.ok ? recipient.name : account.name),
+          avatarUrl: account.avatarUrl || avatarUrl || "",
         });
       } else {
         const recipient = validateRecipientName(name);
@@ -247,6 +288,7 @@ export function createAuthStore(storage = defaultStorage()) {
           profileComplete: false,
           walletPromptSeen: false,
           walletAddress: null,
+          avatarUrl: avatarUrl || "",
           passwordSalt: "",
           passwordHash: "",
           createdAt: now(),
@@ -271,20 +313,17 @@ export function createAuthStore(storage = defaultStorage()) {
       const account = findAccount(loadAccounts(), email);
       if (!account) return { ok: false, error: "No account found for that email." };
       if (account.emailVerified) return { ok: false, error: "This email is already verified." };
-      const verify = makeToken("verify", account.id, account.email);
-      saveTokens([
-        ...loadTokens().filter((item) => !(item.accountId === account.id && item.type === "verify")),
-        verify,
-      ]);
+      const verificationToken = persistVerifyToken(account);
       setSession(account.id);
-      return { ok: true, account: publicAccount(account), verificationToken: verify.token };
+      return { ok: true, account: publicAccount(account), verificationToken };
     },
 
     requestPasswordReset(email) {
       const account = findAccount(loadAccounts(), email);
-      if (!account || account.provider !== AUTH_PROVIDERS.email) {
+      if (!account?.passwordHash && account?.provider !== AUTH_PROVIDERS.email) {
         return { ok: true };
       }
+      if (!account) return { ok: true };
       const reset = makeToken("reset", account.id, account.email);
       saveTokens([
         ...loadTokens().filter((item) => !(item.accountId === account.id && item.type === "reset")),
@@ -294,25 +333,45 @@ export function createAuthStore(storage = defaultStorage()) {
     },
 
     async resetPassword({ token, password, confirmPassword }) {
-      if (typeof password !== "string" || password.length < MIN_PASSWORD_LENGTH) {
-        return { ok: false, error: `Use at least ${MIN_PASSWORD_LENGTH} characters for your password.` };
-      }
-      if (password !== confirmPassword) return { ok: false, error: "Passwords do not match." };
+      const issue = passwordIssue(password, confirmPassword);
+      if (issue) return { ok: false, error: issue };
       const match = consumeToken(token, "reset");
       if (!match) return { ok: false, error: "This reset link is invalid or has expired." };
       const account = getAccountById(match.accountId);
       if (!account) return { ok: false, error: "Account not found." };
-      const passwordSalt = randomHex(16);
-      replaceAccount({
-        ...account,
-        passwordSalt,
-        passwordHash: await hashPassword(password, passwordSalt),
-        emailVerified: true,
-      });
+      const written = await writePassword(account, password, confirmPassword);
+      if (!written.ok) return written;
+      replaceAccount({ ...written.account, emailVerified: true });
       return { ok: true };
     },
 
-    completeProfile(accountId, { name, learningGoal = "" }) {
+    async changePassword(accountId, { currentPassword, password, confirmPassword }) {
+      const account = getAccountById(accountId);
+      if (!account) return { ok: false, error: "Sign in to continue." };
+      if (!account.passwordHash) {
+        return { ok: false, error: "This account does not have a password yet. Create one first." };
+      }
+      const currentHash = await hashPassword(currentPassword, account.passwordSalt);
+      if (currentHash !== account.passwordHash) {
+        return { ok: false, error: "Current password is incorrect." };
+      }
+      const written = await writePassword(account, password, confirmPassword);
+      if (!written.ok) return written;
+      return { ok: true, account: publicAccount(written.account) };
+    },
+
+    async setPassword(accountId, { password, confirmPassword }) {
+      const account = getAccountById(accountId);
+      if (!account) return { ok: false, error: "Sign in to continue." };
+      if (account.passwordHash) {
+        return { ok: false, error: "This account already has a password. Use change password instead." };
+      }
+      const written = await writePassword(account, password, confirmPassword);
+      if (!written.ok) return written;
+      return { ok: true, account: publicAccount(written.account) };
+    },
+
+    completeProfile(accountId, { name, learningGoal = "", avatarUrl } = {}) {
       const account = getAccountById(accountId);
       if (!account) return { ok: false, error: "Sign in to continue." };
       const recipient = validateRecipientName(name);
@@ -323,6 +382,39 @@ export function createAuthStore(storage = defaultStorage()) {
         name: recipient.name,
         learningGoal: goal,
         profileComplete: true,
+        avatarUrl: avatarUrl == null ? account.avatarUrl || "" : avatarUrl,
+      });
+      return { ok: true, account: publicAccount(next) };
+    },
+
+    updateProfile(accountId, { name, learningGoal, avatarUrl } = {}) {
+      const account = getAccountById(accountId);
+      if (!account) return { ok: false, error: "Sign in to continue." };
+      const recipient = name == null ? { ok: true, name: account.name } : validateRecipientName(name);
+      if (!recipient.ok) return { ok: false, error: recipient.error };
+      const goal = learningGoal == null
+        ? account.learningGoal
+        : LEARNING_GOALS.some((item) => item.id === learningGoal)
+          ? learningGoal
+          : "";
+      const next = replaceAccount({
+        ...account,
+        name: recipient.name,
+        learningGoal: goal,
+        avatarUrl: avatarUrl == null ? account.avatarUrl || "" : avatarUrl,
+      });
+      return { ok: true, account: publicAccount(next) };
+    },
+
+    updateAvatar(accountId, avatarUrl) {
+      const account = getAccountById(accountId);
+      if (!account) return { ok: false, error: "Sign in to continue." };
+      if (avatarUrl && typeof avatarUrl === "string" && avatarUrl.length > MAX_AVATAR_BYTES) {
+        return { ok: false, error: "That image is too large. Try a smaller photo." };
+      }
+      const next = replaceAccount({
+        ...account,
+        avatarUrl: avatarUrl || "",
       });
       return { ok: true, account: publicAccount(next) };
     },
@@ -367,12 +459,8 @@ export function createAuthStore(storage = defaultStorage()) {
         email: normalized,
         emailVerified: false,
       });
-      const verify = makeToken("verify", next.id, next.email);
-      saveTokens([
-        ...loadTokens().filter((item) => !(item.accountId === next.id && item.type === "verify")),
-        verify,
-      ]);
-      return { ok: true, account: publicAccount(next), verificationToken: verify.token };
+      const verificationToken = persistVerifyToken(next);
+      return { ok: true, account: publicAccount(next), verificationToken };
     },
 
     signOut() {
@@ -380,6 +468,8 @@ export function createAuthStore(storage = defaultStorage()) {
       return { ok: true, account: null };
     },
   };
+
+  return store;
 }
 
 export const authStore = createAuthStore();

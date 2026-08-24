@@ -77,11 +77,42 @@ export function useAuth() {
   const resendVerification = useCallback((email) => refresh(store.resendVerification(email)), [refresh, store]);
   const requestPasswordReset = useCallback((email) => store.requestPasswordReset(email), [store]);
   const resetPassword = useCallback((input) => store.resetPassword(input), [store]);
-  const completeProfile = useCallback((input) => refresh(store.completeProfile(account?.id, input)), [account?.id, refresh, store]);
-  const dismissWalletPrompt = useCallback(() => refresh(store.dismissWalletPrompt(account?.id)), [account?.id, refresh, store]);
-  const linkWallet = useCallback((address) => refresh(store.linkWallet(account?.id, address)), [account?.id, refresh, store]);
-  const unlinkWallet = useCallback(() => refresh(store.unlinkWallet(account?.id)), [account?.id, refresh, store]);
-  const changeEmail = useCallback((email) => refresh(store.changeEmail(account?.id, email)), [account?.id, refresh, store]);
+  const changePassword = useCallback(
+    (input) => store.changePassword(account?.id, input).then(refresh),
+    [account?.id, refresh, store]
+  );
+  const setPassword = useCallback(
+    (input) => store.setPassword(account?.id, input).then(refresh),
+    [account?.id, refresh, store]
+  );
+  const completeProfile = useCallback(
+    (input) => refresh(store.completeProfile(account?.id, input)),
+    [account?.id, refresh, store]
+  );
+  const updateProfile = useCallback(
+    (input) => refresh(store.updateProfile(account?.id, input)),
+    [account?.id, refresh, store]
+  );
+  const updateAvatar = useCallback(
+    (avatarUrl) => refresh(store.updateAvatar(account?.id, avatarUrl)),
+    [account?.id, refresh, store]
+  );
+  const dismissWalletPrompt = useCallback(
+    () => refresh(store.dismissWalletPrompt(account?.id)),
+    [account?.id, refresh, store]
+  );
+  const linkWallet = useCallback(
+    (address) => refresh(store.linkWallet(account?.id, address)),
+    [account?.id, refresh, store]
+  );
+  const unlinkWallet = useCallback(
+    () => refresh(store.unlinkWallet(account?.id)),
+    [account?.id, refresh, store]
+  );
+  const changeEmail = useCallback(
+    (email) => refresh(store.changeEmail(account?.id, email)),
+    [account?.id, refresh, store]
+  );
   const signOut = useCallback(() => refresh(store.signOut()), [refresh, store]);
 
   const continueWithGoogle = useCallback(async (fallbackIdentity) => {
@@ -104,6 +135,7 @@ export function useAuth() {
             email: payload.email,
             name: payload.name || "",
             googleId: payload.sub || "",
+            avatarUrl: payload.picture || "",
           }));
         },
       });
@@ -129,11 +161,20 @@ export function useAuth() {
     resendVerification,
     requestPasswordReset,
     resetPassword,
+    changePassword,
+    setPassword,
     completeProfile,
+    updateProfile,
+    updateAvatar,
     dismissWalletPrompt,
     linkWallet,
     unlinkWallet,
     changeEmail,
     signOut,
+    linkWallet: linkWallet,
+    verifyEmail: verifyEmail,
+    completeProfile: completeProfile,
+    dismissWalletPrompt: dismissWalletPrompt,
+    signOut: signOut,
   };
 }
