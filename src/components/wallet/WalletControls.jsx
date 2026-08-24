@@ -45,12 +45,23 @@ export function WalletModal({
   error,
   available,
   isMobile,
+  lastWalletId,
   onConnect,
 }) {
   const noWallet = !available?.any && !isMobile;
+  const lastLabel = lastWalletId ? WALLET_LABELS[lastWalletId] : "";
+  const canReconnect = Boolean(lastWalletId && available?.[lastWalletId]);
   return (
     <Modal open={open} title="Connect wallet" onClose={onClose}>
       <p className="modal-copy">{WALLET_GUIDANCE.body}</p>
+      {canReconnect && (
+        <div className="wallet-reconnect">
+          <p>Previously connected: {lastLabel}</p>
+          <Button className="btn-block" onClick={() => onConnect(lastWalletId)} disabled={connecting}>
+            {connecting ? "Reconnecting…" : `Reconnect ${lastLabel}`}
+          </Button>
+        </div>
+      )}
       {error && (
         <EmptyState
           variant="error"

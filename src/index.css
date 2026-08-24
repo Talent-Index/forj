@@ -1833,6 +1833,147 @@ img {
   text-decoration: none;
 }
 
+.auth-password-wrap,
+.auth-password-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.auth-password-wrap input,
+.auth-password-wrap input {
+  flex: 1;
+}
+
+.auth-password-toggle,
+.auth-password-toggle {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  min-height: 44px;
+}
+
+.google-mark,
+.google-mark {
+  width: 18px;
+  height: 18px;
+}
+
+.wallet-reconnect,
+.wallet-reconnect {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  padding: 12px;
+  margin-bottom: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.profile-menu {
+  position: relative;
+}
+
+.profile-trigger {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.profile-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.profile-trigger-avatar,
+.avatar-image,
+.avatar-fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.profile-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(360px, calc(100vw - 32px));
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  z-index: 40;
+}
+
+.profile-popover-head {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.profile-popover-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.profile-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.profile-upload input {
+  font: inherit;
+}
+
+.profile-password,
+.profile-wallet {
+  display: grid;
+  gap: 8px;
+}
+
+.profile-password input {
+  min-height: 40px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 8px 10px;
+  font: inherit;
+}
+
+.profile-popover-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.wallet-reconnect {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  padding: 12px;
+  margin-bottom: 12px;
+  display: grid;
+  gap: 8px;
+}
+
 .auth-kicker {
   letter-spacing: 0.18em;
   text-transform: uppercase;

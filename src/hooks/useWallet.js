@@ -158,7 +158,13 @@ export function useWallet() {
       const selectedId = identifyProvider(nextProvider) || preferredWalletId;
       rememberProvider(nextProvider, selectedId);
 
-      const accounts = await nextProvider.request({ method: "eth_requestAccounts" });
+      const authorized = await nextProvider.request({ method: "eth_accounts" }).catch(() => []);
+      const savedAddress = localStorage.getItem(STORAGE_ADDRESS);
+      const known = authorized.find((account) => savedAddress && account.toLowerCase() === savedAddress.toLowerCase())
+        || authorized[0];
+      const accounts = known
+        ? [known]
+        : await nextProvider.request({ method: "eth_requestAccounts" });
       const nextAddress = accounts?.[0];
       if (!nextAddress) {
         throw new Error("No account returned. Unlock your wallet and try again.");
@@ -304,6 +310,7 @@ export function useWallet() {
     chainId,
     walletId,
     walletName: walletId ? WALLET_LABELS[walletId] : null,
+    lastWalletId: walletId || (typeof localStorage === "undefined" ? null : localStorage.getItem(STORAGE_WALLET_ID)),
     connecting,
     switching,
     restoring,

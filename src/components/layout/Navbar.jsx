@@ -1,5 +1,5 @@
 import { WalletModal } from "../wallet/WalletControls";
-import { shortAddress } from "../../utils/learnerStats";
+import ProfileMenu from "../auth/ProfileMenu";
 
 const LOGGED_OUT_LINKS = [
   { id: "learn", label: "Learn" },
@@ -96,11 +96,9 @@ function Navbar({
   onCycleZoom,
   walletModal,
   onOpenAuth,
+  profile,
 }) {
   const links = isAuthenticated ? LOGGED_IN_LINKS : LOGGED_OUT_LINKS;
-  const identity = wallet.address
-    ? shortAddress(wallet.address)
-    : account?.name || account?.email || "Profile";
 
   return (
     <header className="navbar">
@@ -136,14 +134,23 @@ function Navbar({
             </>
           ) : (
             <>
-              <button className="nav-identity" onClick={() => onNavigate("settings")}>
-                {identity}
-              </button>
               {!wallet.address ? (
                 <button className="btn btn-ghost" onClick={walletModal.openModal}>
                   Connect Wallet
                 </button>
               ) : null}
+              <ProfileMenu
+                account={account}
+                wallet={wallet}
+                onUpdateAvatar={profile?.onUpdateAvatar}
+                onChangePassword={profile?.onChangePassword}
+                onSetPassword={profile?.onSetPassword}
+                onReconnectWallet={() => wallet.connect(wallet.lastWalletId)}
+                onConnectWallet={walletModal.openModal}
+                onDisconnectWallet={profile?.onDisconnectWallet}
+                onOpenPreferences={profile?.onOpenPreferences}
+                onSignOut={profile?.onSignOut}
+              />
             </>
           )}
         </div>
@@ -155,6 +162,7 @@ function Navbar({
         error={wallet.error}
         available={wallet.available}
         isMobile={wallet.isMobile}
+        lastWalletId={wallet.lastWalletId}
         onConnect={(id) => wallet.connect(id)}
       />
     </header>

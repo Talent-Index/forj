@@ -18,6 +18,7 @@ const registered = await auth.registerWithEmail({
 assert.equal(registered.ok, true);
 assert.equal(registered.account.provider, AUTH_PROVIDERS.email);
 assert.equal(registered.account.emailVerified, false);
+assert.equal(registered.account.hasPassword, true);
 assert.equal(onboardingStage(registered.account), "verify-email");
 assert.ok(registered.verificationToken);
 
@@ -46,31 +47,65 @@ assert.equal(skipped.ok, true);
 assert.equal(onboardingStage(skipped.account), "ready");
 assert.equal(skipped.account.walletAddress, null);
 
+const changed = await auth.changePassword(skipped.account.id, {
+  currentPassword: "forge-skill-1",
+  password: "forge-skill-2",
+  confirmPassword: "forge-skill-2",
+});
+assert.equal(changed.ok, true);
+
 auth.signOut();
 assert.equal(auth.currentAccount(), null);
 
-const signedIn = await auth.signInWithEmail({
+const wrong = await auth.signInWithEmail({
   email: "dana@example.com",
   password: "forge-skill-1",
 });
+assert.equal(wrong.ok, false);
+
+const signedIn = await auth.signInWithEmail({
+  email: "dana@example.com",
+  password: "forge-skill-2",
+});
 assert.equal(signedIn.ok, true);
 assert.equal(signedIn.account.email, "dana@example.com");
+
+const photo = auth.updateAvatar(signedIn.account.id, "data:image/jpeg;base64,aaaa");
+assert.equal(photo.ok, true);
+assert.equal(photo.account.avatarUrl.startsWith("data:image/jpeg"), true);
 
 const google = auth.signInWithGoogle({
   email: "forge@gmail.com",
   name: "Forge Google",
   googleId: "google-sub-1",
+  avatarUrl: "https://example.com/photo.jpg",
 });
 assert.equal(google.ok, true);
 assert.equal(google.account.provider, AUTH_PROVIDERS.google);
 assert.equal(google.account.emailVerified, true);
+assert.equal(google.account.hasPassword, false);
+assert.equal(google.account.avatarUrl, "https://example.com/photo.jpg");
 assert.equal(onboardingStage(google.account), "profile");
 
 const googleProfile = auth.completeProfile(google.account.id, { name: "Forge Google" });
 assert.equal(googleProfile.ok, true);
 assert.equal(onboardingStage(googleProfile.account), "wallet-optional");
 
-const linked = auth.linkWallet(googleProfile.account.id, `0x${"a".repeat(40)}`);
+const createdPassword = await auth.setPassword(googleProfile.account.id, {
+  password: "google-pass-1",
+  confirmPassword: "google-pass-1",
+});
+assert.equal(createdPassword.ok, true);
+assert.equal(createdPassword.account.hasPassword, true);
+
+auth.signOut();
+const googleEmailSignIn = await auth.signInWithEmail({
+  email: "forge@gmail.com",
+  password: "google-pass-1",
+});
+assert.equal(googleEmailSignIn.ok, true);
+
+const linked = auth.linkWallet(googleEmailSignIn.account.id, `0x${"a".repeat(40)}`);
 assert.equal(linked.ok, true);
 assert.equal(linked.account.walletAddress, `0x${"a".repeat(40)}`);
 assert.equal(onboardingStage(linked.account), "ready");

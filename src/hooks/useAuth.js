@@ -171,10 +171,5 @@ export function useAuth() {
     unlinkWallet,
     changeEmail,
     signOut,
-    linkWallet: linkWallet,
-    verifyEmail: verifyEmail,
-    completeProfile: completeProfile,
-    dismissWalletPrompt: dismissWalletPrompt,
-    signOut: signOut,
   };
 }

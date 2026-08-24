@@ -14,6 +14,7 @@ function AppShell({
   onCycleZoom,
   walletModal,
   onOpenAuth,
+  profile,
   children,
 }) {
   return (
@@ -30,6 +31,7 @@ function AppShell({
         onCycleZoom={onCycleZoom}
         walletModal={walletModal}
         onOpenAuth={onOpenAuth}
+        profile={profile}
       />
       <main className={`shell-main ${page === "landing" ? "is-landing" : ""}`}>{children}</main>
       <Footer onNavigate={onNavigate} />

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useWallet } from "./hooks/useWallet";
 import { useTheme } from "./hooks/useTheme";
 import { useZoom } from "./hooks/useZoom";
@@ -81,6 +81,7 @@ function App() {
   const [locationKey, setLocationKey] = useState(() =>
     typeof window === "undefined" ? "/" : `${window.location.pathname}${window.location.search}`
   );
+  const reconnectAttempted = useRef(false);
   const userImage = forgeCertificate;
   const account = auth.account;
   const ownerId = account?.id || null;
@@ -156,6 +157,18 @@ function App() {
       auth.linkWallet(wallet.address);
     }
   }, [account, auth, wallet.address]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      reconnectAttempted.current = false;
+      return;
+    }
+    if (reconnectAttempted.current || wallet.address || wallet.restoring || wallet.connecting) return;
+    const lastId = wallet.lastWalletId;
+    if (!lastId || !wallet.available?.[lastId]) return;
+    reconnectAttempted.current = true;
+    wallet.connect(lastId);
+  }, [isAuthenticated, wallet]);
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
@@ -485,6 +498,20 @@ function App() {
         onCycleZoom={zoom.cycleZoom}
         walletModal={walletModal}
         onOpenAuth={openAuth}
+        profile={{
+          onUpdateAvatar: auth.updateAvatar,
+          onChangePassword: auth.changePassword,
+          onSetPassword: auth.setPassword,
+          onDisconnectWallet: () => {
+            wallet.disconnect();
+            auth.unlinkWallet();
+          },
+          onOpenPreferences: () => handleNavigate("settings"),
+          onSignOut: () => {
+            auth.signOut();
+            setPage("landing");
+          },
+        }}
       >
         {renderAppContent()}
       </AppShell>
@@ -495,6 +522,7 @@ function App() {
         onClose={closeAuth}
         auth={auth}
         pendingEmail={account?.email}
+        verificationToken={authView === "reset" ? new URLSearchParams(typeof window === "undefined" ? "" : window.location.search).get("reset") || "" : ""}
       />
     </>
   );
