@@ -70,14 +70,22 @@ export function jigsawPath(index) {
   ].join(" ");
 }
 
+export function pieceId(index) {
+  const row = Math.floor(index / PUZZLE_SIZE);
+  const col = index % PUZZLE_SIZE;
+  return `piece-r${row}-c${col}`;
+}
+
 export function jigsawPieces() {
   return Array.from({ length: TOTAL_PIECES }, (_, index) => {
     const row = Math.floor(index / PUZZLE_SIZE);
     const col = index % PUZZLE_SIZE;
     return {
+      id: pieceId(index),
       index,
       row,
       col,
+      cost: 5,
       d: jigsawPath(index),
       cx: col * JIGSAW_CELL + JIGSAW_CELL / 2,
       cy: row * JIGSAW_CELL + JIGSAW_CELL / 2,
@@ -85,9 +93,10 @@ export function jigsawPieces() {
   });
 }
 
-export function pieceState({ acquired, canAfford, complete }) {
+export function pieceState({ acquired, canAfford, complete, selected }) {
   if (acquired && complete) return "completed";
   if (acquired) return "unlocked";
+  if (selected) return "selected";
   if (canAfford) return "available";
   return "locked";
 }

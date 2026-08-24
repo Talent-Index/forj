@@ -11,6 +11,7 @@ const LOGGED_OUT_LINKS = [
 const LOGGED_IN_LINKS = [
   { id: "learn", label: "Learn" },
   { id: "progress", label: "Progress" },
+  { id: "leaderboard", label: "Board" },
   { id: "credentials", label: "Credentials" },
 ];
 

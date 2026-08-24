@@ -17,6 +17,7 @@ function PuzzleBoard({
   userImage,
 }) {
   const [lastUnlocked, setLastUnlocked] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [message, setMessage] = useState(null);
   const available = availablePoints(totalPoints, acquiredPieces);
   const spent = spentPoints ?? acquiredPieces.length * PIECE_COST;
@@ -25,12 +26,18 @@ function PuzzleBoard({
   const forgeCost = TOTAL_PIECES * PIECE_COST;
 
   function handleAcquire(index) {
+    if (selectedIndex !== index) {
+      setSelectedIndex(index);
+      setMessage(null);
+      return;
+    }
     const result = redeemPiece({ totalPoints, acquiredPieces }, index);
     if (!result.ok) {
       setMessage(result.error);
       return;
     }
     setMessage(null);
+    setSelectedIndex(null);
     setLastUnlocked(index);
     playCorrectSound();
     onAcquirePiece(index);
@@ -84,6 +91,7 @@ function PuzzleBoard({
           complete={complete}
           interactive={!complete}
           lastUnlocked={lastUnlocked}
+          selectedIndex={selectedIndex}
           onSelect={handleAcquire}
         />
         <aside className="card">

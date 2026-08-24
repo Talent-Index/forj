@@ -33,6 +33,7 @@ function Certificate({
   acquiredPieces,
   sectionScores,
   recipientName = "",
+  onClaimed,
   onRecipientName,
   getWalletClient,
   publicClient,
