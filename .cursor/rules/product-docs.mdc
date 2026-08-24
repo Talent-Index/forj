@@ -1,0 +1,37 @@
+---
+description: Keep markdown product-only and in sync with shipped behavior.
+alwaysApply: true
+---
+
+# Product documentation
+
+Markdown in this repo is **product description**, not a developer handbook.
+
+When you ship, change, or remove user-facing behavior (learning loop, identity, scoring, puzzle, credentials, honesty language, or trust model), update the relevant `.md` files in the same change.
+
+## What docs are for
+
+- What SkillForge is and who it is for
+- The learner loop (learn → challenge → earn → unlock → forge → prove)
+- What is shipped versus planned
+- Claimed vs issuer-attested credentials (never blur them)
+- Account vs optional wallet
+- XP, paths, tracks, streaks, puzzle, and leaderboard as product behavior
+
+## What docs must not include
+
+- Install, env, deploy, CI, or test commands
+- File trees, npm scripts, or operator runbooks
+- Setup guides, RPC URLs, or “how to run locally”
+
+## Files
+
+- `README.md` — product overview
+- `docs/STATUS.md` — current shipped state
+- `docs/ROADMAP.md` — phases and remaining work
+- `docs/PROGRESSION.md` — learning and gamification model
+- `docs/CREDENTIAL.md` — credential product model
+- `docs/AUTHORIZATION.md` — issuer attestation as a trust product
+- `docs/METADATA.md` — what the on-chain certificate record shows
+
+Keep names, honesty copy, and Fuji-live facts consistent across these files.

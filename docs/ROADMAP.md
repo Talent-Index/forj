@@ -1,285 +1,94 @@
 # SkillForge — Roadmap
 
-**Goal:** Evolve SkillForge from a Fuji-based Avalanche learning prototype into a reliable, issuer-attested, gamified skills-credentialing platform.
+**Goal:** Grow SkillForge from a Fuji learning product into a reliable, honest, issuer-capable skills credential platform on Avalanche.
 
-> **Current progress:** Phase 1 is complete. Phases 2–3 are partially shipped. `SkillForgeCredential` is **live on Avalanche Fuji**. See **[STATUS.md](./STATUS.md)** for the live address and implementation checklist.
+> **Today:** Phase 1 is complete. Phases 2–5 are partially shipped. The soulbound credential is **live on Avalanche Fuji**. See [STATUS.md](./STATUS.md).
 
 | Phase | Theme | Status |
 | --- | --- | --- |
-| **1** | Foundation & correctness | **Complete** |
-| **2** | Learning experience | **Partial** |
-| **3** | Credential system | **Partial** — contract live on Fuji |
-| **4–10** | Gamification → ecosystem | Planned |
+| 1 | Foundation & correctness | Complete |
+| 2 | Learning experience | Partial |
+| 3 | Credential system | Partial — contract live on Fuji |
+| 4 | Gamification | Client preview |
+| 5 | Avalanche tracks | Initial tracks shipped |
+| 6–10 | Attestation ops → ecosystem | Planned |
 
 ```mermaid
 flowchart LR
-  P1[P1 Foundation] --> P2[P2 Learning]
-  P2 --> P3[P3 Credentials]
-  P3 --> P4[P4 Gamification]
-  P4 --> P5[P5 Avalanche Expansion]
-  P5 --> P6[P6 Verification]
-  P6 --> P7[P7 Infrastructure]
-  P7 --> P8[P8 Security]
-  P8 --> P9[P9 Mainnet]
-  P9 --> P10[P10 Ecosystem]
+  P1[Foundation] --> P2[Learning]
+  P2 --> P3[Credentials]
+  P3 --> P4[Gamification]
+  P4 --> P5[Avalanche tracks]
+  P5 --> P6[Attestation]
+  P6 --> P7[Infrastructure]
+  P7 --> P8[Security]
+  P8 --> P9[Mainnet]
+  P9 --> P10[Ecosystem]
 ```
 
----
+## Phase 1 — Foundation ✅
 
-## Phase 1 — Foundation & Correctness ✅ *Complete*
+Wallet and Fuji network, quiz banks, retry-safe scoring, durable local progress, puzzle redemption, soulbound contract, claimed vs attested on-chain, CI.
 
-- ✅ Stabilize wallet connection and network switching
-- ✅ Validate MetaMask and Core Wallet flows
-- ✅ Harden quiz generation and randomization
-- ✅ Finalize Easy / Medium / Hard question banks *(16 questions per tier; ICM, L1, C-Chain, tooling)*
-- ✅ Verify retry-safe scoring across all quiz sections
-- ✅ Ensure localStorage state recovery is reliable
-- ✅ Validate puzzle-point redemption logic
-- ✅ Review contract ownership and access control
-- ✅ Fix and verify credential score handling
-- ✅ Add comprehensive smart-contract and frontend tests
-- ✅ Establish CI checks for linting, compilation, tests, and builds
+## Phase 2 — Learning experience 🟡
 
----
+Shipped: product intro, first-run guidance, explanations after submit, official Avalanche references, persistent progress, dashboard.
 
-## Phase 2 — Learning Experience 🟡 *Partial*
+Remaining: richer certificate polish and deeper path content beyond the first six tracks.
 
-- ✅ Improve onboarding for new Avalanche learners *(product intro, first-run loop, empty/error states)*
-- ✅ Introduce clearer learning objectives for each difficulty tier
-- ✅ Add explanations after quiz answers *(select, then submit; explanations only after submit)*
-- ✅ Add Avalanche ecosystem learning references *(official Builder Hub / avax.network links)*
-- ✅ Expand ICM and Avalanche L1 content *(expanded question banks; structured paths still remaining)*
-- 🟡 Improve quiz feedback and progress indicators *(dashboard + achievements)*
-- ✅ Add persistent learner progression
-- 🟡 Introduce completion statistics
-- ✅ Improve puzzle redemption experience
-- 🟡 Add certificate preview before minting *(certificate view exists; polish remaining)*
+## Phase 3 — Credentials 🟡
 
----
+Shipped: credential model, soulbound metadata, claimed vs attested, owner-signed attested mint on the contract, public lookup, QR/share URL.
 
-## Phase 3 — Credential System 🟡 *Partial*
+Remaining: issuer-key operations, attested mint in the learner UI, versioning and revocation.
 
-- ✅ Define the SkillForge credential data model *([schema v1](./CREDENTIAL.md))*
-- ✅ Finalize soulbound credential metadata
-- ✅ Use stable IPFS/HTTPS metadata and artwork *([METADATA.md](./METADATA.md); operator sets `VITE_CREDENTIAL_IMAGE_URI`)*
-- ✅ Separate claimed scores from issuer-attested scores
-- ✅ Implement `mintCredentialWithAuthorization` as the issuer-attested path *(contract; UI still self-claim)*
-- ✅ Harden EIP-712 authorization and nonce handling *([AUTHORIZATION.md](./AUTHORIZATION.md))*
-- ✅ Prevent signature replay and unauthorized issuance
-- 🟡 Define issuer-key management procedures
-- ✅ Show claimed vs attested status in credential UI
-- ✅ Allow users to view their on-chain learning record
-- ✅ Public credential lookup *(token ID or wallet; `/credential/<id>`; QR + share URL; [Lookup](../src/components/pages/CredentialLookupPage.jsx))*
-- ⬜ Establish credential versioning/revocation strategy
+## Phase 4 — Gamification ✅ *Client preview*
 
----
+Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle and certificate reveal, opt-in local leaderboard.
 
-## Phase 4 — Gamification ✅ *Shipped (client preview)*
+Remaining: server-backed rankings and multi-device sync. Client rank is not a competitive authority.
 
-- ✅ Central progression events (`docs/PROGRESSION.md`)
-- ✅ XP and deterministic levels
-- ✅ Event-driven achievements / badges
-- ✅ UTC learning streaks
-- ✅ Avalanche tracks + path engine
-- ✅ 4×4 interlocking puzzle + certificate reveal
-- ✅ Opt-in local leaderboard preview (not a competitive authority)
-- ⬜ Server-backed rankings and multi-device sync
+## Phase 5 — Avalanche tracks ✅ *Initial*
 
----
+Shipped: Fundamentals, Architecture, L1s, C-Chain, ICM, Developer — lessons plus mapped quizzes.
 
-## Phase 5 — Avalanche Learning Expansion ✅ *Initial tracks shipped*
+Remaining: more depth, specialized audiences, and a fuller knowledge graph.
 
-- Expand Avalanche fundamentals
-- Add Avalanche L1 concepts
-- Expand ICM learning paths
-- Add C-Chain / EVM content
-- Add subnet/L1 architecture challenges
-- Add Avalanche developer-focused tracks
-- Create beginner → intermediate → advanced learning paths
-- Introduce specialized tracks for developers, founders, and ecosystem participants
-- Build a structured Avalanche knowledge graph/question taxonomy
+## Phase 6 — Attestation & trust
 
----
+Keep claimed and attested distinct. Add issuer accounts, an issuer dashboard, organization issuance, and clearer provenance for third parties.
 
-## Phase 6 — Attestation & Trust
+## Phase 7 — Infrastructure
 
-- ✅ Distinguish self-claimed scores from issuer-attested credentials *(UI, metadata, docs)*
-- ✅ Public credential lookup page *(token ID or wallet; no QR yet)*
-- Introduce issuer accounts
-- Create an issuer dashboard
-- Allow authorized organizations to issue credentials
-- Add issuer-specific signing keys
-- Add QR-based credential lookup
-- Define credential authenticity and provenance rules
-- Document the attestation model clearly
+Move critical learner state off the browser. Sync progress, question quality, and content without treating localStorage as authority for credentials or rankings.
 
----
+## Phase 8 — Security 🟡
 
-## Phase 7 — Platform Infrastructure
+Contract tests and soulbound rules are in place. Remaining: issuer-key risk, upgrade policy, independent audit before production issuance.
 
-- Move critical learner state from localStorage to persistent backend storage
-- Introduce wallet-based user profiles
-- Add database-backed progress synchronization
-- Implement backend APIs where required
-- Add analytics for learning progression
-- Track quiz performance and question quality
-- Add content-management capabilities for question banks
-- Separate quiz content from application code
-- Establish production monitoring and error tracking
+## Phase 9 — Mainnet
 
----
+Freeze the production credential, complete review/audit, production metadata and issuer ops, then gate launch on security approval. Product copy must stay honest on mainnet.
 
-## Phase 8 — Security & Smart-Contract Hardening 🟡 *Partial*
+## Phase 10 — Ecosystem
 
-- 🟡 Perform comprehensive contract review *(internal review + expanded tests)*
-- ✅ Add adversarial tests for mint authorization
-- ✅ Test replay, nonce, signature, and ownership scenarios
-- ✅ Review soulbound transfer restrictions
-- ✅ Review metadata immutability/security *(OpenZeppelin Base64; invalid image rejected)*
-- 🟡 Review issuer-key exposure risks
-- ✅ Remove unnecessary privileged operations
-- ✅ Add deployment verification *(Fuji live; Snowtrace record in STATUS.md)*
-- ⬜ Establish contract upgrade policy, if upgrades are supported
-- ⬜ Conduct an independent security audit before production credential issuance
+Partners, institutions, partner-issued credentials, collections, third-party verification, public achievement profiles — without pretending a claimed score is attested.
 
----
-
-## Phase 9 — Mainnet Readiness
-
-- Freeze the production contract specification
-- Complete security review/audit
-- Validate production metadata and artwork
-- Establish secure issuer infrastructure
-- Configure production RPC infrastructure
-- Configure secure deployment credentials
-- Verify production contract deployment
-- Test complete learner → quiz → redemption → credential flow
-- Update product disclosures and credential terminology
-- Add production monitoring
-- Establish incident-response procedures
-- Gate mainnet deployment behind final security approval
-
----
-
-## Phase 10 — Ecosystem & Scale
-
-- Build an Avalanche ecosystem partner/issuer model
-- Support educational institutions and developer communities
-- Create organization-specific learning tracks
-- Enable partner-issued credentials
-- Introduce credential collections
-- Build APIs for third-party credential verification
-- Support integrations with portfolios and professional profiles
-- Create public learner achievement profiles
-- Explore cross-platform credential interoperability
-- Expand beyond Avalanche while preserving Avalanche-native credentials
-
----
-
-## Core Product Loop
+## Product loop
 
 ```text
-LEARN
-  ↓
-QUIZ
-  ↓
-EARN POINTS
-  ↓
-UNLOCK PUZZLE PIECES
-  ↓
-COMPLETE CERTIFICATE
-  ↓
-CLAIM / VERIFY SCORE
-  ↓
-MINT CREDENTIAL
-  ↓
-BUILD ON-CHAIN LEARNING RECORD
+LEARN → CHALLENGE → EARN XP / POINTS
+       → LEVEL, BADGES, STREAK
+       → PATH / TRACK
+       → PUZZLE → CERTIFICATE → CREDENTIAL → LOOKUP
 ```
 
-```mermaid
-flowchart TD
-  Learn[Learn] --> Quiz[Quiz]
-  Quiz --> Points[Earn points]
-  Points --> Puzzle[Unlock puzzle pieces]
-  Puzzle --> Cert[Complete certificate]
-  Cert --> Score[Claim or attest score]
-  Score --> Mint[Mint credential]
-  Mint --> Record[Build on-chain learning record]
-```
+## Integrity
 
----
+| Track | Objective |
+| --- | --- |
+| Learning | Make Avalanche concepts clear and sequential |
+| GameFi | Make progress feel earned without farming |
+| Credentials | Keep claimed scores honest; attestation is a separate, privileged path |
 
-## Credential Integrity Model
-
-```text
-                 ┌──────────────────────┐
-                 │      Quiz Result     │
-                 └──────────┬───────────┘
-                            │
-                 ┌──────────▼───────────┐
-                 │    Claimed Score     │
-                 │  User-initiated mint │
-                 └──────────┬───────────┘
-                            │
-                      Lower trust
-                            │
-                ────────────┼────────────
-                            │
-                   Higher trust
-                            │
-                 ┌──────────▼───────────┐
-                 │ Issuer Attestation   │
-                 │      EIP-712         │
-                 └──────────┬───────────┘
-                            │
-                 ┌──────────▼───────────┐
-                 │ Verified Credential  │
-                 │    On Avalanche      │
-                 └──────────────────────┘
-```
-
-```mermaid
-flowchart TD
-  QuizResult[Quiz result]
-  Claimed[Claimed score<br/>user-initiated mint]
-  Attest[Issuer attestation<br/>EIP-712]
-  Verified[Verified credential<br/>on Avalanche]
-
-  QuizResult --> Claimed
-  Claimed -->|"lower trust"| Attest
-  Attest -->|"higher trust"| Verified
-```
-
----
-
-## Strategic Priority
-
-The roadmap maintains three parallel tracks:
-
-| Track | Primary objective |
-|-------|-------------------|
-| **Learning** | Make SkillForge an effective Avalanche learning experience |
-| **GameFi** | Make progression, points, puzzles, and achievements engaging |
-| **Credentials** | Keep claimed scores honest; issuer-attested credentials remain a separate privileged path |
-
-```mermaid
-flowchart LR
-  Learning[Learning track]
-  GameFi[GameFi track]
-  Credentials[Credentials track]
-  Product[SkillForge platform]
-
-  Learning --> Product
-  GameFi --> Product
-  Credentials --> Product
-```
-
----
-
-## Related docs
-
-- [STATUS.md](./STATUS.md) — what is shipped today (tests, contracts, UI)
-- [CREDENTIAL.md](./CREDENTIAL.md) — versioned credential record (schema v1)
-- [README](../README.md) — quick start, env, deploy, mainnet gate, CI
-- [`.env.example`](../.env.example) — required environment variables
-- Contract: [`contracts/SkillForgeCredential.sol`](../contracts/SkillForgeCredential.sol)
+Related: [Status](./STATUS.md) · [Progression](./PROGRESSION.md) · [Credential](./CREDENTIAL.md)

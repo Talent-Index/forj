@@ -1,216 +1,60 @@
-# SkillForge — Implementation Status
+# SkillForge — Status
 
-Last updated: 19 August 2026
+Last updated: 25 August 2026
 
-This document tracks what is **shipped today** versus what remains on the [product roadmap](./ROADMAP.md).
+This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
----
+## Snapshot
 
-## Summary
-
-| Area | Status | Notes |
-| --- | --- | --- |
-| **Phase 1 — Foundation** | **Complete** | Wallet, quiz, scoring, persistence, puzzle, contract fixes, CI |
-| **Phase 2 — Learning UX** | **Partial** | Product intro, first-run guide, post-submit explanations, and Avalanche references shipped |
-| **Phase 3 — Credentials** | **Partial** | Dual mint paths on-chain; UI uses self-claim only |
-| **Fuji deploy** | **Live** | `SkillForgeCredential` on Avalanche Fuji |
-| **Phases 4–10** | **Planned** | Gamification, backend, issuer dashboard, mainnet, ecosystem |
-
----
-
-## Live Fuji deployment
-
-`SkillForgeCredential` is deployed on Avalanche Fuji (chain ID `43113`).
-
-| Field | Value |
+| Area | Status |
 | --- | --- |
-| Address | [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) |
-| Deployer | `0x7c538b83D0295f94C4bBAf8302095d9ED4b2Ad5f` |
-| Deploy tx | [`0x7764050f3b6849cae40d971b945f7751caee5567e4dce1b7ae517f021a290e18`](https://testnet.snowtrace.io/tx/0x7764050f3b6849cae40d971b945f7751caee5567e4dce1b7ae517f021a290e18) |
-| Deployed at | 2026-08-17T21:50:03Z |
+| Foundation (wallet, quiz, scoring, puzzle, CI) | Complete |
+| Learning experience | Partial — onboarding, explanations, dashboard, and structured tracks shipped |
+| Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
+| Gamification | Client preview — XP, levels, achievements, streaks, path engine, local leaderboard |
+| Fuji credential | Live |
 
-Local `deployments/fuji.json` and `VITE_CREDENTIAL_CONTRACT` already point at this address. Restart the Vite dev server after env changes.
+Fuji contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) (chain ID 43113).
 
-**Operator follow-up:** set `VITE_CREDENTIAL_IMAGE_URI` to a stable IPFS or HTTPS artwork URL before minting credentials with metadata artwork.
+## Identity
 
----
+Learners use an **account** (email or Google). Progress is stored per account. A **wallet** is optional until the learner mints. Switching wallets does not move another person’s XP or puzzle. Signing out does not leave progress on the next session’s account.
 
-## Shipped features
+## Learning
 
-### First-time onboarding
+- Easy, Medium, and Hard quizzes: five unique questions per attempt, with hints and explanations after submit.
+- Retry-safe **points**: a later attempt on the same difficulty replaces that section’s score.
+- Structured **path** with six tracks: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer.
+- Lessons unlock in order. Quizzes sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone).
 
-- Product intro before wallet connect: loop, difficulties, points, puzzle, credentials, Fuji
-- Wallet connection guidance and install/open links
-- First-run guide after connect (`FirstRunGuide.jsx`), dismissible per wallet
-- Empty and error states for restore, quizzes, points, pieces, credentials, wallet, network, mint
-- Regression test: `npm run test:onboarding`
+## Progression
 
-### Wallet & network
+- One event stream drives XP, levels, achievements, streaks, path completion, puzzle events, and credentials.
+- Quiz retries do not farm XP.
+- Streaks use UTC calendar days. Duplicate activity on the same UTC day does not inflate the streak.
+- Achievements unlock from events (first quiz, perfect score, difficulties, streak, puzzle, credential, track, path).
+- Dashboard shows level, XP, streak, puzzle count, path progress, and the next recommended activity.
 
-- MetaMask and Core Wallet detection (`src/utils/wallet.js`)
-- Fuji chain switch / add-network flow
-- Wrong-network gate blocks quiz, puzzle, and mint until on Fuji (`NetworkGate.jsx`)
-- Session restore via `eth_accounts`; account and chain change listeners
-- Mobile deep links for wallet apps
-- Smoke test: `npm run test:wallet`
+## Puzzle and certificate
 
-### Quiz system
+- Sixteen interlocking jigsaw pieces. Points buy a piece; the same piece cannot be bought twice.
+- Completing the puzzle reveals the certificate, asks for a recipient name, then continues to the credential flow.
+- Artwork concept: a refined blacksmith in a forge holding a crafted diamond (learning, learner, skill).
 
-- Exactly **5 unique random questions** per Easy / Medium / Hard session (`src/utils/quiz.js`)
-- Question banks: **16 questions per tier** covering fundamentals, C-Chain, EVM, L1s, ICM, validators, consensus, tooling, and ecosystem (`src/data/questions.js`)
-- Fisher–Yates shuffle with injectable RNG (deterministic in tests)
-- Per-question **hints**, post-submit **explanations**, and official Avalanche **learn-more** links
-- Select an option, then submit — explanations and the correct answer stay hidden until submit
-- Easy, Medium, and Hard banks all include explanations (`src/data/questions.js`)
-- Smoke test: `npm run test:quiz`
+## Credentials
 
-### Scoring & retries
+- Soulbound NFT. It cannot be transferred.
+- Learner mint records a **claimed** score.
+- The contract also supports **issuer-attested** mint with an owner signature. That path is not the default learner UI.
+- Public lookup by credential ID or holder wallet. A found record is an on-chain record, not a verified exam.
 
-- Section retries **replace** prior section scores — no point stacking (`src/utils/progress.js`)
-- Totals recomputed from normalized section scores
-- Smoke test: `npm run test:retry`
+## Leaderboard
 
-### Progress persistence
+Opt-in ranking on this device only. Rank uses XP, then path completion, then achievement count, then earlier achievement time. It is not a competitive authority, not on-chain, and not a verified score.
 
-- Per-wallet `localStorage` keys: `skillforge.progress.v1.<address>`
-- Legacy key migration, schema versioning, malformed JSON sanitization
-- Hydration before save to avoid overwrite races (`App.jsx`)
-- Smoke test: `npm run test:progress`
+## Not shipped yet
 
-### Puzzle redemption
-
-- Atomic 5-point piece purchases; no duplicates or negative balance (`src/utils/puzzle.js`)
-- 4×4 certificate puzzle (`PuzzleBoard.jsx`)
-- Smoke test: `npm run test:puzzle`
-
-### Smart contract (`SkillForgeCredential.sol`)
-
-| Capability | Status |
-| --- | --- |
-| Soulbound ERC-721 (no transfer/approve) | Shipped |
-| Self-claimed mint — `mintCredential` | Shipped |
-| Issuer-attested mint — `mintCredentialWithAuthorization` (EIP-712) | Shipped (contract only; hardened recover, nonce-before-mint) |
-| `attested` flag on credential + event | Shipped |
-| Nonce increments only after successful attested mint | Shipped |
-| Token IDs start at 1; remint replaces prior credential | Shipped |
-| On-chain JSON metadata via OpenZeppelin Base64 | Shipped |
-| Mainnet deploy gated (`CONFIRM_MAINNET=yes`) | Shipped |
-
-**Hardhat tests:** 28 passing (`npm test`) — ownership, claimed/attested mints, EIP-712 domain/signer/chain/contract/nonce/deadline, no self-promotion to attested, per-wallet isolation, replay, invalid inputs, soulbound restrictions, `tokenURI`.
-
-### Frontend mint & credential display
-
-- Self-claimed mint from `Certificate.jsx` → `mintCredential`
-- Reads on-chain credential; shows **Self-claimed** vs **Issuer-attested** with distinct silver/gold status
-- Snowtrace links say **View on Snowtrace** (on-chain presence, not issuer attestation)
-- Resolvable image URI helper (`src/utils/ipfs.js`) — set `VITE_CREDENTIAL_IMAGE_URI` for explorer artwork
-- ERC-721 metadata schema v1, pack/upload scripts, and URI checks (`docs/METADATA.md`, `npm run test:metadata`)
-- Honesty labels: `src/utils/credentialStatus.js` — unknown status fails closed to claimed
-- Public **Lookup** page at `/credential/<id>`: token ID or holder wallet; shows title, holder, score, difficulty, status, issuer, network, contract, token ID, mint tx, explorer, metadata, verification state, shareable URL, and QR
-
-**Not in UI yet:** attested mint flow, issuer dashboard.
-
-### Deploy & environment
-
-- `npm run deploy:local` — Hardhat network, no `PRIVATE_KEY`
-- `npm run deploy:fuji` — **done**; live address above
-- Deploy script writes `deployments/fuji.json` and updates `VITE_CREDENTIAL_CONTRACT` in `.env`
-- `.env` + `.env.local` merge: empty `.env.local` values no longer wipe `.env` secrets
-- `.gitignore` covers `.env`, `artifacts/`, `cache/`, `deployments/*` (except examples)
-- Mainnet remains gated (`CONFIRM_MAINNET=yes`)
-
-### CI & quality
-
-- GitHub Actions: `npm ci` → `npm run verify` on every PR and push to `main`
-- Local mirror: `npm ci && npm run verify`
-- Node 20 (`.nvmrc`)
-
----
-
-## Phase checklist (roadmap mapping)
-
-### Phase 1 — Foundation & Correctness ✅
-
-- [x] Wallet connection and Fuji network switching
-- [x] MetaMask and Core Wallet flows (automated smoke test)
-- [x] Quiz generation and randomization
-- [x] Easy / Medium / Hard question banks (16 each)
-- [x] Retry-safe scoring
-- [x] localStorage state recovery
-- [x] Puzzle-point redemption logic
-- [x] Contract ownership and access control
-- [x] Credential score handling (token ID, remint)
-- [x] Smart-contract and regression tests
-- [x] CI (lint, compile, test, build)
-
-### Phase 2 — Learning Experience 🟡
-
-- [x] Section descriptions and difficulty tiers
-- [x] Hints and fun facts during/after quiz
-- [x] Dashboard and achievements views
-- [x] Persistent learner progression (localStorage)
-- [x] Dedicated onboarding tutorial
-- [x] Post-answer explanations (Easy / Medium / Hard)
-- [x] Avalanche learning references after submit
-- [ ] Structured beginner → advanced learning paths
-- [ ] Certificate preview polish before first mint
-
-### Phase 3 — Credential System 🟡
-
-- [x] Credential data model (schema v1 — [CREDENTIAL.md](./CREDENTIAL.md))
-- [x] Soulbound metadata and artwork URI field
-- [x] Stable IPFS/HTTPS artwork + metadata process ([METADATA.md](./METADATA.md))
-- [x] Claimed vs issuer-attested separation (`attested` flag)
-- [x] Claimed vs attested labels in credential UI ([CREDENTIAL.md](./CREDENTIAL.md#claimed-vs-attested-honesty))
-- [x] `mintCredentialWithAuthorization` + EIP-712 nonces
-- [x] EIP-712 domain, payload, and replay protections ([AUTHORIZATION.md](./AUTHORIZATION.md))
-- [x] Replay and unauthorized issuance tests
-- [x] On-chain credential read in UI
-- [x] Fuji testnet deployment of `SkillForgeCredential`
-- [ ] Issuer-key management runbook
-- [x] Public credential lookup (token ID or wallet; `/credential/<id>`)
-- [ ] Frontend attested-mint path
-- [x] QR-based credential lookup
-- [ ] Credential versioning or revocation policy
-
-### Phases 4–10 — Not started
-
-See [ROADMAP.md](./ROADMAP.md) for XP, backend, issuer dashboard, mainnet, and ecosystem plans.
-
----
-
-## Test commands
-
-```bash
-npm ci
-npm run verify          # full CI suite
-
-npm run lint            # ESLint
-npm run compile         # Hardhat compile
-npm test                # 28 contract tests
-npm run test:retry      # scoring regression
-npm run test:wallet     # wallet smoke test
-npm run test:quiz       # quiz selection
-npm run test:progress   # localStorage persistence
-npm run test:learner    # dashboard stats
-npm run test:credential # credential schema v1
-npm run test:status     # claimed vs attested honesty labels
-npm run test:lookup     # credential lookup fields and URLs
-npm run test:eip712     # EIP-712 domain and payload
-npm run test:jigsaw     # interlocking puzzle + certificate name
-npm run test:metadata   # ERC-721 metadata JSON, URIs, tokenURI round-trip
-npm run test:puzzle     # puzzle redemption
-npm run test:onboarding # first-time product loop copy
-npm run build           # Vite production build
-```
-
----
-
-## Related docs
-
-- [README](../README.md) — quick start, env, deploy, CI
-- [ROADMAP.md](./ROADMAP.md) — full 10-phase product plan
-- [CREDENTIAL.md](./CREDENTIAL.md) — versioned credential record (schema v1)
-- [AUTHORIZATION.md](./AUTHORIZATION.md) — EIP-712 attested mint domain and payload
-- [METADATA.md](./METADATA.md) — pin artwork, URI rules, production metadata process
-- [`.env.example`](../.env.example) — environment template
+- Server-backed progress and rankings
+- Issuer dashboard and attested mint in the learner UI
+- Credential revocation / versioning policy
+- Independent audit and mainnet issuance

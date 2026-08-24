@@ -1,53 +1,71 @@
-# Progression architecture
+# Progression
 
-SkillForge progression is a single event pipeline. Quizzes, lessons, tracks, XP, achievements, streaks, puzzle unlocks, and credentials all go through `applyProgressEvent`. UI components never write XP or streak fields directly.
+Every completed activity should move the learner toward a finished certificate and, if they choose, an on-chain record.
 
+```text
+LEARN → PATH → TRACK → LESSON / QUIZ
+  → XP, LEVEL, ACHIEVEMENT, STREAK
+  → PUZZLE → CERTIFICATE → CREDENTIAL → LEADERBOARD
 ```
-LEARN → PATH → TRACK → LESSON / QUIZ → XP + LEVEL + ACHIEVEMENT + STREAK
-  → PUZZLE PIECE → PUZZLE COMPLETE → CERTIFICATE → CREDENTIAL → LEADERBOARD
-```
 
-## Identity
+UI never invents XP or streak by itself. Completions become **progress events**. Those events update path state, XP, achievements, streaks, puzzle history, and (when relevant) credential flags.
 
-Progression is keyed by the learner account id (`acc_…`), not the wallet. A wallet is optional until an on-chain claim. Switching wallets does not move XP. Signing out loads a different account key. Legacy quiz progress can still be stored against a wallet address; on first load for an account we migrate that snapshot into progression events without double-awarding.
+## Who the progress belongs to
 
-Storage keys:
+Progress belongs to the **learner account**, not the wallet.
 
-- Quiz/puzzle: `skillforge.progress.v1.account.<acc_…>` (existing)
-- Progression: `skillforge.progression.v2.account.<acc_…>`
+- Learn without connecting a wallet.
+- Connect a wallet only to mint or inspect an on-chain credential.
+- Changing wallets does not transfer another account’s XP or puzzle.
+- Signing out does not leave the next person with your streak.
 
-## Events
+## What counts as learning
 
-`EVENT_TYPES` in `src/utils/progression/events.js` includes quiz, lesson, module, track, path, activity, achievement, streak, puzzle, and credential events. Unique types use a stable `type:sourceId` id so retries cannot farm XP.
+Counts: finishing a quiz, a lesson, or a module.
 
-Valid learning activity (streaks): `QUIZ_COMPLETED`, `LESSON_COMPLETED`, `MODULE_COMPLETED`. Page views and duplicate same-UTC-day activity do not increment the streak.
+Does not count: opening a page, refreshing, clicking repeatedly, or submitting the same quiz again for extra streak or XP.
+
+Streaks use **UTC dates**. One qualifying activity per UTC day. Missing a UTC day resets the current streak; the longest streak remains.
 
 ## XP and levels
 
-Configurable in `XP_CONFIG` (`base`, `growth`). Cumulative XP to reach level `n` is the sum of `floor(base * i^growth)` for `i = 1..n-1`. Rewards live in `XP_REWARDS`. `awardXP` / `applyProgressEvent` is the only write path.
+XP comes from first-time completions (quiz, lesson, module, track, path, puzzle piece, puzzle complete, selected achievements, streak milestones, claimed credential).
 
-Quiz retries still replace **points** via existing scoring. They do not grant a second `QUIZ_COMPLETED` XP packet.
+A quiz retry still updates **points** (the spendable score used for pieces). It does not pay XP again for that quiz.
+
+Level is a function of total XP. The dashboard shows current level, XP, and XP remaining to the next level.
+
+## Path and tracks
+
+The **Avalanche Developer Path** contains six tracks in order of dependency:
+
+1. Avalanche Fundamentals  
+2. Avalanche Architecture  
+3. Avalanche L1s  
+4. C-Chain & Smart Contracts  
+5. Avalanche ICM  
+6. Avalanche Developer Track  
+
+Earlier required work unlocks later work. Optional lessons do not block a module. Easy / Medium / Hard quizzes are the assessments for Fundamentals, Architecture, and the Developer capstone.
+
+The dashboard’s “next” item is the first unlocked incomplete lesson or quiz on that path.
 
 ## Achievements
 
-`ACHIEVEMENT_REGISTRY` is event-evaluated after each applied event. The original `evaluateAchievements(quizSnapshot)` helper remains for the legacy 8 badges.
-
-## Streaks
-
-Calendar days are **UTC** (`YYYY-MM-DD` from `Date.toISOString()`). Browser-local midnight is not used for unlocks. Missing a UTC day resets the current streak; longest streak is preserved.
-
-## Paths and tracks
-
-Catalog: `src/data/learning.js`. Engine: `src/utils/progression/paths.js`. Tracks: Fundamentals, Architecture, L1s, C-Chain, ICM, Developer. Quizzes map Easy → fundamentals, Medium → architecture, Hard → developer capstone.
+Badges unlock from the same events: first quiz, perfect score, difficulty completion, Avalanche Explorer (fundamentals track), streak, puzzle, first credential, track, and path. Locked badges stay visible unless marked hidden.
 
 ## Puzzle
 
-4×4 interlocking geometry stays in `src/utils/jigsaw.js`. Piece ids are `piece-r{row}-c{col}`. Redemption still uses `redeemPiece` (points). Progression records `PUZZLE_PIECE_UNLOCKED` / `PUZZLE_COMPLETED`. Completing all pieces still reveals the certificate name/preview/credential flow. Claimed vs issuer-attested copy is unchanged.
+Sixteen interlocking pieces. Each has a stable identity, a seat on the board, and a point cost. States: locked, available, selected, unlocked, completed.
 
-## Leaderboards
+Rules: no duplicate unlock, no spending below zero, no invented piece ids. Completing all sixteen reveals the certificate and continues to naming and credential.
 
-`src/utils/progression/leaderboard.js` is a **local preview**. `LEADERBOARD_AUTHORITY = "local-preview"`. It is not a competitive authority, not on-chain, and not a verified score. Opt-in only. Rank: XP, then path completion, then achievement count, then earlier first achievement.
+## Leaderboard
 
-## Security
+An opt-in **preview on this device**. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
 
-Client progression is not authority for credentials, attestations, competitive rank, or token value. EIP-712 mint authorization is unchanged.
+It is not a league, not on-chain, and not a verified ranking. Client storage is not an authority for competitive standing.
+
+## What progression is not
+
+Progression state does not prove an issuer-attested skill. Credentials, attestations, and any future competitive rank need their own authority. See [Credential](./CREDENTIAL.md).
