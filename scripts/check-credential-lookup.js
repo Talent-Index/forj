@@ -114,26 +114,17 @@ assert.equal(attestedView.difficulty, "Easy");
 
 const page = readFileSync(join(root, "src/components/pages/CredentialLookupPage.jsx"), "utf8");
 assert.match(page, /Credential lookup/);
+assert.match(page, /Credential verification/);
 assert.doesNotMatch(page, /Verify on Snowtrace/);
 assert.doesNotMatch(page, /verifiable on-chain/i);
 assert.match(page, /does not make a self-claimed score issuer-attested/);
 
 const details = readFileSync(join(root, "src/components/CredentialDetails.jsx"), "utf8");
-for (const label of [
-  "Credential title",
-  "Holder wallet",
-  "Score",
-  "Difficulty",
-  "Credential status",
-  "Issuer",
-  "Network",
-  "Contract address",
-  "Token ID",
-  "Transaction hash",
-  "Explorer link",
-  "Metadata link",
-]) {
-  assert.equal(details.includes(label), true, label);
+assert.match(details, /VERIFICATION_LABELS/);
+assert.match(details, /VERIFICATION_FIELDS/);
+assert.match(details, /Credential verification/);
+for (const field of VERIFICATION_FIELDS) {
+  assert.match(details, new RegExp(`case "${field}"`));
 }
 
 console.log("credential lookup tests passed");
