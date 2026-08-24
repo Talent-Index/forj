@@ -25,6 +25,41 @@ function BrandMark() {
   );
 }
 
+function ThemeToggle({ theme, onToggleTheme }) {
+  const isDark = theme === "dark";
+  return (
+    <button
+      className="btn btn-ghost btn-icon theme-toggle"
+      onClick={onToggleTheme}
+      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+      title={isDark ? "Light theme" : "Dark theme"}
+    >
+      {isDark ? (
+        <svg viewBox="0 0 24 24" className="theme-icon" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" strokeWidth="1.6" />
+          <path
+            d="M12 3.2v2.1M12 18.7v2.1M4.6 12H2.5M21.5 12h-2.1M6.1 6.1l1.5 1.5M16.4 16.4l1.5 1.5M6.1 17.9l1.5-1.5M16.4 7.6l1.5-1.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" className="theme-icon" aria-hidden="true">
+          <path
+            d="M15.2 4.4a7.4 7.4 0 1 0 4.4 4.4 5.8 5.8 0 0 1-4.4-4.4Z"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinejoin="round"
+          />
+        </svg>
+      )}
+    </button>
+  );
+}
+
 function Navbar({
   page,
   onNavigate,
@@ -62,13 +97,7 @@ function Navbar({
           ))}
         </nav>
         <div className="nav-actions">
-          <button
-            className="btn btn-ghost"
-            onClick={onToggleTheme}
-            aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-          >
-            Design
-          </button>
+          <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
           {!isAuthenticated ? (
             <>
               <button className="btn btn-ghost" onClick={() => onOpenAuth("signin")}>

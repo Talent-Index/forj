@@ -110,13 +110,6 @@ function Landing({ onStart, onSignIn, onExploreCredentials }) {
       </section>
 
       <section id="the-forge" className="landing-section landing-split">
-        <div className="landing-puzzle" aria-hidden="true">
-          <JigsawBoard
-            artwork={forgeCertificate}
-            acquiredPieces={PREVIEW_PIECES}
-            showLabels={false}
-          />
-        </div>
         <div>
           <h2 className="landing-heading">Your progress becomes the certificate.</h2>
           <ol className="forge-ladder">
@@ -127,6 +120,13 @@ function Landing({ onStart, onSignIn, onExploreCredentials }) {
               </li>
             ))}
           </ol>
+        </div>
+        <div className="landing-puzzle" aria-hidden="true">
+          <JigsawBoard
+            artwork={forgeCertificate}
+            acquiredPieces={PREVIEW_PIECES}
+            showLabels={false}
+          />
         </div>
       </section>
 
@@ -153,9 +153,11 @@ function Landing({ onStart, onSignIn, onExploreCredentials }) {
       </section>
 
       <section className="landing-finale">
-        <h2>Ready to forge?</h2>
-        <p>Learn Avalanche. Build your skills. Earn your credential.</p>
-        <Button className="btn-solid-inverse" onClick={onStart}>Start Learning →</Button>
+        <div className="landing-finale-inner">
+          <h2>Ready to forge?</h2>
+          <p>Learn Avalanche. Build your skills. Earn your credential.</p>
+          <Button className="btn-solid-inverse" onClick={onStart}>Start Learning →</Button>
+        </div>
       </section>
     </div>
   );

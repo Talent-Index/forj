@@ -377,6 +377,12 @@ img {
   padding: 0;
 }
 
+.theme-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
 .btn-block,
 .btn-wallet-option {
   width: 100%;
@@ -1516,6 +1522,9 @@ img {
 
 .landing-hero {
   display: block;
+}
+
+.landing-hero-copy {
   max-width: 36rem;
 }
 
@@ -1565,9 +1574,11 @@ img {
 
 .landing-steps {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 16rem));
+  justify-content: start;
   gap: 48px;
   margin-top: 32px;
+  text-align: left;
 }
 
 .landing-step-n {
@@ -1647,8 +1658,13 @@ img {
 .landing-finale {
   background: #161513;
   color: #f3f0e8;
-  text-align: center;
+  text-align: left;
   padding: 88px 24px;
+}
+
+.landing-finale-inner {
+  max-width: 1120px;
+  margin: 0 auto;
 }
 
 .landing-finale h2 {
@@ -1657,7 +1673,7 @@ img {
 
 .landing-finale p {
   color: #c4bfb4;
-  margin: 12px auto 24px;
+  margin: 12px 0 24px;
 }
 
 .site-footer {
@@ -1688,11 +1704,11 @@ img {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-size: 11px;
-  text-align: center;
+  text-align: left;
 }
 
 .auth-title {
-  text-align: center;
+  text-align: left;
   margin: 8px 0 16px;
 }
 
@@ -1729,7 +1745,7 @@ img {
 .auth-info,
 .note {
   color: var(--muted);
-  text-align: center;
+  text-align: left;
 }
 
 .auth-error {
