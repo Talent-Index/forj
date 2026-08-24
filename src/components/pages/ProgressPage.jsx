@@ -5,7 +5,8 @@ import { useOnChainCredential } from "../../hooks/useOnChainCredential";
 import { Button, Card, ProgressBar } from "../ui/primitives";
 import EmptyState from "../EmptyState";
 import Achievements from "../Achievements";
-import CredentialRecord from "../CredentialRecord";
+import CredentialDetails from "../CredentialDetails";
+import { buildCredentialVerificationView } from "../../utils/credentialLookup";
 
 function ProgressPage({
   address,
@@ -31,8 +32,11 @@ function ProgressPage({
     totalPoints,
     spentPoints,
   });
-  const { credential, loading: credentialLoading, error: credentialError } =
+  const { credential, transactionHash, loading: credentialLoading, error: credentialError } =
     useOnChainCredential(address, publicClient);
+  const credentialView = credential
+    ? buildCredentialVerificationView(credential, { transactionHash })
+    : null;
   const next = stats.difficulties.find((row) => row.percent < 100) || stats.difficulties[0];
   const displayAddress = shortAddress(address);
   const explorerUrl = walletExplorerUrl(address);
@@ -128,10 +132,10 @@ function ProgressPage({
       </section>
 
       <section className="section-block">
-        <h2>Credentials</h2>
+        <h2>Credential verification</h2>
         {credentialLoading && <p role="status">Loading credential from Fuji…</p>}
-        {!credentialLoading && credential && (
-          <CredentialRecord credential={credential} />
+        {!credentialLoading && credentialView && (
+          <CredentialDetails view={credentialView} />
         )}
         {!credentialLoading && !credential && (
           <EmptyState

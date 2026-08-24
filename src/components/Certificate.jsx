@@ -15,7 +15,7 @@ import { validateRecipientName } from "../utils/recipient";
 import { CREDENTIAL_SCHEMA_VERSION } from "../utils/credentialModel";
 import { CREDENTIAL_STATES, LEARNER_MINT_STATUS, resolveCredentialStatus } from "../utils/credentialStatus";
 import EmptyState from "./EmptyState";
-import CredentialRecord from "./CredentialRecord";
+import CredentialDetails from "./CredentialDetails";
 import CertificateArtifact from "./CertificateArtifact";
 import CredentialStatusBadge from "./CredentialStatusBadge";
 import {
@@ -25,6 +25,7 @@ import {
 } from "../utils/certificateView";
 import JigsawBoard from "./JigsawBoard";
 import { Button } from "./ui/primitives";
+import { buildCredentialVerificationView } from "../utils/credentialLookup";
 
 function Certificate({
   address,
@@ -52,8 +53,21 @@ function Certificate({
   const [minting, setMinting] = useState(false);
   const [mintTx, setMintTx] = useState(null);
   const [mintError, setMintError] = useState(null);
-  const { credential: onChainCredential, loading: loadingCredential, reload: loadOnChainCredential } =
-    useOnChainCredential(address, publicClient);
+  const {
+    credential: onChainCredential,
+    transactionHash,
+    loading: loadingCredential,
+    reload: loadOnChainCredential,
+  } = useOnChainCredential(address, publicClient);
+  const verificationView = useMemo(
+    () =>
+      onChainCredential
+        ? buildCredentialVerificationView(onChainCredential, {
+            transactionHash: transactionHash || mintTx || "",
+          })
+        : null,
+    [onChainCredential, transactionHash, mintTx]
+  );
 
   const mask = puzzleToMask(acquiredPieces);
   const certId = useMemo(
@@ -254,18 +268,18 @@ function Certificate({
 
           {(loadingCredential || onChainCredential) && (
             <section className="section-block">
-              <h2>On-chain record</h2>
+              <h2>Credential verification</h2>
               {loadingCredential && <p role="status">Loading credential from Fuji…</p>}
-              {!loadingCredential && onChainCredential && (
+              {!loadingCredential && verificationView && (
                 <>
-                  <CredentialRecord credential={onChainCredential} />
+                  <CredentialDetails view={verificationView} />
                   {onLookup && (
                     <p>
                       <Button
                         variant="secondary"
                         onClick={() => onLookup(onChainCredential.credentialId, onChainCredential.walletAddress)}
                       >
-                        Open credential lookup
+                        Open public lookup
                       </Button>
                     </p>
                   )}

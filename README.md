@@ -46,11 +46,10 @@ cp .env.example .env.local
 ```
 
 ```bash
-PRIVATE_KEY=                 # deployer only — never commit
+PRIVATE_KEY=
 FUJI_RPC_URL=https://avalanche-fuji-c-chain.publicnode.com
-VITE_CREDENTIAL_CONTRACT=    # set by deploy:fuji or paste from deployments/fuji.json
-VITE_CREDENTIAL_IMAGE_URI=   # stable IPFS or HTTPS artwork URL (see docs/METADATA.md)
-```
+VITE_CREDENTIAL_CONTRACT=    
+VITE_CREDENTIAL_IMAGE_URI=  
 
 If you use `.env.local`, leave `PRIVATE_KEY` out or set a real value — an empty `PRIVATE_KEY=` line used to wipe the key from `.env` (now prevented in Hardhat config).
 
