@@ -80,7 +80,6 @@ function App() {
   const [attempts, setAttempts] = useState([]);
   const [recipientName, setRecipientName] = useState("");
   const [hydratedOwner, setHydratedOwner] = useState(null);
-  const [guideDismissed, setGuideDismissed] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [authView, setAuthView] = useState("signup");
   const [authOobCode, setAuthOobCode] = useState("");
@@ -145,7 +144,6 @@ function App() {
       applyProgress(snapshot);
       setHydratedOwner(ownerId);
       dismissFirstRunGuide(ownerId);
-      setGuideDismissed(true);
       if (snapshot.recipientName === "" && account?.name) {
         setRecipientName(account.name);
       }
@@ -428,15 +426,6 @@ function App() {
         />
       );
     }
-    if (stage === "wallet-optional") {
-      return (
-        <WalletOptional
-          busy={onboardBusy}
-          onConnect={handleWalletConnect}
-          onSkip={handleWalletSkip}
-        />
-      );
-    }
     if (page === "settings") {
       return (
         <SettingsPage
@@ -556,34 +545,15 @@ function App() {
       );
     }
     return (
-      <>
-        {!guideDismissed && (
-          <FirstRunGuide
-            steps={firstRunStatus({
-              isAuthenticated,
-              isConnected: wallet.isConnected,
-              isFuji: wallet.isFuji,
-              walletSkipped: Boolean(account?.walletPromptSeen && !wallet.address),
-              completedSections,
-              acquiredPieces,
-            })}
-            onStartEasy={() => startSection("easy")}
-            onDismiss={() => {
-              dismissFirstRunGuide(ownerId);
-              setGuideDismissed(true);
-            }}
-          />
-        )}
-        <LearnPage
-          progression={progression}
-          sectionScores={sectionScores}
-          totalPoints={totalPoints}
-          completedSections={completedSections}
-          onSelectSection={startSection}
-          onGoToPuzzle={() => setView(VIEWS.PUZZLE)}
-          onCompleteLesson={progression.completeLesson}
-        />
-      </>
+      <LearnPage
+        progression={progression}
+        sectionScores={sectionScores}
+        totalPoints={totalPoints}
+        completedSections={completedSections}
+        onSelectSection={startSection}
+        onGoToPuzzle={() => setView(VIEWS.PUZZLE)}
+        onCompleteLesson={progression.completeLesson}
+      />
     );
   }
 
@@ -641,6 +611,7 @@ function App() {
         auth={auth}
         pendingEmail={account?.email}
         oobCode={authOobCode}
+        onOpenLegal={openLegal}
       />
     </>
   );

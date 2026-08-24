@@ -144,6 +144,26 @@ img {
 }
 
 .nav-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.wallet-connected-toast {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--success);
+  background: var(--success-bg);
+  color: var(--success);
+  white-space: nowrap;
+  z-index: 30;
+}
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2014,12 +2034,17 @@ img {
   padding: 10px 12px;
 }
 
+.auth-legal,
 .auth-or,
 .auth-switch,
 .auth-info,
 .note {
   color: var(--muted);
   text-align: left;
+}
+
+.auth-legal {
+  font-size: 0.95em;
 }
 
 .auth-error {

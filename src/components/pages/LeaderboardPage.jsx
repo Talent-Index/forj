@@ -51,15 +51,14 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
       <section className="section-block">
         <h2>Privacy</h2>
         <p className="meta-line">
-          Opting in publishes a display name and lets other signed-in learners
-          see standing derived from your learning events. Hide anytime. Rank is
-          not a verified exam and not an issuer-attested credential.
+          You appear on the live board by default under your display name.
+          Hide anytime. Rank is not a verified exam and not an issuer-attested credential.
         </p>
         {(actionError || board.error) && (
           <p className="auth-error" role="alert">{actionError || board.error}</p>
         )}
         <Button variant={optedIn ? "secondary" : "primary"} onClick={toggleOptIn} disabled={busy}>
-          {busy ? "Saving…" : optedIn ? "Hide me from the board" : "Include me on the live board"}
+          {busy ? "Saving…" : optedIn ? "Hide me from the board" : "Show me on the live board"}
         </Button>
       </section>
 

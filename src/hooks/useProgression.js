@@ -28,7 +28,7 @@ function browserStorage() {
   return createMemoryStorage();
 }
 
-export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) {
+export function useProgression(learnerId, quizSnapshot, { ready = false, displayName = "" } = {}) {
   const store = useMemo(() => createProgressionStore(browserStorage()), []);
   const stateRef = useRef(null);
   const migratedFor = useRef(null);
@@ -51,11 +51,28 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
     setHydrated(true);
     migratedFor.current = id;
     readLeaderboardPreference(id)
-      .then((pref) => {
-        if (!pref || migratedFor.current !== id || !stateRef.current) return;
+      .then(async (pref) => {
+        if (migratedFor.current !== id || !stateRef.current) return;
+        if (pref) {
+          const next = {
+            ...stateRef.current,
+            leaderboard: { ...stateRef.current.leaderboard, ...pref },
+          };
+          stateRef.current = next;
+          setState(next);
+          store.save(id, next);
+          return;
+        }
+        const applied = applyLeaderboardPreference(stateRef.current.leaderboard, {
+          optIn: true,
+          displayName: displayName || stateRef.current.leaderboard?.displayName,
+        });
+        if (!applied.ok) return;
+        await writeLeaderboardPreference(id, applied.preference).catch(() => {});
+        await setProgressEventsOptIn(id, true).catch(() => {});
         const next = {
           ...stateRef.current,
-          leaderboard: { ...stateRef.current.leaderboard, ...pref },
+          leaderboard: { ...stateRef.current.leaderboard, ...applied.preference },
         };
         stateRef.current = next;
         setState(next);
@@ -64,7 +81,7 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
       .catch(() => {});
     // Hydrate once per learner. Migration is idempotent if called again from dispatch.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- quizSnapshot is read once on account switch
-  }, [learnerId, ready, store]);
+  }, [displayName, learnerId, ready, store]);
 
   const persist = useCallback((next) => {
     const id = progressOwnerId(learnerId);

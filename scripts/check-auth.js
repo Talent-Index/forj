@@ -33,14 +33,15 @@ assert.equal(duplicate.ok, false);
 const verified = auth.verifyEmail(registered.verificationToken);
 assert.equal(verified.ok, true);
 assert.equal(verified.account.emailVerified, true);
-assert.equal(onboardingStage(verified.account), "profile");
+assert.equal(onboardingStage(verified.account), "ready");
+assert.equal(verified.account.profileComplete, true);
 
 const profile = auth.completeProfile(verified.account.id, {
   name: "Dana Learner",
   learningGoal: "avalanche",
 });
 assert.equal(profile.ok, true);
-assert.equal(onboardingStage(profile.account), "wallet-optional");
+assert.equal(onboardingStage(profile.account), "ready");
 
 const skipped = auth.dismissWalletPrompt(profile.account.id);
 assert.equal(skipped.ok, true);
@@ -85,11 +86,11 @@ assert.equal(google.account.provider, AUTH_PROVIDERS.google);
 assert.equal(google.account.emailVerified, true);
 assert.equal(google.account.hasPassword, false);
 assert.equal(google.account.avatarUrl, "https://example.com/photo.jpg");
-assert.equal(onboardingStage(google.account), "profile");
+assert.equal(onboardingStage(google.account), "ready");
 
 const googleProfile = auth.completeProfile(google.account.id, { name: "Forge Google" });
 assert.equal(googleProfile.ok, true);
-assert.equal(onboardingStage(googleProfile.account), "wallet-optional");
+assert.equal(onboardingStage(googleProfile.account), "ready");
 
 const createdPassword = await auth.setPassword(googleProfile.account.id, {
   password: "google-pass-1",

@@ -38,6 +38,7 @@ const learner = readSrc("src/utils/backend/learner.js");
 
 assertIncludes(landing, AUTH_FLOW_BUTTONS.landingStart.label, "Landing");
 assertIncludes(landing, AUTH_FLOW_BUTTONS.landingSignIn.label, "Landing");
+assertIncludes(landing, "{!signedIn &&", "Landing hides Sign in after sign-in");
 assertIncludes(landing, AUTH_FLOW_BUTTONS.landingCredentials.label, "Landing");
 assertIncludes(landing, "onClick={onStart}", "Landing start");
 assertIncludes(landing, "onClick={onSignIn}", "Landing sign in");
@@ -52,19 +53,17 @@ assertIncludes(authModal, AUTH_FLOW_BUTTONS.updatePassword.label, "Auth modal");
 assertIncludes(authModal, AUTH_FLOW_BUTTONS.verified.label, "Auth modal");
 assertIncludes(authModal, AUTH_FLOW_BUTTONS.resend.label, "Auth modal");
 assertIncludes(authModal, AUTH_FLOW_BUTTONS.confirmName.label, "Profile setup");
-assertIncludes(authModal, AUTH_FLOW_BUTTONS.connectWallet.label, "Wallet optional");
-assertIncludes(authModal, AUTH_FLOW_BUTTONS.skipWallet.label, "Wallet optional");
+assertIncludes(authModal, "Terms of Service", "Signup terms");
+assertIncludes(authModal, "Privacy Policy", "Signup privacy");
 assertIncludes(authModal, "type=\"submit\"", "Profile Continue is a submit button");
 assertIncludes(authModal, "onContinue({ name: recipient.name, learningGoal: goal })", "Continue payload");
 assertIncludes(authModal, "disabled={busy}", "Auth buttons disable while saving");
 
 assertIncludes(app, "onContinue={handleProfileContinue}", "App wires name Continue");
 assertIncludes(app, "busy={onboardBusy}", "App passes busy to onboarding");
-assertIncludes(app, "onSkip={handleWalletSkip}", "App wires skip wallet");
-assertIncludes(app, "onConnect={handleWalletConnect}", "App wires connect wallet");
 assertIncludes(app, "auth.completeProfile(input)", "Continue calls completeProfile");
-assertIncludes(app, "auth.dismissWalletPrompt()", "Wallet skip/connect dismisses prompt");
-assertIncludes(app, "openModal()", "Connect wallet opens the wallet modal");
+assertIncludes(app, "LegalPage", "App has Privacy and Terms pages");
+assertIncludes(app, "goLearnHome()", "Signed-in learners leave landing");
 assertIncludes(app, 'onStart={() => (isAuthenticated ? goLearnHome() : openAuth("signup"))}', "Start Learning opens signup");
 assertIncludes(app, 'onSignIn={() => openAuth("signin")}', "Landing Sign in opens signin");
 
@@ -95,12 +94,12 @@ assert.equal(named.ok, true);
 assert.equal(named.account.profileComplete, true);
 assert.equal(named.account.name, "Dana Learner");
 assert.equal(named.account.learningGoal, "avalanche");
-assert.equal(onboardingStage(named.account), "wallet-optional");
+assert.equal(onboardingStage(named.account), "ready");
 
 const skippedGoal = applyProfileCompletion(incomplete, { name: "Dana Learner" });
 assert.equal(skippedGoal.ok, true);
 assert.equal(skippedGoal.account.learningGoal, "");
-assert.equal(onboardingStage(skippedGoal.account), "wallet-optional");
+assert.equal(onboardingStage(skippedGoal.account), "ready");
 
 const unknownGoal = applyProfileCompletion(incomplete, {
   name: "Dana Learner",

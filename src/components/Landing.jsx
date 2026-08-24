@@ -158,7 +158,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
         <div className="landing-finale-inner">
           <h2>Ready to forge?</h2>
           <p>Learn Avalanche. Build your skills. Earn your credential.</p>
-          <Button className="btn-solid-inverse" onClick={onStart}>Start Learning →</Button>
+          <Button className="btn-solid-inverse" onClick={onStart}>{signedIn ? "Continue Learning →" : "Start Learning →"}</Button>
         </div>
       </section>
     </div>
