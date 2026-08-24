@@ -29,6 +29,21 @@ export const VERIFICATION_FIELDS = [
   "metadataUrl",
 ];
 
+export const VERIFICATION_LABELS = {
+  title: "Credential title",
+  holderWallet: "Holder wallet",
+  score: "Score",
+  difficulty: "Difficulty",
+  status: "Credential status",
+  issuer: "Issuer",
+  network: "Network",
+  contractAddress: "Contract address",
+  tokenId: "Token ID",
+  transactionHash: "Transaction hash",
+  explorerUrl: "Explorer link",
+  metadataUrl: "Metadata link",
+};
+
 export function parseLookupQuery(search = "") {
   const params = new URLSearchParams(
     typeof search === "string" && search.startsWith("?") ? search.slice(1) : String(search || "")

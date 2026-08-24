@@ -5,6 +5,7 @@ import {
   FUJI_EXPLORER_TOKEN,
 } from "../utils/contract";
 import { mapOnChainCredential } from "../utils/credential";
+import { findMintTransactionHash } from "../utils/credentialLookup";
 import { FUJI_CHAIN_ID } from "../utils/wallet";
 
 async function readChainId(publicClient) {
@@ -28,12 +29,14 @@ async function readOptional(publicClient, request) {
 
 export function useOnChainCredential(address, publicClient) {
   const [credential, setCredential] = useState(null);
+  const [transactionHash, setTransactionHash] = useState("");
   const [loading, setLoading] = useState(Boolean(CONTRACT_ADDRESS && address && publicClient));
   const [error, setError] = useState(null);
 
   const reload = useCallback(async () => {
     if (!CONTRACT_ADDRESS || !publicClient || !address) {
       setCredential(null);
+      setTransactionHash("");
       setLoading(false);
       setError(null);
       return null;
@@ -51,6 +54,7 @@ export function useOnChainCredential(address, publicClient) {
 
       if (!tokenId || tokenId === 0n) {
         setCredential(null);
+        setTransactionHash("");
         return null;
       }
 
@@ -87,10 +91,13 @@ export function useOnChainCredential(address, publicClient) {
           chainId: Number(chainId) || FUJI_CHAIN_ID,
         }
       );
+      const hash = await findMintTransactionHash(publicClient, tokenId);
       setCredential(next);
+      setTransactionHash(hash || "");
       return next;
     } catch (err) {
       setCredential(null);
+      setTransactionHash("");
       setError(err?.shortMessage || err?.message || "Could not read credential.");
       return null;
     } finally {
@@ -102,5 +109,5 @@ export function useOnChainCredential(address, publicClient) {
     reload();
   }, [reload]);
 
-  return { credential, loading, error, reload };
+  return { credential, transactionHash, loading, error, reload };
 }

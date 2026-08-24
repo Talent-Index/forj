@@ -1,110 +1,92 @@
 import CredentialStatusBadge from "./CredentialStatusBadge";
-import { VERIFICATION_FIELDS } from "../utils/credentialLookup";
+import { VERIFICATION_FIELDS, VERIFICATION_LABELS } from "../utils/credentialLookup";
 import { shortAddress } from "../utils/learnerStats";
 
 function HashValue({ value, href, empty = "Not found" }) {
   if (!value) return <span>{empty}</span>;
   const label = value.startsWith("0x") && value.length > 16 ? `${value.slice(0, 10)}…${value.slice(-8)}` : value;
-  if (!href) return <span>{label}</span>;
+  if (!href) return <span className="credential-mono">{label}</span>;
   return (
-    <a href={href} target="_blank" rel="noreferrer">
+    <a className="credential-mono" href={href} target="_blank" rel="noreferrer">
       {label}
     </a>
   );
 }
 
-function CredentialDetails({ view }) {
-  if (!view) return null;
-  const rows = [
-    { key: "title", label: "Credential title", value: view.title || "—" },
-    {
-      key: "holderWallet",
-      label: "Holder wallet",
-      value: view.holderWallet ? (
-        <HashValue
-          value={view.holderWallet}
-          href={view.holderExplorerUrl}
-          empty="—"
-        />
+function fieldValue(view, key) {
+  switch (key) {
+    case "title":
+      return view.title || "—";
+    case "holderWallet":
+      return view.holderWallet ? (
+        <HashValue value={view.holderWallet} href={view.holderExplorerUrl} empty="—" />
       ) : (
         "—"
-      ),
-    },
-    { key: "score", label: "Score", value: view.scoreLabel || "—" },
-    {
-      key: "difficulty",
-      label: "Difficulty",
-      value: view.difficultyDetail
+      );
+    case "score":
+      return view.scoreLabel || view.score || "—";
+    case "difficulty":
+      return view.difficultyDetail
         ? `${view.difficulty} · ${view.difficultyDetail}`
-        : view.difficulty || "—",
-    },
-    {
-      key: "status",
-      label: "Credential status",
-      value: (
+        : view.difficulty || "—";
+    case "status":
+      return (
         <span className="credential-details-status">
           <CredentialStatusBadge status={view.statusId} />
           <span>{view.status}</span>
         </span>
-      ),
-    },
-    { key: "issuer", label: "Issuer", value: view.issuer || "—" },
-    {
-      key: "network",
-      label: "Network",
-      value: `${view.network} · ${view.chainId}`,
-    },
-    {
-      key: "contractAddress",
-      label: "Contract address",
-      value: view.contractAddress ? (
+      );
+    case "issuer":
+      return view.issuer || "—";
+    case "network":
+      return view.network ? `${view.network} · ${view.chainId}` : "—";
+    case "contractAddress":
+      return view.contractAddress ? (
         <HashValue
           value={view.contractAddress}
           href={`https://testnet.snowtrace.io/address/${view.contractAddress}`}
         />
       ) : (
         "—"
-      ),
-    },
-    { key: "tokenId", label: "Token ID", value: view.tokenId ? `#${view.tokenId}` : "—" },
-    {
-      key: "transactionHash",
-      label: "Transaction hash",
-      value: (
+      );
+    case "tokenId":
+      return view.tokenId ? `#${view.tokenId}` : "—";
+    case "transactionHash":
+      return (
         <HashValue
           value={view.transactionHash}
           href={view.transactionExplorerUrl}
           empty="Not indexed"
         />
-      ),
-    },
-    {
-      key: "explorerUrl",
-      label: "Explorer link",
-      value: view.explorerUrl ? (
+      );
+    case "explorerUrl":
+      return view.explorerUrl ? (
         <a href={view.explorerUrl} target="_blank" rel="noreferrer">
           {view.explorerLabel}
         </a>
       ) : (
         "—"
-      ),
-    },
-    {
-      key: "metadataUrl",
-      label: "Metadata link",
-      value: view.metadataUrl ? (
+      );
+    case "metadataUrl":
+      return view.metadataUrl ? (
         <a href={view.metadataUrl} target="_blank" rel="noreferrer">
           {view.metadataLabel || "Open tokenURI"}
         </a>
       ) : (
         "—"
-      ),
-    },
-  ];
+      );
+    default:
+      return "—";
+  }
+}
+
+function CredentialDetails({ view }) {
+  if (!view) return null;
 
   return (
     <article className={`credential-details credential-record-${view.statusId || "claimed"}`}>
       <header className="credential-details-head">
+        <p className="kicker">Credential verification</p>
         <CredentialStatusBadge status={view.statusId} />
         <h2>{view.title || "SkillForge credential"}</h2>
       </header>
@@ -114,14 +96,13 @@ function CredentialDetails({ view }) {
         {view.scoreLabel ? ` · ${view.scoreLabel}` : ""}
       </p>
       <dl className="credential-details-list">
-        {rows.map((row) => (
-          <div key={row.key} data-field={row.key}>
-            <dt>{row.label}</dt>
-            <dd>{row.value}</dd>
+        {VERIFICATION_FIELDS.map((key) => (
+          <div key={key} data-field={key}>
+            <dt>{VERIFICATION_LABELS[key]}</dt>
+            <dd>{fieldValue(view, key)}</dd>
           </div>
         ))}
       </dl>
-      <p className="visually-hidden">{VERIFICATION_FIELDS.join(" ")}</p>
     </article>
   );
 }
