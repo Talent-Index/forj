@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { applyProgressEvent, emptyProgression, EVENT_TYPES } from "../src/utils/progression/engine.js";
+import { applyProgressEvent, emptyProgression } from "../src/utils/progression/engine.js";
+import { EVENT_TYPES } from "../src/utils/progression/events.js";
 import {
   LEADERBOARD_AUTHORITY,
   LEADERBOARD_PREFERENCE_KEYS,

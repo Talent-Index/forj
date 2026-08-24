@@ -11,7 +11,10 @@ export function useLiveLeaderboard({ progression, windowName = "global", trackId
   const [status, setStatus] = useState("connecting");
   const [error, setError] = useState("");
   const stateRef = useRef(progression?.state);
-  stateRef.current = progression?.state;
+
+  useEffect(() => {
+    stateRef.current = progression?.state;
+  }, [progression?.state]);
 
   useEffect(() => {
     if (!enabled) return undefined;
