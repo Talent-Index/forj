@@ -82,8 +82,8 @@ img {
 .shell-main {
   width: 100%;
   max-width: 1120px;
-  margin: 0 auto;
-  padding: 24px 20px 48px;
+  margin: 0;
+  padding: 24px 24px 48px;
   flex: 1;
 }
 
@@ -100,9 +100,9 @@ img {
 
 .navbar-inner {
   max-width: 1120px;
-  margin: 0 auto;
+  margin: 0;
   min-height: var(--nav-h);
-  padding: 0 20px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   gap: 24px;
@@ -189,8 +189,8 @@ img {
 
 .site-footer {
   max-width: 1120px;
-  margin: 0 auto;
-  padding: 16px 20px 24px;
+  margin: 0;
+  padding: 16px 24px 24px;
   color: var(--muted);
   font-size: 9.39px;
   display: flex;
@@ -1524,7 +1524,7 @@ img {
 .landing-hero,
 .landing-section {
   max-width: 1120px;
-  margin: 0 auto;
+  margin: 0;
   padding: 72px 24px;
 }
 
@@ -1600,7 +1600,12 @@ img {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 64px;
-  align-items: center;
+  align-items: start;
+}
+
+.landing-puzzle {
+  justify-self: start;
+  max-width: 520px;
 }
 
 .landing-heading {
@@ -1648,6 +1653,8 @@ img {
 
 .credential-distinction {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 16rem));
+  justify-content: start;
   gap: 16px;
   margin: 24px 0;
 }
@@ -1672,23 +1679,26 @@ img {
 
 .landing-finale-inner {
   max-width: 1120px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .landing-finale h2 {
   font-size: clamp(32px, 5vw, 52px);
+  max-width: 36rem;
 }
 
 .landing-finale p {
   color: #c4bfb4;
   margin: 12px 0 24px;
+  max-width: 36rem;
 }
 
 .site-footer {
   max-width: 1120px;
-  margin: 0 auto;
+  margin: 0;
   padding: 32px 24px 48px;
   display: grid;
+  justify-items: start;
   gap: 16px;
 }
 
@@ -1796,7 +1806,8 @@ img {
 @media (max-width: 860px) {
   .landing-hero,
   .landing-steps,
-  .landing-split {
+  .landing-split,
+  .credential-distinction {
     grid-template-columns: 1fr;
     gap: 32px;
   }

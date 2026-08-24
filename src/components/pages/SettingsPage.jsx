@@ -1,4 +1,5 @@
 import { Button, Card } from "../ui/primitives";
+import { ThemeToggle } from "../layout/Navbar";
 import { shortAddress } from "../../utils/learnerStats";
 
 function SettingsPage({
@@ -50,9 +51,7 @@ function SettingsPage({
         <h2>Preferences</h2>
         <div className="settings-row">
           <span>Theme</span>
-          <Button variant="secondary" onClick={onToggleTheme}>
-            {theme === "dark" ? "Use light" : "Use dark"}
-          </Button>
+          <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
         </div>
         <div className="settings-row">
           <span>Reduced motion</span>

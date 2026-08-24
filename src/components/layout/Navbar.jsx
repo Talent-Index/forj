@@ -135,4 +135,4 @@ function Navbar({
 }
 
 export default Navbar;
-export { LOGGED_OUT_LINKS, LOGGED_IN_LINKS, BrandMark };
+export { LOGGED_OUT_LINKS, LOGGED_IN_LINKS, BrandMark, ThemeToggle };
