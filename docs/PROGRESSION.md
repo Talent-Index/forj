@@ -63,10 +63,12 @@ Rules: no duplicate unlock, no spending below zero, no invented piece ids. Compl
 
 ## Leaderboard
 
-An opt-in **preview on this device**. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
+An opt-in **live board** among signed-in learners. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
 
-It is not a league, not on-chain, and not a verified ranking. Client storage is not an authority for competitive standing.
+Standing is derived from the append-only learning event log. One completion per source. Quiz retries do not farm XP. Learners cannot write XP or rank.
+
+It is not a league, not on-chain, and not an issuer-attested ranking. The event log is the authority for this board, not a verified exam.
 
 ## What progression is not
 
-Progression state does not prove an issuer-attested skill. Clients cannot write XP, achievements, or attested credentials as raw totals. Credentials, attestations, issuer signatures, and any future competitive rank need their own authority. See [Credential](./CREDENTIAL.md).
+Progression state does not prove an issuer-attested skill. Clients cannot write XP, achievements, or attested credentials as raw totals. The live board replays the event log; that is still not an attested exam. Credentials, attestations, and issuer signatures need their own authority. See [Credential](./CREDENTIAL.md).

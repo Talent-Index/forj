@@ -13,14 +13,11 @@ import {
   getLongestStreak,
   getLevelProgress,
   getXPHistory,
-  snapshotFromProgression,
-  upsertLeaderboardEntry,
-  removeLeaderboardEntry,
-  readLeaderboard,
-  rankLearners,
+  applyLeaderboardPreference,
 } from "../utils/progression/index.js";
 import { isClientEventType } from "../utils/backend/schema.js";
-import { writeProgressEvent } from "../utils/backend/progressSync.js";
+import { writeProgressEvent, setProgressEventsOptIn } from "../utils/backend/progressSync.js";
+import { readLeaderboardPreference, writeLeaderboardPreference } from "../utils/backend/leaderboardSync.js";
 
 function browserStorage() {
   try {
@@ -53,6 +50,18 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
     setState(loaded);
     setHydrated(true);
     migratedFor.current = id;
+    readLeaderboardPreference(id)
+      .then((pref) => {
+        if (!pref || migratedFor.current !== id || !stateRef.current) return;
+        const next = {
+          ...stateRef.current,
+          leaderboard: { ...stateRef.current.leaderboard, ...pref },
+        };
+        stateRef.current = next;
+        setState(next);
+        store.save(id, next);
+      })
+      .catch(() => {});
     // Hydrate once per learner. Migration is idempotent if called again from dispatch.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- quizSnapshot is read once on account switch
   }, [learnerId, ready, store]);
@@ -61,11 +70,6 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
     const id = progressOwnerId(learnerId);
     if (!id) return;
     store.save(id, next);
-    if (next.leaderboard?.optIn) {
-      upsertLeaderboardEntry(snapshotFromProgression(next, { displayName: next.leaderboard.displayName }));
-    } else {
-      removeLeaderboardEntry(id);
-    }
   }, [learnerId, store]);
 
   const dispatch = useCallback((event, extras = {}) => {
@@ -87,6 +91,7 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
         ...event,
         learnerId: current.learnerId,
         timestamp: event.timestamp ?? Date.now(),
+        optIn: Boolean(result.state.leaderboard?.optIn),
       }).catch(() => {});
     }
     return result;
@@ -127,17 +132,36 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
     sourceId: "credential",
   }, { hasCredential: true }), [dispatch]);
 
-  const setLeaderboardPreference = useCallback((patch) => {
+  const setLeaderboardPreference = useCallback(async (patch) => {
     const current = stateRef.current;
-    if (!current) return;
+    if (!current) return { ok: false, error: "Sign in to continue." };
+    const applied = applyLeaderboardPreference(current.leaderboard, patch, {
+      displayName: patch.displayName || current.leaderboard?.displayName,
+    });
+    if (!applied.ok) return applied;
+    const id = progressOwnerId(learnerId);
+    try {
+      if (applied.preference.optIn) {
+        const written = await writeLeaderboardPreference(id, applied.preference);
+        if (!written.ok) return written;
+        await setProgressEventsOptIn(id, true);
+      } else {
+        await setProgressEventsOptIn(id, false);
+        const written = await writeLeaderboardPreference(id, applied.preference);
+        if (!written.ok) return written;
+      }
+    } catch (error) {
+      return { ok: false, error: error.message || "Could not update the live board." };
+    }
     const next = {
       ...current,
-      leaderboard: { ...current.leaderboard, ...patch },
+      leaderboard: { ...current.leaderboard, ...applied.preference },
     };
     stateRef.current = next;
     setState(next);
     persist(next);
-  }, [persist]);
+    return { ok: true, preference: applied.preference };
+  }, [learnerId, persist]);
 
   const clear = useCallback(() => {
     const id = progressOwnerId(learnerId);
@@ -165,8 +189,6 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
     }, state.achievements)
     : [];
 
-  const board = rankLearners(readLeaderboard(), { window: "global" });
-
   return {
     state,
     hydrated,
@@ -188,6 +210,5 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
     xpHistory: state ? getXPHistory(state) : [],
     streakCurrent: state ? getCurrentStreak(state) : 0,
     streakLongest: state ? getLongestStreak(state) : 0,
-    leaderboard: board,
   };
 }

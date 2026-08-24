@@ -12,7 +12,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | Identity | Account sign-in (email or Google) with progress on the learner account |
 | Learning experience | Partial — onboarding, explanations, dashboard, and structured tracks shipped |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
-| Gamification | Client preview — XP, levels, achievements, streaks, path engine, local leaderboard |
+| Gamification | Live opt-in ranking from an append-only event log; XP, levels, achievements, streaks, path engine |
 | Persistent learner backend | Partial — account-backed progress and wallet linking; issuer ops not shipped |
 | Fuji credential | Live |
 
@@ -54,11 +54,13 @@ Existing browser progress is moved onto the account once, so a returning learner
 
 ## Leaderboard
 
-Opt-in ranking on this device only. Rank uses XP, then path completion, then achievement count, then earlier achievement time. It is not a competitive authority, not on-chain, and not a verified score.
+Opt-in ranking among signed-in learners. Standing is derived from an append-only log of first-time learning events. Learners cannot write XP or rank. Quiz retries do not farm standing.
+
+It is not a league with an issuer, not on-chain, and not a verified exam. A claimed credential remains distinct from this board.
 
 ## Not shipped yet
 
-- Server-computed competitive rankings
+- Server-written XP ledgers (the live board replays the event log; clients still cannot write XP)
 - Question bank managed independently of the app
 - Learning analytics dashboards
 - Production monitoring and alerts

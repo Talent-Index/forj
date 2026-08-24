@@ -1,11 +1,25 @@
 import { getLevel, getXP } from "./xp.js";
 import { getPathProgress } from "./paths.js";
+import { replayEvents } from "./replay.js";
 import { createMemoryStorage } from "../progress.js";
+import { validateRecipientName } from "../recipient.js";
 
 export const LEADERBOARD_STORAGE_KEY = "skillforge.leaderboard.v1";
-export const LEADERBOARD_AUTHORITY = "local-preview";
+export const LEADERBOARD_AUTHORITY = Object.freeze({
+  eventLog: "event-log",
+  localPreview: "local-preview",
+});
 export const LEADERBOARD_DISCLAIMER =
-  "This ranking is a local, client-side preview. It is not a competitive authority, not on-chain, and not a verified score. Anyone with browser storage can change it. A future server can replace this list.";
+  "Standing comes from an append-only log of first-time learning events. Learners cannot write XP or rank. This is not on-chain and not an issuer-attested score.";
+export const LEADERBOARD_PREFERENCE_KEYS = Object.freeze([
+  "schemaVersion",
+  "userId",
+  "optIn",
+  "displayName",
+  "hideWallet",
+  "createdAt",
+  "updatedAt",
+]);
 
 function defaultStorage() {
   try {
@@ -35,6 +49,29 @@ function lastEventTime(state) {
   return Math.max(...events.map((event) => Number(event.timestamp) || 0));
 }
 
+export function applyLeaderboardPreference(current = {}, patch = {}, extras = {}) {
+  const hideWallet = patch.hideWallet != null
+    ? Boolean(patch.hideWallet)
+    : current.hideWallet !== false;
+  const optIn = patch.optIn != null ? Boolean(patch.optIn) : Boolean(current.optIn);
+  const rawName = patch.displayName != null
+    ? patch.displayName
+    : (extras.displayName || current.displayName || "");
+  if (optIn) {
+    const recipient = validateRecipientName(rawName);
+    if (!recipient.ok) return { ok: false, error: recipient.error || "Enter a name to appear on the board." };
+    return {
+      ok: true,
+      preference: { optIn: true, displayName: recipient.name, hideWallet },
+    };
+  }
+  const trimmed = typeof rawName === "string" ? rawName.trim() : "";
+  return {
+    ok: true,
+    preference: { optIn: false, displayName: trimmed.slice(0, 48), hideWallet },
+  };
+}
+
 export function snapshotFromProgression(state, extras = {}) {
   const path = getPathProgress(state);
   const unlocked = Object.values(state?.achievements || {});
@@ -54,8 +91,8 @@ export function snapshotFromProgression(state, extras = {}) {
     completedTracks: { ...(state?.completedTracks || {}) },
     firstAchievementAt: Number.isFinite(firstAchievementAt) ? firstAchievementAt : null,
     lastActivityAt: extras.lastActivityAt || lastEventTime(state),
-    updatedAt: Date.now(),
-    authority: LEADERBOARD_AUTHORITY,
+    updatedAt: extras.updatedAt || Date.now(),
+    authority: extras.authority || LEADERBOARD_AUTHORITY.eventLog,
   };
 }
 
@@ -87,6 +124,40 @@ export function rankLearners(entries, { window = "global", trackId, now = Date.n
     return compareLearners(a, b);
   });
   return list.map((row, index) => ({ ...row, rank: index + 1 }));
+}
+
+export function groupEventsByUser(events) {
+  const map = new Map();
+  for (const event of events || []) {
+    const uid = event.userId || event.learnerId;
+    if (!uid) continue;
+    if (!map.has(uid)) map.set(uid, []);
+    map.get(uid).push(event);
+  }
+  return map;
+}
+
+export function buildLiveLeaderboard(preferences, events, extras = {}) {
+  const grouped = groupEventsByUser(events);
+  const snapshots = (preferences || [])
+    .filter((row) => row && row.optIn && (row.userId || row.learnerId || row.id))
+    .map((row) => {
+      const userId = row.userId || row.learnerId || row.id;
+      const state = replayEvents(userId, grouped.get(userId) || [], extras);
+      return snapshotFromProgression({
+        ...state,
+        leaderboard: {
+          optIn: true,
+          displayName: row.displayName || extras.displayName || "Learner",
+          hideWallet: row.hideWallet !== false,
+        },
+      }, {
+        displayName: row.displayName,
+        authority: LEADERBOARD_AUTHORITY.eventLog,
+        now: extras.now,
+      });
+    });
+  return rankLearners(snapshots, extras);
 }
 
 export function readLeaderboard(storage = defaultStorage()) {

@@ -6,50 +6,72 @@ import {
   query,
   setDoc,
   where,
+  writeBatch,
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { emptyProgress, sanitizeProgress } from "../progress";
-import { applyProgressEvent, emptyProgression, EVENT_TYPES } from "../progression";
+import { replayEvents } from "../progression/replay";
 import {
-  CLIENT_EVENT_TYPES,
   COLLECTIONS,
   SCHEMA_VERSION,
   isClientEventType,
   progressEventDocId,
+  sanitizeProgressEventSourceId,
 } from "./schema";
+import { FIRESTORE_TIMEOUT_MS, withTimeout } from "./timeout";
 
 function eventPayload(userId, event) {
+  const sourceId = sanitizeProgressEventSourceId(event.sourceId);
   return {
     schemaVersion: SCHEMA_VERSION,
     userId,
     type: event.type,
-    sourceId: String(event.sourceId ?? ""),
-    eventKey: `${event.type}:${String(event.sourceId ?? "")}`,
+    sourceId,
+    eventKey: `${event.type}:${sourceId}`,
     metadata: event.metadata && typeof event.metadata === "object" ? event.metadata : {},
     clientTimestamp: Number(event.timestamp) || Date.now(),
+    optIn: Boolean(event.optIn),
     createdAt: serverTimestamp(),
   };
 }
 
 export async function writeProgressEvent(userId, event) {
   if (!userId || !event?.type || !isClientEventType(event.type)) return { ok: false, duplicate: false };
-  const id = progressEventDocId(userId, event.type, event.sourceId);
+  const sourceId = sanitizeProgressEventSourceId(event.sourceId);
+  const id = progressEventDocId(userId, event.type, sourceId);
   const ref = doc(db, COLLECTIONS.progressEvents, id);
-  const existing = await getDoc(ref);
+  const existing = await withTimeout(getDoc(ref), FIRESTORE_TIMEOUT_MS);
   if (existing.exists()) return { ok: true, duplicate: true };
-  await setDoc(ref, eventPayload(userId, event));
+  await withTimeout(setDoc(ref, eventPayload(userId, { ...event, sourceId })), FIRESTORE_TIMEOUT_MS);
   return { ok: true, duplicate: false };
 }
 
 export async function readProgressEvents(userId) {
-  const snap = await getDocs(query(
+  const snap = await withTimeout(getDocs(query(
     collection(db, COLLECTIONS.progressEvents),
     where("userId", "==", userId)
-  ));
+  )), FIRESTORE_TIMEOUT_MS);
   return snap.docs
     .map((item) => item.data())
     .sort((a, b) => Number(a.clientTimestamp || 0) - Number(b.clientTimestamp || 0));
+}
+
+export async function setProgressEventsOptIn(userId, optIn) {
+  const snap = await withTimeout(getDocs(query(
+    collection(db, COLLECTIONS.progressEvents),
+    where("userId", "==", userId)
+  )), FIRESTORE_TIMEOUT_MS);
+  const flag = Boolean(optIn);
+  const refs = snap.docs.filter((item) => item.data()?.optIn !== flag).map((item) => item.ref);
+  for (let i = 0; i < refs.length; i += 400) {
+    const batch = writeBatch(db);
+    for (const ref of refs.slice(i, i + 400)) {
+      batch.update(ref, { optIn: flag });
+    }
+    await withTimeout(batch.commit(), FIRESTORE_TIMEOUT_MS);
+  }
+  return { ok: true, updated: refs.length };
 }
 
 export async function writeQuizProgress(userId, snapshot) {
@@ -77,20 +99,7 @@ export async function readQuizProgress(userId) {
   return sanitizeProgress(snap.data());
 }
 
-export function replayEvents(userId, events, extras = {}) {
-  let state = emptyProgression(userId);
-  for (const raw of events) {
-    if (!CLIENT_EVENT_TYPES.includes(raw.type) && !EVENT_TYPES[raw.type]) continue;
-    state = applyProgressEvent(state, {
-      type: raw.type,
-      sourceId: raw.sourceId,
-      learnerId: userId,
-      timestamp: raw.clientTimestamp,
-      metadata: raw.metadata,
-    }, extras).state;
-  }
-  return state;
-}
+export { replayEvents };
 
 export async function writeAnalyticsEvent(userId, type, payload = {}) {
   await setDoc(doc(collection(db, COLLECTIONS.analyticsEvents)), {

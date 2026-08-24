@@ -9,7 +9,7 @@
 | 1 | Foundation & correctness | Complete |
 | 2 | Learning experience | Partial |
 | 3 | Credential system | Partial — contract live on Fuji |
-| 4 | Gamification | Client preview |
+| 4 | Gamification | Live ranking from the event log |
 | 5 | Avalanche tracks | Initial tracks shipped |
 | 6 | Attestation ops | Planned |
 | 7 | Infrastructure | Partial — account-backed learner persistence |
@@ -44,11 +44,11 @@ Shipped: credential model, soulbound metadata, claimed vs attested, owner-signed
 
 Remaining: issuer-key operations, attested mint in the learner UI, versioning and revocation.
 
-## Phase 4 — Gamification ✅ *Client preview*
+## Phase 4 — Gamification ✅ *Live ranking*
 
-Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle and certificate reveal, opt-in local leaderboard.
+Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle and certificate reveal, opt-in live ranking from the append-only event log.
 
-Remaining: server-backed rankings and multi-device sync. Client rank is not a competitive authority.
+Remaining: a persisted XP ledger written only by a trusted service. Rank is not issuer-attested and not on-chain.
 
 ## Phase 5 — Avalanche tracks ✅ *Initial*
 
@@ -64,7 +64,7 @@ Keep claimed and attested distinct. Add issuer accounts, an issuer dashboard, or
 
 Shipped: learner accounts persist progress, quiz state, and puzzle state beyond a single browser. Wallets link to the account without becoming the account.
 
-Remaining: question management, learning analytics, production monitoring, and treating derived XP/rankings as a trusted service rather than a device cache.
+Remaining: question management, learning analytics, production monitoring, and a trusted writer for XP ledgers. Live rank already replays the append-only event log; clients cannot write XP or rank.
 
 ## Phase 8 — Security 🟡
 

@@ -79,11 +79,17 @@ export {
   LEADERBOARD_STORAGE_KEY,
   LEADERBOARD_AUTHORITY,
   LEADERBOARD_DISCLAIMER,
+  LEADERBOARD_PREFERENCE_KEYS,
+  applyLeaderboardPreference,
   snapshotFromProgression,
   compareLearners,
   rankLearners,
+  groupEventsByUser,
+  buildLiveLeaderboard,
   readLeaderboard,
   upsertLeaderboardEntry,
   removeLeaderboardEntry,
   startOfUtcWeek,
 } from "./leaderboard.js";
+
+export { replayEvents } from "./replay.js";

@@ -35,8 +35,14 @@ service cloud.firestore {
     // Does NOT store XP, levels, or attested credentials.
     //
     // Collection: progressEvents
-    // Document ID: {uid}_{type}_{sourceId}
-    // Primitive learning events. Create-only by owner. No XP fields.
+    // Document ID: {uid}_{type}_{sourceId} (immutable, one completion per source)
+    // Primitive learning events. Create-only scoring payload. Owner may toggle
+    // optIn so the event can appear on the live board. No XP fields.
+    //
+    // Collection: leaderboardPreferences
+    // Document ID: uid
+    // Opt-in, display name, hideWallet only. No XP, level, or rank.
+    // Authenticated read when optIn is true. Owner create/update. No delete.
     //
     // Collection: wallets
     // Document ID: lowercase 0x address
@@ -181,14 +187,59 @@ service cloud.firestore {
         && !('attested' in data);
     }
 
+    function isValidLeaderboardPreference(data) {
+      return requiredKeys([
+          'schemaVersion', 'userId', 'optIn', 'displayName', 'hideWallet',
+          'createdAt', 'updatedAt'
+        ])
+        && hasOnlyAllowedFields([
+          'schemaVersion', 'userId', 'optIn', 'displayName', 'hideWallet',
+          'createdAt', 'updatedAt'
+        ])
+        && data.schemaVersion is int && data.schemaVersion == 1
+        && data.userId == request.auth.uid
+        && data.optIn is bool
+        && data.displayName is string && data.displayName.size() <= 48
+        && (!data.optIn || data.displayName.size() >= 2)
+        && data.hideWallet is bool
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp
+        && !('xp' in data)
+        && !('level' in data)
+        && !('rank' in data)
+        && !('weeklyXp' in data)
+        && !('achievementCount' in data)
+        && !('completionPercent' in data);
+    }
+
+    function progressEventIdMatches(eventId, data) {
+      return eventId == data.userId + '_' + data.type + '_' + data.sourceId
+        && data.sourceId.matches('^[a-zA-Z0-9._-]{1,120}$')
+        && data.eventKey == data.type + ':' + data.sourceId;
+    }
+
+    function validEventSource(data) {
+      return (data.type in ['QUIZ_STARTED', 'QUIZ_COMPLETED']
+          && data.sourceId in ['easy', 'medium', 'hard'])
+        || (data.type == 'LESSON_COMPLETED' && data.sourceId.size() > 0)
+        || (data.type == 'PUZZLE_PIECE_UNLOCKED'
+          && data.sourceId.matches('^piece-([0-9]|1[0-5])$'))
+        || (data.type == 'CREDENTIAL_CLAIMED' && data.sourceId == 'credential');
+    }
+
+    function optedIntoLeaderboard() {
+      return exists(/databases/$(database)/documents/leaderboardPreferences/$(request.auth.uid))
+        && get(/databases/$(database)/documents/leaderboardPreferences/$(request.auth.uid)).data.optIn == true;
+    }
+
     function isValidProgressEvent(data) {
       return requiredKeys([
           'schemaVersion', 'userId', 'type', 'sourceId', 'eventKey',
-          'metadata', 'clientTimestamp', 'createdAt'
+          'metadata', 'clientTimestamp', 'optIn', 'createdAt'
         ])
         && hasOnlyAllowedFields([
           'schemaVersion', 'userId', 'type', 'sourceId', 'eventKey',
-          'metadata', 'clientTimestamp', 'createdAt'
+          'metadata', 'clientTimestamp', 'optIn', 'createdAt'
         ])
         && data.schemaVersion is int && data.schemaVersion == 1
         && data.userId == request.auth.uid
@@ -196,11 +247,15 @@ service cloud.firestore {
           'QUIZ_STARTED', 'QUIZ_COMPLETED', 'LESSON_COMPLETED',
           'PUZZLE_PIECE_UNLOCKED', 'CREDENTIAL_CLAIMED'
         ]
+        && validEventSource(data)
         && data.sourceId is string && data.sourceId.size() > 0 && data.sourceId.size() <= 120
         && data.eventKey is string && data.eventKey.size() <= 160
         && data.metadata is map
+        && data.metadata.keys().size() <= 12
         && !('xp' in data.metadata)
         && !('level' in data.metadata)
+        && !('rank' in data.metadata)
+        && data.optIn is bool
         && data.clientTimestamp is int
         && data.createdAt is timestamp;
     }
@@ -260,6 +315,16 @@ service cloud.firestore {
       allow delete: if isOwner(userId);
     }
 
+    match /leaderboardPreferences/{userId} {
+      allow read: if isAuthenticated() && (isOwner(userId) || resource.data.optIn == true);
+      allow create: if isOwner(userId) && isValidLeaderboardPreference(request.resource.data) && uidUnchanged(userId);
+      allow update: if isOwner(userId)
+        && isValidLeaderboardPreference(request.resource.data)
+        && userIdImmutable()
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if false;
+    }
+
     match /quizProgress/{userId} {
       allow read: if isOwner(userId);
       allow create, update: if isOwner(userId)
@@ -269,11 +334,19 @@ service cloud.firestore {
     }
 
     match /progressEvents/{eventId} {
-      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow read: if isAuthenticated()
+        && (resource.data.userId == request.auth.uid || resource.data.optIn == true);
       allow create: if isAuthenticated()
         && isValidProgressEvent(request.resource.data)
-        && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if false;
+        && request.resource.data.userId == request.auth.uid
+        && progressEventIdMatches(eventId, request.resource.data)
+        && (!request.resource.data.optIn || optedIntoLeaderboard());
+      allow update: if isAuthenticated()
+        && resource.data.userId == request.auth.uid
+        && isValidProgressEvent(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['optIn'])
+        && (!request.resource.data.optIn || optedIntoLeaderboard());
+      allow delete: if false;
     }
 
     match /wallets/{walletId} {

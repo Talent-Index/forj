@@ -22,7 +22,7 @@ Learning does not require a wallet. A wallet is needed only to mint or look up a
 - **XP and levels** from real completions, not quiz retries.
 - **Achievements** and **streaks** from the same learning events.
 - A **true interlocking puzzle**, not square tiles pretending to be pieces.
-- A **local leaderboard preview** (opt-in). It is not a competitive authority and not on-chain.
+- An opt-in **live leaderboard**. Standing is derived from an append-only event log. It is not issuer-attested and not on-chain.
 
 ## Credentials, honestly
 

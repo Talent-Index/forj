@@ -191,7 +191,7 @@ assert.equal(compareLearners(
 ) > 0, true);
 
 const snap = snapshotFromProgression(state, { displayName: "Ada" });
-assert.equal(snap.authority, "local-preview");
+assert.equal(snap.authority, "event-log");
 assert.equal(snap.optIn, false);
 
 // --- Account isolation ---

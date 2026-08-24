@@ -475,7 +475,10 @@ function App() {
         <LeaderboardPage
           learnerId={ownerId}
           progression={progression}
-          onToggleOptIn={(optIn) => progression.setLeaderboardPreference({ optIn, displayName: account?.name || "Learner" })}
+          onToggleOptIn={(optIn) => progression.setLeaderboardPreference({
+            optIn,
+            displayName: account?.name || progression.state?.leaderboard?.displayName || "Learner",
+          })}
           onLearn={goLearnHome}
         />
       );

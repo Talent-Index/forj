@@ -1,8 +1,9 @@
 /**
  * SkillForge backend collections (#35–#42).
  * Client may write only learner-owned profile, quiz cache, primitive events,
- * analytics (no PII), and a first-time wallet link.
- * XP, achievements, credentials, questions, and issuer records are not client-writable.
+ * leaderboard opt-in, analytics (no PII), and a first-time wallet link.
+ * XP, achievements, credentials, questions, rank totals, and issuer records
+ * are not client-writable. Leaderboard standing is derived from the event log.
  */
 export const SCHEMA_VERSION = 1;
 
@@ -13,6 +14,7 @@ export const COLLECTIONS = Object.freeze({
   walletEvents: "walletEvents",
   quizProgress: "quizProgress",
   progressEvents: "progressEvents",
+  leaderboardPreferences: "leaderboardPreferences",
   xpTransactions: "xpTransactions",
   achievements: "achievements",
   streaks: "streaks",
@@ -87,8 +89,12 @@ export function isClientEventType(type) {
   return CLIENT_EVENT_TYPES.includes(type);
 }
 
+export function sanitizeProgressEventSourceId(sourceId) {
+  return String(sourceId ?? "").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120);
+}
+
 export function progressEventDocId(userId, type, sourceId) {
-  const source = String(sourceId ?? "").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120);
+  const source = sanitizeProgressEventSourceId(sourceId);
   return `${userId}_${type}_${source}`.slice(0, 700);
 }
 
