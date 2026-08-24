@@ -128,6 +128,7 @@ function Certificate({
 
       setMintTx(hash);
       playFinishSound();
+      onClaimed?.();
       await loadOnChainCredential();
     } catch (err) {
       setMintError(err.displayMessage || err.shortMessage || err.message || "Mint failed");

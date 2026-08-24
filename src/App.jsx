@@ -4,6 +4,7 @@ import { useTheme } from "./hooks/useTheme";
 import { useZoom } from "./hooks/useZoom";
 import { useWalletModal } from "./hooks/useWalletModal";
 import { useAuth } from "./hooks/useAuth";
+import { useProgression } from "./hooks/useProgression";
 import AppShell from "./components/layout/AppShell";
 import SectionSelect from "./components/SectionSelect";
 import Quiz from "./components/Quiz";
@@ -16,6 +17,8 @@ import EmptyState from "./components/EmptyState";
 import AboutPage from "./components/pages/AboutPage";
 import SettingsPage from "./components/pages/SettingsPage";
 import ProgressPage from "./components/pages/ProgressPage";
+import LearnPage from "./components/pages/LearnPage";
+import LeaderboardPage from "./components/pages/LeaderboardPage";
 import CredentialLookupPage from "./components/pages/CredentialLookupPage";
 import AuthModal, { ProfileSetup, WalletOptional } from "./components/auth/AuthModal";
 import forgeCertificate from "./assets/forge-certificate.jpg";
@@ -88,6 +91,11 @@ function App() {
   const isAuthenticated = Boolean(account?.emailVerified);
   const progressReady = Boolean(ownerId && hydratedOwner === ownerId);
   const stage = auth.stage;
+  const progression = useProgression(ownerId, {
+    sectionScores,
+    acquiredPieces,
+    attempts,
+  }, { ready: progressReady });
 
   const applyProgress = useCallback((snapshot) => {
     const next = snapshot || emptyProgress();
@@ -202,6 +210,7 @@ function App() {
       prev.includes(result.sectionId) ? prev : [...prev, result.sectionId]
     );
     setAttempts((prev) => [...prev, result]);
+    progression.completeQuiz(result);
   }, []);
 
   const handleAcquirePiece = useCallback((index) => {
