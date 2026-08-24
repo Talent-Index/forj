@@ -46,7 +46,7 @@ Remaining: issuer-key operations, attested mint in the learner UI, versioning an
 
 ## Phase 4 — Gamification ✅ *Live ranking*
 
-Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle and certificate reveal, opt-in live ranking from the append-only event log.
+Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle and certificate reveal, default-on live ranking from the append-only event log (learners can hide).
 
 Remaining: a persisted XP ledger written only by a trusted service. Rank is not issuer-attested and not on-chain.
 
