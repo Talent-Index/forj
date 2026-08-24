@@ -11,7 +11,9 @@
 | 3 | Credential system | Partial — contract live on Fuji |
 | 4 | Gamification | Client preview |
 | 5 | Avalanche tracks | Initial tracks shipped |
-| 6–10 | Attestation ops → ecosystem | Planned |
+| 6 | Attestation ops | Planned |
+| 7 | Infrastructure | Partial — account-backed learner persistence |
+| 8–10 | Security → ecosystem | Planned |
 
 ```mermaid
 flowchart LR
@@ -58,9 +60,11 @@ Remaining: more depth, specialized audiences, and a fuller knowledge graph.
 
 Keep claimed and attested distinct. Add issuer accounts, an issuer dashboard, organization issuance, and clearer provenance for third parties.
 
-## Phase 7 — Infrastructure
+## Phase 7 — Infrastructure 🟡
 
-Move critical learner state off the browser. Sync progress, question quality, and content without treating localStorage as authority for credentials or rankings.
+Shipped: learner accounts persist progress, quiz state, and puzzle state beyond a single browser. Wallets link to the account without becoming the account.
+
+Remaining: question management, learning analytics, production monitoring, and treating derived XP/rankings as a trusted service rather than a device cache.
 
 ## Phase 8 — Security 🟡
 

@@ -19,6 +19,8 @@ import {
   readLeaderboard,
   rankLearners,
 } from "../utils/progression/index.js";
+import { isClientEventType } from "../utils/backend/schema.js";
+import { writeProgressEvent } from "../utils/backend/progressSync.js";
 
 function browserStorage() {
   try {
@@ -80,6 +82,13 @@ export function useProgression(learnerId, quizSnapshot, { ready = false } = {}) 
     setState(result.state);
     setFeedback(result.feedback);
     persist(result.state);
+    if (result.applied && isClientEventType(event.type)) {
+      writeProgressEvent(current.learnerId, {
+        ...event,
+        learnerId: current.learnerId,
+        timestamp: event.timestamp ?? Date.now(),
+      }).catch(() => {});
+    }
     return result;
   }, [persist]);
 

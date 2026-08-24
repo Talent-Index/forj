@@ -39,7 +39,7 @@ Anyone can open a credential by ID or by holder wallet, with a shareable URL and
 
 - One **current** credential per wallet. Minting again replaces the previous token.  
 - The attested flag on a given token does not flip from claimed to attested.  
-- There is no revocation in this version.  
+- There is no revocation in this version. A future issuer lifecycle will mark credentials revoked or superseded without erasing the historical record.  
 - This is not a proctored exam credential.
 
 ## Trust

@@ -1,161 +1,307 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { createAuthStore, onboardingStage } from "../utils/auth";
-import { createMemoryStorage } from "../utils/progress";
+import { useCallback, useEffect, useState } from "react";
+import {
+  GoogleAuthProvider,
+  applyActionCode,
+  confirmPasswordReset,
+  createUserWithEmailAndPassword,
+  deleteUser,
+  EmailAuthProvider,
+  onAuthStateChanged,
+  reauthenticateWithCredential,
+  reload,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut as firebaseSignOut,
+  updateEmail,
+  updatePassword,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../firebase";
+import {
+  LEARNING_GOALS,
+  MIN_PASSWORD_LENGTH,
+  isValidEmail,
+  normalizeEmail,
+  onboardingStage,
+  passwordIssue,
+} from "../utils/auth";
+import { mapAuthError } from "../utils/backend/authErrors";
+import {
+  ensureLearnerDocuments,
+  linkWalletRecord,
+  patchLearnerProfile,
+  profileFromDoc,
+  readLearnerProfile,
+  unlinkWalletRecord,
+} from "../utils/backend/learner";
+import { validateRecipientName } from "../utils/recipient";
 
-function storage() {
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
+
+function actionUrl() {
   try {
-    if (typeof localStorage !== "undefined") return localStorage;
+    return `${window.location.origin}/`;
   } catch {
-    // Ignore blocked storage.
+    return undefined;
   }
-  return createMemoryStorage();
 }
 
-function decodeJwtPayload(token) {
+async function safeProfile(user) {
   try {
-    const payload = token.split(".")[1];
-    const padded = payload.replace(/-/g, "+").replace(/_/g, "/");
-    return JSON.parse(atob(padded));
+    return await ensureLearnerDocuments(user);
   } catch {
-    return null;
-  }
-}
-
-function googleClientId() {
-  try {
-    return import.meta.env?.VITE_GOOGLE_CLIENT_ID || "";
-  } catch {
-    return "";
-  }
-}
-
-let gisPromise = null;
-
-function loadGoogleIdentity() {
-  if (typeof window === "undefined") return Promise.reject(new Error("Google sign-in needs a browser."));
-  if (window.google?.accounts?.id) return Promise.resolve(window.google);
-  if (gisPromise) return gisPromise;
-  gisPromise = new Promise((resolve, reject) => {
-    const existing = document.querySelector("script[data-google-identity]");
-    if (existing) {
-      existing.addEventListener("load", () => resolve(window.google));
-      existing.addEventListener("error", () => reject(new Error("Google sign-in failed to load.")));
-      return;
+    try {
+      return await readLearnerProfile(user);
+    } catch {
+      return profileFromDoc(user, {});
     }
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.dataset.googleIdentity = "true";
-    script.onload = () => resolve(window.google);
-    script.onerror = () => reject(new Error("Google sign-in failed to load."));
-    document.head.appendChild(script);
-  });
-  return gisPromise;
+  }
 }
 
 export function useAuth() {
-  const store = useMemo(() => createAuthStore(storage()), []);
   const [account, setAccount] = useState(null);
+  const [user, setUser] = useState(null);
   const [restoring, setRestoring] = useState(true);
 
-  useEffect(() => {
-    setAccount(store.currentAccount());
-    setRestoring(false);
-  }, [store]);
-
-  const refresh = useCallback((result) => {
-    if (result && result.ok === false) return result;
-    const next = result?.account !== undefined ? result.account : store.currentAccount();
-    setAccount(next);
-    return result ? { ...result, account: next } : { ok: true, account: next };
-  }, [store]);
-
-  const registerWithEmail = useCallback((input) => store.registerWithEmail(input).then(refresh), [refresh, store]);
-  const signInWithEmail = useCallback((input) => store.signInWithEmail(input).then(refresh), [refresh, store]);
-  const signInWithGoogle = useCallback((input) => refresh(store.signInWithGoogle(input)), [refresh, store]);
-  const verifyEmail = useCallback((token) => refresh(store.verifyEmail(token)), [refresh, store]);
-  const resendVerification = useCallback((email) => refresh(store.resendVerification(email)), [refresh, store]);
-  const requestPasswordReset = useCallback((email) => store.requestPasswordReset(email), [store]);
-  const resetPassword = useCallback((input) => store.resetPassword(input), [store]);
-  const changePassword = useCallback(
-    (input) => store.changePassword(account?.id, input).then(refresh),
-    [account?.id, refresh, store]
-  );
-  const setPassword = useCallback(
-    (input) => store.setPassword(account?.id, input).then(refresh),
-    [account?.id, refresh, store]
-  );
-  const completeProfile = useCallback(
-    (input) => refresh(store.completeProfile(account?.id, input)),
-    [account?.id, refresh, store]
-  );
-  const updateProfile = useCallback(
-    (input) => refresh(store.updateProfile(account?.id, input)),
-    [account?.id, refresh, store]
-  );
-  const updateAvatar = useCallback(
-    (avatarUrl) => refresh(store.updateAvatar(account?.id, avatarUrl)),
-    [account?.id, refresh, store]
-  );
-  const dismissWalletPrompt = useCallback(
-    () => refresh(store.dismissWalletPrompt(account?.id)),
-    [account?.id, refresh, store]
-  );
-  const linkWallet = useCallback(
-    (address) => refresh(store.linkWallet(account?.id, address)),
-    [account?.id, refresh, store]
-  );
-  const unlinkWallet = useCallback(
-    () => refresh(store.unlinkWallet(account?.id)),
-    [account?.id, refresh, store]
-  );
-  const changeEmail = useCallback(
-    (email) => refresh(store.changeEmail(account?.id, email)),
-    [account?.id, refresh, store]
-  );
-  const signOut = useCallback(() => refresh(store.signOut()), [refresh, store]);
-
-  const continueWithGoogle = useCallback(async (fallbackIdentity) => {
-    const clientId = googleClientId();
-    if (!clientId) {
-      if (fallbackIdentity?.email) return signInWithGoogle(fallbackIdentity);
-      return { ok: false, error: "google-fallback", clientIdMissing: true };
+  const hydrate = useCallback(async (nextUser) => {
+    if (!nextUser) {
+      setUser(null);
+      setAccount(null);
+      return null;
     }
-    const google = await loadGoogleIdentity();
-    return new Promise((resolve) => {
-      google.accounts.id.initialize({
-        client_id: clientId,
-        callback: (response) => {
-          const payload = decodeJwtPayload(response.credential);
-          if (!payload?.email) {
-            resolve({ ok: false, error: "Google did not return an email." });
-            return;
-          }
-          resolve(signInWithGoogle({
-            email: payload.email,
-            name: payload.name || "",
-            googleId: payload.sub || "",
-            avatarUrl: payload.picture || "",
-          }));
-        },
-      });
-      google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          resolve({ ok: false, error: "google-fallback", clientIdMissing: false });
-        }
-      });
+    const profile = await safeProfile(nextUser);
+    setUser(nextUser);
+    setAccount(profile);
+    return profile;
+  }, []);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (nextUser) => {
+      await hydrate(nextUser);
+      setRestoring(false);
     });
-  }, [signInWithGoogle]);
+    return () => unsub();
+  }, [hydrate]);
+
+  const refreshUser = useCallback(async () => {
+    if (!auth.currentUser) return { ok: true, account: null };
+    await reload(auth.currentUser);
+    const profile = await hydrate(auth.currentUser);
+    return { ok: true, account: profile };
+  }, [hydrate]);
+
+  const registerWithEmail = useCallback(async ({ name, email, password, confirmPassword }) => {
+    const recipient = validateRecipientName(name);
+    if (!recipient.ok) return { ok: false, error: recipient.error };
+    const normalized = normalizeEmail(email);
+    if (!isValidEmail(normalized)) return { ok: false, error: "Enter a valid email address." };
+    const issue = passwordIssue(password, confirmPassword);
+    if (issue) return { ok: false, error: issue };
+    try {
+      const credential = await createUserWithEmailAndPassword(auth, normalized, password);
+      await updateProfile(credential.user, { displayName: recipient.name });
+      const profile = await safeProfile(credential.user);
+      await patchLearnerProfile(credential.user.uid, { name: recipient.name }).catch(() => {});
+      await sendEmailVerification(credential.user, { url: actionUrl() });
+      const accountState = { ...profile, name: recipient.name, emailVerified: false };
+      setAccount(accountState);
+      return { ok: true, account: accountState };
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, []);
+
+  const signInWithEmail = useCallback(async ({ email, password }) => {
+    try {
+      const credential = await signInWithEmailAndPassword(auth, normalizeEmail(email), password);
+      const profile = await hydrate(credential.user);
+      return { ok: true, account: profile };
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [hydrate]);
+
+  const continueWithGoogle = useCallback(async () => {
+    try {
+      const credential = await signInWithPopup(auth, googleProvider);
+      const profile = await hydrate(credential.user);
+      return { ok: true, account: profile };
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error), code: error.code };
+    }
+  }, [hydrate]);
+
+  const verifyEmail = useCallback(async (oobCode) => {
+    try {
+      if (oobCode) await applyActionCode(auth, oobCode);
+      else if (auth.currentUser) {
+        await reload(auth.currentUser);
+        if (!auth.currentUser.emailVerified) {
+          return { ok: false, error: "Open the verification link from your email to continue." };
+        }
+      }
+      return refreshUser();
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [refreshUser]);
+
+  const resendVerification = useCallback(async () => {
+    try {
+      if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
+      await sendEmailVerification(auth.currentUser, { url: actionUrl() });
+      return { ok: true, account };
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [account]);
+
+  const requestPasswordReset = useCallback(async (email) => {
+    try {
+      await sendPasswordResetEmail(auth, normalizeEmail(email), { url: actionUrl() });
+      return { ok: true };
+    } catch (error) {
+      if (error.code === "auth/user-not-found") return { ok: true };
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, []);
+
+  const resetPassword = useCallback(async ({ oobCode, password, confirmPassword }) => {
+    const issue = passwordIssue(password, confirmPassword);
+    if (issue) return { ok: false, error: issue };
+    try {
+      await confirmPasswordReset(auth, oobCode, password);
+      return { ok: true };
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, []);
+
+  const changePassword = useCallback(async ({ currentPassword, password, confirmPassword }) => {
+    const issue = passwordIssue(password, confirmPassword);
+    if (issue) return { ok: false, error: issue };
+    try {
+      if (!auth.currentUser?.email) return { ok: false, error: "Sign in to continue." };
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, currentPassword);
+      await reauthenticateWithCredential(auth.currentUser, credential);
+      await updatePassword(auth.currentUser, password);
+      return refreshUser();
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [refreshUser]);
+
+  const setPassword = useCallback(async ({ password, confirmPassword }) => {
+    const issue = passwordIssue(password, confirmPassword);
+    if (issue) return { ok: false, error: issue };
+    try {
+      await updatePassword(auth.currentUser, password);
+      return refreshUser();
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [refreshUser]);
+
+  const completeProfile = useCallback(async ({ name, learningGoal = "", avatarUrl } = {}) => {
+    const recipient = validateRecipientName(name);
+    if (!recipient.ok) return { ok: false, error: recipient.error };
+    if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
+    const goal = LEARNING_GOALS.some((item) => item.id === learningGoal) ? learningGoal : "";
+    try {
+      await updateProfile(auth.currentUser, { displayName: recipient.name });
+      await patchLearnerProfile(auth.currentUser.uid, {
+        name: recipient.name,
+        learningGoal: goal,
+        profileComplete: true,
+        avatarUrl: avatarUrl == null ? account?.avatarUrl || "" : avatarUrl,
+      });
+      return refreshUser();
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [account, refreshUser]);
+
+  const updateLearnerProfile = useCallback(async (patch) => {
+    if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
+    try {
+      if (patch.name) await updateProfile(auth.currentUser, { displayName: patch.name });
+      await patchLearnerProfile(auth.currentUser.uid, patch);
+      return refreshUser();
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [refreshUser]);
+
+  const updateAvatar = useCallback((avatarUrl) => updateLearnerProfile({ avatarUrl: avatarUrl || "" }), [updateLearnerProfile]);
+
+  const dismissWalletPrompt = useCallback(() => updateLearnerProfile({ walletPromptSeen: true }), [updateLearnerProfile]);
+
+  const linkWallet = useCallback(async (address) => {
+    if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
+    try {
+      const result = await linkWalletRecord(auth.currentUser.uid, address);
+      if (!result.ok) return result;
+      return refreshUser();
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [refreshUser]);
+
+  const unlinkWallet = useCallback(async () => {
+    if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
+    try {
+      await unlinkWalletRecord(auth.currentUser.uid, account?.walletAddress);
+      return refreshUser();
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [account, refreshUser]);
+
+  const changeEmail = useCallback(async (email) => {
+    const normalized = normalizeEmail(email);
+    if (!isValidEmail(normalized)) return { ok: false, error: "Enter a valid email address." };
+    try {
+      await updateEmail(auth.currentUser, normalized);
+      await sendEmailVerification(auth.currentUser, { url: actionUrl() });
+      return refreshUser();
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, [refreshUser]);
+
+  const signOut = useCallback(async () => {
+    await firebaseSignOut(auth);
+    setAccount(null);
+    setUser(null);
+    return { ok: true, account: null };
+  }, []);
+
+  const deleteAccount = useCallback(async () => {
+    try {
+      if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
+      await deleteUser(auth.currentUser);
+      setAccount(null);
+      setUser(null);
+      return { ok: true, account: null };
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) };
+    }
+  }, []);
 
   return {
     account,
+    user,
     restoring,
     stage: onboardingStage(account),
     isAuthenticated: Boolean(account?.emailVerified),
-    googleConfigured: Boolean(googleClientId()),
+    googleConfigured: true,
+    minPasswordLength: MIN_PASSWORD_LENGTH,
     registerWithEmail,
     signInWithEmail,
-    signInWithGoogle,
+    signInWithGoogle: continueWithGoogle,
     continueWithGoogle,
     verifyEmail,
     resendVerification,
@@ -164,12 +310,14 @@ export function useAuth() {
     changePassword,
     setPassword,
     completeProfile,
-    updateProfile,
+    updateProfile: updateLearnerProfile,
     updateAvatar,
     dismissWalletPrompt,
     linkWallet,
     unlinkWallet,
     changeEmail,
     signOut,
+    deleteAccount,
+    refreshUser,
   };
 }

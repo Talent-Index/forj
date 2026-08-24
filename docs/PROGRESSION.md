@@ -14,8 +14,9 @@ UI never invents XP or streak by itself. Completions become **progress events**.
 
 Progress belongs to the **learner account**, not the wallet.
 
-- Learn without connecting a wallet.
-- Connect a wallet only to mint or inspect an on-chain credential.
+- Sign in with email or Google. Learn without connecting a wallet.
+- Progress follows the account across devices. A browser cache is only a working copy.
+- Connect a wallet only to mint or inspect an on-chain credential. A wallet cannot be linked to two accounts at once.
 - Changing wallets does not transfer another account’s XP or puzzle.
 - Signing out does not leave the next person with your streak.
 
@@ -68,4 +69,4 @@ It is not a league, not on-chain, and not a verified ranking. Client storage is 
 
 ## What progression is not
 
-Progression state does not prove an issuer-attested skill. Credentials, attestations, and any future competitive rank need their own authority. See [Credential](./CREDENTIAL.md).
+Progression state does not prove an issuer-attested skill. Clients cannot write XP, achievements, or attested credentials as raw totals. Credentials, attestations, issuer signatures, and any future competitive rank need their own authority. See [Credential](./CREDENTIAL.md).

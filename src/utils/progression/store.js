@@ -9,8 +9,8 @@ import {
 export function progressionStorageKey(ownerId, version = PROGRESSION_VERSION) {
   const id = progressOwnerId(ownerId);
   if (!id) return null;
-  if (id.startsWith("acc_")) return `skillforge.progression.v${version}.account.${id}`;
-  return `skillforge.progression.v${version}.${id}`;
+  if (id.startsWith("0x")) return `skillforge.progression.v${version}.${id}`;
+  return `skillforge.progression.v${version}.account.${id}`;
 }
 
 function defaultStorage() {

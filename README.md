@@ -17,7 +17,7 @@ Learning does not require a wallet. A wallet is needed only to mint or look up a
 
 ## What learners get
 
-- An **account** that holds progress. A wallet is optional until mint.
+- An **account** (email or Google) that holds progress across devices. A wallet is optional until mint.
 - **Six Avalanche tracks:** Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, and Developer.
 - **XP and levels** from real completions, not quiz retries.
 - **Achievements** and **streaks** from the same learning events.

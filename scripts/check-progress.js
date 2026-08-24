@@ -116,4 +116,9 @@ assert.equal(store.load(ACCOUNT_ID).recipientName, "Dana Learner");
 assert.equal(store.load(WALLET_B).sectionScores.hard.pointsEarned, 8);
 assert.equal(store.load(ACCOUNT_ID).sectionScores.easy.correct, 4);
 
+const FIREBASE_UID = "SkillForgeUid0123456789abcd";
+assert.equal(progressStorageKey(FIREBASE_UID), `skillforge.progress.v${STORAGE_VERSION}.account.${FIREBASE_UID}`);
+assert.equal(store.save(FIREBASE_UID, snapshot({ recipientName: "Firebase Learner" })), true);
+assert.equal(store.load(FIREBASE_UID).recipientName, "Firebase Learner");
+
 console.log("progress storage tests passed");

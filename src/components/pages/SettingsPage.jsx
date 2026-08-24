@@ -16,6 +16,7 @@ function SettingsPage({
   onConnectWallet,
   onDisconnectWallet,
   onSignOut,
+  onDeleteAccount,
 }) {
   return (
     <div className="page">
@@ -30,6 +31,9 @@ function SettingsPage({
         <p className="meta-line">Name · {account?.name || "—"}</p>
         <p className="meta-line">Sign-in · {account?.provider === "google" ? "Google" : "Email"}</p>
         <Button variant="secondary" onClick={onSignOut}>Sign out</Button>
+        {onDeleteAccount ? (
+          <Button variant="danger" onClick={onDeleteAccount}>Delete account</Button>
+        ) : null}
       </Card>
 
       <Card className="settings-block">
@@ -69,7 +73,7 @@ function SettingsPage({
 
       <Card className="settings-block">
         <h2>Data</h2>
-        <p>Reset clears quiz scores, puzzle pieces, and local progress for this account in this browser.</p>
+        <p>Reset clears quiz scores, puzzle pieces, and local cache for this account in this browser. Your signed-in progress remains on your SkillForge account unless you delete the account.</p>
         <Button variant="danger" onClick={onReset} disabled={!account}>
           Reset local progress
         </Button>

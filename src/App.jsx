@@ -42,6 +42,8 @@ import {
   parseLookupQuery,
   publicCredentialPath,
 } from "./utils/credentialLookup";
+import { migrateAndHydrate } from "./utils/backend/migrate";
+import { writeQuizProgress } from "./utils/backend/progressSync";
 
 const VIEWS = PROGRESS_VIEWS;
 const PUBLIC_PAGES = new Set(["landing", "about", "lookup"]);
@@ -60,6 +62,7 @@ function scrollToId(id, reducedMotion) {
 
 function App() {
   const auth = useAuth();
+  const { linkWallet, verifyEmail } = auth;
   const wallet = useWallet();
   const theme = useTheme();
   const zoom = useZoom();
@@ -79,11 +82,13 @@ function App() {
   const [guideDismissed, setGuideDismissed] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [authView, setAuthView] = useState("signup");
+  const [authOobCode, setAuthOobCode] = useState("");
   const [onboardError, setOnboardError] = useState("");
   const [locationKey, setLocationKey] = useState(() =>
     typeof window === "undefined" ? "/" : `${window.location.pathname}${window.location.search}`
   );
   const reconnectAttempted = useRef(false);
+  const authActionHandled = useRef(false);
   const userImage = forgeCertificate;
   const account = auth.account;
   const ownerId = account?.id || null;
@@ -114,27 +119,42 @@ function App() {
       setHydratedOwner(null);
       applyProgress(emptyProgress());
       setPage((current) => (PUBLIC_PAGES.has(current) ? current : "landing"));
-      return;
+      return undefined;
     }
-    let snapshot = loadProgress(ownerId);
-    if (isEmptyProgress(snapshot) && wallet.address) {
-      const fromWallet = loadProgress(wallet.address);
-      if (!isEmptyProgress(fromWallet)) {
-        saveProgress(ownerId, fromWallet);
-        snapshot = fromWallet;
+    let cancelled = false;
+    (async () => {
+      let snapshot = loadProgress(ownerId);
+      if (isEmptyProgress(snapshot) && wallet.address) {
+        const fromWallet = loadProgress(wallet.address);
+        if (!isEmptyProgress(fromWallet)) {
+          saveProgress(ownerId, fromWallet);
+          snapshot = fromWallet;
+        }
       }
-    }
-    applyProgress(snapshot);
-    setHydratedOwner(ownerId);
-    setGuideDismissed(isFirstRunGuideDismissed(ownerId));
-    if (snapshot.recipientName === "" && account?.name) {
-      setRecipientName(account.name);
-    }
-  }, [account?.name, applyProgress, ownerId, wallet.address]);
+      if (auth.user) {
+        try {
+          const hydrated = await migrateAndHydrate(auth.user, snapshot);
+          if (!cancelled && hydrated?.quiz) snapshot = hydrated.quiz;
+        } catch {
+          // Keep the local snapshot if backend sync is unavailable.
+        }
+      }
+      if (cancelled) return;
+      applyProgress(snapshot);
+      setHydratedOwner(ownerId);
+      setGuideDismissed(isFirstRunGuideDismissed(ownerId));
+      if (snapshot.recipientName === "" && account?.name) {
+        setRecipientName(account.name);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [account?.name, applyProgress, auth.user, ownerId, wallet.address]);
 
   useEffect(() => {
     if (!progressReady) return;
-    saveProgress(ownerId, {
+    const snapshot = {
       view,
       activeSection,
       totalPoints,
@@ -144,7 +164,9 @@ function App() {
       completedSections,
       attempts,
       recipientName,
-    });
+    };
+    saveProgress(ownerId, snapshot);
+    writeQuizProgress(ownerId, snapshot).catch(() => {});
   }, [
     activeSection,
     acquiredPieces,
@@ -160,10 +182,10 @@ function App() {
   ]);
 
   useEffect(() => {
-    if (account && wallet.address && account.walletAddress !== wallet.address) {
-      auth.linkWallet(wallet.address);
+    if (account?.id && wallet.address && account.walletAddress !== wallet.address) {
+      linkWallet(wallet.address);
     }
-  }, [account, auth, wallet.address]);
+  }, [account?.id, account?.walletAddress, linkWallet, wallet.address]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -178,20 +200,26 @@ function App() {
   }, [isAuthenticated, wallet]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return undefined;
+    if (typeof window === "undefined" || authActionHandled.current) return undefined;
     const params = new URLSearchParams(window.location.search);
-    const verifyToken = params.get("verifyEmail");
-    const resetToken = params.get("reset");
-    if (verifyToken) {
-      auth.verifyEmail(verifyToken);
-      params.delete("verifyEmail");
-      window.history.replaceState({}, "", `${window.location.pathname}${params.toString() ? `?${params}` : ""}`);
-    } else if (resetToken) {
+    const mode = params.get("mode");
+    const oobCode = params.get("oobCode") || params.get("verifyEmail") || params.get("reset") || "";
+    if (!mode && !params.get("verifyEmail") && !params.get("reset") && !params.get("oobCode")) {
+      return undefined;
+    }
+    authActionHandled.current = true;
+    if ((mode === "verifyEmail" || params.get("verifyEmail")) && oobCode) {
+      verifyEmail(oobCode);
+    } else if (mode === "resetPassword" || params.get("reset")) {
+      setAuthOobCode(oobCode);
       setAuthView("reset");
       setAuthOpen(true);
     }
+    ["mode", "oobCode", "apiKey", "lang", "verifyEmail", "reset"].forEach((key) => params.delete(key));
+    const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}`;
+    window.history.replaceState({}, "", next);
     return undefined;
-  }, [auth]);
+  }, [verifyEmail]);
 
   const startSection = useCallback((id) => {
     setActiveSection(id);
@@ -387,6 +415,10 @@ function App() {
             auth.signOut();
             setPage("landing");
           }}
+          onDeleteAccount={async () => {
+            const result = await auth.deleteAccount();
+            if (result.ok) setPage("landing");
+          }}
         />
       );
     }
@@ -564,7 +596,7 @@ function App() {
         onClose={closeAuth}
         auth={auth}
         pendingEmail={account?.email}
-        verificationToken={authView === "reset" ? new URLSearchParams(typeof window === "undefined" ? "" : window.location.search).get("reset") || "" : ""}
+        oobCode={authOobCode}
       />
     </>
   );

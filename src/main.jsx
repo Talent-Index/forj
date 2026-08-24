@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import "./firebase";
 import { applyDocumentTheme, getInitialReducedMotion, getInitialTheme } from "./utils/theme";
 import { applyDocumentZoom, getInitialZoom } from "./utils/zoom";
 

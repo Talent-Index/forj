@@ -1,0 +1,327 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model — SkillForge #35–#42
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: Firebase Auth uid
+    // Fields:
+    //   - schemaVersion: int (required)
+    //   - userId: string == uid (required, immutable)
+    //   - provider: string email|google (required)
+    //   - createdAt, updatedAt: timestamp
+    // Owner read/write. No email/PII.
+    //
+    // Collection: learnerProfiles
+    // Document ID: uid
+    // Fields:
+    //   - schemaVersion, userId (immutable)
+    //   - name: string 1–80
+    //   - learningGoal: string (allowed ids or empty)
+    //   - profileComplete, walletPromptSeen: bool
+    //   - walletAddress: string empty or 0x + 40 hex
+    //   - avatarUrl: string <= 500000
+    //   - migratedFrom: string|null
+    //   - migratedAt: timestamp|null
+    //   - createdAt, updatedAt: timestamp
+    // Owner only. Contains learner display fields.
+    //
+    // Collection: quizProgress
+    // Document ID: uid
+    // Quiz/puzzle cache. Owner read/write with score bounds.
+    // Does NOT store XP, levels, or attested credentials.
+    //
+    // Collection: progressEvents
+    // Document ID: {uid}_{type}_{sourceId}
+    // Primitive learning events. Create-only by owner. No XP fields.
+    //
+    // Collection: wallets
+    // Document ID: lowercase 0x address
+    //   - userId, address, status active|released, linkedAt, updatedAt
+    // Create if missing or released. Cannot steal an active wallet.
+    //
+    // Collection: walletEvents
+    // Append-only audit. Owner create/read. No update/delete.
+    //
+    // Collection: analyticsEvents
+    // Append-only. Owner create. No email/name/wallet in payload.
+    //
+    // Backend-only (client deny): xpTransactions, achievements, streaks,
+    // learningTracks, learningPaths, questions, questionKeys, questionVersions,
+    // issuers, issuerMembers, credentialTemplates, credentials,
+    // credentialVersions, credentialEvents, auditLogs, roles
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null && request.auth.uid != "";
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function requiredKeys(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function uidUnchanged(userId) {
+      return request.resource.data.userId == userId
+        && request.resource.data.userId == request.auth.uid;
+    }
+
+    function userIdImmutable() {
+      return request.resource.data.userId == resource.data.userId;
+    }
+
+    function isValidTimestamp(value) {
+      return value is timestamp;
+    }
+
+    function optionalTimestamp(field) {
+      return !(field in request.resource.data)
+        || request.resource.data[field] == null
+        || request.resource.data[field] is timestamp;
+    }
+
+    function stringLen(field, minLen, maxLen) {
+      return request.resource.data[field] is string
+        && request.resource.data[field].size() >= minLen
+        && request.resource.data[field].size() <= maxLen;
+    }
+
+    function optionalString(field, maxLen) {
+      return !(field in request.resource.data)
+        || request.resource.data[field] == null
+        || (request.resource.data[field] is string
+          && request.resource.data[field].size() <= maxLen);
+    }
+
+    function isWalletAddress(value) {
+      return value is string && value.matches('^0x[a-f0-9]{40}$');
+    }
+
+    function validLearningGoal(value) {
+      return value in ['', 'avalanche', 'web3', 'credentials', 'development'];
+    }
+
+    function isValidUser(data) {
+      return requiredKeys(['schemaVersion', 'userId', 'provider', 'createdAt', 'updatedAt'])
+        && hasOnlyAllowedFields(['schemaVersion', 'userId', 'provider', 'createdAt', 'updatedAt'])
+        && data.schemaVersion is int && data.schemaVersion == 1
+        && data.userId is string && data.userId == request.auth.uid
+        && data.provider in ['email', 'google']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidLearnerProfile(data) {
+      return requiredKeys([
+          'schemaVersion', 'userId', 'name', 'learningGoal', 'profileComplete',
+          'walletPromptSeen', 'walletAddress', 'avatarUrl', 'createdAt', 'updatedAt'
+        ])
+        && hasOnlyAllowedFields([
+          'schemaVersion', 'userId', 'name', 'learningGoal', 'profileComplete',
+          'walletPromptSeen', 'walletAddress', 'avatarUrl', 'migratedFrom',
+          'migratedAt', 'createdAt', 'updatedAt'
+        ])
+        && data.schemaVersion is int && data.schemaVersion == 1
+        && data.userId == request.auth.uid
+        && data.name is string && data.name.size() <= 80
+        && data.learningGoal is string && validLearningGoal(data.learningGoal)
+        && data.profileComplete is bool
+        && data.walletPromptSeen is bool
+        && (data.walletAddress == null || isWalletAddress(data.walletAddress))
+        && data.avatarUrl is string && data.avatarUrl.size() <= 500000
+        && optionalString('migratedFrom', 200)
+        && optionalTimestamp('migratedAt')
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function validSectionScore(score) {
+      return score is map
+        && score.keys().hasOnly(['correct', 'total', 'pointsEarned'])
+        && score.correct is int && score.correct >= 0 && score.correct <= 5
+        && score.total is int && score.total == 5
+        && score.pointsEarned is int && score.pointsEarned >= 0 && score.pointsEarned <= 40;
+    }
+
+    function isValidQuizProgress(data) {
+      return requiredKeys([
+          'schemaVersion', 'userId', 'view', 'activeSection', 'totalPoints',
+          'spentPoints', 'acquiredPieces', 'sectionScores', 'completedSections',
+          'attempts', 'recipientName', 'updatedAt'
+        ])
+        && hasOnlyAllowedFields([
+          'schemaVersion', 'userId', 'view', 'activeSection', 'totalPoints',
+          'spentPoints', 'acquiredPieces', 'sectionScores', 'completedSections',
+          'attempts', 'recipientName', 'updatedAt'
+        ])
+        && data.schemaVersion is int && data.schemaVersion == 1
+        && data.userId == request.auth.uid
+        && data.view in ['sections', 'quiz', 'puzzle', 'certificate']
+        && (data.activeSection == null || data.activeSection in ['easy', 'medium', 'hard'])
+        && data.totalPoints is int && data.totalPoints >= 0 && data.totalPoints <= 80
+        && data.spentPoints is int && data.spentPoints >= 0 && data.spentPoints <= 80
+        && data.acquiredPieces is list && data.acquiredPieces.size() <= 16
+        && data.sectionScores is map
+        && data.completedSections is list && data.completedSections.size() <= 3
+        && data.attempts is list && data.attempts.size() <= 40
+        && data.recipientName is string && data.recipientName.size() <= 80
+        && data.updatedAt is timestamp
+        && !('xp' in data)
+        && !('level' in data)
+        && !('attested' in data);
+    }
+
+    function isValidProgressEvent(data) {
+      return requiredKeys([
+          'schemaVersion', 'userId', 'type', 'sourceId', 'eventKey',
+          'metadata', 'clientTimestamp', 'createdAt'
+        ])
+        && hasOnlyAllowedFields([
+          'schemaVersion', 'userId', 'type', 'sourceId', 'eventKey',
+          'metadata', 'clientTimestamp', 'createdAt'
+        ])
+        && data.schemaVersion is int && data.schemaVersion == 1
+        && data.userId == request.auth.uid
+        && data.type in [
+          'QUIZ_STARTED', 'QUIZ_COMPLETED', 'LESSON_COMPLETED',
+          'PUZZLE_PIECE_UNLOCKED', 'CREDENTIAL_CLAIMED'
+        ]
+        && data.sourceId is string && data.sourceId.size() > 0 && data.sourceId.size() <= 120
+        && data.eventKey is string && data.eventKey.size() <= 160
+        && data.metadata is map
+        && !('xp' in data.metadata)
+        && !('level' in data.metadata)
+        && data.clientTimestamp is int
+        && data.createdAt is timestamp;
+    }
+
+    function isValidWallet(data, walletId) {
+      return requiredKeys(['schemaVersion', 'userId', 'address', 'status', 'linkedAt', 'updatedAt'])
+        && hasOnlyAllowedFields(['schemaVersion', 'userId', 'address', 'status', 'linkedAt', 'updatedAt'])
+        && data.schemaVersion is int && data.schemaVersion == 1
+        && data.userId == request.auth.uid
+        && data.address == walletId
+        && isWalletAddress(data.address)
+        && data.status in ['active', 'released']
+        && data.linkedAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidWalletEvent(data) {
+      return requiredKeys(['schemaVersion', 'userId', 'address', 'action', 'createdAt'])
+        && hasOnlyAllowedFields(['schemaVersion', 'userId', 'address', 'action', 'createdAt'])
+        && data.schemaVersion is int && data.schemaVersion == 1
+        && data.userId == request.auth.uid
+        && isWalletAddress(data.address)
+        && data.action in ['linked', 'released']
+        && data.createdAt is timestamp;
+    }
+
+    function isValidAnalyticsEvent(data) {
+      return requiredKeys(['schemaVersion', 'userId', 'type', 'payload', 'createdAt'])
+        && hasOnlyAllowedFields(['schemaVersion', 'userId', 'type', 'payload', 'createdAt'])
+        && data.schemaVersion is int && data.schemaVersion == 1
+        && data.userId == request.auth.uid
+        && data.type is string && data.type.size() <= 80
+        && data.payload is map
+        && !('email' in data.payload)
+        && !('name' in data.payload)
+        && !('wallet' in data.payload)
+        && data.createdAt is timestamp;
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(request.resource.data) && uidUnchanged(userId);
+      allow update: if isOwner(userId)
+        && isValidUser(request.resource.data)
+        && userIdImmutable()
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isOwner(userId);
+    }
+
+    match /learnerProfiles/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidLearnerProfile(request.resource.data) && uidUnchanged(userId);
+      allow update: if isOwner(userId)
+        && isValidLearnerProfile(request.resource.data)
+        && userIdImmutable()
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isOwner(userId);
+    }
+
+    match /quizProgress/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId)
+        && isValidQuizProgress(request.resource.data)
+        && uidUnchanged(userId);
+      allow delete: if isOwner(userId);
+    }
+
+    match /progressEvents/{eventId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated()
+        && isValidProgressEvent(request.resource.data)
+        && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /wallets/{walletId} {
+      allow read: if isAuthenticated()
+        && (resource.data.userId == request.auth.uid || resource.data.status == 'released');
+      allow create: if isAuthenticated()
+        && isValidWallet(request.resource.data, walletId)
+        && request.resource.data.status == 'active';
+      allow update: if isAuthenticated()
+        && resource.data.userId == request.auth.uid
+        && isValidWallet(request.resource.data, walletId)
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.address == resource.data.address
+        && request.resource.data.linkedAt == resource.data.linkedAt;
+      allow delete: if false;
+    }
+
+    match /walletEvents/{eventId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && isValidWalletEvent(request.resource.data);
+      allow update, delete: if false;
+    }
+
+    match /analyticsEvents/{eventId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && isValidAnalyticsEvent(request.resource.data);
+      allow update, delete: if false;
+    }
+
+    match /xpTransactions/{id} { allow read, write: if false; }
+    match /achievements/{id} { allow read, write: if false; }
+    match /streaks/{id} { allow read, write: if false; }
+    match /learningTracks/{id} { allow read, write: if false; }
+    match /learningPaths/{id} { allow read, write: if false; }
+    match /questions/{id} { allow read, write: if false; }
+    match /questionKeys/{id} { allow read, write: if false; }
+    match /questionVersions/{id} { allow read, write: if false; }
+    match /issuers/{id} { allow read, write: if false; }
+    match /issuerMembers/{id} { allow read, write: if false; }
+    match /credentialTemplates/{id} { allow read, write: if false; }
+    match /credentials/{id} { allow read, write: if false; }
+    match /credentialVersions/{id} { allow read, write: if false; }
+    match /credentialEvents/{id} { allow read, write: if false; }
+    match /auditLogs/{id} { allow read, write: if false; }
+    match /roles/{id} { allow read, write: if false; }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

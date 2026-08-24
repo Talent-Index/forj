@@ -33,14 +33,21 @@ export function normalizeAccountId(ownerId) {
   return /^acc_[a-f0-9]{24}$/.test(value) ? value : null;
 }
 
+export function normalizeFirebaseUid(ownerId) {
+  if (typeof ownerId !== "string") return null;
+  const value = ownerId.trim();
+  if (!value || value.startsWith("0x") || /^acc_/i.test(value)) return null;
+  return /^[-A-Za-z0-9_]{20,128}$/.test(value) ? value : null;
+}
+
 export function progressOwnerId(ownerId) {
-  return normalizeAddress(ownerId) || normalizeAccountId(ownerId);
+  return normalizeAddress(ownerId) || normalizeAccountId(ownerId) || normalizeFirebaseUid(ownerId);
 }
 
 export function progressStorageKey(ownerId, version = STORAGE_VERSION) {
   const address = normalizeAddress(ownerId);
   if (address) return `skillforge.progress.v${version}.${address}`;
-  const accountId = normalizeAccountId(ownerId);
+  const accountId = normalizeAccountId(ownerId) || normalizeFirebaseUid(ownerId);
   if (accountId) return `skillforge.progress.v${version}.account.${accountId}`;
   return null;
 }

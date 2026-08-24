@@ -48,35 +48,28 @@ function AuthModal({
   onClose,
   auth,
   pendingEmail,
-  verificationToken,
+  oobCode = "",
 }) {
   const [signup, setSignup] = useState(EMPTY_SIGNUP);
   const [signin, setSignin] = useState(EMPTY_SIGNIN);
-  const [googleLocal, setGoogleLocal] = useState({ email: "", name: "" });
   const [forgotEmail, setForgotEmail] = useState("");
   const [reset, setReset] = useState({ password: "", confirmPassword: "" });
   const [changeEmailValue, setChangeEmailValue] = useState("");
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
   const [busy, setBusy] = useState(false);
-  const [demoToken, setDemoToken] = useState(verificationToken || "");
 
   useEffect(() => {
     if (!open) return;
     setError("");
     setInfo("");
-    setDemoToken(verificationToken || "");
-  }, [open, view, verificationToken]);
+  }, [open, view]);
 
   async function handleGoogle() {
     setBusy(true);
     setError("");
     try {
       const result = await auth.continueWithGoogle();
-      if (result.clientIdMissing || result.error === "google-fallback") {
-        onChangeView("google-local");
-        return;
-      }
       if (!result.ok) {
         setError(result.error || "Google sign-in failed.");
         return;
@@ -99,7 +92,6 @@ function AuthModal({
       setError(result.error);
       return;
     }
-    setDemoToken(result.verificationToken || "");
     onChangeView("verify");
   }
 
@@ -114,22 +106,8 @@ function AuthModal({
       return;
     }
     if (!result.account?.emailVerified) {
-      const resent = await auth.resendVerification(result.account.email);
-      setDemoToken(resent.verificationToken || "");
+      await auth.resendVerification();
       onChangeView("verify");
-      return;
-    }
-    onClose();
-  }
-
-  async function handleGoogleLocal(event) {
-    event.preventDefault();
-    setBusy(true);
-    setError("");
-    const result = await auth.signInWithGoogle(googleLocal);
-    setBusy(false);
-    if (!result.ok) {
-      setError(result.error);
       return;
     }
     onClose();
@@ -141,13 +119,11 @@ function AuthModal({
     setError("");
     const result = await auth.requestPasswordReset(forgotEmail);
     setBusy(false);
-    if (result.resetToken) {
-      setDemoToken(result.resetToken);
-      setInfo(`Reset link created for ${result.email}.`);
-      onChangeView("reset");
+    if (!result.ok) {
+      setError(result.error);
       return;
     }
-    setInfo("If an account exists for that email, a reset link is ready.");
+    setInfo("If an account exists for that email, a reset link is on its way.");
   }
 
   async function handleReset(event) {
@@ -155,7 +131,7 @@ function AuthModal({
     setBusy(true);
     setError("");
     const result = await auth.resetPassword({
-      token: demoToken,
+      oobCode,
       password: reset.password,
       confirmPassword: reset.confirmPassword,
     });
@@ -169,29 +145,24 @@ function AuthModal({
   }
 
   async function handleVerify() {
-    if (!demoToken) {
-      setError("Open the verification link from your email to continue.");
-      return;
-    }
     setBusy(true);
-    const result = auth.verifyEmail(demoToken);
+    setError("");
+    const result = await auth.verifyEmail(oobCode);
     setBusy(false);
     if (!result.ok) {
       setError(result.error);
       return;
     }
-    onClose();
+    if (result.account?.emailVerified) onClose();
   }
 
   async function handleResend() {
-    const email = auth.account?.email || pendingEmail || signup.email || signin.email;
-    const result = await auth.resendVerification(email);
+    const result = await auth.resendVerification();
     if (!result.ok) {
       setError(result.error);
       return;
     }
-    setDemoToken(result.verificationToken || "");
-    setInfo(`Verification link sent to ${email}.`);
+    setInfo(`Verification email sent to ${auth.account?.email || pendingEmail || signup.email}.`);
   }
 
   async function handleChangeEmail(event) {
@@ -201,8 +172,7 @@ function AuthModal({
       setError(result.error);
       return;
     }
-    setDemoToken(result.verificationToken || "");
-    setInfo(`Verification link sent to ${changeEmailValue}.`);
+    setInfo(`Verification email sent to ${changeEmailValue}.`);
     setChangeEmailValue("");
   }
 
@@ -212,7 +182,6 @@ function AuthModal({
     forgot: "Reset your password",
     reset: "Choose a new password",
     verify: "Check your email",
-    "google-local": "Continue with Google",
   }[view] || "SkillForge";
 
   return (
@@ -259,25 +228,9 @@ function AuthModal({
         </form>
       )}
 
-      {view === "google-local" && (
-        <form className="auth-form" onSubmit={handleGoogleLocal}>
-          <p className="modal-copy">
-            {auth.googleConfigured
-              ? "Google did not complete the popup. Continue with the Google email for this account."
-              : "Set VITE_GOOGLE_CLIENT_ID for the Google popup, or continue with a Google email here."}
-          </p>
-          <Field id="google-name" label="Name" value={googleLocal.name} onChange={(name) => setGoogleLocal((current) => ({ ...current, name }))} autoComplete="name" placeholder="Your name" />
-          <Field id="google-email" label="Email" type="email" value={googleLocal.email} onChange={(email) => setGoogleLocal((current) => ({ ...current, email }))} autoComplete="email" placeholder="you@gmail.com" />
-          <Button type="submit" className="btn-block" disabled={busy}>Continue</Button>
-          <p className="auth-switch">
-            <button type="button" className="text-link" onClick={() => onChangeView("signup")}>Back</button>
-          </p>
-        </form>
-      )}
-
       {view === "forgot" && (
         <form className="auth-form" onSubmit={handleForgot}>
-          <p className="modal-copy">Enter your email and we will create a reset link for this browser.</p>
+          <p className="modal-copy">Enter your email and we will send a reset link if an account exists.</p>
           <Field id="forgot-email" label="Email" type="email" value={forgotEmail} onChange={setForgotEmail} autoComplete="email" placeholder="you@example.com" />
           <Button type="submit" className="btn-block" disabled={busy}>Send reset link</Button>
           <p className="auth-switch">
@@ -301,11 +254,9 @@ function AuthModal({
             <br />
             <strong>{auth.account?.email || pendingEmail || signup.email}</strong>
           </p>
-          {demoToken && (
-            <Button className="btn-block" onClick={handleVerify} disabled={busy}>
-              Open verification link
-            </Button>
-          )}
+          <Button className="btn-block" onClick={handleVerify} disabled={busy}>
+            I have verified my email
+          </Button>
           <Button variant="secondary" className="btn-block" onClick={handleResend} disabled={busy}>
             Resend email
           </Button>
