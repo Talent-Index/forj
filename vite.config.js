@@ -5,5 +5,6 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
 export default defineConfig({
+  appType: "spa",
   plugins: [react()],
 });

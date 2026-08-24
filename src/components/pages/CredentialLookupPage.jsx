@@ -2,39 +2,69 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/primitives";
 import EmptyState from "../EmptyState";
 import CredentialDetails from "../CredentialDetails";
+import CredentialQr from "../CredentialQr";
+import CredentialStatusBadge from "../CredentialStatusBadge";
 import { EMPTY_STATES } from "../../utils/onboarding";
 import { CONTRACT_ADDRESS } from "../../utils/contract";
 import { getFujiPublicClient } from "../../utils/fujiClient";
+import { isCredentialId } from "../../utils/credentialModel";
+import { normalizeAddress } from "../../utils/progress";
+import { CREDENTIAL_STATES } from "../../utils/credentialStatus";
 import {
   buildCredentialVerificationView,
   loadCredentialLookup,
-  lookupQueryString,
   lookupShareUrl,
-  parseLookupQuery,
+  parseCredentialLocation,
+  publicCredentialPath,
 } from "../../utils/credentialLookup";
-import { CREDENTIAL_STATES } from "../../utils/credentialStatus";
-import CredentialStatusBadge from "../CredentialStatusBadge";
 
-function CredentialLookupPage({ initialQuery = "" }) {
-  const [tokenInput, setTokenInput] = useState("");
-  const [walletInput, setWalletInput] = useState("");
-  const [query, setQuery] = useState(() => parseLookupQuery(initialQuery));
+function CredentialLookupPage({ pathname = "", search = "" }) {
+  const location = useMemo(
+    () =>
+      parseCredentialLocation(
+        pathname || (typeof window !== "undefined" ? window.location.pathname : "/"),
+        search || (typeof window !== "undefined" ? window.location.search : "")
+      ),
+    [pathname, search]
+  );
+  const [tokenInput, setTokenInput] = useState(location.tokenId || "");
+  const [walletInput, setWalletInput] = useState(location.wallet || "");
+  const [query, setQuery] = useState(() => ({
+    tokenId: location.tokenId,
+    wallet: location.wallet,
+    invalidPathId: location.invalidPathId,
+  }));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [credential, setCredential] = useState(null);
   const [transactionHash, setTransactionHash] = useState("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    const parsed = parseLookupQuery(initialQuery || (typeof window !== "undefined" ? window.location.search : ""));
     setQuery((current) =>
-      current.tokenId === parsed.tokenId && current.wallet === parsed.wallet ? current : parsed
+      current.tokenId === location.tokenId &&
+      current.wallet === location.wallet &&
+      current.invalidPathId === location.invalidPathId
+        ? current
+        : {
+            tokenId: location.tokenId,
+            wallet: location.wallet,
+            invalidPathId: location.invalidPathId,
+          }
     );
-    if (parsed.tokenId) setTokenInput(parsed.tokenId);
-    if (parsed.wallet) setWalletInput(parsed.wallet);
-  }, [initialQuery]);
+    if (location.tokenId) setTokenInput(location.tokenId);
+    if (location.wallet) setWalletInput(location.wallet);
+  }, [location]);
 
   useEffect(() => {
     let cancelled = false;
+    if (query.invalidPathId) {
+      setCredential(null);
+      setTransactionHash("");
+      setError("invalid");
+      setLoading(false);
+      return undefined;
+    }
     if (!query.tokenId && !query.wallet) {
       setCredential(null);
       setTransactionHash("");
@@ -66,17 +96,31 @@ function CredentialLookupPage({ initialQuery = "" }) {
   }, [query]);
 
   const view = useMemo(
-    () => (credential ? buildCredentialVerificationView(credential, { transactionHash }) : null),
-    [credential, transactionHash]
+    () =>
+      credential
+        ? buildCredentialVerificationView(credential, {
+            transactionHash,
+            query,
+          })
+        : null,
+    [credential, transactionHash, query]
   );
 
   function submit(event) {
     event.preventDefault();
-    const next = parseLookupQuery(lookupQueryString({
-      tokenId: tokenInput.trim(),
-      wallet: walletInput.trim(),
-    }));
-    const href = lookupQueryString(next) || (typeof window !== "undefined" ? window.location.pathname : "/");
+    const rawToken = tokenInput.trim();
+    const rawWallet = walletInput.trim();
+    if (rawToken && !isCredentialId(rawToken) && !normalizeAddress(rawWallet)) {
+      setQuery({ tokenId: "", wallet: "", invalidPathId: true });
+      setError("invalid");
+      return;
+    }
+    const next = {
+      tokenId: isCredentialId(rawToken) ? rawToken : "",
+      wallet: normalizeAddress(rawWallet) || "",
+      invalidPathId: false,
+    };
+    const href = publicCredentialPath(next);
     if (typeof window !== "undefined") {
       window.history.pushState({}, "", href);
     }
@@ -84,13 +128,27 @@ function CredentialLookupPage({ initialQuery = "" }) {
   }
 
   const shareUrl = view
-    ? lookupShareUrl({ tokenId: view.tokenId, wallet: view.holderWallet })
-    : "";
+    ? lookupShareUrl({ tokenId: view.tokenId, wallet: query.wallet || view.holderWallet })
+    : lookupShareUrl({ tokenId: query.tokenId, wallet: query.wallet });
+
+  async function copyShareUrl() {
+    if (!shareUrl || typeof navigator === "undefined" || !navigator.clipboard) return;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  const verification = view?.verification;
+  const metadata = view?.metadata;
 
   return (
     <div className="page credential-lookup">
       <header className="page-header">
-        <p className="kicker">Credential verification</p>
+        <p className="kicker">Public credential verification</p>
         <h1>Credential lookup</h1>
         <p className="lede">
           Read a SkillForge credential from Avalanche Fuji by token ID or holder wallet.
@@ -143,24 +201,68 @@ function CredentialLookupPage({ initialQuery = "" }) {
       {!loading && error === "invalid" && (
         <EmptyState
           variant="error"
-          title="Invalid lookup"
+          title="Invalid credential identifier"
           body="Enter a token ID starting at 1, or a 0x holder wallet address."
         />
       )}
-      {!loading && error === "empty" && !view && (
+      {!loading && error === "owner-mismatch" && (
+        <EmptyState
+          variant="error"
+          title="Holder does not match"
+          body="This token exists on Fuji, but the connected holder is not the wallet in the URL."
+        />
+      )}
+      {!loading && !error && !view && (
         <p className="meta-line">Enter a token ID or wallet, then look up the on-chain record.</p>
       )}
 
       {view && (
         <section className="section-block">
+          {verification && (
+            <div className={`verification-state verification-state-${verification.statusId} verification-ownership-${verification.ownership}`}>
+              <p className="kicker">Verification state</p>
+              <p>
+                {verification.onChain ? "On-chain record found" : "Not found"}
+                {verification.statusLabel ? ` · ${verification.statusLabel}` : ""}
+              </p>
+              <p className="meta-line">{verification.summary}</p>
+            </div>
+          )}
           <CredentialDetails view={view} />
+          {metadata && (metadata.description || metadata.attributes.length > 0 || metadata.image) && (
+            <div className="credential-metadata">
+              <h3>On-chain metadata</h3>
+              {metadata.description && <p>{metadata.description}</p>}
+              {metadata.image ? (
+                <p className="meta-line">
+                  Image: <span className="credential-mono">{metadata.image}</span>
+                </p>
+              ) : null}
+              {metadata.attributes.length > 0 && (
+                <ul className="credential-traits">
+                  {metadata.attributes.map((trait) => (
+                    <li key={`${trait.trait_type}-${trait.value}`}>
+                      <span>{trait.trait_type}</span>
+                      <strong>{String(trait.value)}</strong>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
           {shareUrl && (
-            <p className="meta-line">
-              Share this record:{" "}
-              <a href={lookupQueryString({ tokenId: view.tokenId, wallet: view.holderWallet })}>
-                {shareUrl}
-              </a>
-            </p>
+            <div className="credential-share">
+              <h3>Shareable URL</h3>
+              <p className="credential-share-url">
+                <a href={publicCredentialPath({ tokenId: view.tokenId, wallet: query.wallet })}>
+                  {shareUrl}
+                </a>
+              </p>
+              <Button type="button" variant="secondary" onClick={copyShareUrl}>
+                {copied ? "Copied" : "Copy URL"}
+              </Button>
+              <CredentialQr url={shareUrl} />
+            </div>
           )}
         </section>
       )}

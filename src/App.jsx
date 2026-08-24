@@ -35,15 +35,19 @@ import {
   firstRunStatus,
   isFirstRunGuideDismissed,
 } from "./utils/onboarding";
-import { parseLookupQuery, lookupQueryString } from "./utils/credentialLookup";
+import {
+  parseCredentialLocation,
+  parseLookupQuery,
+  publicCredentialPath,
+} from "./utils/credentialLookup";
 
 const VIEWS = PROGRESS_VIEWS;
 const PUBLIC_PAGES = new Set(["landing", "about", "lookup"]);
 
 function pageFromLocation() {
   if (typeof window === "undefined") return "landing";
-  const query = parseLookupQuery(window.location.search);
-  if (query.tokenId || query.wallet) return "lookup";
+  const location = parseCredentialLocation(window.location.pathname, window.location.search);
+  if (location.isPublicRoute || location.tokenId || location.wallet) return "lookup";
   return "landing";
 }
 
@@ -74,6 +78,9 @@ function App() {
   const [authOpen, setAuthOpen] = useState(false);
   const [authView, setAuthView] = useState("signup");
   const [onboardError, setOnboardError] = useState("");
+  const [locationKey, setLocationKey] = useState(() =>
+    typeof window === "undefined" ? "/" : `${window.location.pathname}${window.location.search}`
+  );
   const userImage = forgeCertificate;
   const account = auth.account;
   const ownerId = account?.id || null;
@@ -207,9 +214,10 @@ function App() {
   }, []);
 
   const openLookup = useCallback((tokenId = "", walletAddress = "") => {
-    const href = lookupQueryString({ tokenId, wallet: walletAddress });
-    if (typeof window !== "undefined" && href) {
+    const href = publicCredentialPath({ tokenId, wallet: walletAddress });
+    if (typeof window !== "undefined") {
       window.history.pushState({}, "", href);
+      setLocationKey(`${window.location.pathname}${window.location.search}`);
     }
     setPage("lookup");
   }, []);
@@ -228,18 +236,27 @@ function App() {
 
   useEffect(() => {
     function onPop() {
-      const query = parseLookupQuery(window.location.search);
-      if (query.tokenId || query.wallet) setPage("lookup");
+      setLocationKey(`${window.location.pathname}${window.location.search}`);
+      const location = parseCredentialLocation(window.location.pathname, window.location.search);
+      if (location.isPublicRoute || location.tokenId || location.wallet) setPage("lookup");
     }
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
   function handleNavigate(nextPage) {
-    if (typeof window !== "undefined" && nextPage !== "lookup") {
+    if (typeof window !== "undefined" && nextPage === "lookup") {
+      const href = publicCredentialPath({});
+      if (window.location.pathname !== "/credential" || window.location.search) {
+        window.history.pushState({}, "", href);
+      }
+      setLocationKey(`${window.location.pathname}${window.location.search}`);
+    } else if (typeof window !== "undefined") {
+      const location = parseCredentialLocation(window.location.pathname, window.location.search);
       const query = parseLookupQuery(window.location.search);
-      if (query.tokenId || query.wallet) {
-        window.history.pushState({}, "", window.location.pathname);
+      if (location.isPublicRoute || query.tokenId || query.wallet) {
+        window.history.pushState({}, "", "/");
+        setLocationKey("/");
       }
     }
     if (!isAuthenticated) {
@@ -282,7 +299,9 @@ function App() {
     if (page === "lookup") {
       return (
         <CredentialLookupPage
-          initialQuery={typeof window !== "undefined" ? window.location.search : ""}
+          key={locationKey}
+          pathname={typeof window !== "undefined" ? window.location.pathname : "/credential"}
+          search={typeof window !== "undefined" ? window.location.search : ""}
         />
       );
     }
