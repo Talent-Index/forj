@@ -307,13 +307,11 @@ function AuthModal({
 
 export function ProfileSetup({ account, onContinue, busy = false, error = "" }) {
   const [name, setName] = useState(account?.name || "");
-  const [goal, setGoal] = useState(account?.learningGoal || "");
   const [localError, setLocalError] = useState("");
 
   useEffect(() => {
     if (account?.name) setName((current) => current || account.name);
-    if (account?.learningGoal) setGoal((current) => current || account.learningGoal);
-  }, [account?.name, account?.learningGoal]);
+  }, [account?.name]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -342,22 +340,4 @@ export function ProfileSetup({ account, onContinue, busy = false, error = "" }) 
   );
 }
 
-export function WalletOptional({ onConnect, onSkip, busy = false }) {
-  return (
-    <section className="onboard-screen">
-      <p className="kicker">Your account is ready</p>
-      <h1>You can start learning immediately.</h1>
-      <p className="lede">
-        Connect a wallet when you are ready to mint on Avalanche Fuji.
-        Quizzes, points, and the puzzle do not require a wallet.
-      </p>
-      <div className="hero-actions">
-        <Button onClick={onConnect} disabled={busy}>Connect wallet</Button>
-        <Button variant="secondary" onClick={onSkip} disabled={busy}>Continue without wallet</Button>
-      </div>
-    </section>
-  );
-}
-
 export default AuthModal;
-export { LEARNING_GOALS };

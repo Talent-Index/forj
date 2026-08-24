@@ -13,7 +13,6 @@ import {
   LEARNER_PROFILE_REQUIRED_KEYS,
   applyProfileCompletion,
   applySignupIdentity,
-  applyWalletPromptDismissed,
   learnerProfileFields,
   mergeHydratedProfile,
   normalizeLearningGoal,
@@ -58,7 +57,7 @@ assertIncludes(authModal, AUTH_FLOW_BUTTONS.confirmName.label, "Profile setup");
 assertIncludes(authModal, "Terms of Service", "Signup terms");
 assertIncludes(authModal, "Privacy Policy", "Signup privacy");
 assertIncludes(authModal, "type=\"submit\"", "Profile Continue is a submit button");
-assertIncludes(authModal, "onContinue({ name: recipient.name, learningGoal: goal })", "Continue payload");
+assertIncludes(authModal, "onContinue({ name: recipient.name })", "Continue payload");
 assertIncludes(authModal, "disabled={busy}", "Auth buttons disable while saving");
 
 assertIncludes(app, "onContinue={handleProfileContinue}", "App wires name Continue");
@@ -67,7 +66,7 @@ assertIncludes(app, "auth.completeProfile(input)", "Continue calls completeProfi
 assertIncludes(app, "LegalPage", "App has Privacy and Terms pages");
 assertIncludes(app, "goLearnHome()", "Signed-in learners leave landing");
 assert.equal(app.includes("<FirstRunGuide"), false, "SkillForge loop card stays hidden after sign-in");
-assertIncludes(app, "dismissFirstRunGuide(ownerId)", "Login dismisses the first-run loop");
+assert.equal(app.includes("dismissFirstRunGuide"), false, "First-run dismiss helper is unused");
 assertIncludes(readSrc("src/components/layout/Navbar.jsx"), ">Connected<", "Connected toast after wallet");
 assertIncludes(readSrc("src/components/layout/Footer.jsx"), 'onNavigate("privacy")', "Footer Privacy");
 assertIncludes(readSrc("src/components/layout/Footer.jsx"), 'onNavigate("terms")', "Footer Terms");
@@ -137,14 +136,6 @@ assert.equal(fromSignup.complete, true);
 assert.equal(onboardingStage(fromSignup.account), "ready");
 assert.equal(applySignupIdentity(incomplete, "").complete, false);
 
-const skipped = applyWalletPromptDismissed(named.account);
-assert.equal(skipped.ok, true);
-assert.equal(skipped.account.walletPromptSeen, true);
-assert.equal(onboardingStage(skipped.account), "ready");
-
-const connected = applyWalletPromptDismissed(named.account);
-assert.equal(onboardingStage(connected.account), "ready");
-
 const afterFailedRead = mergeHydratedProfile(named.account, {
   ...incomplete,
   name: "",
@@ -155,9 +146,9 @@ assert.equal(afterFailedRead.profileComplete, true);
 assert.equal(afterFailedRead.name, "Dana Learner");
 assert.equal(onboardingStage(afterFailedRead), "ready");
 
-const afterSkipThenFailedRead = mergeHydratedProfile(skipped.account, {
+const afterSkipThenFailedRead = mergeHydratedProfile(named.account, {
   ...incomplete,
-  id: skipped.account.id,
+  id: named.account.id,
   profileComplete: false,
   walletPromptSeen: false,
 });
@@ -224,8 +215,6 @@ assert.equal(onboardingStage(google.account), "ready");
 const googleContinued = auth.completeProfile(google.account.id, { name: "Forge Google" });
 assert.equal(googleContinued.ok, true);
 assert.equal(onboardingStage(googleContinued.account), "ready");
-const googleSkipped = auth.dismissWalletPrompt(googleContinued.account.id);
-assert.equal(onboardingStage(googleSkipped.account), "ready");
 
 const resolved = await withTimeout(Promise.resolve("ok"), 50);
 assert.equal(resolved, "ok");

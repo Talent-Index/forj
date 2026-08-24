@@ -130,7 +130,6 @@ const uiFiles = [
   "src/components/CertificateArtifact.jsx",
   "src/components/CredentialRecord.jsx",
   "src/components/CredentialStatusBadge.jsx",
-  "src/components/ProductIntro.jsx",
   "src/components/pages/AboutPage.jsx",
   "src/components/pages/ProgressPage.jsx",
   "src/components/pages/CredentialLookupPage.jsx",

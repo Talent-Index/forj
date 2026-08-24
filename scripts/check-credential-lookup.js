@@ -173,6 +173,11 @@ const app = readFileSync(join(root, "src/App.jsx"), "utf8");
 assert.match(app, /parseCredentialLocation/);
 assert.match(app, /publicCredentialPath/);
 assert.match(app, /\/credential/);
+assert.match(app, /PUBLIC_PAGES.has\(page\) && page !== "landing"/);
+
+const navbar = readFileSync(join(root, "src/components/layout/Navbar.jsx"), "utf8");
+assert.match(navbar, /LOGGED_OUT_LINKS[\s\S]*id: "lookup"/);
+assert.match(navbar, /LOGGED_IN_LINKS[\s\S]*id: "lookup"/);
 
 const qr = readFileSync(join(root, "src/components/CredentialQr.jsx"), "utf8");
 assert.match(qr, /qrcode/);

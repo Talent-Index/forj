@@ -31,9 +31,7 @@ import {
   saveProgress,
 } from "./utils/progress";
 import { redeemPiece } from "./utils/puzzle";
-import {
-  EMPTY_STATES,
-} from "./utils/onboarding";
+import { EMPTY_STATES } from "./utils/onboarding";
 import { legalPageFromPath } from "./utils/legal";
 import {
   parseCredentialLocation,
@@ -277,7 +275,9 @@ function App() {
 
   function closeAuth() {
     setAuthOpen(false);
-    if (auth.account?.emailVerified) goLearnHome();
+    if (!auth.account?.emailVerified) return;
+    if (PUBLIC_PAGES.has(page) && page !== "landing") return;
+    goLearnHome();
   }
 
   function openLegal(topic) {

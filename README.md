@@ -34,7 +34,7 @@ There are two kinds of on-chain record:
 | **Claimed** | The learner published their own scores. |
 | **Issuer-attested** | The contract owner authorized that record with a signature. |
 
-A claimed score is not an independently verified assessment. Public lookup shows that a record exists on Fuji. Lookup is not issuer attestation. Explorer links show on-chain presence, not certification.
+A claimed score is not an independently verified assessment. Public lookup shows that a record exists on Fuji and stays available after sign-in. Lookup is not issuer attestation. Explorer links show on-chain presence, not certification.
 
 The live Fuji credential contract is [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df).
 

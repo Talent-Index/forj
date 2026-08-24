@@ -33,7 +33,7 @@ Unknown or missing status is treated as **claimed**.
 
 ## Lookup
 
-Anyone can open a credential by ID or by holder wallet, with a shareable URL and QR. Lookup does not require the visitor to connect a wallet. Finding a record is not the same as attesting a score.
+Anyone can open a credential by ID or by holder wallet, with a shareable URL and QR. Lookup stays available after sign-in. Lookup does not require the visitor to connect a wallet. Finding a record is not the same as attesting a score.
 
 ## Lifecycle
 

@@ -1,18 +1,7 @@
-import {
-  WALLET_IDS,
-  WALLET_LABELS,
-  networkLabel,
-  walletDeepLink,
-  walletInstallUrl,
-} from "../../utils/wallet";
+import { WALLET_IDS, WALLET_LABELS, walletDeepLink, walletInstallUrl } from "../../utils/wallet";
 import { ERROR_STATES, WALLET_GUIDANCE } from "../../utils/onboarding";
 import { Button, Modal } from "../ui/primitives";
 import EmptyState from "../EmptyState";
-
-function shortenAddress(addr) {
-  if (!addr) return "";
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
-}
 
 function WalletOption({ id, installed, connecting, isMobile, onConnect }) {
   const label = WALLET_LABELS[id];
@@ -90,45 +79,5 @@ export function WalletModal({
       </div>
       <p className="meta-line">Network · Avalanche Fuji Testnet</p>
     </Modal>
-  );
-}
-
-export function WalletButton({
-  address,
-  connecting,
-  switching,
-  chainId,
-  isFuji,
-  walletName,
-  onDisconnect,
-  onSwitch,
-  onOpen,
-}) {
-  if (!address) {
-    return (
-      <Button onClick={onOpen} disabled={connecting}>
-        {connecting ? "Connecting…" : "Connect wallet"}
-      </Button>
-    );
-  }
-
-  return (
-    <div className="wallet-cluster">
-      <span className={`network-chip ${isFuji ? "ok" : "bad"}`}>
-        {isFuji ? "Fuji" : networkLabel(chainId)}
-      </span>
-      <span className="wallet-chip" title={address}>
-        {walletName ? `${walletName} · ` : ""}
-        {shortenAddress(address)}
-      </span>
-      {!isFuji && (
-        <Button variant="secondary" onClick={() => onSwitch?.()?.catch?.(() => {})} disabled={switching}>
-          {switching ? "Switching…" : "Switch to Fuji"}
-        </Button>
-      )}
-      <Button variant="ghost" onClick={onDisconnect}>
-        Disconnect
-      </Button>
-    </div>
   );
 }

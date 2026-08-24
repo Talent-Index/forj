@@ -43,12 +43,7 @@ const profile = auth.completeProfile(verified.account.id, {
 assert.equal(profile.ok, true);
 assert.equal(onboardingStage(profile.account), "ready");
 
-const skipped = auth.dismissWalletPrompt(profile.account.id);
-assert.equal(skipped.ok, true);
-assert.equal(onboardingStage(skipped.account), "ready");
-assert.equal(skipped.account.walletAddress, null);
-
-const changed = await auth.changePassword(skipped.account.id, {
+const changed = await auth.changePassword(profile.account.id, {
   currentPassword: "forge-skill-1",
   password: "forge-skill-2",
   confirmPassword: "forge-skill-2",

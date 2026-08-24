@@ -52,7 +52,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Soulbound NFT. It cannot be transferred.
 - Learner mint records a **claimed** score.
 - The contract also supports **issuer-attested** mint with an owner signature. That path is not the default learner UI.
-- Public lookup by credential ID or holder wallet. A found record is an on-chain record, not a verified exam.
+- Public lookup by credential ID or holder wallet, signed in or out. A found record is an on-chain record, not a verified exam.
 
 ## Leaderboard
 

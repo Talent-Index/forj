@@ -34,7 +34,7 @@ Wallet and Fuji network, quiz banks, retry-safe scoring, durable local progress,
 
 ## Phase 2 — Learning experience 🟡
 
-Shipped: landing loop for guests, explanations after submit, official Avalanche references, persistent progress, dashboard. After sign-in, learners go to Learn rather than a first-run loop card.
+Shipped: landing loop for guests, explanations after submit, official Avalanche references, persistent progress, dashboard. After sign-in, learners go to Learn.
 
 Remaining: richer certificate polish and deeper path content beyond the first six tracks.
 

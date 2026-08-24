@@ -91,7 +91,7 @@ function ProgressPage({
           label={`Quiz ${stats.quizCorrect}/${stats.quizTotal} · Puzzle ${stats.puzzleCount}/${stats.puzzleTotal}`}
           value={stats.overallPercent}
         />
-        <p className="meta-line">{stats.overallPercent}% of the SkillForge loop (quizzes + puzzle)</p>
+        <p className="meta-line">{stats.overallPercent}% of quizzes and puzzle</p>
       </section>
 
       <section className="section-block">

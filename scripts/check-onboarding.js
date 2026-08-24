@@ -8,14 +8,9 @@ import {
   CREDENTIAL_EXPLAINER,
   FUJI_EXPLAINER,
   WALLET_GUIDANCE,
-  FIRST_TIME_FLOW,
   EMPTY_STATES,
   ERROR_STATES,
   requiredOnboardingTopics,
-  firstRunStatus,
-  onboardingStorageKey,
-  isFirstRunGuideDismissed,
-  dismissFirstRunGuide,
 } from "../src/utils/onboarding.js";
 
 const topics = requiredOnboardingTopics();
@@ -28,7 +23,6 @@ assert.deepEqual(topics, [
   "credentials",
   "fujiTestnet",
   "walletGuidance",
-  "firstTimeFlow",
   "emptyStates",
   "errorStates",
 ]);
@@ -60,10 +54,6 @@ assert.equal(/verif(?:y|ied|ication|iable)/i.test(CREDENTIAL_EXPLAINER.body), fa
 assert.equal(FUJI_EXPLAINER.chainId, 43113);
 assert.match(WALLET_GUIDANCE.body, /MetaMask|Core/);
 assert.equal(WALLET_GUIDANCE.steps.length >= 4, true);
-assert.deepEqual(
-  FIRST_TIME_FLOW.map((step) => step.id),
-  ["account", "quiz", "puzzle", "wallet", "mint"]
-);
 
 for (const key of ["restoring", "noQuizzes", "noPoints", "noPieces", "noCredential", "noLookup", "noAttempts"]) {
   assert.ok(EMPTY_STATES[key].title);
@@ -75,34 +65,4 @@ for (const key of ["wallet", "network", "quiz", "puzzle", "mint"]) {
   assert.ok(ERROR_STATES[key].body);
 }
 
-const beforeAccount = firstRunStatus({});
-assert.equal(beforeAccount.find((s) => s.id === "account").done, false);
-assert.equal(beforeAccount.find((s) => s.id === "wallet").done, false);
-
-const midLoop = firstRunStatus({
-  isAuthenticated: true,
-  isConnected: false,
-  isFuji: false,
-  walletSkipped: true,
-  completedSections: ["easy"],
-  acquiredPieces: [0],
-  hasMinted: false,
-});
-assert.equal(midLoop.find((s) => s.id === "account").done, true);
-assert.equal(midLoop.find((s) => s.id === "quiz").done, true);
-assert.equal(midLoop.find((s) => s.id === "puzzle").done, true);
-assert.equal(midLoop.find((s) => s.id === "wallet").done, true);
-assert.equal(midLoop.find((s) => s.id === "mint").done, false);
-
-const address = "0x7c538b83D0295f94C4bBAf8302095d9ED4b2Ad5f";
-assert.equal(onboardingStorageKey(address), `skillforge.onboarding.v1.${address.toLowerCase()}`);
-const memory = new Map();
-const storage = {
-  getItem: (key) => (memory.has(key) ? memory.get(key) : null),
-  setItem: (key, value) => memory.set(key, String(value)),
-};
-assert.equal(isFirstRunGuideDismissed(address, storage), false);
-assert.equal(dismissFirstRunGuide(address, storage), true);
-assert.equal(isFirstRunGuideDismissed(address, storage), true);
-
-console.log("onboarding copy and first-run tests passed");
+console.log("onboarding copy tests passed");

@@ -1,10 +1,8 @@
+import { replayEvents } from "./replay.js";
 import { getLevel, getXP } from "./xp.js";
 import { getPathProgress } from "./paths.js";
-import { replayEvents } from "./replay.js";
-import { createMemoryStorage } from "../progress.js";
 import { validateRecipientName } from "../recipient.js";
 
-export const LEADERBOARD_STORAGE_KEY = "skillforge.leaderboard.v1";
 export const LEADERBOARD_AUTHORITY = Object.freeze({
   eventLog: "event-log",
   localPreview: "local-preview",
@@ -20,15 +18,6 @@ export const LEADERBOARD_PREFERENCE_KEYS = Object.freeze([
   "createdAt",
   "updatedAt",
 ]);
-
-function defaultStorage() {
-  try {
-    if (typeof localStorage !== "undefined") return localStorage;
-  } catch {
-    // ignore
-  }
-  return createMemoryStorage();
-}
 
 export function startOfUtcWeek(now = Date.now()) {
   const date = new Date(now);
@@ -167,40 +156,4 @@ export function buildLiveLeaderboard(preferences, events, extras = {}) {
       });
     });
   return rankLearners(snapshots, extras);
-}
-
-export function readLeaderboard(storage = defaultStorage()) {
-  try {
-    const raw = storage.getItem(LEADERBOARD_STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.filter((row) => row && row.learnerId) : [];
-  } catch {
-    return [];
-  }
-}
-
-export function writeLeaderboard(entries, storage = defaultStorage()) {
-  try {
-    storage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(entries));
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function upsertLeaderboardEntry(snapshot, storage = defaultStorage()) {
-  const list = readLeaderboard(storage).filter((row) => row.learnerId !== snapshot.learnerId);
-  if (!snapshot?.optIn || !snapshot.learnerId) {
-    writeLeaderboard(list, storage);
-    return list;
-  }
-  const next = [...list, snapshot];
-  writeLeaderboard(next, storage);
-  return next;
-}
-
-export function removeLeaderboardEntry(learnerId, storage = defaultStorage()) {
-  const next = readLeaderboard(storage).filter((row) => row.learnerId !== learnerId);
-  writeLeaderboard(next, storage);
-  return next;
 }

@@ -76,7 +76,6 @@ export {
 } from "./store.js";
 
 export {
-  LEADERBOARD_STORAGE_KEY,
   LEADERBOARD_AUTHORITY,
   LEADERBOARD_DISCLAIMER,
   LEADERBOARD_PREFERENCE_KEYS,
@@ -87,9 +86,6 @@ export {
   rankLearners,
   groupEventsByUser,
   buildLiveLeaderboard,
-  readLeaderboard,
-  upsertLeaderboardEntry,
-  removeLeaderboardEntry,
   startOfUtcWeek,
 } from "./leaderboard.js";
 

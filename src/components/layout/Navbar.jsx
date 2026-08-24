@@ -14,6 +14,7 @@ const LOGGED_IN_LINKS = [
   { id: "progress", label: "Progress" },
   { id: "leaderboard", label: "Board" },
   { id: "credentials", label: "Credentials" },
+  { id: "lookup", label: "Lookup" },
 ];
 
 function ConnectedNotice({ address }) {
