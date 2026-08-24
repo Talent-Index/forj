@@ -82,8 +82,25 @@ export function applyProfileCompletion(account, { name, learningGoal = "", avata
       name: recipient.name,
       learningGoal: normalizeLearningGoal(learningGoal),
       profileComplete: true,
+      walletPromptSeen: true,
       avatarUrl: avatarUrl == null ? account.avatarUrl || "" : avatarUrl,
     },
+  };
+}
+
+export function applySignupIdentity(account, name) {
+  if (!account) return { ok: false, complete: false, error: "Sign in to continue." };
+  const recipient = validateRecipientName(name || account.name);
+  if (!recipient.ok) {
+    return { ok: true, complete: false, account, error: recipient.error };
+  }
+  return {
+    ...applyProfileCompletion(account, {
+      name: recipient.name,
+      learningGoal: account.learningGoal,
+      avatarUrl: account.avatarUrl,
+    }),
+    complete: true,
   };
 }
 

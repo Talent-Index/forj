@@ -126,7 +126,6 @@ export function onboardingStage(account) {
   if (!account) return "anonymous";
   if (!account.emailVerified) return "verify-email";
   if (!account.profileComplete) return "profile";
-  if (!account.walletPromptSeen) return "wallet-optional";
   return "ready";
 }
 
@@ -232,8 +231,8 @@ export function createAuthStore(storage = defaultStorage()) {
         emailVerified: false,
         googleId: "",
         learningGoal: "",
-        profileComplete: false,
-        walletPromptSeen: false,
+        profileComplete: true,
+        walletPromptSeen: true,
         walletAddress: null,
         avatarUrl: "",
         passwordSalt,
@@ -275,6 +274,8 @@ export function createAuthStore(storage = defaultStorage()) {
           emailVerified: true,
           name: account.name || (recipient.ok ? recipient.name : account.name),
           avatarUrl: account.avatarUrl || avatarUrl || "",
+          profileComplete: account.profileComplete || recipient.ok,
+          walletPromptSeen: account.walletPromptSeen || recipient.ok,
         });
       } else {
         const recipient = validateRecipientName(name);
@@ -286,8 +287,8 @@ export function createAuthStore(storage = defaultStorage()) {
           emailVerified: true,
           googleId: googleId || "",
           learningGoal: "",
-          profileComplete: false,
-          walletPromptSeen: false,
+          profileComplete: recipient.ok,
+          walletPromptSeen: recipient.ok,
           walletAddress: null,
           avatarUrl: avatarUrl || "",
           passwordSalt: "",

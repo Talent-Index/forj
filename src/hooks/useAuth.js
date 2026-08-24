@@ -38,6 +38,7 @@ import {
 import { AUTH_WRITE_TIMEOUT_MS, FIRESTORE_TIMEOUT_MS, withTimeout } from "../utils/backend/timeout";
 import {
   applyProfileCompletion,
+  applySignupIdentity,
   applyWalletPromptDismissed,
   mergeHydratedProfile,
 } from "../utils/profileOnboarding";
@@ -78,10 +79,20 @@ export function useAuth() {
       return null;
     }
     const profile = await safeProfile(nextUser);
+    const signedUp = applySignupIdentity(profile, profile.name || nextUser.displayName);
+    const nextProfile = signedUp.complete ? signedUp.account : profile;
+    if (signedUp.complete && !profile.profileComplete) {
+      void upsertLearnerProfile(nextUser, {
+        name: nextProfile.name,
+        profileComplete: true,
+        walletPromptSeen: true,
+        avatarUrl: nextProfile.avatarUrl || "",
+      }).catch(() => {});
+    }
     setUser(nextUser);
-    let merged = profile;
+    let merged = nextProfile;
     setAccount((previous) => {
-      merged = mergeHydratedProfile(previous, profile);
+      merged = mergeHydratedProfile(previous, nextProfile);
       return merged;
     });
     return merged;
@@ -113,9 +124,19 @@ export function useAuth() {
       const credential = await createUserWithEmailAndPassword(auth, normalized, password);
       await updateProfile(credential.user, { displayName: recipient.name });
       const profile = await safeProfile(credential.user);
-      await upsertLearnerProfile(credential.user, { name: recipient.name }).catch(() => {});
+      await upsertLearnerProfile(credential.user, {
+        name: recipient.name,
+        profileComplete: true,
+        walletPromptSeen: true,
+      }).catch(() => {});
       await sendEmailVerification(credential.user, { url: actionUrl() });
-      const accountState = { ...profile, name: recipient.name, emailVerified: false };
+      const accountState = {
+        ...profile,
+        name: recipient.name,
+        emailVerified: false,
+        profileComplete: true,
+        walletPromptSeen: true,
+      };
       setAccount(accountState);
       return { ok: true, account: accountState };
     } catch (error) {
