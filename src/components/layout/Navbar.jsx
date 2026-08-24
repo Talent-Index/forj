@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { WalletModal } from "../wallet/WalletControls";
 import ProfileMenu from "../auth/ProfileMenu";
 
@@ -15,9 +16,26 @@ const LOGGED_IN_LINKS = [
   { id: "credentials", label: "Credentials" },
 ];
 
-function BrandMark() {
+function ConnectedNotice({ address }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (!address) {
+      setVisible(false);
+      return undefined;
+    }
+    setVisible(true);
+    const timer = setTimeout(() => setVisible(false), 2400);
+    return () => clearTimeout(timer);
+  }, [address]);
+
+  if (!visible || !address) return null;
   return (
-    <span className="brand">
+    <p className="wallet-connected-toast" role="status">Connected</p>
+  );
+}
+
+function BrandMark() {
       <svg className="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 2.5 21 12 12 21.5 3 12 Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
         <path d="M12 7.5 16.5 12 12 16.5 7.5 12 Z" fill="currentColor" />
@@ -135,6 +153,7 @@ function Navbar({
             </>
           ) : (
             <>
+              <ConnectedNotice address={wallet.address} />
               {!wallet.address ? (
                 <button className="btn btn-ghost" onClick={walletModal.openModal}>
                   Connect Wallet

@@ -50,6 +50,7 @@ function AuthModal({
   auth,
   pendingEmail,
   oobCode = "",
+  onOpenLegal,
 }) {
   const [signup, setSignup] = useState(EMPTY_SIGNUP);
   const [signin, setSignin] = useState(EMPTY_SIGNIN);
@@ -230,6 +231,12 @@ function AuthModal({
           <Field id="signup-password" label="Password" type="password" value={signup.password} onChange={(password) => setSignup((current) => ({ ...current, password }))} autoComplete="new-password" placeholder={`At least ${MIN_PASSWORD_LENGTH} characters`} />
           <Field id="signup-confirm" label="Confirm password" type="password" value={signup.confirmPassword} onChange={(confirmPassword) => setSignup((current) => ({ ...current, confirmPassword }))} autoComplete="new-password" />
           <Button type="submit" className="btn-block" disabled={busy}>{busy ? "Creating…" : "Create account"}</Button>
+          <p className="auth-legal">
+            By creating an account you agree to the{" "}
+            <button type="button" className="text-link" onClick={() => onOpenLegal?.("terms")}>Terms of Service</button>
+            {" "}and{" "}
+            <button type="button" className="text-link" onClick={() => onOpenLegal?.("privacy")}>Privacy Policy</button>.
+          </p>
           <p className="auth-switch">
             Already have an account?{" "}
             <button type="button" className="text-link" onClick={() => onChangeView("signin")}>Sign in</button>

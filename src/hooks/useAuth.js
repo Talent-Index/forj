@@ -259,6 +259,7 @@ export function useAuth() {
       name: next.account.name,
       learningGoal: next.account.learningGoal,
       profileComplete: true,
+      walletPromptSeen: true,
       avatarUrl: next.account.avatarUrl,
     });
     return { ok: true, account: next.account };

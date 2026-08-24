@@ -37,7 +37,7 @@ const LEVEL_BODY = {
   hard: "Study Snow protocols, Coreth, Teleporter, ACP-77, and validator economics.",
 };
 
-function Landing({ onStart, onSignIn, onExploreCredentials }) {
+function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) {
   const [levelId, setLevelId] = useState("easy");
   const level = DIFFICULTY_LEVELS.find((item) => item.id === levelId) || DIFFICULTY_LEVELS[0];
   const copy = PATH_COPY[level.id];
@@ -59,11 +59,13 @@ function Landing({ onStart, onSignIn, onExploreCredentials }) {
             on-chain, or wait for an issuer-attested credential.
           </p>
           <div className="landing-hero-actions">
-            <Button className="btn-solid" onClick={onStart}>Start Learning →</Button>
-            <p className="landing-secondary">
-              Already have an account?{" "}
-              <button type="button" className="text-link" onClick={onSignIn}>Sign in</button>
-            </p>
+            <Button className="btn-solid" onClick={onStart}>{signedIn ? "Continue Learning →" : "Start Learning →"}</Button>
+            {!signedIn && (
+              <p className="landing-secondary">
+                Already have an account?{" "}
+                <button type="button" className="text-link" onClick={onSignIn}>Sign in</button>
+              </p>
+            )}
           </div>
           <p className="landing-built">Built on Avalanche</p>
         </div>

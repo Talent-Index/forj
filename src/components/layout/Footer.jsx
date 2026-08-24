@@ -12,6 +12,8 @@ function Footer({ onNavigate }) {
         <button type="button" onClick={() => onNavigate("credentials")}>Credentials</button>
         <button type="button" onClick={() => onNavigate("about")}>About</button>
         <button type="button" onClick={() => onNavigate("lookup")}>Lookup</button>
+        <button type="button" onClick={() => onNavigate("privacy")}>Privacy</button>
+        <button type="button" onClick={() => onNavigate("terms")}>Terms</button>
         <a href="https://github.com/Talent-Index/SkillForge" target="_blank" rel="noreferrer">GitHub</a>
         <button type="button" onClick={() => onNavigate("about")}>Documentation</button>
       </nav>

@@ -11,7 +11,6 @@ import PuzzleBoard from "./components/PuzzleBoard";
 import Certificate from "./components/Certificate";
 import Landing from "./components/Landing";
 import NetworkGate from "./components/NetworkGate";
-import FirstRunGuide from "./components/FirstRunGuide";
 import EmptyState from "./components/EmptyState";
 import AboutPage from "./components/pages/AboutPage";
 import SettingsPage from "./components/pages/SettingsPage";
@@ -19,7 +18,8 @@ import ProgressPage from "./components/pages/ProgressPage";
 import LearnPage from "./components/pages/LearnPage";
 import LeaderboardPage from "./components/pages/LeaderboardPage";
 import CredentialLookupPage from "./components/pages/CredentialLookupPage";
-import AuthModal, { ProfileSetup, WalletOptional } from "./components/auth/AuthModal";
+import AuthModal, { ProfileSetup } from "./components/auth/AuthModal";
+import LegalPage from "./components/pages/LegalPage";
 import forgeCertificate from "./assets/forge-certificate.jpg";
 import {
   PROGRESS_VIEWS,
@@ -34,9 +34,8 @@ import { redeemPiece } from "./utils/puzzle";
 import {
   EMPTY_STATES,
   dismissFirstRunGuide,
-  firstRunStatus,
-  isFirstRunGuideDismissed,
 } from "./utils/onboarding";
+import { legalPageFromPath } from "./utils/legal";
 import {
   parseCredentialLocation,
   parseLookupQuery,
@@ -46,10 +45,12 @@ import { migrateAndHydrate } from "./utils/backend/migrate";
 import { writeQuizProgress } from "./utils/backend/progressSync";
 
 const VIEWS = PROGRESS_VIEWS;
-const PUBLIC_PAGES = new Set(["landing", "about", "lookup"]);
+const PUBLIC_PAGES = new Set(["landing", "about", "lookup", "privacy", "terms"]);
 
 function pageFromLocation() {
   if (typeof window === "undefined") return "landing";
+  const legal = legalPageFromPath(window.location.pathname);
+  if (legal) return legal;
   const location = parseCredentialLocation(window.location.pathname, window.location.search);
   if (location.isPublicRoute || location.tokenId || location.wallet) return "lookup";
   return "landing";
@@ -100,7 +101,7 @@ function App() {
     sectionScores,
     acquiredPieces,
     attempts,
-  }, { ready: progressReady });
+  }, { ready: progressReady, displayName: account?.name || "" });
 
   const applyProgress = useCallback((snapshot) => {
     const next = snapshot || emptyProgress();
@@ -143,7 +144,8 @@ function App() {
       if (cancelled) return;
       applyProgress(snapshot);
       setHydratedOwner(ownerId);
-      setGuideDismissed(isFirstRunGuideDismissed(ownerId));
+      dismissFirstRunGuide(ownerId);
+      setGuideDismissed(true);
       if (snapshot.recipientName === "" && account?.name) {
         setRecipientName(account.name);
       }
@@ -187,6 +189,10 @@ function App() {
       linkWallet(wallet.address);
     }
   }, [account?.id, account?.walletAddress, linkWallet, wallet.address]);
+
+  useEffect(() => {
+    if (wallet.address && open) closeModal();
+  }, [closeModal, open, wallet.address]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -268,6 +274,10 @@ function App() {
     setPage("learn");
   }, []);
 
+  useEffect(() => {
+    if (isAuthenticated && page === "landing") goLearnHome();
+  }, [goLearnHome, isAuthenticated, page]);
+
   const openLookup = useCallback((tokenId = "", walletAddress = "") => {
     const href = publicCredentialPath({ tokenId, wallet: walletAddress });
     if (typeof window !== "undefined") {
@@ -284,14 +294,27 @@ function App() {
 
   function closeAuth() {
     setAuthOpen(false);
-    if (auth.account?.emailVerified && auth.stage === "profile") {
-      setPage("learn");
+    if (auth.account?.emailVerified) goLearnHome();
+  }
+
+  function openLegal(topic) {
+    setAuthOpen(false);
+    const path = topic === "terms" ? "/terms" : "/privacy";
+    if (typeof window !== "undefined") {
+      window.history.pushState({}, "", path);
+      setLocationKey(path);
     }
+    setPage(topic === "terms" ? "terms" : "privacy");
   }
 
   useEffect(() => {
     function onPop() {
       setLocationKey(`${window.location.pathname}${window.location.search}`);
+      const legal = legalPageFromPath(window.location.pathname);
+      if (legal) {
+        setPage(legal);
+        return;
+      }
       const location = parseCredentialLocation(window.location.pathname, window.location.search);
       if (location.isPublicRoute || location.tokenId || location.wallet) setPage("lookup");
     }
@@ -300,6 +323,13 @@ function App() {
   }, []);
 
   function handleNavigate(nextPage) {
+    if (typeof window !== "undefined" && (nextPage === "privacy" || nextPage === "terms")) {
+      const path = nextPage === "terms" ? "/terms" : "/privacy";
+      window.history.pushState({}, "", path);
+      setLocationKey(path);
+      setPage(nextPage);
+      return;
+    }
     if (typeof window !== "undefined" && nextPage === "lookup") {
       const href = publicCredentialPath({});
       if (window.location.pathname !== "/credential" || window.location.search) {
@@ -357,22 +387,9 @@ function App() {
     }
   }
 
-  async function handleWalletSkip() {
-    if (onboardBusy) return;
-    setOnboardBusy(true);
-    try {
-      await auth.dismissWalletPrompt();
-    } finally {
-      setOnboardBusy(false);
-    }
-  }
-
-  function handleWalletConnect() {
-    void auth.dismissWalletPrompt();
-    openModal();
-  }
-
   function renderAppContent() {
+    if (page === "privacy") return <LegalPage topic="privacy" />;
+    if (page === "terms") return <LegalPage topic="terms" />;
     if (page === "about") return <AboutPage />;
     if (page === "lookup") {
       return (
@@ -394,6 +411,7 @@ function App() {
     if (!isAuthenticated || page === "landing") {
       return (
         <Landing
+          signedIn={isAuthenticated}
           onStart={() => (isAuthenticated ? goLearnHome() : openAuth("signup"))}
           onSignIn={() => openAuth("signin")}
           onExploreCredentials={() => handleNavigate("lookup")}
