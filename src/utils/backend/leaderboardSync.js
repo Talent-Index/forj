@@ -53,7 +53,10 @@ export async function writeLeaderboardPreference(userId, patch, extras = {}) {
   return { ok: true, preference: applied.preference };
 }
 
-export function listenLiveLeaderboard(onChange, onError) {
+const LIVE_UNSUB_DELAY_MS = 500;
+let liveBoard = null;
+
+function startLiveBoard() {
   const prefQuery = query(
     collection(db, COLLECTIONS.leaderboardPreferences),
     where("optIn", "==", true)
@@ -63,30 +66,68 @@ export function listenLiveLeaderboard(onChange, onError) {
     where("optIn", "==", true)
   );
 
+  const listeners = new Map();
   let preferences = [];
   let events = [];
   let prefReady = false;
   let eventReady = false;
+  let lastRows = null;
+  let pendingUnsub = null;
 
   function emit() {
     if (!prefReady || !eventReady) return;
-    onChange(buildLiveLeaderboard(preferences, events));
+    lastRows = buildLiveLeaderboard(preferences, events);
+    for (const { onChange } of listeners.values()) onChange(lastRows);
+  }
+
+  function fail(err) {
+    for (const { onError } of listeners.values()) onError?.(err);
   }
 
   const unsubPrefs = onSnapshot(prefQuery, (snap) => {
     preferences = snap.docs.map((item) => ({ id: item.id, ...item.data() }));
     prefReady = true;
     emit();
-  }, onError);
+  }, fail);
 
   const unsubEvents = onSnapshot(eventQuery, (snap) => {
     events = snap.docs.map((item) => item.data());
     eventReady = true;
     emit();
-  }, onError);
+  }, fail);
 
+  return {
+    listeners,
+    get lastRows() {
+      return lastRows;
+    },
+    clearPending() {
+      if (pendingUnsub) {
+        clearTimeout(pendingUnsub);
+        pendingUnsub = null;
+      }
+    },
+    scheduleStop() {
+      this.clearPending();
+      pendingUnsub = setTimeout(() => {
+        if (listeners.size > 0) return;
+        unsubPrefs();
+        unsubEvents();
+        if (liveBoard === this) liveBoard = null;
+      }, LIVE_UNSUB_DELAY_MS);
+    },
+  };
+}
+
+export function listenLiveLeaderboard(onChange, onError) {
+  if (!liveBoard) liveBoard = startLiveBoard();
+  liveBoard.clearPending();
+  const id = Symbol("live-board");
+  liveBoard.listeners.set(id, { onChange, onError });
+  if (liveBoard.lastRows) onChange(liveBoard.lastRows);
   return () => {
-    unsubPrefs();
-    unsubEvents();
+    if (!liveBoard) return;
+    liveBoard.listeners.delete(id);
+    if (liveBoard.listeners.size === 0) liveBoard.scheduleStop();
   };
 }

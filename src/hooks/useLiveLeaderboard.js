@@ -17,7 +17,10 @@ export function useLiveLeaderboard({ progression, windowName = "global", trackId
   }, [progression?.state]);
 
   useEffect(() => {
-    if (!enabled) return undefined;
+    if (!enabled) {
+      setStatus("local");
+      return undefined;
+    }
     setStatus("connecting");
     setError("");
     return listenLiveLeaderboard(

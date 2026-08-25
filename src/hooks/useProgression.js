@@ -33,6 +33,7 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
   const store = useMemo(() => createProgressionStore(browserStorage()), []);
   const stateRef = useRef(null);
   const migratedFor = useRef(null);
+  const joinedFor = useRef(null);
   const [state, setState] = useState(null);
   const [feedback, setFeedback] = useState([]);
   const [hydrated, setHydrated] = useState(false);
@@ -44,6 +45,7 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
       setState(null);
       setHydrated(false);
       migratedFor.current = null;
+      joinedFor.current = null;
       return;
     }
     const loaded = store.loadMigrated(id, quizSnapshot || {});
@@ -51,14 +53,23 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
     setState(loaded);
     setHydrated(true);
     migratedFor.current = id;
+    // Hydrate once per learner. Migration is idempotent if called again from dispatch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- quizSnapshot is read once on account switch
+  }, [learnerId, ready, store]);
+
+  useEffect(() => {
+    const id = progressOwnerId(learnerId);
+    if (!id || !ready || !hydrated || joinedFor.current === id) return undefined;
+    let cancelled = false;
     readLeaderboardPreference(id)
       .then(async (pref) => {
-        if (migratedFor.current !== id || !stateRef.current) return;
+        if (cancelled || migratedFor.current !== id || !stateRef.current) return;
         const joined = joinLeaderboardByDefault(
           pref,
           displayName || stateRef.current.leaderboard?.displayName
         );
         if (!joined.ok) return;
+        joinedFor.current = id;
         if (!joined.applied) {
           const next = {
             ...stateRef.current,
@@ -71,6 +82,7 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
         }
         await writeLeaderboardPreference(id, joined.preference).catch(() => {});
         await setProgressEventsOptIn(id, true).catch(() => {});
+        if (cancelled || !stateRef.current) return;
         const next = {
           ...stateRef.current,
           leaderboard: { ...stateRef.current.leaderboard, ...joined.preference },
@@ -80,9 +92,10 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
         store.save(id, next);
       })
       .catch(() => {});
-    // Hydrate once per learner. Migration is idempotent if called again from dispatch.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- quizSnapshot is read once on account switch
-  }, [displayName, learnerId, ready, store]);
+    return () => {
+      cancelled = true;
+    };
+  }, [displayName, hydrated, learnerId, ready, store]);
 
   const persist = useCallback((next) => {
     const id = progressOwnerId(learnerId);

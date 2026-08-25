@@ -20,7 +20,7 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
     progression,
     windowName,
     trackId,
-    enabled: true,
+    enabled: Boolean(learnerId),
   });
 
   async function toggleOptIn() {
