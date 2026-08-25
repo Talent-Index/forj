@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import hre from "hardhat";
+import { ethers, provider, deploySkillForgeCredential } from "./network.js";
 import { validateCredentialMetadata } from "../src/utils/credentialMetadata.js";
 
 const IMAGE = "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi";
@@ -12,15 +12,11 @@ function decodeTokenURI(uri) {
 
 describe("SkillForgeCredential", function () {
   async function deployCredential() {
-    const [owner, learner, other] = await hre.ethers.getSigners();
-    const Credential = await hre.ethers.getContractFactory("SkillForgeCredential");
-    const credential = await Credential.deploy();
-    await credential.waitForDeployment();
-    return { credential, owner, learner, other };
+    return deploySkillForgeCredential();
   }
 
   async function domainFor(credential) {
-    const { chainId } = await hre.ethers.provider.getNetwork();
+    const { chainId } = await provider.getNetwork();
     return {
       name: "SkillForgeCredential",
       version: "1",
@@ -44,7 +40,7 @@ describe("SkillForgeCredential", function () {
   };
 
   async function signAttestation(credential, signer, learner, overrides = {}) {
-    const latest = (await hre.ethers.provider.getBlock("latest")).timestamp;
+    const latest = (await provider.getBlock("latest")).timestamp;
     const value = {
       learner: learner.address,
       totalPoints: 15n,
@@ -52,7 +48,7 @@ describe("SkillForgeCredential", function () {
       easyCorrect: 5,
       mediumCorrect: 0,
       hardCorrect: 0,
-      imageHash: hre.ethers.keccak256(hre.ethers.toUtf8Bytes(IMAGE)),
+      imageHash: ethers.keccak256(ethers.toUtf8Bytes(IMAGE)),
       nonce: 0n,
       deadline: BigInt(latest + 3600),
       ...overrides,
@@ -192,7 +188,7 @@ describe("SkillForgeCredential", function () {
 
   it("rejects unauthorized and invalid attestations without consuming a nonce", async function () {
     const { credential, owner, learner, other } = await deployCredential();
-    const latest = (await hre.ethers.provider.getBlock("latest")).timestamp;
+    const latest = (await provider.getBlock("latest")).timestamp;
     const { value, signature } = await signAttestation(credential, owner, learner);
     const outsider = await signAttestation(credential, other, learner);
 

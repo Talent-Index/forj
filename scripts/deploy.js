@@ -35,26 +35,29 @@ function upsertEnvValue(filePath, key, value) {
 }
 
 async function main() {
-  const networkName = hre.network.name;
-  if (networkName !== "hardhat") {
+  const connection = await hre.network.connect();
+  const { ethers, provider } = connection;
+  const networkName = connection.networkName || connection.name || "default";
+  const isRemote = networkName !== "hardhat" && networkName !== "default";
+  if (isRemote) {
     requirePrivateKey();
   }
   if (networkName === "avalanche" && process.env.CONFIRM_MAINNET !== "yes") {
     throw new Error("Mainnet deploy is gated. Set CONFIRM_MAINNET=yes after the security checklist.");
   }
 
-  const [signer] = await hre.ethers.getSigners();
+  const [signer] = await ethers.getSigners();
   const deployer = await signer.getAddress();
-  const { chainId } = await hre.ethers.provider.getNetwork();
+  const { chainId } = await provider.getNetwork();
 
-  const nonce = await hre.network.provider.send("eth_getTransactionCount", [
+  const nonce = await provider.send("eth_getTransactionCount", [
     deployer,
     "latest",
   ]);
 
-  const Credential = await hre.ethers.getContractFactory("SkillForgeCredential");
+  const Credential = await ethers.getContractFactory("SkillForgeCredential");
   const deployTx = await Credential.getDeployTransaction();
-  const estimatedGas = await hre.network.provider.send("eth_estimateGas", [
+  const estimatedGas = await provider.send("eth_estimateGas", [
     { from: deployer, data: deployTx.data },
     "latest",
   ]);
@@ -80,13 +83,13 @@ async function main() {
   const outFile = deploymentsPath(networkName);
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
   fs.writeFileSync(outFile, `${JSON.stringify(record, null, 2)}\n`);
-  if (networkName !== "hardhat") {
+  if (isRemote) {
     upsertEnvValue(path.join(process.cwd(), ".env"), "VITE_CREDENTIAL_CONTRACT", address);
   }
 
   console.log("SkillForgeCredential deployed to:", address);
   console.log("Deployment record:", outFile);
-  if (networkName !== "hardhat") {
+  if (isRemote) {
     console.log("VITE_CREDENTIAL_CONTRACT updated in .env when that file exists.");
   }
   console.log("Set VITE_CREDENTIAL_IMAGE_URI to a stable IPFS or HTTPS artwork URL before minting.");

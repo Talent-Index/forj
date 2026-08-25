@@ -1,4 +1,5 @@
-import "@nomicfoundation/hardhat-toolbox";
+import { defineConfig } from "hardhat/config";
+import hardhatToolboxMochaEthers from "@nomicfoundation/hardhat-toolbox-mocha-ethers";
 import dotenv from "dotenv";
 import fs from "fs";
 
@@ -18,14 +19,15 @@ if (fs.existsSync(localEnvPath)) {
 function deployerAccounts() {
   const key = (process.env.PRIVATE_KEY || "").trim();
   if (!key) return [];
-  return [key.startsWith("0x") ? key : `0x${key}`];
+  const privateKey = key.startsWith("0x") ? key : `0x${key}`;
+  return [privateKey];
 }
 
 const fujiUrl = process.env.FUJI_RPC_URL || "https://avalanche-fuji-c-chain.publicnode.com";
 const accounts = deployerAccounts();
 
-/** @type import('hardhat/config').HardhatUserConfig */
-export default {
+export default defineConfig({
+  plugins: [hardhatToolboxMochaEthers],
   solidity: {
     version: "0.8.26",
     settings: {
@@ -33,19 +35,23 @@ export default {
       evmVersion: "cancun",
     },
   },
+  paths: {
+    sources: "./contracts",
+  },
   networks: {
     fuji: {
+      type: "http",
+      chainType: "l1",
       url: fujiUrl,
       chainId: 43113,
       accounts,
     },
     avalanche: {
+      type: "http",
+      chainType: "l1",
       url: "https://api.avax.network/ext/bc/C/rpc",
       chainId: 43114,
       accounts,
     },
   },
-  paths: {
-    sources: "./contracts",
-  },
-};
+});

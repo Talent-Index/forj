@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import hre from "hardhat";
+import { ethers, provider, deploySkillForgeCredential } from "./network.js";
 import {
   EIP712_NAME,
   EIP712_TYPES,
@@ -13,15 +13,11 @@ const OTHER_IMAGE = "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy
 
 describe("SkillForgeCredential EIP-712 authorization", function () {
   async function deployCredential() {
-    const [owner, learner, other] = await hre.ethers.getSigners();
-    const Credential = await hre.ethers.getContractFactory("SkillForgeCredential");
-    const credential = await Credential.deploy();
-    await credential.waitForDeployment();
-    return { credential, owner, learner, other };
+    return deploySkillForgeCredential();
   }
 
   async function domainFor(credential, overrides = {}) {
-    const { chainId } = await hre.ethers.provider.getNetwork();
+    const { chainId } = await provider.getNetwork();
     return authorizationDomain({
       chainId,
       verifyingContract: await credential.getAddress(),
@@ -30,7 +26,7 @@ describe("SkillForgeCredential EIP-712 authorization", function () {
   }
 
   async function signAttestation(credential, signer, learner, overrides = {}) {
-    const latest = (await hre.ethers.provider.getBlock("latest")).timestamp;
+    const latest = (await provider.getBlock("latest")).timestamp;
     const value = {
       learner: learner.address,
       totalPoints: 15n,
@@ -68,7 +64,7 @@ describe("SkillForgeCredential EIP-712 authorization", function () {
 
   it("exposes the finalized EIP-712 domain", async function () {
     const { credential } = await deployCredential();
-    const { chainId } = await hre.ethers.provider.getNetwork();
+    const { chainId } = await provider.getNetwork();
     const domain = await credential.eip712Domain();
 
     expect(await credential.EIP712_NAME()).to.equal(EIP712_NAME);
@@ -116,7 +112,7 @@ describe("SkillForgeCredential EIP-712 authorization", function () {
 
   it("reverts for a signature bound to another contract", async function () {
     const { credential, owner, learner } = await deployCredential();
-    const otherContract = await (await hre.ethers.getContractFactory("SkillForgeCredential")).deploy();
+    const otherContract = await (await ethers.getContractFactory("SkillForgeCredential")).deploy();
     await otherContract.waitForDeployment();
     const { value, signature } = await signAttestation(otherContract, owner, learner);
 
@@ -154,10 +150,10 @@ describe("SkillForgeCredential EIP-712 authorization", function () {
 
   it("allows deadline equal to the current timestamp", async function () {
     const { credential, owner, learner } = await deployCredential();
-    const latest = (await hre.ethers.provider.getBlock("latest")).timestamp;
+    const latest = (await provider.getBlock("latest")).timestamp;
     const deadline = BigInt(latest + 8);
     const { value, signature } = await signAttestation(credential, owner, learner, { deadline });
-    await hre.network.provider.send("evm_setNextBlockTimestamp", [Number(deadline)]);
+    await provider.send("evm_setNextBlockTimestamp", [Number(deadline)]);
 
     await expect(
       credential.connect(learner).mintCredentialWithAuthorization(...mintArgs(value, signature))
@@ -166,10 +162,10 @@ describe("SkillForgeCredential EIP-712 authorization", function () {
 
   it("reverts when the deadline is in the past", async function () {
     const { credential, owner, learner } = await deployCredential();
-    const latest = (await hre.ethers.provider.getBlock("latest")).timestamp;
+    const latest = (await provider.getBlock("latest")).timestamp;
     const deadline = BigInt(latest + 4);
     const { value, signature } = await signAttestation(credential, owner, learner, { deadline });
-    await hre.network.provider.send("evm_setNextBlockTimestamp", [Number(deadline) + 1]);
+    await provider.send("evm_setNextBlockTimestamp", [Number(deadline) + 1]);
 
     await expect(
       credential.connect(learner).mintCredentialWithAuthorization(...mintArgs(value, signature))
