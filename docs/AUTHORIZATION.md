@@ -12,7 +12,9 @@ The learner UI still publishes **self-claimed** records. Attestation is a separa
 - Expire it. After the deadline it is no longer valid.  
 - If the owner key changes, old signatures from the previous owner do not authorize new mints.
 
-The credential ID is assigned at mint. The signature authorizes the **content**, not a pre-chosen token number.
+The credential ID is assigned at mint. The signature authorizes the **content**, not a pre-chosen token number. `credentialId` is **not** signed.
+
+Signed domain: `name`, `version`, `chainId`, `verifyingContract`. Signed payload includes `learner`, score snapshot, puzzle mask, `imageHash`, `nonce`, and `deadline`.
 
 ## What a signature is not
 

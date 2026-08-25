@@ -111,7 +111,7 @@ assert.equal(
   false
 );
 
-assert.match(docs, /VITE_CREDENTIAL_IMAGE_URI/);
+assert.match(docs, /tokenURI/);
 assert.match(docs, /ipfs:\/\//);
 assert.match(docs, /forge-certificate\.jpg/);
 assert.match(docs, /tokenURI/);

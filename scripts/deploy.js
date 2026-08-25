@@ -35,8 +35,9 @@ function upsertEnvValue(filePath, key, value) {
 }
 
 async function main() {
-  const connection = await hre.network.connect();
-  const { ethers, provider } = connection;
+  const connection = await hre.network.create();
+  const { ethers } = connection;
+  const provider = ethers.provider;
   const networkName = connection.networkName || connection.name || "default";
   const isRemote = networkName !== "hardhat" && networkName !== "default";
   if (isRemote) {

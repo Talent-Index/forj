@@ -29,11 +29,36 @@ That snapshot is what was written at mint. It is not a live feed of later quiz r
 
 A claimed credential must not be labeled verified, certified, accredited, or independently assessed. Public lookup and explorer links mean **the token exists**. They do not mean an issuer reviewed the learner.
 
-Unknown or missing status is treated as **claimed**.
+Unknown or missing status is treated as **claimed** (fail closed). Explorer links use **View on Snowtrace**. They show that the token exists.
 
 ## Lookup
 
 Anyone can open a credential by ID or by holder wallet, with a shareable URL and QR. Lookup stays available after sign-in. Lookup does not require the visitor to connect a wallet. Finding a record is not the same as attesting a score.
+
+## On-chain record
+
+**Schema version:** `1` (`CREDENTIAL_SCHEMA_VERSION`). The public record fields are:
+
+- `credentialId`
+- `walletAddress`
+- `score`
+- `difficulty`
+- `completion`
+- `credentialType`
+- `verificationStatus`
+- `issuer`
+- `metadataUri`
+- `contractAddress`
+- `chainId`
+- `version`
+
+Required vs optional fields: the list above is required for a current record. Optional display fields may be empty without changing claimed vs attested.
+
+Score constraints: points and Easy / Medium / Hard counts are the minted snapshot. They cannot exceed the quiz maximums. Puzzle completion is a bit mask of seated pieces.
+
+Verification-state transitions: a token stays claimed or attested as minted. A learner remint creates a new token. A claimed record does not become attested in place. `credentialIdsAreUnique` for a wallet’s current set.
+
+Mint time is Unix **seconds**.
 
 ## Lifecycle
 

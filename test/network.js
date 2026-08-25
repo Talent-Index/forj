@@ -1,8 +1,9 @@
 import hre from "hardhat";
 
-const connection = await hre.network.connect();
+const connection = await hre.network.create();
 
-export const { ethers, provider, networkHelpers } = connection;
+export const { ethers, networkHelpers } = connection;
+export const provider = ethers.provider;
 
 export async function deploySkillForgeCredential() {
   const [owner, learner, other] = await ethers.getSigners();
