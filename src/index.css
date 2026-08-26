@@ -1671,10 +1671,12 @@ img {
 
 .landing-hero {
   display: block;
+  text-align: center;
 }
 
 .landing-hero-copy {
   max-width: 36rem;
+  margin-inline: auto;
 }
 
 .landing-kicker {
@@ -1706,19 +1708,29 @@ img {
 .footer-note {
   color: var(--muted);
   max-width: 36em;
+  margin-inline: auto;
 }
 
 .landing-hero-actions,
 .hero-actions {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   margin: 24px 0 16px;
 }
 
 .landing-section {
   border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.landing-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+  text-align: left;
 }
 
 .landing-steps {
@@ -1737,15 +1749,8 @@ img {
   margin-bottom: 12px;
 }
 
-.landing-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: start;
-}
-
 .landing-puzzle {
-  justify-self: start;
+  justify-self: center;
   max-width: 520px;
 }
 
@@ -1758,6 +1763,7 @@ img {
   display: flex;
   gap: 8px;
   margin: 16px 0 24px;
+  justify-content: center;
 }
 
 .level-tab {
@@ -1814,7 +1820,7 @@ img {
 .landing-finale {
   background: #161513;
   color: #f3f0e8;
-  text-align: left;
+  text-align: center;
   padding: 88px 24px;
 }
 
@@ -1827,11 +1833,12 @@ img {
 .landing-finale h2 {
   font-size: clamp(32px, 5vw, 52px);
   max-width: 36rem;
+  margin-inline: auto;
 }
 
 .landing-finale p {
   color: #c4bfb4;
-  margin: 12px 0 24px;
+  margin: 12px auto 24px;
   max-width: 36rem;
 }
 
@@ -1841,7 +1848,8 @@ img {
   margin-inline: auto;
   padding: 32px 24px 48px;
   display: grid;
-  justify-items: start;
+  justify-items: center;
+  text-align: center;
   gap: 16px;
 }
 
@@ -1849,6 +1857,7 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 12px 20px;
+  justify-content: center;
 }
 
 .footer-links button,
