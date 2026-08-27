@@ -119,9 +119,41 @@ describe("SkillForgeCredential", function () {
     await expect(
       credential.connect(learner).mintCredential(1, 1, 6, 0, 0, "")
     ).to.be.revertedWith("Invalid scores");
+  it("rejects scores above the on-chain maximum", async function () {
+    const { credential, learner } = await deployCredential();
+    const maxPoints = await credential.MAX_POINTS();
+    expect(maxPoints).to.equal(80n);
+
+    await expect(
+      credential.connect(learner).mintCredential(maxPoints + 1n, 1, 5, 5, 5, IMAGE)
+    ).to.be.revertedWith("Score exceeds maximum");
+    await credential.connect(learner).mintCredential(maxPoints, 1, 5, 5, 5, IMAGE);
+    expect((await credential.credentials(1n)).totalPoints).to.equal(maxPoints);
+  });
+
+  it("rejects JSON-breaking and oversized image URIs", async function () {
+    const { credential, learner } = await deployCredential();
+
     await expect(
       credential.connect(learner).mintCredential(1, 1, 0, 0, 0, 'ipfs://"bad"')
     ).to.be.revertedWith("Invalid image");
+    await expect(
+      credential.connect(learner).mintCredential(1, 1, 0, 0, 0, "ipfs://foo\\")
+    ).to.be.revertedWith("Invalid image");
+    await expect(
+      credential.connect(learner).mintCredential(1, 1, 0, 0, 0, "javascript:alert(1)")
+    ).to.be.revertedWith("Invalid image");
+    await expect(
+      credential.connect(learner).mintCredential(1, 1, 0, 0, 0, `ipfs://${"a".repeat(250)}`)
+    ).to.be.revertedWith("Invalid image");
+  });
+
+  it("accepts empty, ipfs, and https artwork URIs", async function () {
+    const { credential, learner, other } = await deployCredential();
+    await credential.connect(learner).mintCredential(1, 1, 0, 0, 0, "");
+    expect((await credential.credentials(1n)).image).to.equal("");
+    await credential.connect(other).mintCredential(1, 1, 0, 0, 0, "https://example.com/forge-certificate.jpg");
+    expect((await credential.credentials(2n)).image).to.equal("https://example.com/forge-certificate.jpg");
   });
 
   it("does not allow tokenURI reads for burned or missing tokens", async function () {
@@ -146,19 +178,55 @@ describe("SkillForgeCredential", function () {
       credential.connect(learner).approve(other.address, 1n)
     ).to.be.revertedWith("Soulbound: non-transferable");
     await expect(
-      credential.connect(learner).setApprovalForAll(other.address, true)
+      credential.connect(learner)["safeTransferFrom(address,address,uint256,bytes)"](
+        learner.address,
+        other.address,
+        1n,
+        "0x"
+      )
     ).to.be.revertedWith("Soulbound: non-transferable");
+    expect(await credential.getApproved(1n)).to.equal(ethers.ZeroAddress);
+    expect(await credential.isApprovedForAll(learner.address, other.address)).to.equal(false);
   });
 
-  it("restricts ownership changes to the current owner", async function () {
+  it("uses two-step ownership and refuses renounce", async function () {
     const { credential, owner, learner, other } = await deployCredential();
 
     await expect(
       credential.connect(learner).transferOwnership(other.address)
     ).to.be.revertedWithCustomError(credential, "OwnableUnauthorizedAccount");
+    await expect(credential.connect(owner).renounceOwnership())
+      .to.be.revertedWith("Ownership cannot be renounced");
 
     await credential.connect(owner).transferOwnership(other.address);
+    expect(await credential.owner()).to.equal(owner.address);
+    expect(await credential.pendingOwner()).to.equal(other.address);
+
+    await credential.connect(other).acceptOwnership();
     expect(await credential.owner()).to.equal(other.address);
+    expect(await credential.pendingOwner()).to.equal(ethers.ZeroAddress);
+  });
+
+  it("rejects attestations from a previous owner after the handoff", async function () {
+    const { credential, owner, learner, other } = await deployCredential();
+    const { value, signature } = await signAttestation(credential, owner, learner);
+
+    await credential.connect(owner).transferOwnership(other.address);
+    await credential.connect(other).acceptOwnership();
+
+    await expect(
+      credential.connect(learner).mintCredentialWithAuthorization(
+        value.totalPoints,
+        value.puzzleMask,
+        value.easyCorrect,
+        value.mediumCorrect,
+        value.hardCorrect,
+        IMAGE,
+        value.deadline,
+        signature
+      )
+    ).to.be.revertedWith("Invalid authorization");
+    expect(await credential.authorizationNonces(learner.address)).to.equal(0n);
   });
 
   it("accepts owner-signed attestation and marks the mint as attested", async function () {

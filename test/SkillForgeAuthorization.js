@@ -160,7 +160,19 @@ describe("SkillForgeCredential EIP-712 authorization", function () {
     ).to.emit(credential, "CredentialMinted");
   });
 
-  it("reverts when the deadline is in the past", async function () {
+  it("reverts when the deadline is farther than the authorization window", async function () {
+    const { credential, owner, learner } = await deployCredential();
+    const latest = (await provider.getBlock("latest")).timestamp;
+    const window = Number(await credential.MAX_AUTHORIZATION_WINDOW());
+    const { value, signature } = await signAttestation(credential, owner, learner, {
+      deadline: BigInt(latest + window + 60),
+    });
+
+    await expect(
+      credential.connect(learner).mintCredentialWithAuthorization(...mintArgs(value, signature))
+    ).to.be.revertedWith("Authorization window too long");
+    expect(await credential.authorizationNonces(learner.address)).to.equal(0n);
+  });
     const { credential, owner, learner } = await deployCredential();
     const latest = (await provider.getBlock("latest")).timestamp;
     const deadline = BigInt(latest + 4);

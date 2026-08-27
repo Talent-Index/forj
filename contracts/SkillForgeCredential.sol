@@ -2,7 +2,7 @@
 pragma solidity ^0.8.26;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable2Step.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
@@ -15,11 +15,14 @@ import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 ///      - mintCredentialWithAuthorization: issuer-attested scores. Requires an EIP-712
 ///        signature from the contract owner. The learner nonce is consumed before mint
 ///        and rolls back if the transaction reverts.
-contract SkillForgeCredential is ERC721, Ownable, EIP712 {
+contract SkillForgeCredential is ERC721, Ownable2Step, EIP712 {
     using Strings for uint256;
 
     string public constant EIP712_NAME = "SkillForgeCredential";
     string public constant EIP712_VERSION = "1";
+    uint256 public constant MAX_POINTS = 80;
+    uint256 public constant MAX_IMAGE_BYTES = 256;
+    uint256 public constant MAX_AUTHORIZATION_WINDOW = 7 days;
 
     bytes32 private constant CREDENTIAL_TYPEHASH = keccak256(
         "Credential(address learner,uint256 totalPoints,uint256 puzzleMask,uint8 easyCorrect,uint8 mediumCorrect,uint8 hardCorrect,bytes32 imageHash,uint256 nonce,uint256 deadline)"
@@ -75,6 +78,7 @@ contract SkillForgeCredential is ERC721, Ownable, EIP712 {
         bytes calldata signature
     ) external {
         require(block.timestamp <= deadline, "Authorization expired");
+        require(deadline <= block.timestamp + MAX_AUTHORIZATION_WINDOW, "Authorization window too long");
 
         uint256 nonce = authorizationNonces[msg.sender];
         bytes32 structHash = keccak256(
@@ -122,9 +126,10 @@ contract SkillForgeCredential is ERC721, Ownable, EIP712 {
         bool attested
     ) internal {
         require(totalPoints > 0, "No points earned");
+        require(totalPoints <= MAX_POINTS, "Score exceeds maximum");
         require(puzzleMask > 0 && puzzleMask <= 0xFFFF, "Invalid puzzle mask");
         require(easyCorrect <= 5 && mediumCorrect <= 5 && hardCorrect <= 5, "Invalid scores");
-        require(!_containsQuote(imageData), "Invalid image");
+        require(_isAllowedImage(imageData), "Invalid image");
 
         uint256 existingId = credentialOf[learner];
         if (existingId != 0) {
@@ -133,7 +138,9 @@ contract SkillForgeCredential is ERC721, Ownable, EIP712 {
         }
 
         uint256 tokenId = _nextTokenId++;
-        _safeMint(learner, tokenId);
+        // Soulbound tokens are not transferred. Skip onERC721Received to avoid
+        // receiver callbacks during mint (reentrancy and extra gas).
+        _mint(learner, tokenId);
 
         credentials[tokenId] = CredentialData({
             totalPoints: totalPoints,
@@ -150,12 +157,30 @@ contract SkillForgeCredential is ERC721, Ownable, EIP712 {
         emit CredentialMinted(learner, tokenId, totalPoints, puzzleMask, attested);
     }
 
-    function _containsQuote(string calldata value) private pure returns (bool) {
+    function _isAllowedImage(string calldata value) private pure returns (bool) {
         bytes memory data = bytes(value);
-        for (uint256 i = 0; i < data.length; i++) {
-            if (data[i] == 0x22) return true;
+        uint256 n = data.length;
+        if (n == 0) return true;
+        if (n > MAX_IMAGE_BYTES) return false;
+
+        bool ipfsPrefix = n >= 7
+            && data[0] == "i" && data[1] == "p" && data[2] == "f" && data[3] == "s"
+            && data[4] == ":" && data[5] == "/" && data[6] == "/";
+        bool httpsPrefix = n >= 8
+            && data[0] == "h" && data[1] == "t" && data[2] == "t" && data[3] == "p"
+            && data[4] == "s" && data[5] == ":" && data[6] == "/" && data[7] == "/";
+        if (!ipfsPrefix && !httpsPrefix) return false;
+
+        for (uint256 i = 0; i < n; i++) {
+            bytes1 c = data[i];
+            bool ok = (c >= 0x61 && c <= 0x7A)
+                || (c >= 0x41 && c <= 0x5A)
+                || (c >= 0x30 && c <= 0x39)
+                || c == 0x3A || c == 0x2F || c == 0x2E || c == 0x2D || c == 0x5F
+                || c == 0x3F || c == 0x26 || c == 0x3D || c == 0x25;
+            if (!ok) return false;
         }
-        return false;
+        return true;
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
@@ -209,6 +234,10 @@ contract SkillForgeCredential is ERC721, Ownable, EIP712 {
 
     function setApprovalForAll(address, bool) public pure override {
         revert("Soulbound: non-transferable");
+    }
+
+    function renounceOwnership() public pure override {
+        revert("Ownership cannot be renounced");
     }
 
     function _update(address to, uint256 tokenId, address auth) internal override returns (address) {

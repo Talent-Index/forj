@@ -9,8 +9,9 @@ The learner UI still publishes **self-claimed** records. Attestation is a separa
 - Bind the authorization to **this** SkillForge contract on **this** chain.  
 - Bind it to one learner, one score snapshot, one puzzle mask, and one artwork hash.  
 - Use it once. A second use of the same authorization fails.  
-- Expire it. After the deadline it is no longer valid.  
-- If the owner key changes, old signatures from the previous owner do not authorize new mints.
+- Expire it. After the deadline it is no longer valid. An authorization cannot reach more than seven days into the future.  
+- Use a per-learner nonce so a valid signature cannot be replayed.  
+- If the issuer key is handed off, the new owner must accept it. The issuer role cannot be abandoned. Old signatures from the previous owner do not authorize new mints.
 
 The credential ID is assigned at mint. The signature authorizes the **content**, not a pre-chosen token number. `credentialId` is **not** signed.
 
