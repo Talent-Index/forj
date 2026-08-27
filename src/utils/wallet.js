@@ -14,6 +14,10 @@ export const WALLET_IDS = {
   core: "core",
 };
 
+export function isAllowedWalletId(walletId) {
+  return walletId === WALLET_IDS.metamask || walletId === WALLET_IDS.core;
+}
+
 export const WALLET_LABELS = {
   metamask: "MetaMask",
   core: "Core Wallet",
@@ -113,6 +117,10 @@ export function walletInstallUrl(walletId) {
 export function walletDeepLink(walletId, href) {
   try {
     const url = new URL(href);
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      return walletInstallUrl(walletId);
+    }
+    if (url.username || url.password) return walletInstallUrl(walletId);
     if (walletId === WALLET_IDS.metamask) {
       return `https://metamask.app.link/dapp/${url.host}${url.pathname}${url.search}`;
     }

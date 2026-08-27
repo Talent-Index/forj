@@ -6,6 +6,7 @@ import {
   jigsawPieces,
   pieceState,
 } from "../utils/jigsaw";
+import { safeMediaSrc } from "../utils/frontendSecurity";
 
 const PIECES = jigsawPieces();
 
@@ -66,10 +67,10 @@ function JigsawBoard({
                 : undefined
             }
           >
-            {acquired && artwork ? (
+            {acquired && safeMediaSrc(artwork) ? (
               <g clipPath={`url(#jigsaw-clip-${piece.index})`}>
                 <image
-                  href={artwork}
+                  href={safeMediaSrc(artwork)}
                   x="0"
                   y="0"
                   width={JIGSAW_BOARD}

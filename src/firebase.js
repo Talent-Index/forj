@@ -3,15 +3,10 @@ import { getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore, initializeFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { readPublicEnv } from "./utils/frontendSecurity.js";
 
 function env(name, fallback) {
-  try {
-    const value = import.meta.env?.[name];
-    if (typeof value === "string" && value.trim()) return value.trim();
-  } catch {
-    // Node scripts and tests do not have Vite env.
-  }
-  return fallback;
+  return readPublicEnv(name) || fallback;
 }
 
 export const firebaseConfig = {

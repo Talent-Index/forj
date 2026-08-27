@@ -1,24 +1,13 @@
 import { createPublicClient, http } from "viem";
 import { avalancheFuji } from "viem/chains";
-
-const DEFAULT_FUJI_RPC = "https://avalanche-fuji-c-chain.publicnode.com";
+import { parseDeployBlock, parseFujiRpcUrl, readPublicEnv } from "./frontendSecurity.js";
 
 export function fujiRpcUrl() {
-  try {
-    return String(import.meta.env?.VITE_FUJI_RPC_URL || "").trim() || DEFAULT_FUJI_RPC;
-  } catch {
-    return DEFAULT_FUJI_RPC;
-  }
+  return parseFujiRpcUrl(readPublicEnv("VITE_FUJI_RPC_URL"));
 }
 
 export function credentialDeployBlock() {
-  try {
-    const raw = String(import.meta.env?.VITE_CREDENTIAL_DEPLOY_BLOCK || "").trim();
-    if (!raw) return 0n;
-    return BigInt(raw);
-  } catch {
-    return 0n;
-  }
+  return parseDeployBlock(readPublicEnv("VITE_CREDENTIAL_DEPLOY_BLOCK"));
 }
 
 let client;

@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { initialsFromName, readAvatarFile } from "../../utils/avatar";
 import { MIN_PASSWORD_LENGTH } from "../../utils/auth";
 import { WALLET_LABELS } from "../../utils/wallet";
+import { safeAvatarSrc } from "../../utils/frontendSecurity";
 import { Button } from "../ui/primitives";
 
 export function AvatarFace({ account, className = "" }) {
-  if (account?.avatarUrl) {
-    return <img className={`avatar-image ${className}`.trim()} src={account.avatarUrl} alt="" />;
+  const avatar = safeAvatarSrc(account?.avatarUrl);
+  if (avatar) {
+    return <img className={`avatar-image ${className}`.trim()} src={avatar} alt="" />;
   }
   return (
     <span className={`avatar-fallback ${className}`.trim()} aria-hidden="true">

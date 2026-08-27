@@ -190,8 +190,8 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
 
       {!CONTRACT_ADDRESS && (
         <EmptyState
-          title="Contract not configured"
-          body="Set VITE_CREDENTIAL_CONTRACT to the Fuji SkillForgeCredential address."
+          title="Lookup unavailable"
+          body="Credential lookup is not available until the Fuji contract is configured."
         />
       )}
 

@@ -10,6 +10,7 @@ import {
   findProvider,
   formatWalletError,
   identifyProvider,
+  isAllowedWalletId,
   isFujiChain,
   isMobileUserAgent,
   parseChainId,
@@ -18,6 +19,7 @@ import {
   walletDeepLink,
   walletInstallUrl,
 } from "../utils/wallet";
+import { normalizeAddress } from "../utils/progress";
 
 function subscribe(provider, event, handler) {
   if (!provider) return () => {};
@@ -95,9 +97,11 @@ export function useWallet() {
   }, [provider, walletId]);
 
   const persistSession = useCallback((nextAddress, nextWalletId) => {
-    if (nextAddress) localStorage.setItem(STORAGE_ADDRESS, nextAddress);
+    const address = normalizeAddress(nextAddress);
+    const id = isAllowedWalletId(nextWalletId) ? nextWalletId : null;
+    if (address) localStorage.setItem(STORAGE_ADDRESS, address);
     else localStorage.removeItem(STORAGE_ADDRESS);
-    if (nextWalletId) localStorage.setItem(STORAGE_WALLET_ID, nextWalletId);
+    if (id) localStorage.setItem(STORAGE_WALLET_ID, id);
     else localStorage.removeItem(STORAGE_WALLET_ID);
   }, []);
 
@@ -159,13 +163,13 @@ export function useWallet() {
       rememberProvider(nextProvider, selectedId);
 
       const authorized = await nextProvider.request({ method: "eth_accounts" }).catch(() => []);
-      const savedAddress = localStorage.getItem(STORAGE_ADDRESS);
-      const known = authorized.find((account) => savedAddress && account.toLowerCase() === savedAddress.toLowerCase())
+      const savedAddress = normalizeAddress(localStorage.getItem(STORAGE_ADDRESS));
+      const known = authorized.find((account) => savedAddress && normalizeAddress(account) === savedAddress)
         || authorized[0];
       const accounts = known
         ? [known]
         : await nextProvider.request({ method: "eth_requestAccounts" });
-      const nextAddress = accounts?.[0];
+      const nextAddress = normalizeAddress(accounts?.[0]);
       if (!nextAddress) {
         throw new Error("No account returned. Unlock your wallet and try again.");
       }
@@ -200,9 +204,16 @@ export function useWallet() {
         if (cancelled) return;
         refreshAvailability();
 
-        const savedAddress = localStorage.getItem(STORAGE_ADDRESS);
-        const savedWalletId = localStorage.getItem(STORAGE_WALLET_ID);
-        if (!savedAddress) return;
+        const rawAddress = localStorage.getItem(STORAGE_ADDRESS);
+        if (!rawAddress) return;
+        const savedAddress = normalizeAddress(rawAddress);
+        const savedWalletId = isAllowedWalletId(localStorage.getItem(STORAGE_WALLET_ID))
+          ? localStorage.getItem(STORAGE_WALLET_ID)
+          : null;
+        if (!savedAddress) {
+          persistSession(null, null);
+          return;
+        }
 
         const nextProvider = findProvider(savedWalletId, window) || findProvider(null, window);
         if (!nextProvider) {
@@ -221,8 +232,13 @@ export function useWallet() {
         if (cancelled) return;
         const selectedId = identifyProvider(nextProvider) || savedWalletId;
         rememberProvider(nextProvider, selectedId);
-        setAddress(match);
-        persistSession(match, selectedId);
+        const restored = normalizeAddress(match);
+        if (!restored) {
+          persistSession(null, null);
+          return;
+        }
+        setAddress(restored);
+        persistSession(restored, selectedId);
         const nextChainId = await requestChainId(nextProvider);
         if (!cancelled) setChainId(nextChainId);
       } catch {
@@ -246,8 +262,13 @@ export function useWallet() {
         disconnect();
         return;
       }
-      setAddress(accounts[0]);
-      persistSession(accounts[0], walletId || identifyProvider(provider));
+      const next = normalizeAddress(accounts[0]);
+      if (!next) {
+        disconnect();
+        return;
+      }
+      setAddress(next);
+      persistSession(next, walletId || identifyProvider(provider));
       setError(null);
     };
 
@@ -283,8 +304,13 @@ export function useWallet() {
           return;
         }
         if (accounts[0].toLowerCase() !== address.toLowerCase()) {
-          setAddress(accounts[0]);
-          persistSession(accounts[0], walletId || identifyProvider(provider));
+          const next = normalizeAddress(accounts[0]);
+          if (!next) {
+            disconnect();
+            return;
+          }
+          setAddress(next);
+          persistSession(next, walletId || identifyProvider(provider));
         }
         const nextChainId = await requestChainId(provider);
         setChainId(nextChainId);
@@ -310,7 +336,11 @@ export function useWallet() {
     chainId,
     walletId,
     walletName: walletId ? WALLET_LABELS[walletId] : null,
-    lastWalletId: walletId || (typeof localStorage === "undefined" ? null : localStorage.getItem(STORAGE_WALLET_ID)),
+    lastWalletId: walletId || (typeof localStorage === "undefined"
+      ? null
+      : (isAllowedWalletId(localStorage.getItem(STORAGE_WALLET_ID))
+        ? localStorage.getItem(STORAGE_WALLET_ID)
+        : null)),
     connecting,
     switching,
     restoring,

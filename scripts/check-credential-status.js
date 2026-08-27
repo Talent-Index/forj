@@ -88,7 +88,8 @@ assert.equal(
 );
 
 const certificateSource = readFileSync(join(root, "src/components/Certificate.jsx"), "utf8");
-assert.match(certificateSource, /buildMintData/);
+assert.match(certificateSource, /prepareClaimedMint/);
+assert.match(certificateSource, /value: prepared\.value/);
 assert.doesNotMatch(certificateSource, /mintCredentialWithAuthorization/);
 assert.match(certificateSource, /Claim self-claimed credential on Fuji/);
 assert.match(certificateSource, /LEARNER_MINT_STATUS/);

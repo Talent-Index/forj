@@ -1,6 +1,6 @@
 # SkillForge — Status
 
-Last updated: 27 August 2026
+Last updated: 28 August 2026
 
 This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
@@ -14,7 +14,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
 | Gamification | Live opt-in ranking from an append-only event log; XP, levels, achievements, streaks, path engine |
 | Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
-| Security & Launch | Planned — contract tests shipped; independent audit and mainnet issuance not shipped |
+| Security & Launch | Planned — contract and frontend checks shipped; independent audit and mainnet issuance not shipped |
 | Fuji credential | Live |
 
 Fuji contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) (chain ID 43113).

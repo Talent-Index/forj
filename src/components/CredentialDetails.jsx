@@ -1,13 +1,15 @@
 import CredentialStatusBadge from "./CredentialStatusBadge";
 import { VERIFICATION_FIELDS, VERIFICATION_LABELS } from "../utils/credentialLookup";
 import { shortAddress } from "../utils/learnerStats";
+import { safeExternalHref } from "../utils/frontendSecurity";
 
 function HashValue({ value, href, empty = "Not found" }) {
   if (!value) return <span>{empty}</span>;
   const label = value.startsWith("0x") && value.length > 16 ? `${value.slice(0, 10)}…${value.slice(-8)}` : value;
-  if (!href) return <span className="credential-mono">{label}</span>;
+  const safeHref = safeExternalHref(href);
+  if (!safeHref) return <span className="credential-mono">{label}</span>;
   return (
-    <a className="credential-mono" href={href} target="_blank" rel="noreferrer">
+    <a className="credential-mono" href={safeHref} target="_blank" rel="noopener noreferrer">
       {label}
     </a>
   );
@@ -44,7 +46,7 @@ function fieldValue(view, key) {
       return view.contractAddress ? (
         <HashValue
           value={view.contractAddress}
-          href={`https://testnet.snowtrace.io/address/${view.contractAddress}`}
+          href={safeExternalHref(`https://testnet.snowtrace.io/address/${view.contractAddress}`)}
         />
       ) : (
         "—"
@@ -60,16 +62,16 @@ function fieldValue(view, key) {
         />
       );
     case "explorerUrl":
-      return view.explorerUrl ? (
-        <a href={view.explorerUrl} target="_blank" rel="noreferrer">
+      return safeExternalHref(view.explorerUrl) ? (
+        <a href={safeExternalHref(view.explorerUrl)} target="_blank" rel="noopener noreferrer">
           {view.explorerLabel}
         </a>
       ) : (
         "—"
       );
     case "metadataUrl":
-      return view.metadataUrl ? (
-        <a href={view.metadataUrl} target="_blank" rel="noreferrer">
+      return safeExternalHref(view.metadataUrl) ? (
+        <a href={safeExternalHref(view.metadataUrl)} target="_blank" rel="noopener noreferrer">
           {view.metadataLabel || "Open tokenURI"}
         </a>
       ) : (

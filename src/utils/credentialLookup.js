@@ -9,6 +9,7 @@ import { normalizeAddress } from "./progress.js";
 import { FUJI_CHAIN_ID, networkLabel } from "./wallet.js";
 import { CONTRACT_ADDRESS, CREDENTIAL_ABI, FUJI_EXPLORER_TOKEN, FUJI_EXPLORER_TX } from "./contract.js";
 import { credentialDeployBlock } from "./fujiClient.js";
+import { isTxHash } from "./frontendSecurity.js";
 
 export const CREDENTIAL_MINTED_EVENT = parseAbiItem(
   "event CredentialMinted(address indexed learner, uint256 indexed tokenId, uint256 totalPoints, uint256 puzzleMask, bool attested)"
@@ -285,7 +286,7 @@ export function buildCredentialVerificationView(credential, extras = {}) {
         .join(" · ")
     : "";
   const metadataUri = credential?.metadataUri || "";
-  const metadataUrl = retrievalUrl(metadataUri) || metadataUri;
+  const metadataUrl = retrievalUrl(metadataUri) || "";
   const transactionHash = extras.transactionHash || credential?.transactionHash || "";
   const verification = evaluateCredentialVerification(credential, extras.query || {});
   const metadata = {
@@ -314,7 +315,7 @@ export function buildCredentialVerificationView(credential, extras = {}) {
     contractAddress: credential?.contractAddress || "",
     tokenId,
     transactionHash,
-    transactionExplorerUrl: transactionHash ? `${FUJI_EXPLORER_TX}${transactionHash}` : "",
+    transactionExplorerUrl: isTxHash(transactionHash) ? `${FUJI_EXPLORER_TX}${transactionHash}` : "",
     explorerUrl: credential?.explorerUrl || "",
     explorerLabel: EXPLORER_LINK_LABEL,
     metadataUrl,

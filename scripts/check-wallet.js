@@ -7,6 +7,7 @@ import {
   findProvider,
   formatWalletError,
   identifyProvider,
+  isAllowedWalletId,
   isFujiChain,
   isMobileUserAgent,
   networkLabel,
@@ -46,5 +47,8 @@ assert.match(
   walletDeepLink(WALLET_IDS.metamask, "https://skillforge.example/play"),
   /metamask\.app\.link\/dapp\/skillforge\.example\/play/
 );
+assert.match(walletDeepLink(WALLET_IDS.metamask, "javascript:alert(1)"), /metamask\.io/);
+assert.equal(isAllowedWalletId(WALLET_IDS.core), true);
+assert.equal(isAllowedWalletId("injected-malware"), false);
 
 console.log("wallet onboarding smoke test passed");

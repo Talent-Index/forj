@@ -2,6 +2,7 @@ import { replayEvents } from "./replay.js";
 import { getLevel, getXP } from "./xp.js";
 import { getPathProgress } from "./paths.js";
 import { validateRecipientName } from "../recipient.js";
+import { sanitizePlainText } from "../frontendSecurity.js";
 
 export const LEADERBOARD_AUTHORITY = Object.freeze({
   eventLog: "event-log",
@@ -54,10 +55,10 @@ export function applyLeaderboardPreference(current = {}, patch = {}, extras = {}
       preference: { optIn: true, displayName: recipient.name, hideWallet },
     };
   }
-  const trimmed = typeof rawName === "string" ? rawName.trim() : "";
+  const trimmed = sanitizePlainText(rawName, 48);
   return {
     ok: true,
-    preference: { optIn: false, displayName: trimmed.slice(0, 48), hideWallet },
+    preference: { optIn: false, displayName: trimmed, hideWallet },
   };
 }
 

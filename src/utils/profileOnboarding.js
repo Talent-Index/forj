@@ -1,5 +1,6 @@
 import { SCHEMA_VERSION } from "./backend/schema.js";
 import { validateRecipientName } from "./recipient.js";
+import { safeAvatarSrc } from "./frontendSecurity.js";
 
 const LEARNING_GOAL_IDS = ["avalanche", "web3", "credentials", "development"];
 
@@ -63,7 +64,7 @@ export function learnerProfileFields(user, existing = {}, patch = {}) {
     profileComplete: Boolean(patch.profileComplete ?? existing.profileComplete),
     walletPromptSeen: Boolean(patch.walletPromptSeen ?? existing.walletPromptSeen),
     walletAddress: patch.walletAddress !== undefined ? patch.walletAddress : (existing.walletAddress ?? null),
-    avatarUrl: String(patch.avatarUrl ?? existing.avatarUrl ?? user?.photoURL ?? ""),
+    avatarUrl: safeAvatarSrc(String(patch.avatarUrl ?? existing.avatarUrl ?? user?.photoURL ?? "")) || "",
     migratedFrom: patch.migratedFrom !== undefined ? patch.migratedFrom : (existing.migratedFrom ?? null),
     migratedAt: patch.migratedAt !== undefined ? patch.migratedAt : (existing.migratedAt ?? null),
   };

@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
+import { isCredentialShareUrl } from "../utils/frontendSecurity";
 
 function CredentialQr({ url, label = "QR code for this credential URL" }) {
-  const [svg, setSvg] = useState("");
+  const [dataUrl, setDataUrl] = useState("");
   const [failed, setFailed] = useState(false);
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const safeUrl = isCredentialShareUrl(url, origin) ? url : "";
 
   useEffect(() => {
     let cancelled = false;
-    if (!url) {
-      setSvg("");
+    if (!safeUrl) {
+      setDataUrl("");
       setFailed(false);
       return undefined;
     }
-    QRCode.toString(url, {
-      type: "svg",
+    QRCode.toDataURL(safeUrl, {
       margin: 1,
       width: 160,
       errorCorrectionLevel: "M",
@@ -21,29 +23,30 @@ function CredentialQr({ url, label = "QR code for this credential URL" }) {
     })
       .then((markup) => {
         if (!cancelled) {
-          setSvg(markup);
+          setDataUrl(markup);
           setFailed(false);
         }
       })
       .catch(() => {
         if (!cancelled) {
-          setSvg("");
+          setDataUrl("");
           setFailed(true);
         }
       });
     return () => {
       cancelled = true;
     };
-  }, [url]);
+  }, [safeUrl]);
 
-  if (!url || failed) return null;
-  if (!svg) return <p className="meta-line">Preparing QR code…</p>;
+  if (!safeUrl || failed) return null;
+  if (!dataUrl) return <p className="meta-line">Preparing QR code…</p>;
   return (
-    <div
+    <img
       className="credential-qr"
-      role="img"
-      aria-label={label}
-      dangerouslySetInnerHTML={{ __html: svg }}
+      src={dataUrl}
+      width={160}
+      height={160}
+      alt={label}
     />
   );
 }

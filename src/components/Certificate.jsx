@@ -2,11 +2,12 @@ import { useMemo, useState } from "react";
 import { TOTAL_PIECES } from "../data/questions";
 import {
   CONTRACT_ADDRESS,
-  buildMintData,
+  prepareClaimedMint,
   puzzleToMask,
   FUJI_CHAIN_ID,
   FUJI_EXPLORER_TX,
 } from "../utils/contract";
+import { isTxHash, safeExternalHref } from "../utils/frontendSecurity";
 import { resolveCredentialImageUri } from "../utils/ipfs";
 import { playFinishSound } from "../utils/sounds";
 import { CREDENTIAL_EXPLAINER, EMPTY_STATES, ERROR_STATES } from "../utils/onboarding";
@@ -85,7 +86,7 @@ function Certificate({
 
   async function handleMint() {
     if (!CONTRACT_ADDRESS) {
-      setMintError("Contract not deployed. Run: npm run deploy:fuji and set VITE_CREDENTIAL_CONTRACT.");
+      setMintError("The credential contract is not available yet.");
       return;
     }
     if (!savedName.ok) {
@@ -99,11 +100,10 @@ function Certificate({
       const client = await getWalletClient();
       const [account] = await client.getAddresses();
       const currentChainId = publicClient ? await publicClient.getChainId() : null;
-      if (currentChainId !== FUJI_CHAIN_ID) {
-        throw new Error("Please switch your wallet to Avalanche Fuji (43113) before minting.");
-      }
-
-      const data = buildMintData({
+      const prepared = prepareClaimedMint({
+        account,
+        expectedAccount: address,
+        chainId: currentChainId,
         totalPoints,
         puzzleMask: mask,
         easyCorrect: sectionScores.easy?.correct ?? 0,
@@ -111,11 +111,15 @@ function Certificate({
         hardCorrect: sectionScores.hard?.correct ?? 0,
         imageData: onChainImageUri,
       });
+      if (!prepared.ok) {
+        throw new Error(prepared.error);
+      }
 
       const hash = await client.sendTransaction({
-        account,
-        to: CONTRACT_ADDRESS,
-        data,
+        account: prepared.account,
+        to: prepared.to,
+        data: prepared.data,
+        value: prepared.value,
         chain: client.chain,
       });
 
@@ -251,8 +255,7 @@ function Certificate({
           )}
           {!onChainImageUri && (
             <p className="meta-line">
-              On-chain artwork is empty until <code>VITE_CREDENTIAL_IMAGE_URI</code> is set to an
-              {" "}ipfs:// or https:// URL. The certificate still mints; explorers will not show the image.
+              Certificate artwork is not pinned yet. The credential still mints; explorers will not show an image.
             </p>
           )}
           <div className="quiz-nav quiz-nav-end">
@@ -296,10 +299,10 @@ function Certificate({
             />
           )}
 
-          {mintTx && (
+          {mintTx && isTxHash(mintTx) && (
             <p className="mint-success">
               Minted.{" "}
-              <a href={`${FUJI_EXPLORER_TX}${mintTx}`} target="_blank" rel="noreferrer">
+              <a href={safeExternalHref(`${FUJI_EXPLORER_TX}${mintTx}`)} target="_blank" rel="noopener noreferrer">
                 View transaction on Snowtrace
               </a>
             </p>
@@ -316,7 +319,7 @@ function Certificate({
                   ? "Minted on-chain"
                   : CONTRACT_ADDRESS
                     ? "Claim self-claimed credential on Fuji"
-                    : "Mint (deploy contract first)"}
+                    : "Mint unavailable"}
             </Button>
             <Button variant="secondary" onClick={onRetry}>Start over</Button>
           </div>
@@ -329,13 +332,12 @@ function Certificate({
           )}
           {!onChainImageUri && (
             <p className="meta-line">
-              Set <code>VITE_CREDENTIAL_IMAGE_URI</code> to a pinned ipfs:// or https:// artwork URL
-              so Snowtrace can load the certificate image.
+              Pin certificate artwork as ipfs:// or https:// so Snowtrace can load the image.
             </p>
           )}
           {!CONTRACT_ADDRESS && (
             <p className="deploy-hint">
-              Deploy with <code>npm run deploy:fuji</code> to enable on-chain minting.
+              On-chain minting is not available in this app yet.
             </p>
           )}
         </>

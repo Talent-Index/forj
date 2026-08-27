@@ -3,5 +3,6 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   appType: "spa",
+  envPrefix: "VITE_",
   plugins: [react()],
 });

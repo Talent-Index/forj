@@ -1,6 +1,7 @@
 import { createMemoryStorage, normalizeAddress, progressOwnerId } from "./progress.js";
 import { applyProfileCompletion } from "./profileOnboarding.js";
 import { validateRecipientName } from "./recipient.js";
+import { safeAvatarSrc } from "./frontendSecurity.js";
 
 export const AUTH_STORAGE_VERSION = 1;
 export const AUTH_ACCOUNTS_KEY = `skillforge.auth.v${AUTH_STORAGE_VERSION}.accounts`;
@@ -405,9 +406,13 @@ export function createAuthStore(storage = defaultStorage()) {
       if (avatarUrl && typeof avatarUrl === "string" && avatarUrl.length > MAX_AVATAR_BYTES) {
         return { ok: false, error: "That image is too large. Try a smaller photo." };
       }
+      const safe = avatarUrl ? safeAvatarSrc(avatarUrl) : "";
+      if (avatarUrl && !safe) {
+        return { ok: false, error: "Use a JPEG, PNG, or WebP photo." };
+      }
       const next = replaceAccount({
         ...account,
-        avatarUrl: avatarUrl || "",
+        avatarUrl: safe,
       });
       return { ok: true, account: publicAccount(next) };
     },

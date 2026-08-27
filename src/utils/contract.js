@@ -1,5 +1,6 @@
 import { encodeFunctionData } from "viem";
-import { FUJI_CHAIN_ID } from "./wallet.js";
+import { matchingWalletAccount, parseContractAddress, readPublicEnv, validateMintParams } from "./frontendSecurity.js";
+import { FUJI_CHAIN_ID, parseChainId } from "./wallet.js";
 
 export const CREDENTIAL_ABI = [
   {
@@ -78,15 +79,7 @@ export const CREDENTIAL_ABI = [
   },
 ];
 
-function configuredContract() {
-  try {
-    return String(import.meta.env?.VITE_CREDENTIAL_CONTRACT || "").trim();
-  } catch {
-    return "";
-  }
-}
-
-export const CONTRACT_ADDRESS = configuredContract();
+export const CONTRACT_ADDRESS = parseContractAddress(readPublicEnv("VITE_CREDENTIAL_CONTRACT"));
 export const FUJI_EXPLORER_TX = "https://testnet.snowtrace.io/tx/";
 export const FUJI_EXPLORER_TOKEN = "https://testnet.snowtrace.io/token/";
 export { FUJI_CHAIN_ID };
@@ -99,18 +92,71 @@ export function buildMintData({
   hardCorrect,
   imageData = "",
 }) {
+  const checked = validateMintParams({
+    totalPoints,
+    puzzleMask,
+    easyCorrect,
+    mediumCorrect,
+    hardCorrect,
+    imageData,
+  });
+  if (!checked.ok) {
+    throw new Error(checked.error);
+  }
+  const { values } = checked;
   return encodeFunctionData({
     abi: CREDENTIAL_ABI,
     functionName: "mintCredential",
     args: [
-      BigInt(totalPoints),
-      BigInt(puzzleMask),
-      easyCorrect,
-      mediumCorrect,
-      hardCorrect,
-      imageData,
+      BigInt(values.totalPoints),
+      BigInt(values.puzzleMask),
+      values.easyCorrect,
+      values.mediumCorrect,
+      values.hardCorrect,
+      values.imageData,
     ],
   });
+}
+
+export function prepareClaimedMint({
+  account,
+  expectedAccount,
+  chainId,
+  totalPoints,
+  puzzleMask,
+  easyCorrect,
+  mediumCorrect,
+  hardCorrect,
+  imageData = "",
+}) {
+  if (!CONTRACT_ADDRESS) {
+    return { ok: false, error: "The credential contract is not available yet." };
+  }
+  const from = matchingWalletAccount(account, expectedAccount);
+  if (!from) {
+    return { ok: false, error: "The connected wallet does not match this session." };
+  }
+  if (parseChainId(chainId) !== FUJI_CHAIN_ID) {
+    return { ok: false, error: "Switch your wallet to Avalanche Fuji before minting." };
+  }
+  try {
+    return {
+      ok: true,
+      to: CONTRACT_ADDRESS,
+      account: from,
+      value: 0n,
+      data: buildMintData({
+        totalPoints,
+        puzzleMask,
+        easyCorrect,
+        mediumCorrect,
+        hardCorrect,
+        imageData,
+      }),
+    };
+  } catch (err) {
+    return { ok: false, error: err?.message || "Mint parameters are invalid." };
+  }
 }
 
 export function puzzleToMask(acquiredPieces) {

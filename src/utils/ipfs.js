@@ -1,12 +1,10 @@
 /** Stable artwork URI for on-chain token metadata. IPFS or HTTPS only. */
 import { isStableMediaUri } from "./credentialMetadata.js";
+import { readPublicEnv } from "./frontendSecurity.js";
 
 function configuredImageUri() {
-  try {
-    return String(import.meta.env?.VITE_CREDENTIAL_IMAGE_URI || "").trim();
-  } catch {
-    return "";
-  }
+  const value = readPublicEnv("VITE_CREDENTIAL_IMAGE_URI");
+  return isStableMediaUri(value) ? value : "";
 }
 
 export const CREDENTIAL_IMAGE_URI = configuredImageUri();

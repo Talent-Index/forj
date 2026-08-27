@@ -1,6 +1,7 @@
 import { shortAddress } from "../utils/learnerStats";
 import { describeMetadataUri } from "../utils/credentialModel";
 import { EXPLORER_LINK_LABEL, resolveCredentialStatus } from "../utils/credentialStatus";
+import { safeExternalHref, safeMediaSrc } from "../utils/frontendSecurity";
 import CredentialStatusBadge from "./CredentialStatusBadge";
 
 function CertificateArtifact({
@@ -25,8 +26,8 @@ function CertificateArtifact({
       <p className="certificate-brand">SkillForge</p>
       <h2 className="certificate-title">Certificate of Achievement</h2>
       <div className="certificate-art-frame">
-        {artwork ? (
-          <img src={artwork} alt="Blacksmith in a forge presenting a crafted diamond" />
+        {safeMediaSrc(artwork) ? (
+          <img src={safeMediaSrc(artwork)} alt="Blacksmith in a forge presenting a crafted diamond" />
         ) : (
           <div className="certificate-art-fallback" aria-hidden="true" />
         )}
@@ -53,9 +54,9 @@ function CertificateArtifact({
           {metadataUri ? <div><dt>Metadata</dt><dd>{describeMetadataUri(metadataUri)}</dd></div> : null}
         </dl>
       )}
-      {explorerUrl && (
+      {safeExternalHref(explorerUrl) && (
         <p className="certificate-explorer">
-          <a href={explorerUrl} target="_blank" rel="noreferrer">{EXPLORER_LINK_LABEL}</a>
+          <a href={safeExternalHref(explorerUrl)} target="_blank" rel="noopener noreferrer">{EXPLORER_LINK_LABEL}</a>
         </p>
       )}
     </article>
