@@ -106,7 +106,7 @@ See [coverage-report.json](./coverage-report.json). Mocha contract tests cover u
 Do not treat this pack as permission to issue on Avalanche C-Chain.
 
 - **Fuji live address** is the current testnet credential. Freeze v1 source (two-step owner, 80-point cap, image rules, 7-day window) is what reviewers should read. A production credential needs a freeze-and-redeploy onto a new address, then honest product copy that names that address.  
-- **C-Chain** deploy is gated until independent review. The deployer requires an explicit mainnet confirmation.  
+- **C-Chain** issuance is **closed** by a fail-closed production gate. An env confirmation is not enough. See [PRODUCTION-GATE.md](./PRODUCTION-GATE.md).  
 - **Issuer key** stays off the learner device. After deploy, the owner is the attesting issuer until a two-step handoff completes.  
 - **Honesty gate:** claimed mint remains the learner path; attested remains owner-signed. Lookup and explorers must not say verified or certified for a claimed record.  
 - Deployment records should include `freezeId: "v1"` with the EIP-712 name and version.

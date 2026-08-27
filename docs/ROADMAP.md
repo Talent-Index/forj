@@ -2,7 +2,7 @@
 
 **Goal:** Grow SkillForge from a Fuji learning product into a reliable, honest, issuer-capable skills credential platform on Avalanche.
 
-> **Today:** Foundation is complete. Learning, credentials, gamification, and platform are partially shipped. The soulbound credential is **live on Avalanche Fuji**. Security & Launch is the production gate before mainnet issuance. See [STATUS.md](./STATUS.md).
+> **Today:** Foundation is complete. Learning, credentials, gamification, and platform are partially shipped. The soulbound credential is **live on Avalanche Fuji**. The Security & Launch production readiness gate is **closed**. SkillForge is not independently audited and does not issue credentials on Avalanche C-Chain. See [STATUS.md](./STATUS.md).
 
 | Phase | Theme | Status |
 | --- | --- | --- |
@@ -11,7 +11,7 @@
 | 3 | Credentials | Partial — contract live on Fuji |
 | 4 | Gamification | Live ranking from the event log |
 | 5 | Platform | Partial — account-backed learner persistence |
-| 6 | Security & Launch | Planned — Fuji tests in place; audit and mainnet not shipped |
+| 6 | Security & Launch | Partial — production gate closed; audit and C-Chain issuance not shipped |
 | 7 | Ecosystem | Planned |
 
 ```mermaid
@@ -54,7 +54,9 @@ Remaining: question management, learning analytics, issuer dashboard, and produc
 
 ## Phase 6 — Security & Launch
 
-This is the production gate. It is **not** a claim that SkillForge is audited or live on Avalanche C-Chain mainnet.
+This is the production gate. It is **not** a claim that SkillForge is audited or live on Avalanche C-Chain.
+
+The readiness gate is **closed**. Schema v1 metadata, Privacy/Terms disclosures, Fuji vs C-Chain RPC separation, and incident copy (no pause; two-step issuer handoff) are in place. Independent review, issuer infrastructure, a production deployer, monitoring, and C-Chain issuance are **not**. An env flag cannot open issuance.
 
 Shipped on Fuji: soulbound transfer rules and owner-signed attestation. Contract tests cover unauthorized mint, forged and replayed signatures, wrong nonce, wrong chain, wrong contract, expired authorizations, unauthorized issuer and ownership changes, and duplicate current credentials. The learner app does not hold issuer keys; wallet, contract, and mint inputs are checked before a transaction is sent. Freeze v1 of the credential source is packed for independent review. That pack is **not** an audit.
 
@@ -62,12 +64,12 @@ Remaining before production issuance:
 
 - Independent review of freeze v1 (the credential contract and issuer authorization)
 - Redeploy the frozen credential before production issuance if the live Fuji address still lags this source
-- Confirm signing keys never live in the learner browser
-- Production Firebase project, monitoring, and honest production copy
-- Freeze the production credential, then mainnet deploy only after that review
+- Dedicated issuer operations and key custody (signing keys never live in the learner browser)
+- Production monitoring and incident operations beyond documented v1 limits
+- Open the production gate in source only after those items are ready, then C-Chain deploy
 - End-to-end learner and issuer checks on Avalanche C-Chain
 
-Product copy must stay honest on mainnet: claimed scores are not issuer-attested.
+Product copy must stay honest on C-Chain: claimed scores are not issuer-attested. SkillForge does not issue credentials on C-Chain today.
 
 ## Phase 7 — Ecosystem
 

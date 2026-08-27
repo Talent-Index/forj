@@ -29,7 +29,7 @@ A pending owner cannot attest until they accept. The issuer role cannot be aband
 
 ## Threat model
 
-Anyone can publish a claimed record within the score caps. That is self-publication, not an exam. Attested mint without the current owner’s signature fails. A used, expired, or wrong-chain / wrong-contract signature fails. The token cannot be transferred. App XP is not the credential. A stolen issuer key could attest until the owner completes a two-step handoff.
+Anyone can publish a claimed record within the score caps. That is self-publication, not an exam. Attested mint without the current owner’s signature fails. A used, expired, or wrong-chain / wrong-contract signature fails. The token cannot be transferred. App XP is not the credential. A stolen issuer key could attest until the owner completes a two-step handoff. This version has no pause. Already-minted tokens stay claimed or attested as minted. Claimed mint cannot be switched off on-chain.
 
 Revocation, issuer organizations, and treating a claimed score as independently assessed are out of scope for this version.
 

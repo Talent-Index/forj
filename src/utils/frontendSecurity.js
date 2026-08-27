@@ -20,11 +20,17 @@ export const PUBLIC_ENV_KEYS = Object.freeze([
 ]);
 
 export const DEFAULT_FUJI_RPC = "https://avalanche-fuji-c-chain.publicnode.com";
+export const DEFAULT_C_CHAIN_RPC = "https://api.avax.network/ext/bc/C/rpc";
 export const SNOWTRACE_ORIGIN = "https://testnet.snowtrace.io";
 export const IPFS_GATEWAY_ORIGIN = "https://ipfs.io";
 
 const SECRET_NAME = /^(VITE_)?(PRIVATE_KEY|PINATA_JWT|MNEMONIC|SECRET|AWS_SECRET)/i;
 const PRIVATE_HOST = /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/i;
+const C_CHAIN_RPC_HOSTS = new Set(["api.avax.network"]);
+const FUJI_RPC_HOSTS = new Set([
+  "api.avax-test.network",
+  "avalanche-fuji-c-chain.publicnode.com",
+]);
 const TX_HASH_RE = /^0x[a-fA-F0-9]{64}$/;
 const JPEG_AVATAR_RE = /^data:image\/jpeg;base64,[A-Za-z0-9+/]+=*$/;
 const PNG_AVATAR_RE = /^data:image\/png;base64,[A-Za-z0-9+/]+=*$/;
@@ -74,13 +80,35 @@ function normalizeHttpsRpc(candidate) {
   }
 }
 
+function hostnameOf(urlString) {
+  try {
+    return new URL(urlString).hostname;
+  } catch {
+    return "";
+  }
+}
+
 export function parseFujiRpcUrl(raw, fallback = DEFAULT_FUJI_RPC) {
   for (const candidate of [String(raw || "").trim(), fallback, DEFAULT_FUJI_RPC]) {
     if (!candidate) continue;
     const normalized = normalizeHttpsRpc(candidate);
-    if (normalized) return normalized;
+    if (!normalized) continue;
+    if (C_CHAIN_RPC_HOSTS.has(hostnameOf(normalized))) continue;
+    return normalized;
   }
   return DEFAULT_FUJI_RPC;
+}
+
+export function parseCChainRpcUrl(raw, fallback = DEFAULT_C_CHAIN_RPC) {
+  for (const candidate of [String(raw || "").trim(), fallback, DEFAULT_C_CHAIN_RPC]) {
+    if (!candidate) continue;
+    const normalized = normalizeHttpsRpc(candidate);
+    if (!normalized) continue;
+    const host = hostnameOf(normalized);
+    if (FUJI_RPC_HOSTS.has(host) || host.includes("fuji")) continue;
+    return normalized;
+  }
+  return DEFAULT_C_CHAIN_RPC;
 }
 
 export function parseDeployBlock(raw) {

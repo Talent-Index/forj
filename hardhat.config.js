@@ -24,6 +24,11 @@ function deployerAccounts() {
 }
 
 const fujiUrl = process.env.FUJI_RPC_URL || "https://avalanche-fuji-c-chain.publicnode.com";
+const avalancheUrl = (() => {
+  const raw = (process.env.AVALANCHE_RPC_URL || "https://api.avax.network/ext/bc/C/rpc").trim();
+  if (/fuji|avax-test/i.test(raw)) return "https://api.avax.network/ext/bc/C/rpc";
+  return raw;
+})();
 const accounts = deployerAccounts();
 
 export default defineConfig({
@@ -49,7 +54,7 @@ export default defineConfig({
     avalanche: {
       type: "http",
       chainType: "l1",
-      url: "https://api.avax.network/ext/bc/C/rpc",
+      url: avalancheUrl,
       chainId: 43114,
       accounts,
     },

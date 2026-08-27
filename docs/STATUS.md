@@ -14,7 +14,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
 | Gamification | Live opt-in ranking from an append-only event log; XP, levels, achievements, streaks, path engine |
 | Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
-| Security & Launch | Planned — freeze v1 packed for review; independent audit and mainnet issuance not shipped |
+| Security & Launch | Partial — production readiness gate is **closed**; freeze packed, not audited, not C-Chain |
 | Fuji credential | Live |
 
 Fuji contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) (chain ID 43113).
@@ -54,6 +54,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Learner mint records a **claimed** score.
 - The contract also supports **issuer-attested** mint with an owner signature. That path is not the default learner UI.
 - Public lookup by credential ID or holder wallet, signed in or out. A found record is an on-chain record, not a verified exam.
+- SkillForge does not issue credentials on Avalanche C-Chain today.
 
 ## Leaderboard
 
@@ -68,4 +69,4 @@ It is not a league with an issuer, not on-chain, and not a verified exam. A clai
 - Learning analytics dashboards
 - Issuer model, dashboard, and key management
 - Credential revocation and versioning
-- Independent audit of freeze v1, production monitoring, and mainnet issuance (see [Security & Launch](./ROADMAP.md))
+- Independent review of freeze v1, issuer operations, production monitoring, and Avalanche C-Chain issuance (the production readiness gate stays closed; see [Security & Launch](./ROADMAP.md))

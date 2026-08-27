@@ -1,6 +1,6 @@
 # Credential
 
-The SkillForge credential is a **soulbound** record on Avalanche Fuji. It stores a snapshot of claimed (or attested) scores and puzzle completion. It cannot be transferred.
+The SkillForge credential is a **soulbound** record on Avalanche Fuji. It stores a snapshot of claimed (or attested) scores and puzzle completion. It cannot be transferred. SkillForge does **not** issue this credential on Avalanche C-Chain today.
 
 Live contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df).
 
@@ -21,7 +21,7 @@ The snapshot is what was written at mint. It is not a live feed of later quiz re
 
 ## Frozen credential
 
-Schema **v1** is frozen for independent review. That freeze is **not** an audit and **not** Avalanche C-Chain issuance.
+Schema **v1** is frozen for independent review. That freeze is **not** an audit and **not** Avalanche C-Chain issuance. The production gate for C-Chain remains closed.
 
 Frozen rules: soulbound; 80 total points and five correct per difficulty; short `ipfs://` or `https://` artwork; claimed or issuer-attested at mint (never flipped in place); one current record per wallet; owner-signed attestation with a seven-day window and a per-learner nonce.
 

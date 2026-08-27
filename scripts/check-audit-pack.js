@@ -80,6 +80,7 @@ assert.match(pack, /## Deployment/);
 assert.match(pack, /credentialId.*is \*\*not\*\* signed/);
 assert.match(pack, /not an audit report/i);
 assert.match(pack, /not live on C-Chain/i);
+assert.match(pack, /fail-closed production gate/);
 
 assert.match(credentialDoc, /Frozen credential/);
 assert.match(credentialDoc, /80 total points/);

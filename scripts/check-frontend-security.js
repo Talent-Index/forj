@@ -5,12 +5,14 @@ import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { zeroAddress } from "viem";
 import {
+  DEFAULT_C_CHAIN_RPC,
   DEFAULT_FUJI_RPC,
   PUBLIC_ENV_KEYS,
   isCredentialShareUrl,
   isSecretEnvName,
   isTxHash,
   parseContractAddress,
+  parseCChainRpcUrl,
   parseDeployBlock,
   parseFujiRpcUrl,
   readPublicEnv,
@@ -48,6 +50,8 @@ assert.doesNotMatch(envExample, /VITE_PRIVATE_KEY/);
 assert.doesNotMatch(envExample, /VITE_PINATA/);
 assert.match(envExample, /^PRIVATE_KEY=/m);
 assert.match(envExample, /^PINATA_JWT=/m);
+assert.match(envExample, /^AVALANCHE_RPC_URL=/m);
+assert.doesNotMatch(envExample, /VITE_AVALANCHE/);
 assert.match(envExample, /Never prefix this with VITE_/);
 
 assert.equal(isSecretEnvName("PRIVATE_KEY"), true);
@@ -72,6 +76,11 @@ assert.equal(parseFujiRpcUrl("javascript:alert(1)"), allowedRpc);
 assert.equal(parseFujiRpcUrl("https://user:pass@evil.example/rpc"), allowedRpc);
 assert.equal(parseFujiRpcUrl("https://127.0.0.1/rpc"), allowedRpc);
 assert.match(allowedRpc, /^https:\/\/avalanche-fuji-c-chain\.publicnode\.com$/);
+assert.equal(parseFujiRpcUrl(DEFAULT_C_CHAIN_RPC), allowedRpc);
+assert.equal(parseFujiRpcUrl("https://api.avax.network/ext/bc/C/rpc"), allowedRpc);
+assert.match(parseCChainRpcUrl(""), /api\.avax\.network/);
+assert.equal(parseCChainRpcUrl("https://api.avax-test.network/ext/bc/C/rpc"), parseCChainRpcUrl(DEFAULT_C_CHAIN_RPC));
+assert.equal(parseCChainRpcUrl("https://avalanche-fuji-c-chain.publicnode.com"), parseCChainRpcUrl(DEFAULT_C_CHAIN_RPC));
 
 assert.equal(parseDeployBlock(""), 0n);
 assert.equal(parseDeployBlock("12"), 12n);
@@ -126,6 +135,17 @@ if (CONTRACT_ADDRESS) {
 } else {
   assert.equal(prepared.ok, false);
 }
+
+assert.equal(prepareClaimedMint({
+  account: live,
+  expectedAccount: live,
+  chainId: 43114,
+  totalPoints: 15,
+  puzzleMask: 1,
+  easyCorrect: 5,
+  mediumCorrect: 0,
+  hardCorrect: 0,
+}).ok, false);
 
 assert.equal(prepareClaimedMint({
   account: live,

@@ -2,6 +2,27 @@ import fs from "fs";
 import path from "path";
 import hre from "hardhat";
 
+import { C_CHAIN_ID, mainnetIssuanceAllowed } from "../src/utils/productionGate.js";
+import { FUJI_CHAIN_ID } from "../src/utils/wallet.js";
+
+function requestedNetworkName() {
+  const index = process.argv.indexOf("--network");
+  if (index >= 0 && process.argv[index + 1]) return process.argv[index + 1];
+  return "";
+}
+
+function refuseClosedCChainIssuance(networkName) {
+  if (networkName !== "avalanche") return;
+  if (!mainnetIssuanceAllowed()) {
+    throw new Error(
+      "Avalanche C-Chain issuance is closed. Freeze v1 is not independently reviewed, and issuer operations and monitoring are not production-ready."
+    );
+  }
+  if (process.env.CONFIRM_MAINNET !== "yes") {
+    throw new Error("C-Chain deploy also requires explicit confirmation after the production gate opens.");
+  }
+}
+
 function requirePrivateKey() {
   const key = (process.env.PRIVATE_KEY || "").trim();
   if (!key) {
@@ -35,21 +56,26 @@ function upsertEnvValue(filePath, key, value) {
 }
 
 async function main() {
+  refuseClosedCChainIssuance(requestedNetworkName());
   const connection = await hre.network.create();
   const { ethers } = connection;
   const provider = ethers.provider;
   const networkName = connection.networkName || connection.name || "default";
+  refuseClosedCChainIssuance(networkName);
   const isRemote = networkName !== "hardhat" && networkName !== "default";
   if (isRemote) {
     requirePrivateKey();
-  }
-  if (networkName === "avalanche" && process.env.CONFIRM_MAINNET !== "yes") {
-    throw new Error("Mainnet deploy is gated. Set CONFIRM_MAINNET=yes after the security checklist.");
   }
 
   const [signer] = await ethers.getSigners();
   const deployer = await signer.getAddress();
   const { chainId } = await provider.getNetwork();
+  if (networkName === "avalanche" && Number(chainId) !== C_CHAIN_ID) {
+    throw new Error("Avalanche network is not C-Chain.");
+  }
+  if (networkName === "fuji" && Number(chainId) !== FUJI_CHAIN_ID) {
+    throw new Error("Fuji network is not the Fuji chain.");
+  }
 
   const nonce = await provider.send("eth_getTransactionCount", [
     deployer,
