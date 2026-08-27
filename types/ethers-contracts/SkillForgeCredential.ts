@@ -6,12 +6,16 @@ import type { TypedContractEvent, TypedDeferredTopicFilter, TypedEventLog, Typed
   
 
   export interface SkillForgeCredentialInterface extends Interface {
-    getFunction(nameOrSignature: "EIP712_NAME" | "EIP712_VERSION" | "approve" | "authorizationNonces" | "balanceOf" | "credentialOf" | "credentials" | "eip712Domain" | "getApproved" | "isApprovedForAll" | "mintCredential" | "mintCredentialWithAuthorization" | "name" | "owner" | "ownerOf" | "renounceOwnership" | "safeTransferFrom(address,address,uint256)" | "safeTransferFrom(address,address,uint256,bytes)" | "setApprovalForAll" | "supportsInterface" | "symbol" | "tokenURI" | "transferFrom" | "transferOwnership"): FunctionFragment;
+    getFunction(nameOrSignature: "EIP712_NAME" | "EIP712_VERSION" | "MAX_AUTHORIZATION_WINDOW" | "MAX_IMAGE_BYTES" | "MAX_POINTS" | "acceptOwnership" | "approve" | "authorizationNonces" | "balanceOf" | "credentialOf" | "credentials" | "eip712Domain" | "getApproved" | "isApprovedForAll" | "mintCredential" | "mintCredentialWithAuthorization" | "name" | "owner" | "ownerOf" | "pendingOwner" | "renounceOwnership" | "safeTransferFrom(address,address,uint256)" | "safeTransferFrom(address,address,uint256,bytes)" | "setApprovalForAll" | "supportsInterface" | "symbol" | "tokenURI" | "transferFrom" | "transferOwnership"): FunctionFragment;
 
-    getEvent(nameOrSignatureOrTopic: "Approval" | "ApprovalForAll" | "CredentialMinted" | "EIP712DomainChanged" | "OwnershipTransferred" | "Transfer"): EventFragment;
+    getEvent(nameOrSignatureOrTopic: "Approval" | "ApprovalForAll" | "CredentialMinted" | "EIP712DomainChanged" | "OwnershipTransferStarted" | "OwnershipTransferred" | "Transfer"): EventFragment;
 
     encodeFunctionData(functionFragment: 'EIP712_NAME', values?: undefined): string;
 encodeFunctionData(functionFragment: 'EIP712_VERSION', values?: undefined): string;
+encodeFunctionData(functionFragment: 'MAX_AUTHORIZATION_WINDOW', values?: undefined): string;
+encodeFunctionData(functionFragment: 'MAX_IMAGE_BYTES', values?: undefined): string;
+encodeFunctionData(functionFragment: 'MAX_POINTS', values?: undefined): string;
+encodeFunctionData(functionFragment: 'acceptOwnership', values?: undefined): string;
 encodeFunctionData(functionFragment: 'approve', values: [AddressLike, BigNumberish]): string;
 encodeFunctionData(functionFragment: 'authorizationNonces', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'balanceOf', values: [AddressLike]): string;
@@ -25,6 +29,7 @@ encodeFunctionData(functionFragment: 'mintCredentialWithAuthorization', values: 
 encodeFunctionData(functionFragment: 'name', values?: undefined): string;
 encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
 encodeFunctionData(functionFragment: 'ownerOf', values: [BigNumberish]): string;
+encodeFunctionData(functionFragment: 'pendingOwner', values?: undefined): string;
 encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string;
 encodeFunctionData(functionFragment: 'safeTransferFrom(address,address,uint256)', values: [AddressLike, AddressLike, BigNumberish]): string;
 encodeFunctionData(functionFragment: 'safeTransferFrom(address,address,uint256,bytes)', values: [AddressLike, AddressLike, BigNumberish, BytesLike]): string;
@@ -37,6 +42,10 @@ encodeFunctionData(functionFragment: 'transferOwnership', values: [AddressLike])
 
     decodeFunctionResult(functionFragment: 'EIP712_NAME', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'EIP712_VERSION', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'MAX_AUTHORIZATION_WINDOW', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'MAX_IMAGE_BYTES', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'MAX_POINTS', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'acceptOwnership', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'approve', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'authorizationNonces', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'balanceOf', data: BytesLike): Result;
@@ -50,6 +59,7 @@ decodeFunctionResult(functionFragment: 'mintCredentialWithAuthorization', data: 
 decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'ownerOf', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'pendingOwner', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'safeTransferFrom(address,address,uint256)', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'safeTransferFrom(address,address,uint256,bytes)', data: BytesLike): Result;
@@ -102,6 +112,18 @@ decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Re
       export type InputTuple = [];
       export type OutputTuple = [];
       export interface OutputObject {};
+      export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
+      export type Filter = TypedDeferredTopicFilter<Event>
+      export type Log = TypedEventLog<Event>
+      export type LogDescription = TypedLogDescription<Event>
+    }
+
+  
+
+    export namespace OwnershipTransferStartedEvent {
+      export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
+      export type OutputTuple = [previousOwner: string, newOwner: string];
+      export interface OutputObject {previousOwner: string, newOwner: string };
       export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
       export type Filter = TypedDeferredTopicFilter<Event>
       export type Log = TypedEventLog<Event>
@@ -180,6 +202,38 @@ decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Re
       [],
       [string],
       'view'
+    >
+    
+
+    
+    MAX_AUTHORIZATION_WINDOW: TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >
+    
+
+    
+    MAX_IMAGE_BYTES: TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >
+    
+
+    
+    MAX_POINTS: TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >
+    
+
+    
+    acceptOwnership: TypedContractMethod<
+      [],
+      [void],
+      'nonpayable'
     >
     
 
@@ -288,10 +342,18 @@ decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Re
     
 
     
+    pendingOwner: TypedContractMethod<
+      [],
+      [string],
+      'view'
+    >
+    
+
+    
     renounceOwnership: TypedContractMethod<
       [],
       [void],
-      'nonpayable'
+      'view'
     >
     
 
@@ -372,6 +434,26 @@ getFunction(nameOrSignature: 'EIP712_VERSION'): TypedContractMethod<
       [string],
       'view'
     >;
+getFunction(nameOrSignature: 'MAX_AUTHORIZATION_WINDOW'): TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >;
+getFunction(nameOrSignature: 'MAX_IMAGE_BYTES'): TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >;
+getFunction(nameOrSignature: 'MAX_POINTS'): TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >;
+getFunction(nameOrSignature: 'acceptOwnership'): TypedContractMethod<
+      [],
+      [void],
+      'nonpayable'
+    >;
 getFunction(nameOrSignature: 'approve'): TypedContractMethod<
       [arg0: AddressLike, arg1: BigNumberish, ],
       [void],
@@ -437,10 +519,15 @@ getFunction(nameOrSignature: 'ownerOf'): TypedContractMethod<
       [string],
       'view'
     >;
+getFunction(nameOrSignature: 'pendingOwner'): TypedContractMethod<
+      [],
+      [string],
+      'view'
+    >;
 getFunction(nameOrSignature: 'renounceOwnership'): TypedContractMethod<
       [],
       [void],
-      'nonpayable'
+      'view'
     >;
 getFunction(nameOrSignature: 'safeTransferFrom(address,address,uint256)'): TypedContractMethod<
       [from: AddressLike, to: AddressLike, tokenId: BigNumberish, ],
@@ -487,6 +574,7 @@ getFunction(nameOrSignature: 'transferOwnership'): TypedContractMethod<
 getEvent(key: 'ApprovalForAll'): TypedContractEvent<ApprovalForAllEvent.InputTuple, ApprovalForAllEvent.OutputTuple, ApprovalForAllEvent.OutputObject>;
 getEvent(key: 'CredentialMinted'): TypedContractEvent<CredentialMintedEvent.InputTuple, CredentialMintedEvent.OutputTuple, CredentialMintedEvent.OutputObject>;
 getEvent(key: 'EIP712DomainChanged'): TypedContractEvent<EIP712DomainChangedEvent.InputTuple, EIP712DomainChangedEvent.OutputTuple, EIP712DomainChangedEvent.OutputObject>;
+getEvent(key: 'OwnershipTransferStarted'): TypedContractEvent<OwnershipTransferStartedEvent.InputTuple, OwnershipTransferStartedEvent.OutputTuple, OwnershipTransferStartedEvent.OutputObject>;
 getEvent(key: 'OwnershipTransferred'): TypedContractEvent<OwnershipTransferredEvent.InputTuple, OwnershipTransferredEvent.OutputTuple, OwnershipTransferredEvent.OutputObject>;
 getEvent(key: 'Transfer'): TypedContractEvent<TransferEvent.InputTuple, TransferEvent.OutputTuple, TransferEvent.OutputObject>;
 
@@ -506,6 +594,10 @@ getEvent(key: 'Transfer'): TypedContractEvent<TransferEvent.InputTuple, Transfer
 
       'EIP712DomainChanged()': TypedContractEvent<EIP712DomainChangedEvent.InputTuple, EIP712DomainChangedEvent.OutputTuple, EIP712DomainChangedEvent.OutputObject>;
       EIP712DomainChanged: TypedContractEvent<EIP712DomainChangedEvent.InputTuple, EIP712DomainChangedEvent.OutputTuple, EIP712DomainChangedEvent.OutputObject>;
+    
+
+      'OwnershipTransferStarted(address,address)': TypedContractEvent<OwnershipTransferStartedEvent.InputTuple, OwnershipTransferStartedEvent.OutputTuple, OwnershipTransferStartedEvent.OutputObject>;
+      OwnershipTransferStarted: TypedContractEvent<OwnershipTransferStartedEvent.InputTuple, OwnershipTransferStartedEvent.OutputTuple, OwnershipTransferStartedEvent.OutputObject>;
     
 
       'OwnershipTransferred(address,address)': TypedContractEvent<OwnershipTransferredEvent.InputTuple, OwnershipTransferredEvent.OutputTuple, OwnershipTransferredEvent.OutputObject>;
