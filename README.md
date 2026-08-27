@@ -43,7 +43,7 @@ The live Fuji credential contract is [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90d
 | Doc | What it covers |
 | --- | --- |
 | [Status](docs/STATUS.md) | What is shipped today |
-| [Roadmap](docs/ROADMAP.md) | Phases from foundation through ecosystem |
+| [Roadmap](docs/ROADMAP.md) | Foundation through Security & Launch, then ecosystem |
 | [Progression](docs/PROGRESSION.md) | Paths, XP, achievements, streaks, puzzle, leaderboard |
 | [Credential](docs/CREDENTIAL.md) | On-chain learning record and claimed vs attested |
 | [Authorization](docs/AUTHORIZATION.md) | How issuer attestation is designed |

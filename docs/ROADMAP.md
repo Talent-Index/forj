@@ -2,39 +2,35 @@
 
 **Goal:** Grow SkillForge from a Fuji learning product into a reliable, honest, issuer-capable skills credential platform on Avalanche.
 
-> **Today:** Phase 1 is complete. Phases 2–5 are partially shipped. The soulbound credential is **live on Avalanche Fuji**. See [STATUS.md](./STATUS.md).
+> **Today:** Foundation is complete. Learning, credentials, gamification, and platform are partially shipped. The soulbound credential is **live on Avalanche Fuji**. Security & Launch is the production gate before mainnet issuance. See [STATUS.md](./STATUS.md).
 
 | Phase | Theme | Status |
 | --- | --- | --- |
-| 1 | Foundation & correctness | Complete |
-| 2 | Learning experience | Partial |
-| 3 | Credential system | Partial — contract live on Fuji |
+| 1 | Foundation | Complete |
+| 2 | Learning | Partial |
+| 3 | Credentials | Partial — contract live on Fuji |
 | 4 | Gamification | Live ranking from the event log |
-| 5 | Avalanche tracks | Initial tracks shipped |
-| 6 | Attestation ops | Planned |
-| 7 | Infrastructure | Partial — account-backed learner persistence |
-| 8–10 | Security → ecosystem | Planned |
+| 5 | Platform | Partial — account-backed learner persistence |
+| 6 | Security & Launch | Planned — Fuji tests in place; audit and mainnet not shipped |
+| 7 | Ecosystem | Planned |
 
 ```mermaid
 flowchart LR
   P1[Foundation] --> P2[Learning]
   P2 --> P3[Credentials]
   P3 --> P4[Gamification]
-  P4 --> P5[Avalanche tracks]
-  P5 --> P6[Attestation]
-  P6 --> P7[Infrastructure]
-  P7 --> P8[Security]
-  P8 --> P9[Mainnet]
-  P9 --> P10[Ecosystem]
+  P4 --> P5[Platform]
+  P5 --> P6[Security and Launch]
+  P6 --> P7[Ecosystem]
 ```
 
 ## Phase 1 — Foundation ✅
 
-Wallet and Fuji network, quiz banks, retry-safe scoring, durable local progress, puzzle redemption, soulbound contract, claimed vs attested on-chain, CI.
+Wallet and Fuji network, quiz banks, retry-safe scoring, durable local progress, puzzle redemption, soulbound contract, claimed vs attested on-chain.
 
-## Phase 2 — Learning experience 🟡
+## Phase 2 — Learning 🟡
 
-Shipped: landing loop for guests, explanations after submit, official Avalanche references, persistent progress, dashboard. After sign-in, learners go to Learn.
+Shipped: landing loop for guests, explanations after submit, official Avalanche references, persistent progress. After sign-in, learners go to Learn. Six initial tracks: Fundamentals, Architecture, L1s, C-Chain, ICM, Developer — lessons plus mapped quizzes.
 
 Remaining: richer certificate polish and deeper path content beyond the first six tracks.
 
@@ -50,31 +46,29 @@ Shipped: shared progression events, XP and levels, achievements, UTC streaks, pa
 
 Remaining: a persisted XP ledger written only by a trusted service. Rank is not issuer-attested and not on-chain.
 
-## Phase 5 — Avalanche tracks ✅ *Initial*
+## Phase 5 — Platform 🟡
 
-Shipped: Fundamentals, Architecture, L1s, C-Chain, ICM, Developer — lessons plus mapped quizzes.
+Shipped: learner accounts persist progress, quiz state, and puzzle state beyond a single browser. Wallets link to the account without becoming the account. Clients cannot write XP or rank.
 
-Remaining: more depth, specialized audiences, and a fuller knowledge graph.
+Remaining: question management, learning analytics, issuer dashboard, and production monitoring. Live rank already replays the append-only event log.
 
-## Phase 6 — Attestation & trust
+## Phase 6 — Security & Launch
 
-Keep claimed and attested distinct. Add issuer accounts, an issuer dashboard, organization issuance, and clearer provenance for third parties.
+This is the production gate. It is **not** a claim that SkillForge is audited or live on Avalanche C-Chain mainnet.
 
-## Phase 7 — Infrastructure 🟡
+Shipped on Fuji: soulbound transfer rules, owner-signed attestation, and contract tests for forged, replayed, expired, wrong-signer, wrong-chain, and wrong-contract authorizations.
 
-Shipped: learner accounts persist progress, quiz state, and puzzle state beyond a single browser. Wallets link to the account without becoming the account.
+Remaining before production issuance:
 
-Remaining: question management, learning analytics, production monitoring, and a trusted writer for XP ledgers. Live rank already replays the append-only event log; clients cannot write XP or rank.
+- Independent review of the credential contract and issuer authorization
+- Confirm signing keys never live in the learner browser
+- Production Firebase project, monitoring, and honest production copy
+- Freeze the production credential, then mainnet deploy only after that review
+- End-to-end learner and issuer checks on Avalanche C-Chain
 
-## Phase 8 — Security 🟡
+Product copy must stay honest on mainnet: claimed scores are not issuer-attested.
 
-Contract tests and soulbound rules are in place. Remaining: issuer-key risk, upgrade policy, independent audit before production issuance.
-
-## Phase 9 — Mainnet
-
-Freeze the production credential, complete review/audit, production metadata and issuer ops, then gate launch on security approval. Product copy must stay honest on mainnet.
-
-## Phase 10 — Ecosystem
+## Phase 7 — Ecosystem
 
 Partners, institutions, partner-issued credentials, collections, third-party verification, public achievement profiles — without pretending a claimed score is attested.
 
@@ -94,5 +88,6 @@ LEARN → CHALLENGE → EARN XP / POINTS
 | Learning | Make Avalanche concepts clear and sequential |
 | GameFi | Make progress feel earned without farming |
 | Credentials | Keep claimed scores honest; attestation is a separate, privileged path |
+| Launch | Do not issue on mainnet until review, honest copy, and issuer keys are production-ready |
 
-Related: [Status](./STATUS.md) · [Progression](./PROGRESSION.md) · [Credential](./CREDENTIAL.md)
+Related: [Status](./STATUS.md) · [Progression](./PROGRESSION.md) · [Credential](./CREDENTIAL.md) · [Authorization](./AUTHORIZATION.md)

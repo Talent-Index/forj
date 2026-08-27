@@ -1,6 +1,6 @@
 # SkillForge — Status
 
-Last updated: 25 August 2026
+Last updated: 27 August 2026
 
 This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
@@ -13,7 +13,8 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | Learning experience | Partial — onboarding, explanations, dashboard, and structured tracks shipped |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
 | Gamification | Live opt-in ranking from an append-only event log; XP, levels, achievements, streaks, path engine |
-| Persistent learner backend | Partial — account-backed progress and wallet linking; issuer ops not shipped |
+| Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
+| Security & Launch | Planned — Fuji contract tests shipped; independent audit and mainnet issuance not shipped |
 | Fuji credential | Live |
 
 Fuji contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) (chain ID 43113).
@@ -65,7 +66,6 @@ It is not a league with an issuer, not on-chain, and not a verified exam. A clai
 - Server-written XP ledgers (the live board replays the event log; clients still cannot write XP)
 - Question bank managed independently of the app
 - Learning analytics dashboards
-- Production monitoring and alerts
 - Issuer model, dashboard, and key management
 - Credential revocation and versioning
-- Independent audit and mainnet issuance
+- Independent audit, production monitoring, and mainnet issuance (see [Security & Launch](./ROADMAP.md))
