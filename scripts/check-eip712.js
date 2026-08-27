@@ -83,5 +83,12 @@ assert.match(sol, /authorizationNonces\[msg\.sender\] = nonce \+ 1;/);
 const consumeAt = sol.indexOf("authorizationNonces[msg.sender] = nonce + 1;");
 const mintAt = sol.indexOf("_mintCredential(msg.sender, totalPoints, puzzleMask, easyCorrect, mediumCorrect, hardCorrect, imageData, true);");
 assert.equal(consumeAt > 0 && mintAt > consumeAt, true);
+assert.match(sol, /Ownable2Step/);
+assert.match(sol, /MAX_POINTS = 80/);
+assert.match(sol, /MAX_AUTHORIZATION_WINDOW = 7 days/);
+assert.match(sol, /_mint\(learner, tokenId\)/);
+assert.equal(sol.includes("_safeMint"), false);
+assert.match(docs, /seven days/);
+assert.match(docs, /per-learner nonce/);
 
 console.log("EIP-712 authorization model tests passed");

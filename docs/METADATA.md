@@ -9,7 +9,7 @@ When a credential is minted, explorers and wallets read an on-chain JSON documen
 - Artwork: a forge certificate image (blacksmith, workshop, crafted diamond) when an image URI is configured  
 - Traits: total points, puzzle pieces, Easy / Medium / Hard correct counts, and an attestation trait that matches claimed vs attested  
 
-The JSON itself is produced by the contract from the minted snapshot (`tokenURI`). Artwork should be `ipfs://` or stable HTTPS, such as `forge-certificate.jpg` on IPFS (Pinata, web3.storage, or equivalent).
+The JSON itself is produced by the contract from the minted snapshot (`tokenURI`). Artwork must be a short `ipfs://` or `https://` URI so explorers can show it safely — for example `forge-certificate.jpg` on IPFS (Pinata, web3.storage, or equivalent).
 
 ## Honesty in the record
 

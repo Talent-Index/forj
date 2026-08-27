@@ -54,7 +54,7 @@ Anyone can open a credential by ID or by holder wallet, with a shareable URL and
 
 Required vs optional fields: the list above is required for a current record. Optional display fields may be empty without changing claimed vs attested.
 
-Score constraints: points and Easy / Medium / Hard counts are the minted snapshot. They cannot exceed the quiz maximums. Puzzle completion is a bit mask of seated pieces.
+Score constraints: points and Easy / Medium / Hard counts are the minted snapshot. They cannot exceed the quiz maximums (80 total points, five correct per difficulty). Puzzle completion is a bit mask of seated pieces.
 
 Verification-state transitions: a token stays claimed or attested as minted. A learner remint creates a new token. A claimed record does not become attested in place. `credentialIdsAreUnique` for a wallet’s current set.
 

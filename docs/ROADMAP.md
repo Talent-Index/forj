@@ -60,6 +60,7 @@ Shipped on Fuji: soulbound transfer rules, owner-signed attestation, and contrac
 
 Remaining before production issuance:
 
+- Freeze the hardened credential (score cap, image URI rules, two-step issuer handoff, bounded authorization window) and redeploy before production issuance
 - Independent review of the credential contract and issuer authorization
 - Confirm signing keys never live in the learner browser
 - Production Firebase project, monitoring, and honest production copy

@@ -173,6 +173,8 @@ describe("SkillForgeCredential EIP-712 authorization", function () {
     ).to.be.revertedWith("Authorization window too long");
     expect(await credential.authorizationNonces(learner.address)).to.equal(0n);
   });
+
+  it("reverts when the deadline is in the past", async function () {
     const { credential, owner, learner } = await deployCredential();
     const latest = (await provider.getBlock("latest")).timestamp;
     const deadline = BigInt(latest + 4);

@@ -119,6 +119,8 @@ describe("SkillForgeCredential", function () {
     await expect(
       credential.connect(learner).mintCredential(1, 1, 6, 0, 0, "")
     ).to.be.revertedWith("Invalid scores");
+  });
+
   it("rejects scores above the on-chain maximum", async function () {
     const { credential, learner } = await deployCredential();
     const maxPoints = await credential.MAX_POINTS();
@@ -145,6 +147,9 @@ describe("SkillForgeCredential", function () {
     ).to.be.revertedWith("Invalid image");
     await expect(
       credential.connect(learner).mintCredential(1, 1, 0, 0, 0, `ipfs://${"a".repeat(250)}`)
+    ).to.be.revertedWith("Invalid image");
+    await expect(
+      credential.connect(learner).mintCredential(1, 1, 0, 0, 0, "http://example.com/forge.jpg")
     ).to.be.revertedWith("Invalid image");
   });
 
@@ -175,15 +180,18 @@ describe("SkillForgeCredential", function () {
       credential.connect(learner)["safeTransferFrom(address,address,uint256)"](learner.address, other.address, 1n)
     ).to.be.revertedWith("Soulbound: non-transferable");
     await expect(
-      credential.connect(learner).approve(other.address, 1n)
-    ).to.be.revertedWith("Soulbound: non-transferable");
-    await expect(
       credential.connect(learner)["safeTransferFrom(address,address,uint256,bytes)"](
         learner.address,
         other.address,
         1n,
         "0x"
       )
+    ).to.be.revertedWith("Soulbound: non-transferable");
+    await expect(
+      credential.connect(learner).approve(other.address, 1n)
+    ).to.be.revertedWith("Soulbound: non-transferable");
+    await expect(
+      credential.connect(learner).setApprovalForAll(other.address, true)
     ).to.be.revertedWith("Soulbound: non-transferable");
     expect(await credential.getApproved(1n)).to.equal(ethers.ZeroAddress);
     expect(await credential.isApprovedForAll(learner.address, other.address)).to.equal(false);
@@ -419,5 +427,12 @@ describe("SkillForgeCredential", function () {
     expect(await credential.credentialOf(learner.address)).to.equal(3n);
     expect(await credential.credentialOf(other.address)).to.equal(2n);
     expect((await credential.credentials(2n)).totalPoints).to.equal(40n);
+  });
+
+  it("keeps claimed mint gas bounded", async function () {
+    const { credential, learner } = await deployCredential();
+    const tx = await credential.connect(learner).mintCredential(15, 1, 5, 0, 0, IMAGE);
+    const receipt = await tx.wait();
+    expect(receipt.gasUsed).to.be.lessThan(400_000n);
   });
 });

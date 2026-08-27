@@ -43,6 +43,9 @@ const CID_V0 = /^Qm[1-9A-HJ-NP-Za-km-z]{44}$/;
 const CID_V1 = /^baf[a-z2-7]{20,}$/;
 const DATA_JSON_BASE64 = "data:application/json;base64,";
 
+const MAX_ONCHAIN_IMAGE_BYTES = 256;
+const ONCHAIN_IMAGE_CHARS = /^[A-Za-z0-9:/._?&=%-]+$/;
+
 function hasUnsafeChars(uri) {
   return /["\\\s]/.test(uri) || Array.from(uri).some((ch) => ch.charCodeAt(0) < 32);
 }
@@ -56,6 +59,7 @@ export function parseIpfsCid(uri) {
 
 export function isStableMediaUri(uri) {
   if (typeof uri !== "string" || !uri || hasUnsafeChars(uri)) return false;
+  if (uri.length > MAX_ONCHAIN_IMAGE_BYTES || !ONCHAIN_IMAGE_CHARS.test(uri)) return false;
   if (parseIpfsCid(uri)) return true;
   try {
     const url = new URL(uri);
