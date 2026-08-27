@@ -56,7 +56,7 @@ Remaining: question management, learning analytics, issuer dashboard, and produc
 
 This is the production gate. It is **not** a claim that SkillForge is audited or live on Avalanche C-Chain mainnet.
 
-Shipped on Fuji: soulbound transfer rules, owner-signed attestation, and contract tests for forged, replayed, expired, wrong-signer, wrong-chain, and wrong-contract authorizations.
+Shipped on Fuji: soulbound transfer rules and owner-signed attestation. Contract tests cover unauthorized mint, forged and replayed signatures, wrong nonce, wrong chain, wrong contract, expired authorizations, unauthorized issuer and ownership changes, and duplicate current credentials.
 
 Remaining before production issuance:
 

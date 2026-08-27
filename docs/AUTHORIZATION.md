@@ -6,12 +6,12 @@ The learner UI still publishes **self-claimed** records. Attestation is a separa
 
 ## Intent
 
-- Bind the authorization to **this** SkillForge contract on **this** chain.  
-- Bind it to one learner, one score snapshot, one puzzle mask, and one artwork hash.  
+- Bind the authorization to **this** SkillForge contract on **this** chain. A signature for another chain or another SkillForge contract does not mint here.  
+- Bind it to one learner, one score snapshot, one puzzle mask, and one artwork hash. Another wallet cannot submit that signature.  
 - Use it once. A second use of the same authorization fails.  
 - Expire it. After the deadline it is no longer valid. An authorization cannot reach more than seven days into the future.  
 - Use a per-learner nonce so a valid signature cannot be replayed.  
-- If the issuer key is handed off, the new owner must accept it. The issuer role cannot be abandoned. Old signatures from the previous owner do not authorize new mints.
+- If the issuer key is handed off, the new owner must accept it. A pending owner cannot attest until they accept. The issuer role cannot be abandoned. Old signatures from the previous owner do not authorize new mints.
 
 The credential ID is assigned at mint. The signature authorizes the **content**, not a pre-chosen token number. `credentialId` is **not** signed.
 
