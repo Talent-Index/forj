@@ -22,6 +22,8 @@ C-Chain issuance is **closed**. Freeze v1 may be reviewed; it is not independent
 
 Opening issuance requires flipping the source gate after independent review, issuer custody, and monitoring exist. An env flag must not be enough.
 
+Public launch validation is a separate fail-closed record. See [LAUNCH-VALIDATION.md](./LAUNCH-VALIDATION.md). That pack is **not** approval to launch.
+
 ## Incident notes
 
 v1 cannot pause claimed mint. Attested mint stops for an old owner after a completed two-step handoff. Tokens already minted do not change from claimed to attested or the reverse. Explorers showing a token do not mean an exam was passed.

@@ -2,7 +2,7 @@
 
 **Goal:** Grow SkillForge from a Fuji learning product into a reliable, honest, issuer-capable skills credential platform on Avalanche.
 
-> **Today:** Foundation is complete. Learning, credentials, gamification, and platform are partially shipped. The soulbound credential is **live on Avalanche Fuji**. The Security & Launch production readiness gate is **closed**. SkillForge is not independently audited and does not issue credentials on Avalanche C-Chain. See [STATUS.md](./STATUS.md).
+> **Today:** Foundation is complete. Learning, credentials, gamification, and platform are partially shipped. The soulbound credential is **live on Avalanche Fuji**. The Security & Launch production readiness gate is **closed**. Launch validation is **not** approval to launch. SkillForge is not independently audited and does not issue credentials on Avalanche C-Chain. See [STATUS.md](./STATUS.md).
 
 | Phase | Theme | Status |
 | --- | --- | --- |
@@ -11,7 +11,7 @@
 | 3 | Credentials | Partial — contract live on Fuji |
 | 4 | Gamification | Live ranking from the event log |
 | 5 | Platform | Partial — account-backed learner persistence |
-| 6 | Security & Launch | Partial — production gate closed; audit and C-Chain issuance not shipped |
+| 6 | Security & Launch | Partial — production gate closed; launch not approved; audit and C-Chain issuance not shipped |
 | 7 | Ecosystem | Planned |
 
 ```mermaid
@@ -70,6 +70,8 @@ Remaining before production issuance:
 - End-to-end learner and issuer checks on Avalanche C-Chain
 
 Product copy must stay honest on C-Chain: claimed scores are not issuer-attested. SkillForge does not issue credentials on C-Chain today.
+
+Launch validation of the Fuji learner loop (quiz, retry, puzzle, claimed mint, public lookup, and issuer-authorization rejects) is **not** approval to launch. Live wallets, mobile and desktop browsers, issuer operations, monitoring, and a C-Chain contract remain unsigned.
 
 ## Phase 7 — Ecosystem
 

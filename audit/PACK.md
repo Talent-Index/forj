@@ -111,4 +111,4 @@ Do not treat this pack as permission to issue on Avalanche C-Chain.
 - **Honesty gate:** claimed mint remains the learner path; attested remains owner-signed. Lookup and explorers must not say verified or certified for a claimed record.  
 - Deployment records should include `freezeId: "v1"` with the EIP-712 name and version.
 
-Independent review of this freeze is still **remaining**. SkillForge is not audited and not live on C-Chain mainnet.
+Independent review of this freeze is still **remaining**. SkillForge is not audited and not live on C-Chain mainnet. Launch validation of the Fuji learner loop is not approval to launch.
