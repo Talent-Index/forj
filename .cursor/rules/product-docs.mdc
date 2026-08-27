@@ -33,5 +33,6 @@ When you ship, change, or remove user-facing behavior (learning loop, identity, 
 - `docs/CREDENTIAL.md` — credential product model
 - `docs/AUTHORIZATION.md` — issuer attestation as a trust product
 - `docs/METADATA.md` — what the on-chain certificate record shows
+- `audit/` — freeze pack for independent review (not learner copy; not a setup guide)
 
 Keep names, honesty copy, and Fuji-live facts consistent across these files.

@@ -56,12 +56,12 @@ Remaining: question management, learning analytics, issuer dashboard, and produc
 
 This is the production gate. It is **not** a claim that SkillForge is audited or live on Avalanche C-Chain mainnet.
 
-Shipped on Fuji: soulbound transfer rules and owner-signed attestation. Contract tests cover unauthorized mint, forged and replayed signatures, wrong nonce, wrong chain, wrong contract, expired authorizations, unauthorized issuer and ownership changes, and duplicate current credentials. The learner app does not hold issuer keys; wallet, contract, and mint inputs are checked before a transaction is sent.
+Shipped on Fuji: soulbound transfer rules and owner-signed attestation. Contract tests cover unauthorized mint, forged and replayed signatures, wrong nonce, wrong chain, wrong contract, expired authorizations, unauthorized issuer and ownership changes, and duplicate current credentials. The learner app does not hold issuer keys; wallet, contract, and mint inputs are checked before a transaction is sent. Freeze v1 of the credential source is packed for independent review. That pack is **not** an audit.
 
 Remaining before production issuance:
 
-- Freeze the hardened credential (score cap, image URI rules, two-step issuer handoff, bounded authorization window) and redeploy before production issuance
-- Independent review of the credential contract and issuer authorization
+- Independent review of freeze v1 (the credential contract and issuer authorization)
+- Redeploy the frozen credential before production issuance if the live Fuji address still lags this source
 - Confirm signing keys never live in the learner browser
 - Production Firebase project, monitoring, and honest production copy
 - Freeze the production credential, then mainnet deploy only after that review

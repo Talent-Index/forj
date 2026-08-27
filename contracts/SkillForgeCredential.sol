@@ -10,7 +10,11 @@ import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 
 /// @title SkillForgeCredential
 /// @notice Soulbound NFT credential for Avalanche learning achievements.
-/// @dev Two mint paths:
+/// @dev Freeze v1 for independent review (not an audit completion claim):
+///      MAX_POINTS 80, MAX_IMAGE_BYTES 256, MAX_AUTHORIZATION_WINDOW 7 days,
+///      EIP-712 name SkillForgeCredential / version 1, Ownable2Step issuer,
+///      soulbound via _update (no transfers or approvals), nonce consumed before
+///      attested mint, mint without ERC-721 receiver callbacks. Two mint paths:
 ///      - mintCredential: self-claimed scores. Anyone can mint for themselves.
 ///      - mintCredentialWithAuthorization: issuer-attested scores. Requires an EIP-712
 ///        signature from the contract owner. The learner nonce is consumed before mint

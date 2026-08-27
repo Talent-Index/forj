@@ -73,6 +73,9 @@ async function main() {
   const address = await credential.getAddress();
   const record = {
     contract: "SkillForgeCredential",
+    freezeId: "v1",
+    eip712Name: "SkillForgeCredential",
+    eip712Version: "1",
     network: networkName,
     chainId: Number(chainId),
     address,

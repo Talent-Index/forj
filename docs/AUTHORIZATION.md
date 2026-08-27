@@ -17,6 +17,22 @@ The credential ID is assigned at mint. The signature authorizes the **content**,
 
 Signed domain: `name`, `version`, `chainId`, `verifyingContract`. Signed payload includes `learner`, score snapshot, puzzle mask, `imageHash`, `nonce`, and `deadline`.
 
+## Privileged roles
+
+| Role | What they can do |
+| --- | --- |
+| Learner | Publish a **claimed** score to their own wallet |
+| Issuer (contract owner) | Sign an attested authorization; hand the issuer role to a new owner who must accept it |
+| Public | Look up a token. Lookup does not attest a score |
+
+A pending owner cannot attest until they accept. The issuer role cannot be abandoned. Signing keys never live in the learner browser.
+
+## Threat model
+
+Anyone can publish a claimed record within the score caps. That is self-publication, not an exam. Attested mint without the current owner’s signature fails. A used, expired, or wrong-chain / wrong-contract signature fails. The token cannot be transferred. App XP is not the credential. A stolen issuer key could attest until the owner completes a two-step handoff.
+
+Revocation, issuer organizations, and treating a claimed score as independently assessed are out of scope for this version.
+
 ## What a signature is not
 
 It is not a degree, a proctored exam, or a general Avalanche certification. It is an on-chain statement that the issuer’s key authorized that score record.

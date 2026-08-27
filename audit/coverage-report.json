@@ -1,0 +1,170 @@
+{
+  "freezeId": "v1",
+  "generatedAt": "2026-08-27T22:21:59.536Z",
+  "mochaTests": 47,
+  "requirements": [
+    {
+      "id": "unauthorized-mint",
+      "label": "Unauthorized mint",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "does not mint an attested credential without a valid owner signature"
+        },
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "cannot mint a credential into another wallet"
+        }
+      ]
+    },
+    {
+      "id": "forged-signature",
+      "label": "Forged signature",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects a mutated owner signature and a random 65-byte payload"
+        },
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects signatures bound to the wrong EIP-712 name or version"
+        }
+      ]
+    },
+    {
+      "id": "replayed-signature",
+      "label": "Replayed signature",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects a second use of the same authorization"
+        },
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects replay after a claimed remint has replaced the attested token"
+        },
+        {
+          "file": "SkillForgeAuthorization.js",
+          "title": "accepts the first authorization and rejects reuse"
+        },
+        {
+          "file": "SkillForgeCredential.js",
+          "title": "rejects replayed attestations after a successful mint"
+        }
+      ]
+    },
+    {
+      "id": "wrong-nonce",
+      "label": "Wrong nonce",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects a future nonce and an already-consumed nonce"
+        },
+        {
+          "file": "SkillForgeAuthorization.js",
+          "title": "reverts when the nonce in the signature was already consumed"
+        }
+      ]
+    },
+    {
+      "id": "wrong-chain",
+      "label": "Wrong chain",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects a signature bound to Fuji or mainnet while this network differs"
+        },
+        {
+          "file": "SkillForgeAuthorization.js",
+          "title": "reverts for a signature bound to the wrong chain"
+        }
+      ]
+    },
+    {
+      "id": "wrong-contract",
+      "label": "Wrong contract",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects a signature issued for a different SkillForgeCredential"
+        },
+        {
+          "file": "SkillForgeAuthorization.js",
+          "title": "reverts for a signature bound to another contract"
+        }
+      ]
+    },
+    {
+      "id": "expired-signature",
+      "label": "Expired signature",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects a deadline of zero and a deadline that has already passed"
+        },
+        {
+          "file": "SkillForgeAuthorization.js",
+          "title": "reverts when the deadline is in the past"
+        }
+      ]
+    },
+    {
+      "id": "unauthorized-issuer",
+      "label": "Unauthorized issuer",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects a learner, a stranger, and a pending owner as attesting issuer"
+        },
+        {
+          "file": "SkillForgeAuthorization.js",
+          "title": "reverts for the wrong signer and does not consume the nonce"
+        },
+        {
+          "file": "SkillForgeCredential.js",
+          "title": "rejects attestations from a previous owner after the handoff"
+        }
+      ]
+    },
+    {
+      "id": "unauthorized-ownership",
+      "label": "Unauthorized ownership",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "rejects transfer, accept, and renounce from accounts that do not hold the issuer role"
+        },
+        {
+          "file": "SkillForgeCredential.js",
+          "title": "uses two-step ownership and refuses renounce"
+        }
+      ]
+    },
+    {
+      "id": "duplicate-credential",
+      "label": "Duplicate credential",
+      "covered": true,
+      "tests": [
+        {
+          "file": "SkillForgeAdversarial.js",
+          "title": "keeps one current credential per wallet and unique token IDs"
+        },
+        {
+          "file": "SkillForgeCredential.js",
+          "title": "replaces a learner's previous credential on remint"
+        }
+      ]
+    }
+  ],
+  "allCovered": true
+}

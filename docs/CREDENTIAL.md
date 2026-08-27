@@ -17,7 +17,25 @@ The record includes:
 - When it was minted  
 - Network and contract  
 
-That snapshot is what was written at mint. It is not a live feed of later quiz retries.
+The snapshot is what was written at mint. It is not a live feed of later quiz retries.
+
+## Frozen credential
+
+Schema **v1** is frozen for independent review. That freeze is **not** an audit and **not** Avalanche C-Chain issuance.
+
+Frozen rules: soulbound; 80 total points and five correct per difficulty; short `ipfs://` or `https://` artwork; claimed or issuer-attested at mint (never flipped in place); one current record per wallet; owner-signed attestation with a seven-day window and a per-learner nonce.
+
+The live Fuji contract is the current testnet deployment. Freeze v1 source may be redeployed to a new address later. Lookup always names the contract that holds the token.
+
+```text
+Account (progress, XP)     Wallet (optional until mint)
+        \                         /
+         \                       /
+          claimed mint -----> soulbound credential
+          attested mint --> (same contract, owner signature)
+                 \
+                  public lookup
+```
 
 ## Claimed vs attested
 
