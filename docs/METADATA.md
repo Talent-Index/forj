@@ -6,7 +6,8 @@ When a credential is minted, explorers and wallets read an on-chain JSON documen
 
 - Title for this credential  
 - A description that is either **self-claimed** or **issuer-attested** — never “verified” or “certified” for a claimed record  
-- Artwork: a forge certificate image (blacksmith, workshop, crafted diamond) when an image URI is configured  
+- Artwork: Forjora forge art — blacksmith in a workshop presenting a crafted diamond, with Learn · Forge · Prove — when an image URI is configured. The image does not say “certified” or “verified”  
+
 - Traits: total points, puzzle pieces, Easy / Medium / Hard correct counts, and an attestation trait that matches claimed vs attested  
 
 The JSON itself is produced by the contract from the minted snapshot (`tokenURI`). Artwork must be a short `ipfs://` or `https://` URI so explorers can show it safely — for example `forge-certificate.jpg` on IPFS (Pinata, web3.storage, or equivalent).

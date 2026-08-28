@@ -29,7 +29,12 @@ function CertificateArtifact({
   return (
     <article className={`certificate-artifact status-${trust.id} ${compact ? "is-compact" : ""}`}>
       <p className="certificate-brand">{PRODUCT_NAME}</p>
-      <h2 className="certificate-title">Certificate of Achievement</h2>
+      <div className="certificate-divider" aria-hidden="true" />
+      <h2 className="certificate-title">
+        <span className="certificate-title-line">Certificate</span>
+        <span className="certificate-title-of">of</span>
+        <span className="certificate-title-line">Achievement</span>
+      </h2>
       <p className="certificate-awarded">Awarded to</p>
       <p className="certificate-recipient">{recipientName || "Recipient"}</p>
       <div className="certificate-art-frame">

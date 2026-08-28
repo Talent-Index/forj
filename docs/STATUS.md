@@ -46,7 +46,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 
 - Sixteen interlocking jigsaw pieces. Points buy a piece; the same piece cannot be bought twice.
 - Completing the puzzle reveals the certificate, asks for a recipient name, then continues to the credential flow.
-- Artwork concept: a refined blacksmith in a forge holding a crafted diamond (learning, learner, skill).
+- Artwork: Forjora forge certificate image — blacksmith in a workshop presenting a crafted diamond; banners say Forjora and Learn · Forge · Prove, not “certified” or “verified”.
 
 ## Credentials
 
