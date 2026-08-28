@@ -35,7 +35,7 @@ export const CREDENTIAL_STATES = {
     title: "Forjora issuer-attested credential",
     summary:
       "Forjora issuer-attested: requires an owner EIP-712 signature. Not used in the learner mint UI.",
-    body: "This credential was authorized by the SkillForgeCredential contract owner with an EIP-712 signature. It is not a self-claimed quiz mint.",
+    body: "This credential was authorized by the Forjora issuer with an EIP-712 signature. It is not a Forjora claimed quiz mint.",
     remintNote: "",
     metadataDescription: DESCRIPTION.attested,
     metadataTrait: ATTESTATION_VALUE.attested,

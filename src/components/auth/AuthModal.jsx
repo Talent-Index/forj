@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MIN_PASSWORD_LENGTH } from "../../utils/auth";
 import { PRODUCT_NAME } from "../../utils/brand";
 import { validateRecipientName } from "../../utils/recipient";
 import { Button, Modal } from "../ui/primitives";

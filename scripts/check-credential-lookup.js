@@ -158,10 +158,9 @@ assert.equal(attestedView.transactionHash, "");
 assert.equal(attestedView.difficulty, "Easy");
 
 const page = readFileSync(join(root, "src/components/pages/CredentialLookupPage.jsx"), "utf8");
-assert.match(page, /Credential lookup/);
 assert.match(page, /Credential verification/);
-assert.match(page, /Public credential verification/);
-assert.match(page, /Verification state/);
+assert.match(page, /Forjora claimed score issuer-attested/);
+assert.match(page, /verification-checks/);
 assert.match(page, /Shareable URL/);
 assert.match(page, /CredentialQr/);
 assert.match(page, /not-found/);
@@ -169,7 +168,7 @@ assert.match(page, /owner-mismatch/);
 assert.match(page, /EMPTY_STATES\.noLookup/);
 assert.doesNotMatch(page, /Verify on Snowtrace/);
 assert.doesNotMatch(page, /verifiable on-chain/i);
-assert.match(page, /does not make a self-claimed score issuer-attested/);
+assert.match(page, /does not make a Forjora claimed score issuer-attested/);
 
 const app = readFileSync(join(root, "src/App.jsx"), "utf8");
 assert.match(app, /parseCredentialLocation/);

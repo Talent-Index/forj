@@ -28,6 +28,7 @@ assert.deepEqual(topics, [
 ]);
 
 assert.match(INTRODUCTION.body, /Fuji|quiz|credential/i);
+assert.equal(INTRODUCTION.title, "Forjora");
 assert.equal(LEARNING_PROGRESSION.length, 5);
 assert.deepEqual(
   LEARNING_PROGRESSION.map((step) => step.title),

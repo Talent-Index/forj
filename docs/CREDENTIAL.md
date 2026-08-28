@@ -39,7 +39,7 @@ Account (progress, XP)     Wallet (optional until mint)
 
 ## Claimed vs attested
 
-| | Claimed | Issuer-attested |
+| | Forjora claimed | Forjora issuer-attested |
 | --- | --- | --- |
 | Who authorizes it | The learner | The contract owner, by signature |
 | Product meaning | “I published these scores.” | “An issuer authorized this record.” |

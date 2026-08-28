@@ -65,7 +65,7 @@ assertIncludes(app, "busy={onboardBusy}", "App passes busy to onboarding");
 assertIncludes(app, "auth.completeProfile(input)", "Continue calls completeProfile");
 assertIncludes(app, "LegalPage", "App has Privacy and Terms pages");
 assertIncludes(app, "goLearnHome()", "Signed-in learners leave landing");
-assert.equal(app.includes("<FirstRunGuide"), false, "SkillForge loop card stays hidden after sign-in");
+assert.equal(app.includes("<FirstRunGuide"), false, "Forjora loop card stays hidden after sign-in");
 assert.equal(app.includes("dismissFirstRunGuide"), false, "First-run dismiss helper is unused");
 assertIncludes(readSrc("src/components/layout/Navbar.jsx"), ">Connected<", "Connected toast after wallet");
 assertIncludes(readSrc("src/components/layout/Footer.jsx"), 'onNavigate("privacy")', "Footer Privacy");
