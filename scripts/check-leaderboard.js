@@ -3,6 +3,7 @@ import { applyProgressEvent, emptyProgression } from "../src/utils/progression/e
 import { EVENT_TYPES } from "../src/utils/progression/events.js";
 import {
   LEADERBOARD_AUTHORITY,
+  LEADERBOARD_DISCLAIMER,
   LEADERBOARD_PREFERENCE_KEYS,
   applyLeaderboardPreference,
   joinLeaderboardByDefault,
@@ -15,9 +16,15 @@ import { replayEvents } from "../src/utils/progression/replay.js";
 import { getXP } from "../src/utils/progression/xp.js";
 import {
   COLLECTIONS,
+  isAllowedProgressEventSource,
   progressEventDocId,
   sanitizeProgressEventSourceId,
 } from "../src/utils/backend/schema.js";
+
+assert.match(LEADERBOARD_DISCLAIMER, /not a tamper-proof exam/i);
+assert.match(LEADERBOARD_DISCLAIMER, /community ranking/i);
+assert.equal(isAllowedProgressEventSource("LESSON_COMPLETED", "fund-what"), true);
+assert.equal(isAllowedProgressEventSource("LESSON_COMPLETED", "made-up-lesson"), false);
 
 assert.equal(COLLECTIONS.leaderboardPreferences, "leaderboardPreferences");
 assert.equal(sanitizeProgressEventSourceId("piece-3"), "piece-3");

@@ -356,6 +356,9 @@ export const LESSONS = [
   },
 ];
 
+/** Lesson ids allowed as LESSON_COMPLETED progressEvent sourceIds (Firestore + client). */
+export const LESSON_EVENT_SOURCE_IDS = Object.freeze(LESSONS.map((lesson) => lesson.id));
+
 function indexById(items) {
   return Object.fromEntries(items.map((item) => [item.id, item]));
 }

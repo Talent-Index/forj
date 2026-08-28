@@ -2,7 +2,12 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { LESSON_EVENT_SOURCE_IDS } from "../src/data/learning.js";
+import {
+  isAllowedProgressEventSource,
+} from "../src/utils/backend/schema.js";
 import { PUBLIC_ENV_KEYS } from "../src/utils/frontendSecurity.js";
+import { LEADERBOARD_DISCLAIMER } from "../src/utils/progression/leaderboard.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const firestoreRules = readFileSync(join(root, "firestore.rules"), "utf8");
@@ -13,10 +18,27 @@ const threatModel = readFileSync(join(root, "audit/THREAT-MODEL.md"), "utf8");
 const appCheck = readFileSync(join(root, "src/utils/appCheck.js"), "utf8");
 const main = readFileSync(join(root, "src/main.jsx"), "utf8");
 const envExample = readFileSync(join(root, ".env.example"), "utf8");
+const progressionDoc = readFileSync(join(root, "docs/PROGRESSION.md"), "utf8");
 
 assert.match(firestoreRules, /request\.auth\.token\.email_verified\s*==\s*true/);
 assert.match(storageRules, /request\.auth\.token\.email_verified\s*==\s*true/);
 assert.match(storageRules, /isVerifiedUser/);
+
+assert.ok(LESSON_EVENT_SOURCE_IDS.length >= 18, "expected shipped lesson ids");
+for (const lessonId of LESSON_EVENT_SOURCE_IDS) {
+  assert.match(
+    firestoreRules,
+    new RegExp(`'${lessonId}'`),
+    `firestore.rules must allowlist LESSON_COMPLETED source ${lessonId}`
+  );
+  assert.equal(isAllowedProgressEventSource("LESSON_COMPLETED", lessonId), true);
+}
+assert.equal(isAllowedProgressEventSource("LESSON_COMPLETED", "farm-extra-lesson"), false);
+assert.equal(isAllowedProgressEventSource("QUIZ_COMPLETED", "easy"), true);
+assert.equal(isAllowedProgressEventSource("PUZZLE_PIECE_UNLOCKED", "piece-16"), false);
+assert.match(firestoreRules, /validSectionScore\(data\.sectionScores\.easy\)/);
+assert.match(LEADERBOARD_DISCLAIMER, /not a tamper-proof exam/i);
+assert.match(progressionDoc, /community ranking/i);
 
 assert.equal(PUBLIC_ENV_KEYS.includes("VITE_FIREBASE_APPCHECK_SITE_KEY"), true);
 assert.match(appCheck, /initializeAppCheck/);

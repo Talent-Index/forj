@@ -36,6 +36,7 @@ service cloud.firestore {
     //
     // Collection: progressEvents
     // Document ID: {uid}_{type}_{sourceId} (immutable, one completion per source)
+    // Learner-published community ranking input — not a trusted exam ledger.
     // Primitive learning events. Create-only scoring payload. Owner may toggle
     // optIn so the event can appear on the live board. No XP fields.
     //
@@ -181,6 +182,10 @@ service cloud.firestore {
         && data.spentPoints is int && data.spentPoints >= 0 && data.spentPoints <= 80
         && data.acquiredPieces is list && data.acquiredPieces.size() <= 16
         && data.sectionScores is map
+        && data.sectionScores.keys().hasOnly(['easy', 'medium', 'hard'])
+        && (!('easy' in data.sectionScores) || validSectionScore(data.sectionScores.easy))
+        && (!('medium' in data.sectionScores) || validSectionScore(data.sectionScores.medium))
+        && (!('hard' in data.sectionScores) || validSectionScore(data.sectionScores.hard))
         && data.completedSections is list && data.completedSections.size() <= 3
         && data.attempts is list && data.attempts.size() <= 40
         && data.recipientName is string && data.recipientName.size() <= 80
@@ -221,10 +226,24 @@ service cloud.firestore {
         && data.eventKey == data.type + ':' + data.sourceId;
     }
 
+    // Keep in sync with LESSON_EVENT_SOURCE_IDS in src/data/learning.js
+    // (enforced by scripts/check-firebase-security.js).
+    function allowedLessonSourceIds() {
+      return [
+        'fund-what', 'fund-chains', 'fund-avax',
+        'arch-primary', 'arch-consensus', 'arch-validators',
+        'l1-what', 'l1-validators', 'l1-custom',
+        'cchain-evm', 'cchain-gas', 'cchain-contracts',
+        'icm-what', 'icm-teleporter', 'icm-use',
+        'dev-tooling', 'dev-fuji', 'dev-practice'
+      ];
+    }
+
     function validEventSource(data) {
       return (data.type in ['QUIZ_STARTED', 'QUIZ_COMPLETED']
           && data.sourceId in ['easy', 'medium', 'hard'])
-        || (data.type == 'LESSON_COMPLETED' && data.sourceId.size() > 0)
+        || (data.type == 'LESSON_COMPLETED'
+          && data.sourceId in allowedLessonSourceIds())
         || (data.type == 'PUZZLE_PIECE_UNLOCKED'
           && data.sourceId.matches('^piece-([0-9]|1[0-5])$'))
         || (data.type == 'CREDENTIAL_CLAIMED' && data.sourceId == 'credential');

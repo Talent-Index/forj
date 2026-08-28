@@ -5,7 +5,7 @@ import { useLiveLeaderboard } from "../../hooks/useLiveLeaderboard";
 import { Button, Card } from "../ui/primitives";
 
 function statusCopy(status) {
-  if (status === "live") return "Live · append-only event log";
+  if (status === "live") return "Live · community event log (not a trusted ledger)";
   if (status === "local") return "Offline preview · this device only";
   return "Connecting to the live board…";
 }
@@ -52,7 +52,7 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
         <h2>Privacy</h2>
         <p className="meta-line">
           You appear on the live board by default under your display name.
-          Hide anytime. Rank is not a verified exam and not an issuer-attested credential.
+          Hide anytime. Rank is community standing from learner-published events — not a verified exam and not an issuer-attested credential.
         </p>
         {(actionError || board.error) && (
           <p className="auth-error" role="alert">{actionError || board.error}</p>

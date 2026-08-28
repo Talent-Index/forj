@@ -245,7 +245,7 @@ Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, 
 | Issuer key in frontend or Git | Issuer infrastructure | Critical | Low if process followed | CI/frontend checks block `PRIVATE_KEY` in public env; ops must keep `.env` clean |
 | Stolen issuer key | Attested credentials | Critical | Ops-dependent | No pause; two-step ownership only; **residual** |
 | Claimed score / mint inflation | Claimed credential | Medium (honesty) | High if adversarial learner | **Accepted** for claimed path; copy must not say verified |
-| XP / leaderboard farming via client events | Progression / board | Medium–High (product integrity) | High | **Residual** — no server adjudication |
+| XP / leaderboard farming via client events | Progression / board | Medium (product integrity) | Medium | Lesson sources allowlisted; quiz/puzzle caps apply; **residual** until trusted XP ledger — board is community ranking |
 | Cross-user profile/progress read/write | Learner accounts | High | Low if rules deployed | Owner checks; deny-by-default catch-all |
 | Unverified email using Firestore | Learner data | Medium | Low after rules deploy | Rules require `email_verified` — **deploy rules to production** |
 | XSS → session/tx trickery | Accounts / wallet | High | Low–Medium | No `dangerouslySetInnerHTML`; URL/media sanitizers; **no CSP** |
@@ -283,7 +283,7 @@ It does **not** by itself satisfy the full 23-section execution checklist or the
 | Area | Gap |
 | --- | --- |
 | App Check | Client scaffolding optional via `VITE_FIREBASE_APPCHECK_SITE_KEY`; **console enforcement** still required |
-| Trusted XP / quiz validation | No Cloud Functions / server referee |
+| Trusted XP / quiz validation | No Cloud Functions / server referee; board copy + lesson allowlist reduce abuse but do not eliminate quiz metadata gaming |
 | Firestore `email_verified` | Enforced in rules (deploy rules to production Firebase) |
 | Security headers / CSP | Shipped in `vercel.json` for Vercel hosts |
 | Rate limiting | No app-layer limits |
@@ -298,9 +298,9 @@ It does **not** by itself satisfy the full 23-section execution checklist or the
 
 ## 14. Suggested next execution order
 
-1. **Deploy** updated Firestore/Storage rules to the Firebase project.  
+1. **Deploy** updated Firestore/Storage rules (verified email + lesson allowlist + quiz score shape) to the Firebase project.  
 2. **Configure App Check** (reCAPTCHA v3 site key + console enforcement).  
-3. **XP / reward integrity** — trusted adjudication or explicit “untrusted board” product stance.  
+3. **Trusted XP ledger** (Cloud Functions / Admin SDK) when ready to leave community-ranking mode.  
 4. **Live Fuji walkthroughs** — MetaMask/Core claimed mint and lookup.  
 5. **Continue** issuer-key ops, monitoring, pen test, and regression suite per the program checklist.
 

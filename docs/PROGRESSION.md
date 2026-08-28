@@ -65,10 +65,10 @@ Rules: no duplicate unlock, no spending below zero, no invented piece ids. Compl
 
 An opt-in **live board** among signed-in learners. New learners are included by default and can hide. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
 
-Standing is derived from the append-only learning event log. One completion per source. Quiz retries do not farm XP. Learners cannot write XP or rank.
+Standing is derived from an append-only learning event log that learners publish under security rules. One completion per allowed source (listed lessons, quiz difficulties, puzzle pieces, credential claim). Quiz retries do not farm XP. Learners cannot write XP totals or rank fields.
 
-It is not a league, not on-chain, and not an issuer-attested ranking. The event log is the authority for this board, not a verified exam.
+It is a **community ranking**, not a tamper-proof exam ledger, not on-chain, and not issuer-attested. A trusted XP service is still on the roadmap.
 
 ## What progression is not
 
-Progression state does not prove an issuer-attested skill. Clients cannot write XP, achievements, or attested credentials as raw totals. The live board replays the event log; that is still not an attested exam. Credentials, attestations, and issuer signatures need their own authority. See [Credential](./CREDENTIAL.md).
+Progression state does not prove an issuer-attested skill. Clients cannot write XP totals, achievements, or attested credentials as raw fields. The live board replays learner-published events; that is still not an attested exam. Credentials, attestations, and issuer signatures need their own authority. See [Credential](./CREDENTIAL.md).

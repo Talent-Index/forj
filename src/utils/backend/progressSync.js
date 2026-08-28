@@ -15,6 +15,7 @@ import { replayEvents } from "../progression/replay";
 import {
   COLLECTIONS,
   SCHEMA_VERSION,
+  isAllowedProgressEventSource,
   isClientEventType,
   progressEventDocId,
   sanitizeProgressEventSourceId,
@@ -39,6 +40,9 @@ function eventPayload(userId, event) {
 export async function writeProgressEvent(userId, event) {
   if (!userId || !event?.type || !isClientEventType(event.type)) return { ok: false, duplicate: false };
   const sourceId = sanitizeProgressEventSourceId(event.sourceId);
+  if (!isAllowedProgressEventSource(event.type, sourceId)) {
+    return { ok: false, duplicate: false, error: "Unsupported progress event source." };
+  }
   const id = progressEventDocId(userId, event.type, sourceId);
   const ref = doc(db, COLLECTIONS.progressEvents, id);
   const existing = await withTimeout(getDoc(ref), FIRESTORE_TIMEOUT_MS);

@@ -2,10 +2,15 @@
  * Forjora backend collections (#35–#42).
  * Client may write only learner-owned profile, quiz cache, primitive events,
  * leaderboard opt-in, analytics (no PII), and a first-time wallet link.
- * XP, achievements, credentials, questions, rank totals, and issuer records
- * are not client-writable. Leaderboard standing is derived from the event log.
+ * XP totals, achievements, credentials, questions, rank fields, and issuer records
+ * are not client-writable. Standing is replayed from the event log — that log is
+ * still learner-published under rules, not a trusted exam ledger.
  */
+import { LESSON_EVENT_SOURCE_IDS } from "../../data/learning.js";
+
 export const SCHEMA_VERSION = 1;
+
+export { LESSON_EVENT_SOURCE_IDS };
 
 export const COLLECTIONS = Object.freeze({
   users: "users",
@@ -87,6 +92,24 @@ export const QUESTION_STATUSES = Object.freeze({
 
 export function isClientEventType(type) {
   return CLIENT_EVENT_TYPES.includes(type);
+}
+
+export function isAllowedProgressEventSource(type, sourceId) {
+  const source = sanitizeProgressEventSourceId(sourceId);
+  if (!source) return false;
+  if (type === "QUIZ_STARTED" || type === "QUIZ_COMPLETED") {
+    return source === "easy" || source === "medium" || source === "hard";
+  }
+  if (type === "LESSON_COMPLETED") {
+    return LESSON_EVENT_SOURCE_IDS.includes(source);
+  }
+  if (type === "PUZZLE_PIECE_UNLOCKED") {
+    return /^piece-([0-9]|1[0-5])$/.test(source);
+  }
+  if (type === "CREDENTIAL_CLAIMED") {
+    return source === "credential";
+  }
+  return false;
 }
 
 export function sanitizeProgressEventSourceId(sourceId) {

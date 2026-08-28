@@ -9,7 +9,7 @@ export const LEADERBOARD_AUTHORITY = Object.freeze({
   localPreview: "local-preview",
 });
 export const LEADERBOARD_DISCLAIMER =
-  "Standing comes from an append-only log of first-time learning events. Learners cannot write XP or rank. This is not on-chain and not an issuer-attested score.";
+  "Standing comes from an append-only log of first-time learning events that signed-in learners publish under security rules. Learners cannot write XP totals or rank fields, but this board is not a tamper-proof exam, not on-chain, and not issuer-attested. Treat it as community ranking, not proof of skill.";
 export const LEADERBOARD_PREFERENCE_KEYS = Object.freeze([
   "schemaVersion",
   "userId",
