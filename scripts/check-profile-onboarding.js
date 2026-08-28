@@ -72,6 +72,9 @@ assertIncludes(readSrc("src/components/layout/Footer.jsx"), 'onNavigate("privacy
 assertIncludes(readSrc("src/components/layout/Footer.jsx"), 'onNavigate("terms")', "Footer Terms");
 assertIncludes(app, 'onStart={() => (isAuthenticated ? goLearnHome() : openAuth("signup"))}', "Start Learning opens signup");
 assertIncludes(app, 'onSignIn={() => openAuth("signin")}', "Landing Sign in opens signin");
+assertIncludes(app, "onSuccess={finishAuth}", "Auth modal closes after successful login");
+assertIncludes(app, "!isAuthenticated || !authOpen", "Authenticated session dismisses auth dialog");
+assertIncludes(authModal, "completeAuth", "Auth modal success paths close the dialog");
 
 assert.equal(legalPageFromPath("/privacy"), "privacy");
 assert.equal(legalPageFromPath("/terms"), "terms");

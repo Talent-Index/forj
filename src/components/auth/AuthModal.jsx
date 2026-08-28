@@ -58,12 +58,16 @@ function AuthModal({
   view,
   onChangeView,
   onClose,
+  onSuccess,
   auth,
   pendingEmail,
   oobCode = "",
   banner = "",
   onOpenLegal,
 }) {
+  function completeAuth() {
+    (onSuccess || onClose)?.();
+  }
   const [signup, setSignup] = useState(EMPTY_SIGNUP);
   const [signin, setSignin] = useState(EMPTY_SIGNIN);
   const [forgotEmail, setForgotEmail] = useState("");
@@ -88,7 +92,7 @@ function AuthModal({
         setError(result.error || "Google sign-in failed.");
         return;
       }
-      onClose();
+      completeAuth();
     } catch (err) {
       setError(err.message || "Google sign-in failed.");
     } finally {
@@ -146,7 +150,7 @@ function AuthModal({
         onChangeView("verify");
         return;
       }
-      onClose();
+      completeAuth();
     } catch (err) {
       setError(err.message || "Could not sign in.");
     } finally {
@@ -219,7 +223,7 @@ function AuthModal({
       }
       if (result.message) setInfo(result.message);
       if (result.signedIn && result.account?.emailVerified) {
-        onClose();
+        completeAuth();
         return;
       }
       if (!result.signedIn) {

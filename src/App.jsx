@@ -281,6 +281,14 @@ function App() {
     if (isAuthenticated && page === "landing") goLearnHome();
   }, [goLearnHome, isAuthenticated, page]);
 
+  // Always dismiss the auth dialog once the learner is verified/signed in.
+  useEffect(() => {
+    if (!isAuthenticated || !authOpen) return;
+    setAuthOpen(false);
+    setAuthBanner("");
+    setAuthOobCode("");
+  }, [authOpen, isAuthenticated]);
+
   const openLookup = useCallback((tokenId = "", walletAddress = "") => {
     const href = publicCredentialPath({ tokenId, wallet: walletAddress });
     if (typeof window !== "undefined") {
@@ -299,7 +307,12 @@ function App() {
   function closeAuth() {
     setAuthOpen(false);
     setAuthBanner("");
-    if (!auth.account?.emailVerified) return;
+  }
+
+  function finishAuth() {
+    setAuthOpen(false);
+    setAuthBanner("");
+    setAuthOobCode("");
     if (PUBLIC_PAGES.has(page) && page !== "landing") return;
     goLearnHome();
   }
@@ -620,6 +633,7 @@ function App() {
           setAuthView(next);
         }}
         onClose={closeAuth}
+        onSuccess={finishAuth}
         auth={auth}
         pendingEmail={account?.email}
         oobCode={authOobCode}
