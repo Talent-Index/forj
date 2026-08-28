@@ -46,6 +46,8 @@ The learning app and the credential are separate trust domains. XP and leaderboa
 
 ## Threat model
 
+Full architecture map, trust boundaries, assets, and attack surfaces: [THREAT-MODEL.md](./THREAT-MODEL.md). Contract-focused threats for freeze v1:
+
 | Threat | Intended outcome |
 | --- | --- |
 | Attested mint without the owner signature | Revert; no token; nonce unspent |
