@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { PRODUCT_NAME } from "../../utils/brand";
 import { WalletModal } from "../wallet/WalletControls";
 import ProfileMenu from "../auth/ProfileMenu";
 
@@ -43,7 +44,7 @@ function BrandMark() {
         <path d="M12 2.5 21 12 12 21.5 3 12 Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
         <path d="M12 7.5 16.5 12 12 16.5 7.5 12 Z" fill="currentColor" />
       </svg>
-      SkillForge
+      {PRODUCT_NAME}
     </span>
   );
 }

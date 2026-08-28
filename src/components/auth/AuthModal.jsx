@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MIN_PASSWORD_LENGTH } from "../../utils/auth";
+import { PRODUCT_NAME } from "../../utils/brand";
 import { validateRecipientName } from "../../utils/recipient";
 import { Button, Modal } from "../ui/primitives";
 
@@ -211,11 +211,11 @@ function AuthModal({
     forgot: "Reset your password",
     reset: "Choose a new password",
     verify: "Check your email",
-  }[view] || "SkillForge";
+  }[view] || PRODUCT_NAME;
 
   return (
-    <Modal open={open} title="SkillForge" onClose={onClose} className="auth-modal">
-      <p className="auth-kicker">SkillForge</p>
+    <Modal open={open} title={PRODUCT_NAME} onClose={onClose} className="auth-modal">
+      <p className="auth-kicker">{PRODUCT_NAME}</p>
       <h3 className="auth-title">{title}</h3>
       {error && <p className="auth-error" role="alert">{error}</p>}
       {info && <p className="auth-info" role="status">{info}</p>}

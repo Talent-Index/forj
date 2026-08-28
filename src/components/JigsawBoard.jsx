@@ -26,7 +26,7 @@ function JigsawBoard({
       className={`jigsaw-board ${complete ? "jigsaw-board-complete" : ""}`}
       viewBox={`${-JIGSAW_PAD} ${-JIGSAW_PAD} ${JIGSAW_VIEW} ${JIGSAW_VIEW}`}
       role="group"
-      aria-label="SkillForge certificate jigsaw"
+      aria-label="Forjora certificate jigsaw"
     >
       <defs>
         {PIECES.map((piece) => (

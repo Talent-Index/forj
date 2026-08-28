@@ -72,7 +72,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
       </section>
 
       <section id="how-it-works" className="landing-section">
-        <p className="landing-kicker">How SkillForge works</p>
+        <p className="landing-kicker">How Forjora works</p>
         <div className="landing-steps">
           {HOW_STEPS.map((step) => (
             <article key={step.n} className="landing-step">

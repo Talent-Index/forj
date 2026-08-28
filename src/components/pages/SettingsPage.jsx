@@ -26,7 +26,7 @@ function SettingsPage({
       </header>
 
       <Card className="settings-block">
-        <h2>SkillForge account</h2>
+        <h2>Forjora account</h2>
         <p className="meta-line">Email · {account?.email || "—"}</p>
         <p className="meta-line">Name · {account?.name || "—"}</p>
         <p className="meta-line">Sign-in · {account?.provider === "google" ? "Google" : "Email"}</p>
@@ -73,7 +73,7 @@ function SettingsPage({
 
       <Card className="settings-block">
         <h2>Data</h2>
-        <p>Reset clears quiz scores, puzzle pieces, and local cache for this account in this browser. Your signed-in progress remains on your SkillForge account unless you delete the account.</p>
+        <p>Reset clears quiz scores, puzzle pieces, and local cache for this account in this browser. Your signed-in progress remains on your Forjora account unless you delete the account.</p>
         <Button variant="danger" onClick={onReset} disabled={!account}>
           Reset local progress
         </Button>

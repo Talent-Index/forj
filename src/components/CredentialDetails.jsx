@@ -90,7 +90,7 @@ function CredentialDetails({ view }) {
       <header className="credential-details-head">
         <p className="kicker">Credential verification</p>
         <CredentialStatusBadge status={view.statusId} />
-        <h2>{view.title || "SkillForge credential"}</h2>
+        <h2>{view.title || "Forjora credential"}</h2>
       </header>
       <p className="credential-record-honesty">{view.statusBody}</p>
       <p className="meta-line">

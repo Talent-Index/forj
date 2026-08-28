@@ -51,7 +51,7 @@ function PuzzleBoard({
         <p className="lede">
           {complete
             ? "The jigsaw has settled. Reveal the forged certificate and enter the recipient name."
-            : "Spend points to seat interlocking pieces. Each piece forges more of the SkillForge certificate."}
+            : "Spend points to seat interlocking pieces. Each piece forges more of the Forjora certificate."}
         </p>
       </header>
 

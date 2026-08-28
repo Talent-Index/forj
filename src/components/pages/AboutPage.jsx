@@ -13,14 +13,14 @@ function AboutPage() {
     <div className="page">
       <header className="page-header">
         <p className="kicker">About</p>
-        <h1>Learn SkillForge</h1>
+        <h1>Learn Forjora</h1>
         <p className="lede">{INTRODUCTION.body}</p>
       </header>
 
       <section className="section-block">
         <h2>Why Avalanche</h2>
         <p>
-          SkillForge is built for people learning Avalanche: consensus, C-Chain, L1s, and ICM.
+          Forjora is built for people learning Avalanche: consensus, C-Chain, L1s, and ICM.
           Credentials are recorded on Avalanche Fuji so the learning record lives on the same ecosystem you are studying.
         </p>
       </section>

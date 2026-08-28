@@ -127,7 +127,7 @@ function LearnPage({
   return (
     <div className="page">
       <header className="page-header">
-        <p className="kicker">Learn</p>
+        <p className="kicker">Forjora learning</p>
         <h1>{path.name || "Avalanche Developer Path"}</h1>
         <p className="lede">{path.description || "Lessons unlock in order. Quizzes still use retry-safe scoring."}</p>
       </header>

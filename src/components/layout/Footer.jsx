@@ -5,7 +5,7 @@ function Footer({ onNavigate }) {
     <footer className="site-footer">
       <div className="footer-brand">
         <BrandMark />
-        <p>Learn Avalanche. Forge your skills.</p>
+        <p>Learn Avalanche. Forge. Prove.</p>
       </div>
       <nav className="footer-links" aria-label="Footer">
         <button type="button" onClick={() => onNavigate("learn")}>Learn</button>
