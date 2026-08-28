@@ -13,6 +13,7 @@ import {
 import { db } from "../../firebase";
 import { learnerProfileFields, pickLearnerProfilePatch } from "../profileOnboarding";
 import { normalizeAddress } from "../progress";
+import { safeAvatarSrc } from "../frontendSecurity";
 import { COLLECTIONS, SCHEMA_VERSION, WALLET_STATUSES, walletDocId } from "./schema";
 import { FIRESTORE_TIMEOUT_MS, withTimeout } from "./timeout";
 
@@ -35,7 +36,7 @@ export function profileFromDoc(user, data = {}) {
     profileComplete: Boolean(data.profileComplete),
     walletPromptSeen: Boolean(data.walletPromptSeen),
     walletAddress: data.walletAddress || null,
-    avatarUrl: data.avatarUrl || user.photoURL || "",
+    avatarUrl: safeAvatarSrc(data.avatarUrl || user.photoURL || "") || "",
     hasPassword: user.providerData?.some((item) => item.providerId === "password") || false,
     createdAt: data.createdAt || null,
     migratedAt: data.migratedAt || null,

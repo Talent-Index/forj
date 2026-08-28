@@ -20,6 +20,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import {
+  MAX_AVATAR_BYTES,
   MIN_PASSWORD_LENGTH,
   isValidEmail,
   normalizeEmail,
@@ -36,6 +37,7 @@ import {
   upsertLearnerProfile,
 } from "../utils/backend/learner";
 import { AUTH_WRITE_TIMEOUT_MS, FIRESTORE_TIMEOUT_MS, withTimeout } from "../utils/backend/timeout";
+import { safeAvatarSrc } from "../utils/frontendSecurity";
 import {
   applyProfileCompletion,
   applySignupIdentity,
@@ -277,7 +279,17 @@ export function useAuth() {
     return { ok: true, account: nextAccount };
   }, [account, persistProfilePatch]);
 
-  const updateAvatar = useCallback((avatarUrl) => updateLearnerProfile({ avatarUrl: avatarUrl || "" }), [updateLearnerProfile]);
+  const updateAvatar = useCallback((avatarUrl) => {
+    const next = avatarUrl || "";
+    if (next && next.length > MAX_AVATAR_BYTES) {
+      return Promise.resolve({ ok: false, error: "That image is too large. Try a smaller photo." });
+    }
+    const safe = next ? safeAvatarSrc(next) : "";
+    if (next && !safe) {
+      return Promise.resolve({ ok: false, error: "Use a JPEG, PNG, or WebP photo." });
+    }
+    return updateLearnerProfile({ avatarUrl: safe });
+  }, [updateLearnerProfile]);
 
   const linkWallet = useCallback(async (address) => {
     if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };

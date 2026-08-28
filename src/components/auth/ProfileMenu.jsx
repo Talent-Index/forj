@@ -7,28 +7,27 @@ import { Button } from "../ui/primitives";
 
 export function AvatarFace({ account, className = "" }) {
   const avatar = safeAvatarSrc(account?.avatarUrl);
-  if (avatar) {
-    return <img className={`avatar-image ${className}`.trim()} src={avatar} alt="" />;
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [avatar]);
+
+  if (avatar && !failed) {
+    return (
+      <img
+        className={`avatar-image ${className}`.trim()}
+        src={avatar}
+        alt=""
+        referrerPolicy="no-referrer"
+        onError={() => setFailed(true)}
+      />
+    );
   }
   return (
     <span className={`avatar-fallback ${className}`.trim()} aria-hidden="true">
       {initialsFromName(account?.name, account?.email)}
     </span>
-  );
-}
-
-function UserIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="profile-icon" aria-hidden="true">
-      <circle cx="12" cy="8" r="3.2" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path
-        d="M5.2 19.2c.8-3.2 3.4-5 6.8-5s6 1.8 6.8 5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }
 
@@ -125,7 +124,7 @@ function ProfileMenu({
           setMessage("");
         }}
       >
-        {account?.avatarUrl ? <AvatarFace account={account} className="profile-trigger-avatar" /> : <UserIcon />}
+        <AvatarFace account={account} className="profile-trigger-avatar" />
       </button>
       {open && (
         <div className="profile-popover" role="dialog" aria-label="Profile">
@@ -143,10 +142,25 @@ function ProfileMenu({
 
           <label className="profile-upload">
             <span>Upload photo</span>
-            <input type="file" accept="image/*" onChange={handleAvatar} disabled={busy} />
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleAvatar} disabled={busy} />
           </label>
-          {account?.avatarUrl ? (
-            <button type="button" className="text-link" onClick={() => onUpdateAvatar("")}>
+          {safeAvatarSrc(account?.avatarUrl) ? (
+            <button
+              type="button"
+              className="text-link"
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                setError("");
+                const result = await onUpdateAvatar("");
+                setBusy(false);
+                if (!result?.ok) {
+                  setError(result?.error || "Could not remove that photo.");
+                  return;
+                }
+                setMessage("Profile photo removed.");
+              }}
+            >
               Remove photo
             </button>
           ) : null}
