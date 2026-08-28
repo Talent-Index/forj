@@ -28,7 +28,7 @@ import {
   onboardingStage,
   passwordIssue,
 } from "../utils/auth";
-import { mapAuthError } from "../utils/backend/authErrors";
+import { isCredentialAuthError, mapAuthError } from "../utils/backend/authErrors";
 import {
   ensureLearnerDocuments,
   linkWalletRecord,
@@ -187,7 +187,12 @@ export function useAuth() {
       const profile = await hydrate(auth.currentUser || credential.user);
       return { ok: true, account: profile };
     } catch (error) {
-      return { ok: false, error: mapAuthError(error) };
+      return {
+        ok: false,
+        error: mapAuthError(error),
+        code: error?.code || "",
+        suggestSignup: isCredentialAuthError(error),
+      };
     }
   }, [hydrate, persistVerifiedProfile]);
 

@@ -135,6 +135,9 @@ function AuthModal({
       const result = await auth.signInWithEmail(signin);
       if (!result.ok) {
         setError(result.error || "Could not sign in.");
+        if (result.suggestSignup) {
+          setInfo("New to Forjora? Use Create one below — sign-in only works after you register with email and password.");
+        }
         return;
       }
       if (!result.account?.emailVerified) {
@@ -309,7 +312,7 @@ function AuthModal({
           <Button className="btn-google btn-block" onClick={handleGoogle} disabled={busy} type="button">
             <GoogleMark /> Continue with Google
           </Button>
-          <p className="auth-or">or</p>
+          <p className="auth-or">or sign in with email</p>
           <Field id="signin-email" label="Email" type="email" value={signin.email} onChange={(email) => setSignin((current) => ({ ...current, email }))} autoComplete="email" placeholder="you@example.com" required />
           <Field id="signin-password" label="Password" type="password" value={signin.password} onChange={(password) => setSignin((current) => ({ ...current, password }))} autoComplete="current-password" required />
           <Button type="submit" className="btn-block" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</Button>
@@ -317,7 +320,7 @@ function AuthModal({
             <button type="button" className="text-link" onClick={() => onChangeView("forgot")}>Forgot password?</button>
           </p>
           <p className="auth-switch">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account yet?{" "}
             <button type="button" className="text-link" onClick={() => onChangeView("signup")}>Create one</button>
           </p>
         </form>
