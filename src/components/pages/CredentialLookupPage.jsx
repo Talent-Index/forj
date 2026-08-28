@@ -153,11 +153,11 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
   return (
     <div className="page credential-lookup">
       <header className="page-header">
-        <p className="kicker">Public credential verification</p>
-        <h1>Credential lookup</h1>
+        <p className="kicker">Forjora</p>
+        <h1>Credential verification</h1>
         <p className="lede">
-          Read a SkillForge credential from Avalanche Fuji by token ID or holder wallet.
-          Looking it up does not make a self-claimed score issuer-attested.
+          Read a Forjora credential from Avalanche Fuji by token ID or holder wallet.
+          Looking it up does not make a Forjora claimed score issuer-attested.
         </p>
         <p className="certificate-status-row">
           <CredentialStatusBadge status={CREDENTIAL_STATES.claimed} />
@@ -233,12 +233,22 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
         <section className="section-block">
           {verification && (
             <div className={`verification-state verification-state-${verification.statusId} verification-ownership-${verification.ownership}`}>
-              <p className="kicker">Credential verification</p>
-              <h2>Verification state</h2>
-              <p>
-                {verification.onChain ? "On-chain record found" : "Not found"}
-                {verification.statusLabel ? ` · ${verification.statusLabel}` : ""}
-              </p>
+              <p className="kicker">Forjora</p>
+              <h2>Credential verification</h2>
+              {verification.checks?.length ? (
+                <ul className="verification-checks">
+                  {verification.checks.map((check) => (
+                    <li key={check.id} className={check.ok ? "is-ok" : "is-miss"}>
+                      {check.ok ? "✓" : "–"} {check.label}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>
+                  {verification.onChain ? "On-chain record found" : "Not found"}
+                  {verification.statusLabel ? ` · ${verification.statusLabel}` : ""}
+                </p>
+              )}
               <p className="meta-line">{verification.summary}</p>
             </div>
           )}

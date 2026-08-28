@@ -112,7 +112,7 @@ assert.equal(claimedView.score, 80);
 assert.equal(claimedView.scoreLabel, "80 pts");
 assert.equal(claimedView.difficulty, "Hard");
 assert.match(claimedView.difficultyDetail, /Easy 5\/5/);
-assert.equal(claimedView.status, "Self-claimed");
+assert.equal(claimedView.status, "Forjora claimed");
 assert.equal(claimedView.statusId, "claimed");
 assert.match(claimedView.issuer, /Learner/);
 assert.equal(claimedView.network, "Avalanche Fuji");
@@ -128,6 +128,8 @@ assert.equal(hasAmbiguousTrustLanguage(claimedView.statusBody), false);
 assert.equal(claimedView.verification.onChain, true);
 assert.equal(claimedView.verification.ownership, "on-chain");
 assert.equal(claimedView.verification.statusId, "claimed");
+assert.equal(claimedView.verification.checks.length, 4);
+assert.equal(claimedView.verification.checks.every((check) => check.ok), true);
 assert.match(claimedView.verification.summary, /On-chain record/);
 assert.equal(hasAmbiguousTrustLanguage(claimedView.verification.summary), false);
 assert.equal(claimedView.metadata.name, claimedView.title);
@@ -150,7 +152,7 @@ const attested = buildCredentialRecord({
   contractAddress: CONTRACT,
 });
 const attestedView = buildCredentialVerificationView(attested);
-assert.equal(attestedView.status, "Issuer-attested");
+assert.equal(attestedView.status, "Forjora issuer-attested");
 assert.match(attestedView.issuer, /Contract owner/);
 assert.equal(attestedView.transactionHash, "");
 assert.equal(attestedView.difficulty, "Easy");

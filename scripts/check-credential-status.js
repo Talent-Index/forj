@@ -91,7 +91,7 @@ const certificateSource = readFileSync(join(root, "src/components/Certificate.js
 assert.match(certificateSource, /prepareClaimedMint/);
 assert.match(certificateSource, /value: prepared\.value/);
 assert.doesNotMatch(certificateSource, /mintCredentialWithAuthorization/);
-assert.match(certificateSource, /Claim self-claimed credential on Fuji/);
+assert.match(certificateSource, /Claim Forjora claimed credential on Fuji/);
 assert.match(certificateSource, /LEARNER_MINT_STATUS/);
 const contractSource = readFileSync(join(root, "src/utils/contract.js"), "utf8");
 assert.match(contractSource, /functionName: "mintCredential"/);
@@ -101,10 +101,10 @@ assert.doesNotMatch(
 );
 
 // UI terminology consistently reflects credential type.
-assert.equal(CREDENTIAL_STATES.claimed.label, "Self-claimed");
-assert.equal(CREDENTIAL_STATES.attested.label, "Issuer-attested");
-assert.equal(TRUST_COPY.claimed.title, "Self-claimed");
-assert.equal(TRUST_COPY.attested.title, "Issuer-attested");
+assert.equal(CREDENTIAL_STATES.claimed.label, "Forjora claimed");
+assert.equal(CREDENTIAL_STATES.attested.label, "Forjora issuer-attested");
+assert.equal(TRUST_COPY.claimed.title, "Forjora claimed");
+assert.equal(TRUST_COPY.attested.title, "Forjora issuer-attested");
 assert.equal(CREDENTIAL_EXPLAINER.claimed, CREDENTIAL_STATES.claimed.summary);
 assert.equal(CREDENTIAL_EXPLAINER.attested, CREDENTIAL_STATES.attested.summary);
 assert.equal(EXPLORER_LINK_LABEL, "View on Snowtrace");
@@ -118,7 +118,7 @@ for (const state of Object.values(CREDENTIAL_STATES)) {
       `${state.id}.${field} must not use verified/certified language`
     );
   }
-  assert.match(state.label, state.id === "claimed" ? /Self-claimed/ : /Issuer-attested/);
+  assert.match(state.label, state.id === "claimed" ? /Forjora claimed/ : /Forjora issuer-attested/);
 }
 
 assert.equal(hasAmbiguousTrustLanguage(TRUST_COPY.claimed.body), false);
@@ -162,14 +162,14 @@ assert.equal(credentialStatusId({ score: { totalPoints: 80 }, attested: false })
 assert.equal(credentialStatusId({ explorerUrl: "https://testnet.snowtrace.io/token/x" }), "claimed");
 assert.equal(credentialStatusId({ metadataUri: "data:application/json;base64,e30=" }), "claimed");
 assert.equal(credentialStatusId({ credentialType: "self-claimed", attested: false }), "claimed");
-assert.equal(resolveCredentialStatus("verified").label, "Self-claimed");
+assert.equal(resolveCredentialStatus("verified").label, "Forjora claimed");
 assert.equal(credentialStatusId("attested"), "attested");
 assert.equal(credentialStatusId("issuer-attested"), "attested");
 assert.equal(credentialStatusId("Issuer attested"), "attested");
 assert.equal(credentialStatusId({ attested: true }), "attested");
 assert.equal(credentialStatusId({ verificationStatus: "attested" }), "attested");
 assert.equal(credentialStatusId({ credentialType: "issuer-attested" }), "attested");
-assert.equal(resolveCredentialStatus("attested").label, "Issuer-attested");
+assert.equal(resolveCredentialStatus("attested").label, "Forjora issuer-attested");
 
 const maxScoreClaimed = mapOnChainCredential(
   9n,
@@ -180,7 +180,7 @@ const maxScoreClaimed = mapOnChainCredential(
 );
 assert.equal(maxScoreClaimed.attested, false);
 assert.equal(resolveCredentialStatus(maxScoreClaimed).id, "claimed");
-assert.equal(resolveCredentialStatus(maxScoreClaimed).label, "Self-claimed");
+assert.equal(resolveCredentialStatus(maxScoreClaimed).label, "Forjora claimed");
 
 const attestedOnlyFromFlag = mapOnChainCredential(
   10n,
@@ -217,7 +217,7 @@ const historicalClaimed = mapOnChainCredential(1n, {
 }, CONTRACT, undefined, { walletAddress: WALLET_A, metadataUri: "data:application/json;base64,e30=" });
 assert.equal(historicalClaimed.schemaVersion, 1);
 assert.equal(historicalClaimed.verificationStatus, "claimed");
-assert.equal(resolveCredentialStatus(historicalClaimed).title, "Self-claimed score record");
+assert.equal(resolveCredentialStatus(historicalClaimed).title, "Forjora claimed score record");
 assert.equal(validateCredentialRecord(historicalClaimed).ok, true);
 
 const historicalAttested = mapOnChainCredential(2n, {
@@ -231,7 +231,7 @@ const historicalAttested = mapOnChainCredential(2n, {
   attested: true,
 }, CONTRACT, undefined, { walletAddress: WALLET_A, issuerAddress: OWNER });
 assert.equal(historicalAttested.verificationStatus, "attested");
-assert.equal(resolveCredentialStatus(historicalAttested).title, "Issuer-attested credential");
+assert.equal(resolveCredentialStatus(historicalAttested).title, "Forjora issuer-attested credential");
 assert.equal(validateCredentialRecord(historicalAttested).ok, true);
 
 const rebuilt = buildCredentialMetadata({

@@ -97,8 +97,8 @@ assert.match(credentialDoc, /does \*\*not\*\* issue this credential on Avalanche
 assert.equal(QUESTIONS_PER_QUIZ, 5);
 assert.equal(TOTAL_PIECES, 16);
 assert.equal(LEARNER_MINT_STATUS, "claimed");
-assert.equal(CREDENTIAL_STATES.claimed.label, "Self-claimed");
-assert.equal(CREDENTIAL_STATES.attested.label, "Issuer-attested");
+assert.equal(CREDENTIAL_STATES.claimed.label, "Forjora claimed");
+assert.equal(CREDENTIAL_STATES.attested.label, "Forjora issuer-attested");
 assert.equal(
   canTransitionVerification(VERIFICATION_STATUS.CLAIMED, VERIFICATION_STATUS.ATTESTED, {
     sameCredentialId: true,
@@ -123,7 +123,7 @@ assert.equal(WALLET_IDS.metamask, "metamask");
 assert.equal(WALLET_IDS.core, "core");
 
 assert.match(certificate, /prepareClaimedMint/);
-assert.match(certificate, /Claim self-claimed credential on Fuji/);
+assert.match(certificate, /Claim Forjora claimed credential on Fuji/);
 assert.match(certificate, /setMintError/);
 assert.doesNotMatch(certificate, /43114/);
 assert.equal(
@@ -147,7 +147,7 @@ assert.ok(artifactCssStart >= 0);
 const artifactCss = css.slice(artifactCssStart, artifactCssStart + 900);
 assert.doesNotMatch(artifactCss, /linear-gradient|radial-gradient|text-shadow|filter:|box-shadow/);
 
-assert.match(lookupPage, /Looking it up does not make a self-claimed score issuer-attested/);
+assert.match(lookupPage, /Looking it up does not make a Forjora claimed score issuer-attested/);
 assert.match(srcBlob, /\/credential/);
 assert.doesNotMatch(srcBlob, /IssuerDashboard|issuer dashboard/i);
 

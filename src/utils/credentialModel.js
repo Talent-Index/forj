@@ -412,7 +412,7 @@ export function isCredentialRecord(value) {
 }
 
 /**
- * Canonical SkillForge credential record (schema v1).
+ * Canonical Forjora credential record (schema v1). On-chain standard remains SkillForgeCredential.
  * Composes on-chain CredentialData with deployment context.
  */
 export function buildCredentialRecord({

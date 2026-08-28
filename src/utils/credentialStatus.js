@@ -1,5 +1,6 @@
 import { CREDENTIAL_TYPE, VERIFICATION_STATUS } from "./credentialModel.js";
 import { ATTESTATION_VALUE, DESCRIPTION } from "./credentialMetadata.js";
+import { ATTESTED_LABEL, CLAIMED_LABEL } from "./brand.js";
 
 /**
  * Learner-facing honesty labels. Claimed scores are never called verified.
@@ -15,9 +16,9 @@ export const CREDENTIAL_STATES = {
     id: "claimed",
     credentialType: CREDENTIAL_TYPE.SELF_CLAIMED,
     verificationStatus: VERIFICATION_STATUS.CLAIMED,
-    label: "Self-claimed",
-    title: "Self-claimed score record",
-    summary: "Self-claimed: you submit your scores from this app.",
+    label: CLAIMED_LABEL,
+    title: "Forjora claimed score record",
+    summary: "Forjora claimed: you submit your scores from this app.",
     body: "This credential records a score the learner submitted. Anyone can mint their own scores. It is not an issuer-attested assessment.",
     remintNote:
       "Minting from this app writes a self-claimed record and replaces any existing token for this wallet, including an issuer-attested one.",
@@ -30,11 +31,11 @@ export const CREDENTIAL_STATES = {
     id: "attested",
     credentialType: CREDENTIAL_TYPE.ISSUER_ATTESTED,
     verificationStatus: VERIFICATION_STATUS.ATTESTED,
-    label: "Issuer-attested",
-    title: "Issuer-attested credential",
+    label: ATTESTED_LABEL,
+    title: "Forjora issuer-attested credential",
     summary:
-      "Issuer-attested: requires an owner EIP-712 signature. Not used in the learner mint UI.",
-    body: "This credential was authorized by the SkillForge contract owner with an EIP-712 signature. It is not a self-claimed quiz mint.",
+      "Forjora issuer-attested: requires an owner EIP-712 signature. Not used in the learner mint UI.",
+    body: "This credential was authorized by the SkillForgeCredential contract owner with an EIP-712 signature. It is not a self-claimed quiz mint.",
     remintNote: "",
     metadataDescription: DESCRIPTION.attested,
     metadataTrait: ATTESTATION_VALUE.attested,

@@ -1,5 +1,5 @@
 /**
- * SkillForge backend collections (#35–#42).
+ * Forjora backend collections (#35–#42).
  * Client may write only learner-owned profile, quiz cache, primitive events,
  * leaderboard opt-in, analytics (no PII), and a first-time wallet link.
  * XP, achievements, credentials, questions, rank totals, and issuer records

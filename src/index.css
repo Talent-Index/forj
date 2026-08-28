@@ -1499,6 +1499,28 @@ img {
   margin-top: 8px;
 }
 
+.verification-checks {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.verification-checks li {
+  margin: 0;
+}
+
+.verification-checks .is-miss {
+  color: var(--danger);
+}
+
+.certificate-verify-url {
+  margin: 12px 0 0;
+  overflow-wrap: anywhere;
+  font-size: 12.8px;
+}
+
 .verification-state-none,
 .verification-ownership-mismatch {
   background: var(--danger-bg);

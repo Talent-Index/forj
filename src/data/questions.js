@@ -201,7 +201,7 @@ export const sections = [
           "A deprecated name for the P-Chain",
         ],
         answer: "Avalanche's public testnet",
-        hint: "SkillForge mints credentials here using valueless test tokens.",
+        hint: "Forjora mints credentials here using valueless test tokens.",
         explanation:
           "Fuji is Avalanche's public test network. The C-Chain ID is 43113. Test AVAX has no market value and is used for gas while you learn, deploy, and mint test credentials.",
         reference: REFS.primary,
@@ -268,7 +268,7 @@ export const sections = [
         explanation:
           "C-Chain gas must be paid in AVAX. You can deploy ERC-20s on the C-Chain, but those tokens do not pay C-Chain fees. A custom Avalanche L1 can choose a different native gas token.",
         reference: REFS.cChain,
-        funFact: "SkillForge mint transactions on Fuji spend test AVAX for gas.",
+        funFact: "Forjora mint transactions on Fuji spend test AVAX for gas.",
       },
       {
         id: "e14",
@@ -462,7 +462,7 @@ export const sections = [
         explanation:
           "Fuji C-Chain is 43113 (0xA869). Avalanche mainnet C-Chain is 43114 (0xA86A). Wallets and Hardhat networks must use the matching ID or transactions will fail.",
         reference: REFS.cChain,
-        funFact: "SkillForge's NetworkGate expects chain ID 43113.",
+        funFact: "Forjora's NetworkGate expects chain ID 43113.",
       },
       {
         id: "m10",
@@ -826,7 +826,7 @@ export const sections = [
         explanation:
           "Platform CLI documents Fuji (and local) validator/delegator minima at 1 AVAX, and mainnet at 2,000 AVAX to validate and 25 AVAX to delegate. Always check current docs before staking real funds.",
         reference: REFS.platformCli,
-        funFact: "SkillForge itself never stakes for you; it only quizzes and mints on Fuji.",
+        funFact: "Forjora itself never stakes for you; it only quizzes and mints on Fuji.",
       },
       {
         id: "h16",

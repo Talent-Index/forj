@@ -78,7 +78,7 @@ export const PUZZLE_EXPLAINER = {
 
 export const CREDENTIAL_EXPLAINER = {
   title: "Credentials",
-  body: "Minting writes your claimed quiz scores and puzzle progress to a soulbound NFT on Avalanche Fuji. It cannot be transferred. The app mints a self-claimed record — anyone can mint their own scores. An issuer-attested mint exists on-chain for later privileged issuance. This is not a proctored exam credential.",
+  body: "Minting writes your claimed quiz scores and puzzle progress to a soulbound NFT on Avalanche Fuji. It cannot be transferred. The app mints a Forjora claimed record — anyone can mint their own scores. A Forjora issuer-attested mint exists on-chain for later privileged issuance. This is not a proctored exam credential.",
   claimed: CREDENTIAL_STATES.claimed.summary,
   attested: CREDENTIAL_STATES.attested.summary,
 };
@@ -93,7 +93,7 @@ export const FUJI_EXPLAINER = {
 
 export const WALLET_GUIDANCE = {
   title: "Connect a wallet when you need on-chain features",
-  body: "A SkillForge account lets you learn immediately. Connect MetaMask or Core Wallet later to save credentials on Avalanche Fuji and send a mint transaction you must approve.",
+  body: "A Forjora account lets you learn immediately. Connect MetaMask or Core Wallet later to save credentials on Avalanche Fuji and send a mint transaction you must approve.",
   steps: [
     "Install MetaMask or Core Wallet if you do not have one.",
     "Click Connect and approve the request in your wallet.",
@@ -106,7 +106,7 @@ export const WALLET_GUIDANCE = {
 export const EMPTY_STATES = {
   restoring: {
     title: "Restoring your session",
-    body: "Checking for a SkillForge account and loading any saved progress.",
+    body: "Checking for a Forjora account and loading any saved progress.",
   },
   noQuizzes: {
     title: "No quizzes yet",
@@ -126,7 +126,7 @@ export const EMPTY_STATES = {
   },
   noLookup: {
     title: "No credential found",
-    body: "That token ID or wallet has no current SkillForge credential on Fuji. Burned remints are not kept.",
+    body: "That token ID or wallet has no current Forjora credential on Fuji. Burned remints are not kept.",
   },
   noAttempts: {
     title: "No attempts logged",

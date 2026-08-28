@@ -27,7 +27,7 @@ END-TO-END FLOW PASS             ← not signed off (issuer UI missing; producti
 └─────────────────────────┘
 ```
 
-Environment under test: **Avalanche Fuji**. SkillForge does not issue credentials on Avalanche C-Chain today.
+Environment under test: **Avalanche Fuji**. Forjora does not issue credentials on Avalanche C-Chain today.
 
 ## What CI already covers
 

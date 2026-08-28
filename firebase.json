@@ -12,7 +12,7 @@
     "providers": {
       "emailPassword": true,
       "googleSignIn": {
-        "oAuthBrandDisplayName": "SkillForge",
+        "oAuthBrandDisplayName": "Forjora",
         "supportEmail": "crimzor@gmail.com"
       }
     }

@@ -149,7 +149,7 @@ export async function linkWalletRecord(userId, address) {
     const owner = existing.data()?.userId;
     const status = existing.data()?.status;
     if (owner && owner !== userId && status === WALLET_STATUSES.active) {
-      return { ok: false, error: "This wallet is already linked to another SkillForge account." };
+      return { ok: false, error: "This wallet is already linked to another Forjora account." };
     }
     if (owner === userId) {
       await patchLearnerProfile(userId, { walletAddress: walletId, walletPromptSeen: true });

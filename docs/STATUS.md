@@ -1,4 +1,4 @@
-# SkillForge — Status
+# Forjora — Status
 
 Last updated: 28 August 2026
 
@@ -54,7 +54,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Learner mint records a **claimed** score.
 - The contract also supports **issuer-attested** mint with an owner signature. That path is not the default learner UI.
 - Public lookup by credential ID or holder wallet, signed in or out. A found record is an on-chain record, not a verified exam.
-- SkillForge does not issue credentials on Avalanche C-Chain today.
+- Forjora does not issue credentials on Avalanche C-Chain today.
 
 ## Leaderboard
 
@@ -67,6 +67,6 @@ It is not a league with an issuer, not on-chain, and not a verified exam. A clai
 - Server-written XP ledgers (the live board replays the event log; clients still cannot write XP)
 - Question bank managed independently of the app
 - Learning analytics dashboards
-- Issuer model, dashboard, and key management
+- Public learner profile pages (for example `/dave`) and a Forjora Issuer dashboard
 - Credential revocation and versioning
 - Independent review of freeze v1, issuer operations, production monitoring, and Avalanche C-Chain issuance (the production readiness gate stays closed; launch validation is not public-launch approval; see [Security & Launch](./ROADMAP.md))

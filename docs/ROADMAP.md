@@ -1,8 +1,8 @@
-# SkillForge — Roadmap
+# Forjora — Roadmap
 
-**Goal:** Grow SkillForge from a Fuji learning product into a reliable, honest, issuer-capable skills credential platform on Avalanche.
+**Goal:** Grow Forjora from a Fuji learning product into a reliable, honest, issuer-capable skills credential platform on Avalanche.
 
-> **Today:** Foundation is complete. Learning, credentials, gamification, and platform are partially shipped. The soulbound credential is **live on Avalanche Fuji**. The Security & Launch production readiness gate is **closed**. Launch validation is **not** approval to launch. SkillForge is not independently audited and does not issue credentials on Avalanche C-Chain. See [STATUS.md](./STATUS.md).
+> **Today:** Foundation is complete. Learning, credentials, gamification, and platform are partially shipped. The soulbound credential is **live on Avalanche Fuji**. The Security & Launch production readiness gate is **closed**. Launch validation is **not** approval to launch. Forjora is not independently audited and does not issue credentials on Avalanche C-Chain. See [STATUS.md](./STATUS.md).
 
 | Phase | Theme | Status |
 | --- | --- | --- |
@@ -54,7 +54,7 @@ Remaining: question management, learning analytics, issuer dashboard, and produc
 
 ## Phase 6 — Security & Launch
 
-This is the production gate. It is **not** a claim that SkillForge is audited or live on Avalanche C-Chain.
+This is the production gate. It is **not** a claim that Forjora is audited or live on Avalanche C-Chain.
 
 The readiness gate is **closed**. Schema v1 metadata, Privacy/Terms disclosures, Fuji vs C-Chain RPC separation, and incident copy (no pause; two-step issuer handoff) are in place. Independent review, issuer infrastructure, a production deployer, monitoring, and C-Chain issuance are **not**. An env flag cannot open issuance.
 
@@ -69,7 +69,7 @@ Remaining before production issuance:
 - Open the production gate in source only after those items are ready, then C-Chain deploy
 - End-to-end learner and issuer checks on Avalanche C-Chain
 
-Product copy must stay honest on C-Chain: claimed scores are not issuer-attested. SkillForge does not issue credentials on C-Chain today.
+Product copy must stay honest on C-Chain: claimed scores are not issuer-attested. Forjora does not issue credentials on C-Chain today.
 
 Launch validation of the Fuji learner loop (quiz, retry, puzzle, claimed mint, public lookup, and issuer-authorization rejects) is **not** approval to launch. Live wallets, mobile and desktop browsers, issuer operations, monitoring, and a C-Chain contract remain unsigned.
 

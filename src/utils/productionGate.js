@@ -1,4 +1,4 @@
-/** Fail-closed production issuance gate. Not a claim that SkillForge is audited. */
+/** Fail-closed production issuance gate. Not a claim that Forjora is audited. */
 
 export const C_CHAIN_ID = 43114;
 export const PRODUCTION_FREEZE_ID = "v1";

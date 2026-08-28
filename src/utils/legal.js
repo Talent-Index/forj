@@ -7,7 +7,7 @@ export const LEGAL_PAGES = Object.freeze({
     sections: [
       {
         heading: "What we collect",
-        body: "SkillForge uses an account (email or Google) so your learning progress can follow you. We store the display name you choose, quiz and puzzle progress, and append-only learning events used to derive XP. If you connect a wallet, we store that address to link a mint. We do not ask for a password to your wallet. Issuer signing keys are not stored in the learner app.",
+        body: "Forjora uses an account (email or Google) so your learning progress can follow you. We store the display name you choose, quiz and puzzle progress, and append-only learning events used to derive XP. If you connect a wallet, we store that address to link a mint. We do not ask for a password to your wallet. Issuer signing keys are not stored in the learner app.",
       },
       {
         heading: "Leaderboard",
@@ -19,7 +19,7 @@ export const LEGAL_PAGES = Object.freeze({
       },
       {
         heading: "What we do not do",
-        body: "We do not sell your account data. We do not treat a claimed score as an issuer-attested credential. SkillForge issues credentials on Avalanche Fuji, a test network. We do not issue SkillForge credentials on Avalanche C-Chain today.",
+        body: "We do not sell your account data. We do not treat a claimed score as an issuer-attested credential. Forjora issues credentials on Avalanche Fuji, a test network. We do not issue Forjora credentials on Avalanche C-Chain today.",
       },
     ],
   },
@@ -31,7 +31,7 @@ export const LEGAL_PAGES = Object.freeze({
     sections: [
       {
         heading: "The product",
-        body: "SkillForge is an Avalanche learning product. You can study, take quizzes, earn points and XP, assemble a certificate puzzle, and optionally record a soulbound credential on Avalanche Fuji. SkillForge does not currently offer credential issuance on Avalanche C-Chain.",
+        body: "Forjora is an Avalanche learning product. You can study, take quizzes, earn points and XP, assemble a certificate puzzle, and optionally record a soulbound credential on Avalanche Fuji. Forjora does not currently offer credential issuance on Avalanche C-Chain.",
       },
       {
         heading: "Accounts and wallets",
@@ -47,7 +47,7 @@ export const LEGAL_PAGES = Object.freeze({
       },
       {
         heading: "Acceptable use",
-        body: "Do not disrupt the service, impersonate others, or treat SkillForge as financial, legal, or professional advice. Do not present a claimed Fuji record as an Avalanche certification or a mainnet credential.",
+        body: "Do not disrupt the service, impersonate others, or treat Forjora as financial, legal, or professional advice. Do not present a claimed Fuji record as an Avalanche certification or a mainnet credential.",
       },
     ],
   },

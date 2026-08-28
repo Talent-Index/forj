@@ -1,4 +1,4 @@
-/** Fail-closed public launch decision. Not a claim that SkillForge is approved to launch. */
+/** Fail-closed public launch decision. Not a claim that Forjora is approved to launch. */
 
 import { mainnetIssuanceAllowed } from "./productionGate.js";
 

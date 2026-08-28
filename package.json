@@ -1,7 +1,8 @@
 {
-  "name": "skillforge",
+  "name": "forjora",
   "private": true,
   "version": "1.0.0",
+  "description": "Gamified Avalanche learning with claimed and issuer-attested credentials",
   "type": "module",
   "engines": {
     "node": ">=22.13.0"

@@ -216,7 +216,7 @@ export const LESSONS = [
     title: "What Avalanche is",
     optional: false,
     reference: REF.docs,
-    body: "Avalanche is a proof-of-stake network designed for fast, irreversible finality. The Primary Network is the shared security and messaging layer that other Avalanche chains connect to.\n\nSkillForge uses this track to ground later L1, C-Chain, and ICM lessons. Completing the Easy quiz records a claimed score for fundamentals — it is not an issuer-attested credential.",
+    body: "Avalanche is a proof-of-stake network designed for fast, irreversible finality. The Primary Network is the shared security and messaging layer that other Avalanche chains connect to.\n\nForjora uses this track to ground later L1, C-Chain, and ICM lessons. Completing the Easy quiz records a claimed score for fundamentals — it is not an issuer-attested credential.",
   },
   {
     id: "fund-chains",
@@ -232,7 +232,7 @@ export const LESSONS = [
     title: "AVAX, fees, and staking",
     optional: false,
     reference: REF.avax,
-    body: "AVAX is the native asset. You pay C-Chain gas with it, stake it to validate, and use it as the unit of account across the Primary Network.\n\nFuji is the public test network. SkillForge mints its learning record on Fuji so you can practice without Mainnet funds.",
+    body: "AVAX is the native asset. You pay C-Chain gas with it, stake it to validate, and use it as the unit of account across the Primary Network.\n\nFuji is the public test network. Forjora mints its learning record on Fuji so you can practice without Mainnet funds.",
   },
   {
     id: "arch-primary",
@@ -248,7 +248,7 @@ export const LESSONS = [
     title: "Snowman consensus",
     optional: false,
     reference: REF.consensus,
-    body: "Snowman is the linear-chain member of the Snow family. Validators sample small random subsets instead of running a classical all-to-all BFT round.\n\nThat sampling is why finality is fast and irreversible once a transaction is accepted. SkillForge quizzes treat Snowman as required vocabulary.",
+    body: "Snowman is the linear-chain member of the Snow family. Validators sample small random subsets instead of running a classical all-to-all BFT round.\n\nThat sampling is why finality is fast and irreversible once a transaction is accepted. Forjora quizzes treat Snowman as required vocabulary.",
   },
   {
     id: "arch-validators",
@@ -288,7 +288,7 @@ export const LESSONS = [
     title: "C-Chain is an EVM",
     optional: false,
     reference: REF.cChain,
-    body: "The C-Chain is Avalanche’s Ethereum-compatible contract chain. Solidity, standard wallets, and EVM tooling work here with Avalanche-specific network settings.\n\nFuji C-Chain is the test environment SkillForge uses for its credential contract.",
+    body: "The C-Chain is Avalanche’s Ethereum-compatible contract chain. Solidity, standard wallets, and EVM tooling work here with Avalanche-specific network settings.\n\nFuji C-Chain is the test environment Forjora uses for its credential contract.",
   },
   {
     id: "cchain-gas",
@@ -296,7 +296,7 @@ export const LESSONS = [
     title: "Gas is paid in AVAX",
     optional: false,
     reference: REF.cChain,
-    body: "C-Chain gas is paid in AVAX, not ETH. Chain ID 43113 is Fuji; 43114 is Mainnet.\n\nA wallet that is still on Ethereum Mainnet cannot mint a SkillForge credential. The app gates that step until you are on Fuji.",
+    body: "C-Chain gas is paid in AVAX, not ETH. Chain ID 43113 is Fuji; 43114 is Mainnet.\n\nA wallet that is still on Ethereum Mainnet cannot mint a Forjora credential. The app gates that step until you are on Fuji.",
   },
   {
     id: "cchain-contracts",
@@ -304,7 +304,7 @@ export const LESSONS = [
     title: "Contracts and soulbound records",
     optional: false,
     reference: REF.cChain,
-    body: "SkillForgeCredential is a soulbound NFT. It stores a claimed score and puzzle mask. A later owner signature can attest that record.\n\nMinting from the learner UI is always self-claimed. Lookup can prove the on-chain record exists; it cannot turn a claimed score into an issuer assessment.",
+    body: "The Forjora credential is a soulbound NFT on the SkillForgeCredential contract (the live Fuji name). It stores a claimed score and puzzle mask. A later owner signature can attest that record.\n\nMinting from the learner UI is always Forjora claimed. Lookup can prove the on-chain record exists; it cannot turn a claimed score into an issuer assessment.",
   },
   {
     id: "icm-what",
@@ -344,7 +344,7 @@ export const LESSONS = [
     title: "Practice on Fuji",
     optional: false,
     reference: REF.docs,
-    body: "Fuji is where SkillForge records claimed scores. Test AVAX has no Mainnet value. That is why the mint path is explicit about Fuji chain ID validation.\n\nNever treat a Fuji credential as a Mainnet or issuer-attested diploma.",
+    body: "Fuji is where Forjora records claimed scores. Test AVAX has no Mainnet value. That is why the mint path is explicit about Fuji chain ID validation.\n\nNever treat a Fuji credential as a Mainnet or issuer-attested diploma.",
   },
   {
     id: "dev-practice",
@@ -352,7 +352,7 @@ export const LESSONS = [
     title: "Close the loop",
     optional: false,
     reference: REF.docs,
-    body: "The SkillForge loop is learn, challenge, earn, unlock, forge, then prove. Points buy puzzle pieces. The finished jigsaw reveals a certificate. A wallet is required only for the on-chain claim.\n\nThe Hard quiz is the capstone assessment for this path. Retries replace that section’s points; they do not farm extra XP.",
+    body: "The Forjora loop is learn, challenge, earn, unlock, forge, then prove. Points buy puzzle pieces. The finished jigsaw reveals a certificate. A wallet is required only for the on-chain claim.\n\nThe Hard quiz is the capstone assessment for this path. Retries replace that section’s points; they do not farm extra XP.",
   },
 ];
 

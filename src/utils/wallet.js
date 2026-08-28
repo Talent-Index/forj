@@ -137,7 +137,7 @@ export function formatWalletError(err, context = "connect") {
   const code = err?.code ?? err?.data?.originalError?.code;
   if (code === 4001) {
     return context === "switch"
-      ? "Network switch was rejected. SkillForge requires Avalanche Fuji."
+      ? "Network switch was rejected. Forjora requires Avalanche Fuji."
       : "Connection request was rejected. Approve it in your wallet to continue.";
   }
   if (code === 4100) {

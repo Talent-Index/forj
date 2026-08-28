@@ -1,8 +1,8 @@
-# SkillForge credential — freeze pack
+# Forjora credential — freeze pack
 
 This pack is for **independent review**. It is not an audit report, not a mainnet launch claim, and not a learner handbook.
 
-Frozen source: `SkillForgeCredential` freeze **v1**. Live Fuji at [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) is a **prior testnet deployment**. Reviewers must treat source freeze and the live Fuji address as distinct until a freeze-and-redeploy.
+Frozen source: `SkillForgeCredential` freeze **v1**. The learner product is **Forjora**. Live Fuji at [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) is a **prior testnet deployment**. Reviewers must treat source freeze and the live Fuji address as distinct until a freeze-and-redeploy. A future `ForjoraCredential` would be a new deployment, not a rename of this contract.
 
 Product meaning of claimed vs attested: [Credential](../docs/CREDENTIAL.md) · [Authorization](../docs/AUTHORIZATION.md).
 
@@ -111,4 +111,4 @@ Do not treat this pack as permission to issue on Avalanche C-Chain.
 - **Honesty gate:** claimed mint remains the learner path; attested remains owner-signed. Lookup and explorers must not say verified or certified for a claimed record.  
 - Deployment records should include `freezeId: "v1"` with the EIP-712 name and version.
 
-Independent review of this freeze is still **remaining**. SkillForge is not audited and not live on C-Chain mainnet. Launch validation of the Fuji learner loop is not approval to launch.
+Independent review of this freeze is still **remaining**. Forjora is not audited and not live on C-Chain mainnet. Launch validation of the Fuji learner loop is not approval to launch.

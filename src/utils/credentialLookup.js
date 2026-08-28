@@ -232,7 +232,13 @@ export function evaluateCredentialVerification(credential, query = {}) {
       ownership: "unknown",
       statusId: "none",
       statusLabel: "Not found",
-      summary: "No SkillForge credential exists for this identifier on Fuji.",
+      summary: "No Forjora credential exists for this identifier on Fuji.",
+      checks: [
+        { id: "found", ok: false, label: "Credential found" },
+        { id: "onChain", ok: false, label: "On-chain record" },
+        { id: "holder", ok: false, label: "Holder on-chain" },
+        { id: "status", ok: false, label: "Forjora claimed or issuer-attested" },
+      ],
     };
   }
   const status = resolveCredentialStatus(credential);
@@ -253,6 +259,20 @@ export function evaluateCredentialVerification(credential, query = {}) {
     statusId: status.id,
     statusLabel: status.label,
     summary,
+    checks: [
+      { id: "found", ok: true, label: "Credential found" },
+      { id: "onChain", ok: true, label: "On-chain record" },
+      {
+        id: "holder",
+        ok: ownership !== "mismatch",
+        label: ownership === "match" ? "Holder matches this URL" : "Holder on-chain",
+      },
+      {
+        id: "status",
+        ok: true,
+        label: status.id === "attested" ? "Forjora issuer-attested" : "Forjora claimed",
+      },
+    ],
   };
 }
 

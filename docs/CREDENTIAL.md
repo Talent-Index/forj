@@ -1,8 +1,8 @@
 # Credential
 
-The SkillForge credential is a **soulbound** record on Avalanche Fuji. It stores a snapshot of claimed (or attested) scores and puzzle completion. It cannot be transferred. SkillForge does **not** issue this credential on Avalanche C-Chain today.
+The Forjora credential is a **soulbound** record on Avalanche Fuji. It stores a snapshot of claimed (or attested) scores and puzzle completion. It cannot be transferred. Forjora does **not** issue this credential on Avalanche C-Chain today.
 
-Live contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df).
+Live contract: [`SkillForgeCredential`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) at [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df). That Solidity name is legacy on-chain identity. A future ForjoraCredential deploy would be a new address, not a silent rename of this one.
 
 ## What it represents
 
@@ -87,4 +87,4 @@ Mint time is Unix **seconds**.
 
 ## Trust
 
-SkillForge separates **learning progress in the app** from **on-chain publication**. App XP and points are not the credential. The credential is only as strong as its mint path: self-published, or owner-signed. Details of signed issuance: [Authorization](./AUTHORIZATION.md). What explorers show: [Metadata](./METADATA.md).
+Forjora separates **learning progress in the app** from **on-chain publication**. App XP and points are not the credential. The credential is only as strong as its mint path: self-published, or owner-signed. Details of signed issuance: [Authorization](./AUTHORIZATION.md). What explorers show: [Metadata](./METADATA.md).

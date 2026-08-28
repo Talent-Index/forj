@@ -45,7 +45,7 @@ function ProgressPage({
   return (
     <div className="page">
       <header className="page-header">
-        <p className="kicker">Progress</p>
+        <p className="kicker">Forjora progress</p>
         <h1>Learner dashboard</h1>
         <p className="lede">
           Track quizzes, points, puzzle pieces, and your Fuji credential for this wallet.

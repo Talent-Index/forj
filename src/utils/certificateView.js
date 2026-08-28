@@ -29,6 +29,6 @@ export function highestDifficulty(sectionScores = {}) {
 }
 
 export function certificateId(address, maskHex) {
-  if (!address) return "SF-LOCAL";
-  return `SF-${address.slice(2, 8).toUpperCase()}-${String(maskHex || "0").toUpperCase()}`;
+  if (!address) return "FJ-LOCAL";
+  return `FJ-${address.slice(2, 8).toUpperCase()}-${String(maskHex || "0").toUpperCase()}`;
 }

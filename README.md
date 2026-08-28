@@ -1,6 +1,6 @@
-# SkillForge
+# Forjora
 
-SkillForge is an Avalanche learning product. Learners study network concepts, complete challenges, earn progress, assemble a certificate puzzle, and can record a soulbound on-chain credential on Avalanche Fuji.
+Forjora is an Avalanche learning product. Learners study network concepts, complete challenges, earn progress, assemble a certificate puzzle, and can record a soulbound on-chain credential on Avalanche Fuji.
 
 Learning does not require a wallet. A wallet is needed only to mint or look up an on-chain record.
 
@@ -31,12 +31,12 @@ There are two kinds of on-chain record:
 
 | Record | Meaning |
 | --- | --- |
-| **Claimed** | The learner published their own scores. |
-| **Issuer-attested** | The contract owner authorized that record with a signature. |
+| **Forjora claimed** | The learner published their own scores. |
+| **Forjora issuer-attested** | The contract owner authorized that record with a signature. |
 
 A claimed score is not an independently verified assessment. Public lookup shows that a record exists on Fuji and stays available after sign-in. Lookup is not issuer attestation. Explorer links show on-chain presence, not certification.
 
-The live Fuji credential contract is [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df). SkillForge does not issue credentials on Avalanche C-Chain today.
+The live Fuji credential sits on [`SkillForgeCredential`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) at [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df). That on-chain name is the legacy contract identity. Forjora does not issue credentials on Avalanche C-Chain today.
 
 ## Product docs
 

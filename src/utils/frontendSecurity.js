@@ -187,7 +187,7 @@ export function safeExternalHref(value) {
 
 export function isCredentialShareUrl(value, origin = "") {
   try {
-    const url = new URL(String(value || ""), origin || "https://skillforge.invalid");
+    const url = new URL(String(value || ""), origin || "https://forjora.invalid");
     if (url.protocol !== "https:" && url.protocol !== "http:") return false;
     if (url.username || url.password) return false;
     return url.pathname === "/credential" || url.pathname.startsWith("/credential/");

@@ -11,7 +11,7 @@ When a credential is minted, explorers and wallets read an on-chain JSON documen
 
 The JSON itself is produced by the contract from the minted snapshot (`tokenURI`). Artwork must be a short `ipfs://` or `https://` URI so explorers can show it safely — for example `forge-certificate.jpg` on IPFS (Pinata, web3.storage, or equivalent).
 
-Schema v1 certificate copy is **final** for this freeze: claimed descriptions stay self-claimed; attested descriptions stay issuer-attested; the attestation trait is “Self claimed” or “Issuer attested”. That copy does not make SkillForge a C-Chain issuer.
+Schema v1 certificate copy is **final** for this freeze: claimed descriptions stay self-claimed; attested descriptions stay issuer-attested; the attestation trait is “Self claimed” or “Issuer attested”. That copy does not make Forjora a C-Chain issuer.
 
 ## Honesty in the record
 

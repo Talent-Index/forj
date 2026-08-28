@@ -47,9 +47,9 @@ for (const level of DIFFICULTY_LEVELS) {
 assert.match(POINTS_EXPLAINER.body, /replace|stack/i);
 assert.equal(PUZZLE_EXPLAINER.pieceCost, 5);
 assert.equal(PUZZLE_EXPLAINER.totalPieces, 16);
-assert.match(CREDENTIAL_EXPLAINER.body, /soulbound|self-claimed/i);
-assert.equal(CREDENTIAL_EXPLAINER.claimed.includes("Self-claimed"), true);
-assert.equal(CREDENTIAL_EXPLAINER.attested.includes("Issuer-attested"), true);
+assert.match(CREDENTIAL_EXPLAINER.body, /soulbound|claimed/i);
+assert.equal(CREDENTIAL_EXPLAINER.claimed.includes("Forjora claimed"), true);
+assert.equal(CREDENTIAL_EXPLAINER.attested.includes("Forjora issuer-attested"), true);
 assert.equal(/verif(?:y|ied|ication|iable)/i.test(CREDENTIAL_EXPLAINER.body), false);
 assert.equal(FUJI_EXPLAINER.chainId, 43113);
 assert.match(WALLET_GUIDANCE.body, /MetaMask|Core/);
