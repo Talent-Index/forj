@@ -329,7 +329,7 @@ export function ProfileSetup({ account, onContinue, busy = false, error = "" }) 
 
   return (
     <section className="onboard-screen">
-      <p className="kicker">Welcome to SkillForge</p>
+      <p className="kicker">Welcome to Forjora</p>
       <h1>What should we call you?</h1>
       <form className="auth-form onboard-form" onSubmit={handleSubmit}>
         {shownError && <p className="auth-error" role="alert">{shownError}</p>}

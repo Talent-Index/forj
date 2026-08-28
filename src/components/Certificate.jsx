@@ -26,7 +26,7 @@ import {
 } from "../utils/certificateView";
 import JigsawBoard from "./JigsawBoard";
 import { Button } from "./ui/primitives";
-import { buildCredentialVerificationView } from "../utils/credentialLookup";
+import { buildCredentialVerificationView, publicCredentialPath } from "../utils/credentialLookup";
 
 function Certificate({
   address,
@@ -168,6 +168,11 @@ function Certificate({
       schemaVersion={onChainCredential?.version?.schema || CREDENTIAL_SCHEMA_VERSION}
       metadataUri={onChainCredential?.metadataUri}
       explorerUrl={onChainCredential?.explorerUrl}
+      verificationUrl={
+        onChainCredential?.credentialId
+          ? publicCredentialPath({ tokenId: String(onChainCredential.credentialId), wallet: address })
+          : ""
+      }
       compact={phase === "preview"}
     />
   );
@@ -175,7 +180,7 @@ function Certificate({
   return (
     <div className="page certificate">
       <header className="page-header">
-        <p className="kicker">The credential</p>
+        <p className="kicker">Forjora credential</p>
         <h1>
           {phase === "forge"
             ? "Certificate in progress"
@@ -191,7 +196,7 @@ function Certificate({
           {onChainCredential ? (
             <span className="meta-line">On-chain status for this wallet</span>
           ) : (
-            <span className="meta-line">Learner mint is always self-claimed</span>
+            <span className="meta-line">Learner mint is always Forjora claimed</span>
           )}
         </p>
       </header>
@@ -318,7 +323,7 @@ function Certificate({
                 : mintTx
                   ? "Minted on-chain"
                   : CONTRACT_ADDRESS
-                    ? "Claim self-claimed credential on Fuji"
+                    ? "Claim Forjora claimed credential on Fuji"
                     : "Mint unavailable"}
             </Button>
             <Button variant="secondary" onClick={onRetry}>Start over</Button>

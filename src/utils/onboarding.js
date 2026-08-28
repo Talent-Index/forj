@@ -6,10 +6,10 @@ export const FUJI_CHAIN_ID = 43113;
 export const FUJI_FAUCET_URL = "https://core.app/tools/testnet-faucet/";
 
 export const INTRODUCTION = {
-  title: "SkillForge",
+  title: "Forjora",
   tagline: "Learn Avalanche. Forge your skills. Earn your credential.",
   body: [
-    "SkillForge is a guided Avalanche learning quest.",
+    "Forjora is a guided Avalanche learning quest.",
     "Create an account, take short quizzes, earn points, unlock puzzle pieces, then mint a soulbound on-chain record of your claimed scores when you connect a wallet.",
     "Learning does not require a wallet. Fuji test AVAX is only needed if you mint.",
   ].join(" "),
@@ -34,7 +34,7 @@ export const LEARNING_PROGRESSION = [
   {
     step: 4,
     title: "Unlock puzzle pieces",
-    body: `Spend ${PIECE_COST} points per piece on a 16-piece interlocking jigsaw. Completing it forges the SkillForge certificate.`,
+    body: `Spend ${PIECE_COST} points per piece on a 16-piece interlocking jigsaw. Completing it forges the Forjora certificate.`,
   },
   {
     step: 5,
@@ -85,7 +85,7 @@ export const CREDENTIAL_EXPLAINER = {
 
 export const FUJI_EXPLAINER = {
   title: "Avalanche Fuji testnet",
-  body: `SkillForge runs only on Avalanche Fuji (chain ID ${FUJI_CHAIN_ID}). Fuji is a test network. Test AVAX has no market value and is used only for gas when you mint. Switch your wallet to Fuji before quizzes, puzzle redemption, or minting.`,
+  body: `Forjora runs only on Avalanche Fuji (chain ID ${FUJI_CHAIN_ID}). Fuji is a test network. Test AVAX has no market value and is used only for gas when you mint. Switch your wallet to Fuji before quizzes, puzzle redemption, or minting.`,
   chainId: FUJI_CHAIN_ID,
   faucetUrl: FUJI_FAUCET_URL,
   faucetHint: "Need test AVAX for minting? Use the official Fuji faucet, then return here.",
