@@ -3,8 +3,26 @@ import { createMemoryStorage } from "../src/utils/progress.js";
 import {
   AUTH_PROVIDERS,
   createAuthStore,
+  emailPasswordFormIssue,
   onboardingStage,
 } from "../src/utils/auth.js";
+
+assert.equal(emailPasswordFormIssue({ email: "", password: "x", mode: "signin" }), "Enter a valid email address.");
+assert.equal(emailPasswordFormIssue({ email: "a@b.co", password: "", mode: "signin" }), "Enter your password.");
+assert.equal(emailPasswordFormIssue({
+  name: "Dana",
+  email: "a@b.co",
+  password: "forge-skill-1",
+  confirmPassword: "forge-skill-1",
+  mode: "signup",
+}), "");
+assert.match(emailPasswordFormIssue({
+  name: "",
+  email: "a@b.co",
+  password: "forge-skill-1",
+  confirmPassword: "forge-skill-1",
+  mode: "signup",
+}), /name/i);
 
 const storage = createMemoryStorage();
 const auth = createAuthStore(storage);

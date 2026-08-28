@@ -67,6 +67,27 @@ export function passwordIssue(password, confirmPassword) {
   return "";
 }
 
+/** Client-side checks for email/password forms before calling Firebase. */
+export function emailPasswordFormIssue({
+  email,
+  password,
+  confirmPassword,
+  name,
+  mode = "signin",
+} = {}) {
+  if (mode === "signup") {
+    const recipient = typeof name === "string" ? name.trim() : "";
+    if (!recipient) return "Enter your name.";
+  }
+  if (!isValidEmail(email)) return "Enter a valid email address.";
+  if (mode === "signin") {
+    if (typeof password !== "string" || !password) return "Enter your password.";
+    return "";
+  }
+  if (mode === "forgot") return "";
+  return passwordIssue(password, confirmPassword);
+}
+
 async function sha256Hex(value) {
   const data = new TextEncoder().encode(value);
   const digest = await crypto.subtle.digest("SHA-256", data);

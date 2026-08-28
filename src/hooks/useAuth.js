@@ -22,6 +22,7 @@ import { auth } from "../firebase";
 import {
   MAX_AVATAR_BYTES,
   MIN_PASSWORD_LENGTH,
+  emailPasswordFormIssue,
   isValidEmail,
   normalizeEmail,
   onboardingStage,
@@ -68,6 +69,14 @@ async function safeProfile(user) {
   }
 }
 
+/** Reload user + force token refresh so Firestore rules see email_verified. */
+async function refreshAuthSession(user = auth.currentUser) {
+  if (!user) return null;
+  await reload(user);
+  await user.getIdToken(true);
+  return auth.currentUser;
+}
+
 export function useAuth() {
   const [account, setAccount] = useState(null);
   const [user, setUser] = useState(null);
@@ -82,7 +91,7 @@ export function useAuth() {
     const profile = await safeProfile(nextUser);
     const signedUp = applySignupIdentity(profile, profile.name || nextUser.displayName);
     const nextProfile = signedUp.complete ? signedUp.account : profile;
-    if (signedUp.complete && !profile.profileComplete) {
+    if (nextUser.emailVerified && signedUp.complete && !profile.profileComplete) {
       void upsertLearnerProfile(nextUser, {
         name: nextProfile.name,
         profileComplete: true,
@@ -109,35 +118,56 @@ export function useAuth() {
 
   const refreshUser = useCallback(async () => {
     if (!auth.currentUser) return { ok: true, account: null };
-    await reload(auth.currentUser);
+    await refreshAuthSession(auth.currentUser);
     const profile = await hydrate(auth.currentUser);
     return { ok: true, account: profile };
   }, [hydrate]);
 
+  const persistVerifiedProfile = useCallback(async (firebaseUser, displayName) => {
+    if (!firebaseUser?.emailVerified) return;
+    const recipient = validateRecipientName(displayName || firebaseUser.displayName || "");
+    const name = recipient.ok ? recipient.name : (firebaseUser.displayName || "");
+    try {
+      await ensureLearnerDocuments(firebaseUser);
+      if (name) {
+        await upsertLearnerProfile(firebaseUser, {
+          name,
+          profileComplete: Boolean(name),
+          walletPromptSeen: true,
+        });
+      }
+    } catch {
+      // Rules or network may lag; hydrate will retry on the next refresh.
+    }
+  }, []);
+
   const registerWithEmail = useCallback(async ({ name, email, password, confirmPassword }) => {
+    const formIssue = emailPasswordFormIssue({
+      name,
+      email,
+      password,
+      confirmPassword,
+      mode: "signup",
+    });
+    if (formIssue) return { ok: false, error: formIssue };
     const recipient = validateRecipientName(name);
     if (!recipient.ok) return { ok: false, error: recipient.error };
     const normalized = normalizeEmail(email);
-    if (!isValidEmail(normalized)) return { ok: false, error: "Enter a valid email address." };
-    const issue = passwordIssue(password, confirmPassword);
-    if (issue) return { ok: false, error: issue };
     try {
       const credential = await createUserWithEmailAndPassword(auth, normalized, password);
       await updateProfile(credential.user, { displayName: recipient.name });
-      const profile = await safeProfile(credential.user);
-      await upsertLearnerProfile(credential.user, {
-        name: recipient.name,
-        profileComplete: true,
-        walletPromptSeen: true,
-      }).catch(() => {});
+      // Firestore requires email_verified — persist profile after the user verifies.
       await sendEmailVerification(credential.user, { url: actionUrl() });
       const accountState = {
-        ...profile,
+        ...profileFromDoc(credential.user, {}),
         name: recipient.name,
+        email: normalized,
         emailVerified: false,
         profileComplete: true,
         walletPromptSeen: true,
+        hasPassword: true,
       };
+      setUser(credential.user);
       setAccount(accountState);
       return { ok: true, account: accountState };
     } catch (error) {
@@ -146,39 +176,62 @@ export function useAuth() {
   }, []);
 
   const signInWithEmail = useCallback(async ({ email, password }) => {
+    const formIssue = emailPasswordFormIssue({ email, password, mode: "signin" });
+    if (formIssue) return { ok: false, error: formIssue };
     try {
       const credential = await signInWithEmailAndPassword(auth, normalizeEmail(email), password);
-      const profile = await hydrate(credential.user);
+      await refreshAuthSession(credential.user);
+      if (credential.user.emailVerified) {
+        await persistVerifiedProfile(credential.user, credential.user.displayName);
+      }
+      const profile = await hydrate(auth.currentUser || credential.user);
       return { ok: true, account: profile };
     } catch (error) {
       return { ok: false, error: mapAuthError(error) };
     }
-  }, [hydrate]);
+  }, [hydrate, persistVerifiedProfile]);
 
   const continueWithGoogle = useCallback(async () => {
     try {
       const credential = await signInWithPopup(auth, googleProvider);
-      const profile = await hydrate(credential.user);
+      await refreshAuthSession(credential.user);
+      await persistVerifiedProfile(credential.user, credential.user.displayName);
+      const profile = await hydrate(auth.currentUser || credential.user);
       return { ok: true, account: profile };
     } catch (error) {
       return { ok: false, error: mapAuthError(error), code: error.code };
     }
-  }, [hydrate]);
+  }, [hydrate, persistVerifiedProfile]);
 
   const verifyEmail = useCallback(async (oobCode) => {
     try {
-      if (oobCode) await applyActionCode(auth, oobCode);
-      else if (auth.currentUser) {
-        await reload(auth.currentUser);
-        if (!auth.currentUser.emailVerified) {
-          return { ok: false, error: "Open the verification link from your email to continue." };
-        }
+      if (oobCode) {
+        await applyActionCode(auth, oobCode);
       }
-      return refreshUser();
+      if (!auth.currentUser) {
+        return {
+          ok: true,
+          signedIn: false,
+          account: null,
+          message: "Email verified. Sign in with your email and password to continue.",
+        };
+      }
+      await refreshAuthSession(auth.currentUser);
+      if (!auth.currentUser.emailVerified) {
+        return { ok: false, error: "Open the verification link from your email to continue." };
+      }
+      await persistVerifiedProfile(auth.currentUser, auth.currentUser.displayName);
+      const profile = await hydrate(auth.currentUser);
+      return {
+        ok: true,
+        signedIn: true,
+        account: profile,
+        message: "Email verified. You are signed in.",
+      };
     } catch (error) {
       return { ok: false, error: mapAuthError(error) };
     }
-  }, [refreshUser]);
+  }, [hydrate, persistVerifiedProfile]);
 
   const resendVerification = useCallback(async () => {
     try {
@@ -191,6 +244,7 @@ export function useAuth() {
   }, [account]);
 
   const requestPasswordReset = useCallback(async (email) => {
+    if (!isValidEmail(email)) return { ok: false, error: "Enter a valid email address." };
     try {
       await sendPasswordResetEmail(auth, normalizeEmail(email), { url: actionUrl() });
       return { ok: true };

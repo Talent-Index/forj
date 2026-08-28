@@ -80,6 +80,7 @@ function App() {
   const [authOpen, setAuthOpen] = useState(false);
   const [authView, setAuthView] = useState("signup");
   const [authOobCode, setAuthOobCode] = useState("");
+  const [authBanner, setAuthBanner] = useState("");
   const [onboardError, setOnboardError] = useState("");
   const [onboardBusy, setOnboardBusy] = useState(false);
   const [locationKey, setLocationKey] = useState(() =>
@@ -187,6 +188,12 @@ function App() {
     if (wallet.address && open) closeModal();
   }, [closeModal, open, wallet.address]);
 
+  const goLearnHome = useCallback(() => {
+    setView(VIEWS.SECTIONS);
+    setActiveSection(null);
+    setPage("learn");
+  }, []);
+
   useEffect(() => {
     if (typeof window === "undefined" || authActionHandled.current) return undefined;
     const params = new URLSearchParams(window.location.search);
@@ -197,17 +204,38 @@ function App() {
     }
     authActionHandled.current = true;
     if ((mode === "verifyEmail" || params.get("verifyEmail")) && oobCode) {
-      verifyEmail(oobCode);
+      setAuthOobCode(oobCode);
+      setAuthView("verify");
+      setAuthOpen(true);
+      setAuthBanner("Confirming your email…");
+      void verifyEmail(oobCode).then((result) => {
+        if (!result?.ok) {
+          setAuthBanner(result?.error || "Could not verify that link. Try resending the email.");
+          setAuthView("verify");
+          setAuthOpen(true);
+          return;
+        }
+        if (result.signedIn && result.account?.emailVerified) {
+          setAuthBanner(result.message || "Email verified.");
+          setAuthOpen(false);
+          goLearnHome();
+          return;
+        }
+        setAuthBanner(result.message || "Email verified. Sign in to continue.");
+        setAuthView("signin");
+        setAuthOpen(true);
+      });
     } else if (mode === "resetPassword" || params.get("reset")) {
       setAuthOobCode(oobCode);
       setAuthView("reset");
+      setAuthBanner("Choose a new password for your account.");
       setAuthOpen(true);
     }
     ["mode", "oobCode", "apiKey", "lang", "verifyEmail", "reset"].forEach((key) => params.delete(key));
     const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}`;
     window.history.replaceState({}, "", next);
     return undefined;
-  }, [verifyEmail]);
+  }, [goLearnHome, verifyEmail]);
 
   const startSection = useCallback((id) => {
     setActiveSection(id);
@@ -249,12 +277,6 @@ function App() {
     setPage("learn");
   }, [applyProgress, ownerId, progression]);
 
-  const goLearnHome = useCallback(() => {
-    setView(VIEWS.SECTIONS);
-    setActiveSection(null);
-    setPage("learn");
-  }, []);
-
   useEffect(() => {
     if (isAuthenticated && page === "landing") goLearnHome();
   }, [goLearnHome, isAuthenticated, page]);
@@ -269,12 +291,14 @@ function App() {
   }, []);
 
   function openAuth(nextView = "signup") {
+    setAuthBanner("");
     setAuthView(nextView);
     setAuthOpen(true);
   }
 
   function closeAuth() {
     setAuthOpen(false);
+    setAuthBanner("");
     if (!auth.account?.emailVerified) return;
     if (PUBLIC_PAGES.has(page) && page !== "landing") return;
     goLearnHome();
@@ -591,11 +615,15 @@ function App() {
       <AuthModal
         open={authOpen}
         view={authView}
-        onChangeView={setAuthView}
+        onChangeView={(next) => {
+          setAuthBanner("");
+          setAuthView(next);
+        }}
         onClose={closeAuth}
         auth={auth}
         pendingEmail={account?.email}
         oobCode={authOobCode}
+        banner={authBanner}
         onOpenLegal={openLegal}
       />
     </>

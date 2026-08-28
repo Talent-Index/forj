@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MIN_PASSWORD_LENGTH } from "../../utils/auth";
+import { emailPasswordFormIssue, MIN_PASSWORD_LENGTH, passwordIssue } from "../../utils/auth";
 import { PRODUCT_NAME } from "../../utils/brand";
 import { validateRecipientName } from "../../utils/recipient";
 import { Button, Modal } from "../ui/primitives";
@@ -18,7 +18,16 @@ function GoogleMark() {
   );
 }
 
-function Field({ id, label, type = "text", value, onChange, autoComplete, placeholder }) {
+function Field({
+  id,
+  label,
+  type = "text",
+  value,
+  onChange,
+  autoComplete,
+  placeholder,
+  required = false,
+}) {
   const [visible, setVisible] = useState(false);
   const isPassword = type === "password";
   return (
@@ -32,6 +41,7 @@ function Field({ id, label, type = "text", value, onChange, autoComplete, placeh
           onChange={(event) => onChange(event.target.value)}
           autoComplete={autoComplete}
           placeholder={placeholder}
+          required={required}
         />
         {isPassword ? (
           <button type="button" className="auth-password-toggle" onClick={() => setVisible((current) => !current)}>
@@ -51,6 +61,7 @@ function AuthModal({
   auth,
   pendingEmail,
   oobCode = "",
+  banner = "",
   onOpenLegal,
 }) {
   const [signup, setSignup] = useState(EMPTY_SIGNUP);
@@ -65,8 +76,8 @@ function AuthModal({
   useEffect(() => {
     if (!open) return;
     setError("");
-    setInfo("");
-  }, [open, view]);
+    setInfo(banner || "");
+  }, [open, view, banner]);
 
   async function handleGoogle() {
     setBusy(true);
@@ -87,15 +98,24 @@ function AuthModal({
 
   async function handleSignup(event) {
     event.preventDefault();
+    const formIssue = emailPasswordFormIssue({ ...signup, mode: "signup" });
+    if (formIssue) {
+      setError(formIssue);
+      return;
+    }
     setBusy(true);
     setError("");
+    setInfo("");
     try {
       const result = await auth.registerWithEmail(signup);
       if (!result.ok) {
-        setError(result.error);
+        setError(result.error || "Could not create that account.");
         return;
       }
+      setInfo(`We sent a verification link to ${result.account?.email || signup.email}.`);
       onChangeView("verify");
+    } catch (err) {
+      setError(err.message || "Could not create that account.");
     } finally {
       setBusy(false);
     }
@@ -103,20 +123,29 @@ function AuthModal({
 
   async function handleSignin(event) {
     event.preventDefault();
+    const formIssue = emailPasswordFormIssue({ ...signin, mode: "signin" });
+    if (formIssue) {
+      setError(formIssue);
+      return;
+    }
     setBusy(true);
     setError("");
+    setInfo("");
     try {
       const result = await auth.signInWithEmail(signin);
       if (!result.ok) {
-        setError(result.error);
+        setError(result.error || "Could not sign in.");
         return;
       }
       if (!result.account?.emailVerified) {
         await auth.resendVerification();
+        setInfo(`Verify your email to continue. We sent a link to ${result.account?.email || signin.email}.`);
         onChangeView("verify");
         return;
       }
       onClose();
+    } catch (err) {
+      setError(err.message || "Could not sign in.");
     } finally {
       setBusy(false);
     }
@@ -124,6 +153,10 @@ function AuthModal({
 
   async function handleForgot(event) {
     event.preventDefault();
+    if (!forgotEmail.trim()) {
+      setError("Enter a valid email address.");
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -133,6 +166,8 @@ function AuthModal({
         return;
       }
       setInfo("If an account exists for that email, a reset link is on its way.");
+    } catch (err) {
+      setError(err.message || "Could not send a reset link.");
     } finally {
       setBusy(false);
     }
@@ -140,6 +175,15 @@ function AuthModal({
 
   async function handleReset(event) {
     event.preventDefault();
+    const passwordError = passwordIssue(reset.password, reset.confirmPassword);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+    if (!oobCode) {
+      setError("This reset link is missing or expired. Request a new one.");
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -154,6 +198,8 @@ function AuthModal({
       }
       setInfo("Password updated. Sign in with your new password.");
       onChangeView("signin");
+    } catch (err) {
+      setError(err.message || "Could not update password.");
     } finally {
       setBusy(false);
     }
@@ -165,10 +211,19 @@ function AuthModal({
     try {
       const result = await auth.verifyEmail(oobCode);
       if (!result.ok) {
-        setError(result.error);
+        setError(result.error || "Email is not verified yet.");
         return;
       }
-      if (result.account?.emailVerified) onClose();
+      if (result.message) setInfo(result.message);
+      if (result.signedIn && result.account?.emailVerified) {
+        onClose();
+        return;
+      }
+      if (!result.signedIn) {
+        onChangeView("signin");
+      }
+    } catch (err) {
+      setError(err.message || "Could not verify email.");
     } finally {
       setBusy(false);
     }
@@ -184,6 +239,8 @@ function AuthModal({
         return;
       }
       setInfo(`Verification email sent to ${auth.account?.email || pendingEmail || signup.email}.`);
+    } catch (err) {
+      setError(err.message || "Could not resend verification.");
     } finally {
       setBusy(false);
     }
@@ -201,6 +258,8 @@ function AuthModal({
       }
       setInfo(`Verification email sent to ${changeEmailValue}.`);
       setChangeEmailValue("");
+    } catch (err) {
+      setError(err.message || "Could not update email.");
     } finally {
       setBusy(false);
     }
@@ -227,10 +286,10 @@ function AuthModal({
             <GoogleMark /> Continue with Google
           </Button>
           <p className="auth-or">or</p>
-          <Field id="signup-name" label="Name" value={signup.name} onChange={(name) => setSignup((current) => ({ ...current, name }))} autoComplete="name" placeholder="Your name" />
-          <Field id="signup-email" label="Email" type="email" value={signup.email} onChange={(email) => setSignup((current) => ({ ...current, email }))} autoComplete="email" placeholder="you@example.com" />
-          <Field id="signup-password" label="Password" type="password" value={signup.password} onChange={(password) => setSignup((current) => ({ ...current, password }))} autoComplete="new-password" placeholder={`At least ${MIN_PASSWORD_LENGTH} characters`} />
-          <Field id="signup-confirm" label="Confirm password" type="password" value={signup.confirmPassword} onChange={(confirmPassword) => setSignup((current) => ({ ...current, confirmPassword }))} autoComplete="new-password" />
+          <Field id="signup-name" label="Name" value={signup.name} onChange={(name) => setSignup((current) => ({ ...current, name }))} autoComplete="name" placeholder="Your name" required />
+          <Field id="signup-email" label="Email" type="email" value={signup.email} onChange={(email) => setSignup((current) => ({ ...current, email }))} autoComplete="email" placeholder="you@example.com" required />
+          <Field id="signup-password" label="Password" type="password" value={signup.password} onChange={(password) => setSignup((current) => ({ ...current, password }))} autoComplete="new-password" placeholder={`At least ${MIN_PASSWORD_LENGTH} characters`} required />
+          <Field id="signup-confirm" label="Confirm password" type="password" value={signup.confirmPassword} onChange={(confirmPassword) => setSignup((current) => ({ ...current, confirmPassword }))} autoComplete="new-password" required />
           <Button type="submit" className="btn-block" disabled={busy}>{busy ? "Creating…" : "Create account"}</Button>
           <p className="auth-legal">
             By creating an account you agree to the{" "}
@@ -251,14 +310,14 @@ function AuthModal({
             <GoogleMark /> Continue with Google
           </Button>
           <p className="auth-or">or</p>
-          <Field id="signin-email" label="Email" type="email" value={signin.email} onChange={(email) => setSignin((current) => ({ ...current, email }))} autoComplete="email" placeholder="you@example.com" />
-          <Field id="signin-password" label="Password" type="password" value={signin.password} onChange={(password) => setSignin((current) => ({ ...current, password }))} autoComplete="current-password" />
+          <Field id="signin-email" label="Email" type="email" value={signin.email} onChange={(email) => setSignin((current) => ({ ...current, email }))} autoComplete="email" placeholder="you@example.com" required />
+          <Field id="signin-password" label="Password" type="password" value={signin.password} onChange={(password) => setSignin((current) => ({ ...current, password }))} autoComplete="current-password" required />
           <Button type="submit" className="btn-block" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</Button>
           <p className="auth-switch">
             <button type="button" className="text-link" onClick={() => onChangeView("forgot")}>Forgot password?</button>
           </p>
           <p className="auth-switch">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <button type="button" className="text-link" onClick={() => onChangeView("signup")}>Create one</button>
           </p>
         </form>
@@ -267,7 +326,7 @@ function AuthModal({
       {view === "forgot" && (
         <form className="auth-form" onSubmit={handleForgot}>
           <p className="modal-copy">Enter your email and we will send a reset link if an account exists.</p>
-          <Field id="forgot-email" label="Email" type="email" value={forgotEmail} onChange={setForgotEmail} autoComplete="email" placeholder="you@example.com" />
+          <Field id="forgot-email" label="Email" type="email" value={forgotEmail} onChange={setForgotEmail} autoComplete="email" placeholder="you@example.com" required />
           <Button type="submit" className="btn-block" disabled={busy}>Send reset link</Button>
           <p className="auth-switch">
             <button type="button" className="text-link" onClick={() => onChangeView("signin")}>Back to sign in</button>
@@ -277,8 +336,8 @@ function AuthModal({
 
       {view === "reset" && (
         <form className="auth-form" onSubmit={handleReset}>
-          <Field id="reset-password" label="New password" type="password" value={reset.password} onChange={(password) => setReset((current) => ({ ...current, password }))} autoComplete="new-password" />
-          <Field id="reset-confirm" label="Confirm password" type="password" value={reset.confirmPassword} onChange={(confirmPassword) => setReset((current) => ({ ...current, confirmPassword }))} autoComplete="new-password" />
+          <Field id="reset-password" label="New password" type="password" value={reset.password} onChange={(password) => setReset((current) => ({ ...current, password }))} autoComplete="new-password" required />
+          <Field id="reset-confirm" label="Confirm password" type="password" value={reset.confirmPassword} onChange={(confirmPassword) => setReset((current) => ({ ...current, confirmPassword }))} autoComplete="new-password" required />
           <Button type="submit" className="btn-block" disabled={busy}>Update password</Button>
         </form>
       )}
@@ -288,10 +347,14 @@ function AuthModal({
           <p className="modal-copy">
             We sent a verification link to:
             <br />
-            <strong>{auth.account?.email || pendingEmail || signup.email}</strong>
+            <strong>{auth.account?.email || pendingEmail || signup.email || "your email"}</strong>
+          </p>
+          <p className="modal-copy">
+            Open the link in that email, then come back and confirm below.
+            If the link opens Forjora automatically, you can continue as soon as verification finishes.
           </p>
           <Button className="btn-block" onClick={handleVerify} disabled={busy}>
-            I have verified my email
+            {busy ? "Checking…" : "I have verified my email"}
           </Button>
           <Button variant="secondary" className="btn-block" onClick={handleResend} disabled={busy}>
             Resend email
@@ -300,6 +363,9 @@ function AuthModal({
             <Field id="change-email" label="Change email" type="email" value={changeEmailValue} onChange={setChangeEmailValue} placeholder="new@example.com" />
             <Button variant="ghost" type="submit" disabled={busy}>Update email</Button>
           </form>
+          <p className="auth-switch">
+            <button type="button" className="text-link" onClick={() => onChangeView("signin")}>Back to sign in</button>
+          </p>
         </div>
       )}
     </Modal>
@@ -334,7 +400,7 @@ export function ProfileSetup({ account, onContinue, busy = false, error = "" }) 
       <h1>What should we call you?</h1>
       <form className="auth-form onboard-form" onSubmit={handleSubmit}>
         {shownError && <p className="auth-error" role="alert">{shownError}</p>}
-        <Field id="profile-name" label="Your name" value={name} onChange={(value) => { setLocalError(""); setName(value); }} autoComplete="name" placeholder="Your name" />
+        <Field id="profile-name" label="Your name" value={name} onChange={(value) => { setLocalError(""); setName(value); }} autoComplete="name" placeholder="Your name" required />
         <Button type="submit" disabled={busy}>{busy ? "Saving…" : "Continue"}</Button>
       </form>
     </section>

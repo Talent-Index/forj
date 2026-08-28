@@ -81,6 +81,10 @@ assert.ok(LEGAL_PAGES.terms.sections.length >= 3);
 assertIncludes(useAuth, "applyProfileCompletion", "Firebase auth uses local profile completion");
 assertIncludes(useAuth, "setAccount(next.account)", "Continue updates local account immediately");
 assertIncludes(useAuth, "void persistProfilePatch", "Cloud writes do not block Continue");
+assertIncludes(useAuth, "getIdToken(true)", "Email verify refreshes the Auth token for Firestore rules");
+assertIncludes(useAuth, "sendEmailVerification", "Signup sends a verification email");
+assertIncludes(authModal, "emailPasswordFormIssue", "Email forms validate before Firebase");
+assertIncludes(authModal, "required", "Email form fields are required");
 assertIncludes(learner, "setDoc(profileRef, patchFields, { merge: true })", "Profile save upserts");
 assertIncludes(learner, "fullLearnerProfile", "Missing profiles are created, not patched");
 
