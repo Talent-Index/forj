@@ -56,7 +56,7 @@ Remaining: question management, learning analytics, issuer dashboard, and produc
 
 This is the production gate. It is **not** a claim that Forjora is audited or live on Avalanche C-Chain.
 
-The readiness gate is **closed**. Schema v1 metadata, Privacy/Terms disclosures, Fuji vs C-Chain RPC separation, and incident copy (no pause; two-step issuer handoff) are in place. Independent review, issuer infrastructure, a production deployer, monitoring, and C-Chain issuance are **not**. An env flag cannot open issuance.
+The readiness gate is **closed**. Schema v1 metadata, Privacy/Terms disclosures, Fuji vs C-Chain RPC separation, incident copy (no pause; two-step issuer handoff), verified-email Firestore/Storage rules, optional App Check client scaffolding, hosting security headers, and a tracked-secrets audit note are in place. Independent review, issuer infrastructure, a production deployer, monitoring, App Check **enforcement** in Firebase, and C-Chain issuance are **not**. An env flag cannot open issuance.
 
 Shipped on Fuji: soulbound transfer rules and owner-signed attestation. Contract tests cover unauthorized mint, forged and replayed signatures, wrong nonce, wrong chain, wrong contract, expired authorizations, unauthorized issuer and ownership changes, and duplicate current credentials. The learner app does not hold issuer keys; wallet, contract, and mint inputs are checked before a transaction is sent. Freeze v1 of the credential source is packed for independent review. That pack is **not** an audit.
 

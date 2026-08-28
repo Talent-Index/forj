@@ -62,7 +62,10 @@ service cloud.firestore {
     // ===============================================================
 
     function isAuthenticated() {
-      return request.auth != null && request.auth.uid != null && request.auth.uid != "";
+      return request.auth != null
+        && request.auth.uid != null
+        && request.auth.uid != ""
+        && request.auth.token.email_verified == true;
     }
 
     function isOwner(userId) {

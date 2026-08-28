@@ -26,7 +26,7 @@ Review date: **28 August 2026**. Live Fuji contract under review is distinct fro
 │  Storage (rules ready;    │   │  0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df │
 │  avatar path unused)      │   │  claimed mint · EIP-712 attested mint   │
 │  No Cloud Functions       │   │                                         │
-│  No App Check             │   │                                         │
+│  App Check optional       │   │                                         │
 └───────────────────────────┘   └─────────────────────────────────────────┘
                 │                             │
                 ▼                             ▼
@@ -50,7 +50,7 @@ Review date: **28 August 2026**. Live Fuji contract under review is distinct fro
 
 | Boundary | Inside | Outside | Controls today |
 | --- | --- | --- | --- |
-| **B1 Browser ↔ Firebase** | SPA with Auth ID token | Google / email IdP, Firestore, Storage | Security rules; UI email-verify gate; **no App Check**; **rules do not require `email_verified`** |
+| **B1 Browser ↔ Firebase** | SPA with Auth ID token | Google / email IdP, Firestore, Storage | Security rules require `email_verified`; UI verify gate; App Check client optional until console enforcement |
 | **B2 Browser ↔ Wallet** | App intent UI | Extension / mobile wallet | Fuji-only prep; allowlisted wallets; param validation; user confirms tx |
 | **B3 Wallet ↔ Fuji contract** | Signed txs from learner EOA | `SkillForgeCredential` | Solidity access control; soulbound; score caps |
 | **B4 Issuer ops ↔ Contract** | Owner key (off-app) | Attested mint path | EIP-712 domain + nonce + deadline; **no learner-UI signing** |
@@ -131,7 +131,7 @@ Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, 
 | Topic | Current state |
 | --- | --- |
 | Providers | Email/password + Google (`signInWithPopup`) |
-| Email verification | Required for **app “authenticated” UI** (`account.emailVerified`); **not** required in Firestore/Storage rules |
+| Email verification | Required for **app UI** and for Firestore/Storage rules (`request.auth.token.email_verified`) |
 | Password policy | App-side minimum length via auth helpers; Firebase project policy is ops-managed |
 | Recovery | Firebase password reset email flow |
 | Session | Firebase Auth persistence; `onAuthStateChanged` |
@@ -141,7 +141,7 @@ Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, 
 | Authorized domains | Must be reviewed in Firebase console for production (not encoded as deny-list in repo) |
 | Local mock auth | `src/utils/auth.js` for checks/tests only; can leave legacy `localStorage` keys in old browsers |
 
-**Abuse controls (rate limits, App Check, bot resistance):** not implemented in-repo. Depend on Firebase platform defaults and future App Check.
+**Abuse controls:** App Check client scaffolding is optional (`VITE_FIREBASE_APPCHECK_SITE_KEY`); console enforcement and rate limits are still ops / platform.
 
 ---
 
@@ -176,8 +176,8 @@ Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, 
 2. Deployed `firestore.rules` / `storage.rules` match this repository and are the real enforcement point.  
 3. Reserved deny-all collections stay unused until a trusted backend exists.  
 4. Firebase **cannot** mint or attest on-chain credentials.  
-5. Without App Check or Functions, **any** client with a valid user token can exercise allowed writes.  
-6. Email verification is a **product** gate, not a rules gate, unless rules are tightened.  
+5. Without App Check **enforcement** or Functions, any client with a **verified** user token can still exercise allowed writes (including farmable events).  
+6. Email verification is required in rules and in the product UI; rules must be deployed to the live Firebase project.  
 7. Public web config in the bundle is expected; it is not an issuer key.  
 8. Analytics payloads are constrained by rules; Analytics SDK may still collect platform telemetry.
 
@@ -247,14 +247,14 @@ Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, 
 | Claimed score / mint inflation | Claimed credential | Medium (honesty) | High if adversarial learner | **Accepted** for claimed path; copy must not say verified |
 | XP / leaderboard farming via client events | Progression / board | Medium–High (product integrity) | High | **Residual** — no server adjudication |
 | Cross-user profile/progress read/write | Learner accounts | High | Low if rules deployed | Owner checks; deny-by-default catch-all |
-| Unverified email using Firestore | Learner data | Medium | Medium | **Residual** — rules ignore `email_verified` |
+| Unverified email using Firestore | Learner data | Medium | Low after rules deploy | Rules require `email_verified` — **deploy rules to production** |
 | XSS → session/tx trickery | Accounts / wallet | High | Low–Medium | No `dangerouslySetInnerHTML`; URL/media sanitizers; **no CSP** |
 | Malicious artwork / avatar URI | Browser | Medium | Low | `safeMediaSrc` / `safeAvatarSrc`; SVG data URLs rejected |
 | Wallet on wrong network | Funds / failed mint | Medium | Medium | Fuji gate + prep rejection |
 | Seed phrase phishing via UI | Wallet | Critical | Process | App must never ask; none in code paths reviewed |
 | Firestore reserved collection enablement without backend | Credentials / issuer | Critical | Future risk | Keep deny-all until trusted writers exist |
 | Dependency RCE in build | Supply chain | High | Low–Medium | `npm audit` high gate in verify; no Dependabot config |
-| Hosting header stripping / clickjacking | Session UX | Medium | Medium | **Residual** — headers not in repo |
+| Hosting header stripping / clickjacking | Session UX | Medium | Low on Vercel | Headers/CSP in `vercel.json`; confirm on live host |
 | Public lookup overshared as “verified” | Reputation / honesty | High (product) | Process | Copy + status badges; regression checks |
 
 ---
@@ -282,26 +282,27 @@ It does **not** by itself satisfy the full 23-section execution checklist or the
 
 | Area | Gap |
 | --- | --- |
-| App Check | Not enabled |
+| App Check | Client scaffolding optional via `VITE_FIREBASE_APPCHECK_SITE_KEY`; **console enforcement** still required |
 | Trusted XP / quiz validation | No Cloud Functions / server referee |
-| Firestore `email_verified` | Not enforced |
-| Security headers / CSP | Not in repo |
+| Firestore `email_verified` | Enforced in rules (deploy rules to production Firebase) |
+| Security headers / CSP | Shipped in `vercel.json` for Vercel hosts |
 | Rate limiting | No app-layer limits |
-| Dependabot / secret scanning / branch protection | Ops / GitHub settings (not fully represented in repo) |
-| Storage uploads | Rules exist; unused path |
+| Dependabot | Config present; secret scanning / branch protection still ops |
+| Storage uploads | Rules exist (verified email); unused path |
 | Issuer infrastructure & monitoring | Production-gate blocked |
 | Independent pen test | Not claimed |
 | Launch / C-Chain | Fail-closed not approved |
+| Secrets history | Working-tree scan clean — [SECRETS-AUDIT.md](./SECRETS-AUDIT.md); history rotation is ops |
 
 ---
 
 ## 14. Suggested next execution order
 
-1. **Secrets audit** — confirm no keys in Git history; rotate anything ever exposed; keep issuer keys offline from the SPA.  
-2. **Firebase hardening** — enforce `email_verified` in rules where appropriate; enable App Check; rules tests in CI against emulator.  
-3. **XP / reward integrity** — move reward-granting writes behind trusted adjudication (or explicitly keep leaderboard “untrusted fun” in product copy and gate).  
-4. **HTTP headers / CSP** on the production host.  
-5. **Continue** wallet, contract, issuer-key ops, dependency/CI, then pen test and regression suite per the program checklist.
+1. **Deploy** updated Firestore/Storage rules to the Firebase project.  
+2. **Configure App Check** (reCAPTCHA v3 site key + console enforcement).  
+3. **XP / reward integrity** — trusted adjudication or explicit “untrusted board” product stance.  
+4. **Live Fuji walkthroughs** — MetaMask/Core claimed mint and lookup.  
+5. **Continue** issuer-key ops, monitoring, pen test, and regression suite per the program checklist.
 
 ---
 
@@ -310,7 +311,9 @@ It does **not** by itself satisfy the full 23-section execution checklist or the
 | Topic | Primary paths |
 | --- | --- |
 | Firestore / Storage rules | `firestore.rules`, `storage.rules`, `src/utils/backend/schema.js` |
-| Auth | `src/hooks/useAuth.js`, `src/firebase.js` |
+| Auth | `src/hooks/useAuth.js`, `src/firebase.js`, `src/utils/appCheck.js` |
+| Secrets audit | `audit/SECRETS-AUDIT.md` |
+| Hosting headers | `vercel.json` |
 | Frontend sanitizers | `src/utils/frontendSecurity.js`, `scripts/check-frontend-security.js` |
 | Wallet / mint prep | `src/utils/wallet.js`, `src/utils/contract.js`, `src/components/Certificate.jsx` |
 | EIP-712 | `contracts/SkillForgeCredential.sol`, `src/utils/eip712Authorization.js`, `scripts/check-eip712.js` |

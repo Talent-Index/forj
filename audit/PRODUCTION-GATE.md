@@ -15,7 +15,7 @@ C-Chain issuance is **closed**. Freeze v1 may be reviewed; it is not independent
 | Issuer infrastructure secured | Blocked — keys stay out of the learner app; issuer ops not shipped |
 | Production RPC configured | Ready for Fuji lookup; C-Chain RPC is reserved and must not be used as Fuji |
 | Deployment wallet secured | Blocked — C-Chain deploy is refused by this gate |
-| Monitoring configured | Blocked — not shipped |
+| Monitoring configured | Blocked — not shipped (Dependabot config present; App Check enforcement and alerts not) |
 | Incident response documented | Ready — no pause; claimed stays claimed; issuer handoff is two-step |
 | User disclosures updated | Ready — Privacy and Terms: Fuji-only, claimed vs attested, public records |
 | Mainnet configuration reviewed | Reviewed: learner mint stays Fuji; C-Chain issuance is not offered |

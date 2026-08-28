@@ -61,6 +61,7 @@ assert.equal(isSecretEnvName("VITE_CREDENTIAL_CONTRACT"), false);
 assert.equal(readPublicEnv("PRIVATE_KEY"), "");
 assert.equal(readPublicEnv("VITE_PRIVATE_KEY"), "");
 assert.equal(PUBLIC_ENV_KEYS.every((key) => key.startsWith("VITE_")), true);
+assert.equal(PUBLIC_ENV_KEYS.includes("VITE_FIREBASE_APPCHECK_SITE_KEY"), true);
 
 const live = "0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df";
 assert.equal(parseContractAddress(live).toLowerCase(), live.toLowerCase());
