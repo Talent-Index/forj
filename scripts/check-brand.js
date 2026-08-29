@@ -54,5 +54,13 @@ assert.match(pkg.scripts.verify, /test:brand/);
 const manifest = JSON.parse(readFileSync(join(root, "public/site.webmanifest"), "utf8"));
 assert.equal(manifest.name, "Forjora");
 assert.equal(manifest.short_name, "Forjora");
+assert.match(JSON.stringify(manifest.icons), /favicon\.svg|forjora-mark\.svg/);
+
+const mark = readFileSync(join(root, "src/components/brand/ForjoraMark.jsx"), "utf8");
+assert.match(mark, /brand-mark-accent/);
+assert.match(mark, /BrandMark/);
+assert.match(html, /favicon\.svg/);
+assert.match(readFileSync(join(root, "public/forjora-mark.svg"), "utf8"), /#c4a35a/);
+assert.match(readFileSync(join(root, "public/favicon.svg"), "utf8"), /#c4a35a/);
 
 console.log("Forjora brand checks passed; SkillForgeCredential remains the on-chain name");

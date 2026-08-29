@@ -8,9 +8,27 @@
   "theme_color": "#1a1916",
   "icons": [
     {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/forjora-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
       "src": "/favicon.ico",
       "sizes": "48x48",
       "type": "image/x-icon"
+    },
+    {
+      "src": "/forjora-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }

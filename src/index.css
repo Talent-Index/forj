@@ -1687,12 +1687,65 @@ img {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .brand-mark {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.brand-mark-accent {
+  color: var(--accent);
+}
+
+.brand-wordmark {
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.landing-brand {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.landing-brand-lockup .brand-mark {
+  width: 28px;
+  height: 28px;
+}
+
+.landing-brand-lockup .brand-wordmark {
+  font-size: 14px;
+  letter-spacing: 0.22em;
+}
+
+.landing-loop {
+  margin: 12px auto 0;
+  max-width: 28rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.auth-brand {
+  margin-bottom: 8px;
+}
+
+.auth-brand .brand-wordmark {
+  font-size: 12px;
+}
+
+.footer-brand .brand-mark {
+  width: 22px;
+  height: 22px;
 }
 
 .btn-solid,

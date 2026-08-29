@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { PRODUCT_LOOP } from "../utils/brand";
 import { DIFFICULTY_LEVELS, PATH_COPY } from "../utils/onboarding";
+import { BrandMark } from "./brand/ForjoraMark";
 import { Button } from "./ui/primitives";
 import JigsawBoard from "./JigsawBoard";
 import forgeCertificate from "../assets/forge-certificate.jpg";
@@ -46,6 +48,9 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
     <div className="landing-page">
       <section className="landing-hero">
         <div className="landing-hero-copy">
+          <div className="landing-brand">
+            <BrandMark className="landing-brand-lockup" />
+          </div>
           <p className="landing-kicker">Avalanche learning platform</p>
           <h1 className="landing-display">
             LEARN.
@@ -54,6 +59,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
             <br />
             PROVE.
           </h1>
+          <p className="landing-loop">{PRODUCT_LOOP}</p>
           <p className="landing-lede">
             Master Avalanche through interactive challenges. Record a claimed score
             on-chain, or wait for an issuer-attested credential.

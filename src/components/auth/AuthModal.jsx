@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { emailPasswordFormIssue, MIN_PASSWORD_LENGTH, passwordIssue } from "../../utils/auth";
 import { PRODUCT_NAME } from "../../utils/brand";
 import { validateRecipientName } from "../../utils/recipient";
+import { BrandMark } from "../brand/ForjoraMark";
 import { Button, Modal } from "../ui/primitives";
 
 const EMPTY_SIGNUP = { name: "", email: "", password: "", confirmPassword: "" };
@@ -282,7 +283,9 @@ function AuthModal({
 
   return (
     <Modal open={open} title={PRODUCT_NAME} onClose={onClose} className="auth-modal">
-      <p className="auth-kicker">{PRODUCT_NAME}</p>
+      <div className="auth-brand">
+        <BrandMark />
+      </div>
       <h3 className="auth-title">{title}</h3>
       {error && <p className="auth-error" role="alert">{error}</p>}
       {info && <p className="auth-info" role="status">{info}</p>}

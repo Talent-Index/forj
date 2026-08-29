@@ -4,9 +4,13 @@ Forjora is an Avalanche learning product. Learners study network concepts, compl
 
 Learning does not require a wallet. A wallet is needed only to mint or look up an on-chain record.
 
+The mark is a geometric **F / upward pathway** in charcoal with a gold accent step — skills, progress, and transformation without crypto clichés.
+
 ## The loop
 
-**Learn → Challenge → Earn → Unlock → Forge → Prove**
+**Learn → Build → Prove → Advance**
+
+(Product path: Learn → Challenge → Earn → Unlock → Forge → Prove.)
 
 1. Follow a structured Avalanche path (tracks, lessons, and quizzes).
 2. Complete Easy, Medium, and Hard challenges. Retries replace a section’s score; they do not stack extra points.

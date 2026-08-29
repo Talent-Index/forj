@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PRODUCT_NAME } from "../../utils/brand";
+import { BrandMark } from "../brand/ForjoraMark";
 import { WalletModal } from "../wallet/WalletControls";
 import ProfileMenu from "../auth/ProfileMenu";
 
@@ -34,18 +34,6 @@ function ConnectedNotice({ address }) {
   if (!visible || !address) return null;
   return (
     <p className="wallet-connected-toast" role="status">Connected</p>
-  );
-}
-
-function BrandMark() {
-  return (
-    <span className="brand">
-      <svg className="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 2.5 21 12 12 21.5 3 12 Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M12 7.5 16.5 12 12 16.5 7.5 12 Z" fill="currentColor" />
-      </svg>
-      {PRODUCT_NAME}
-    </span>
   );
 }
 
@@ -194,4 +182,5 @@ function Navbar({
 }
 
 export default Navbar;
-export { LOGGED_OUT_LINKS, LOGGED_IN_LINKS, BrandMark, ThemeToggle, ZoomToggle };
+export { BrandMark } from "../brand/ForjoraMark";
+export { LOGGED_OUT_LINKS, LOGGED_IN_LINKS, ThemeToggle, ZoomToggle };
