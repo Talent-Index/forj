@@ -10,7 +10,6 @@ import Quiz from "./components/Quiz";
 import PuzzleBoard from "./components/PuzzleBoard";
 import Certificate from "./components/Certificate";
 import Landing from "./components/Landing";
-import NetworkGate from "./components/NetworkGate";
 import EmptyState from "./components/EmptyState";
 import AboutPage from "./components/pages/AboutPage";
 import SettingsPage from "./components/pages/SettingsPage";
@@ -410,7 +409,9 @@ function App() {
   function renderAppContent() {
     if (page === "privacy") return <LegalPage topic="privacy" />;
     if (page === "terms") return <LegalPage topic="terms" />;
-    if (page === "about") return <AboutPage />;
+    if (page === "about") {
+      return <AboutPage onNavigate={handleNavigate} isAuthenticated={isAuthenticated} />;
+    }
     if (page === "lookup") {
       return (
         <CredentialLookupPage
@@ -526,15 +527,6 @@ function App() {
     }
     if (page === "credentials") {
       return (
-        <>
-          {wallet.isConnected && !wallet.isFuji && (
-            <NetworkGate
-              chainId={wallet.chainId}
-              switching={wallet.switching}
-              error={wallet.error}
-              onSwitch={() => wallet.switchToFuji().catch(() => {})}
-            />
-          )}
           <Certificate
             address={wallet.address}
             totalPoints={totalPoints}
@@ -549,8 +541,17 @@ function App() {
             userImage={userImage}
             onLookup={openLookup}
             onClaimed={progression.claimCredential}
+            onPuzzle={() => {
+              setView(VIEWS.PUZZLE);
+              setPage("learn");
+            }}
+            onLearn={goLearnHome}
+            onConnectWallet={openModal}
+            isFuji={wallet.isFuji}
+            chainId={wallet.chainId}
+            switchingNetwork={wallet.switching}
+            networkError={wallet.error}
           />
-        </>
       );
     }
     if (view === VIEWS.QUIZ && activeSection) {

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { LEARNING_PATHS } from "../data/learning";
 import { TOTAL_PIECES } from "../data/questions";
 import {
   CONTRACT_ADDRESS,
@@ -19,6 +20,7 @@ import EmptyState from "./EmptyState";
 import CredentialDetails from "./CredentialDetails";
 import CertificateArtifact from "./CertificateArtifact";
 import CredentialStatusBadge from "./CredentialStatusBadge";
+import NetworkGate from "./NetworkGate";
 import {
   certificateId,
   highestDifficulty,
@@ -27,6 +29,39 @@ import {
 import JigsawBoard from "./JigsawBoard";
 import { Button } from "./ui/primitives";
 import { buildCredentialVerificationView, publicCredentialPath } from "../utils/credentialLookup";
+
+const PATH_LABEL = LEARNING_PATHS[0]?.name || "Avalanche Developer Path";
+
+function headerFor(phase, { minted, onChain }) {
+  if (phase === "forge") {
+    return {
+      title: "Certificate in progress",
+      lede: "Seat all 16 interlocking pieces, then name the recipient and mint a Forjora claimed record on Fuji.",
+    };
+  }
+  if (phase === "name") {
+    return {
+      title: "Name the recipient",
+      lede: "This name appears on the certificate artwork. It is not written on-chain.",
+    };
+  }
+  if (phase === "preview") {
+    return {
+      title: "Certificate preview",
+      lede: "Confirm the claimed certificate. Learner mint is always Forjora claimed.",
+    };
+  }
+  if (minted || onChain) {
+    return {
+      title: "On-chain credential",
+      lede: CREDENTIAL_EXPLAINER.body,
+    };
+  }
+  return {
+    title: "Mint a claimed credential",
+    lede: CREDENTIAL_EXPLAINER.body,
+  };
+}
 
 function Certificate({
   address,
@@ -42,6 +77,13 @@ function Certificate({
   onRetry,
   userImage,
   onLookup,
+  onPuzzle,
+  onLearn,
+  onConnectWallet,
+  isFuji = false,
+  chainId = null,
+  switchingNetwork = false,
+  networkError = "",
 }) {
   const puzzleComplete = acquiredPieces.length >= TOTAL_PIECES;
   const savedName = validateRecipientName(recipientName);
@@ -55,6 +97,7 @@ function Certificate({
   const [minting, setMinting] = useState(false);
   const [mintTx, setMintTx] = useState(null);
   const [mintError, setMintError] = useState(null);
+  const [confirmReset, setConfirmReset] = useState(false);
   const {
     credential: onChainCredential,
     transactionHash,
@@ -83,6 +126,10 @@ function Certificate({
   const artifactStatus = onChainCredential ? onChainStatus : previewStatus;
   const issuedName = savedName.ok ? savedName.name : validateRecipientName(nameInput).name;
   const onChainImageUri = resolveCredentialImageUri(userImage);
+  const minted = Boolean(mintTx) || Boolean(onChainCredential);
+  const header = headerFor(phase, { minted, onChain: Boolean(onChainCredential) });
+  const walletConnected = Boolean(address);
+  const hasScores = Object.keys(sectionScores).length > 0;
 
   async function handleMint() {
     if (!CONTRACT_ADDRESS) {
@@ -91,6 +138,11 @@ function Certificate({
     }
     if (!savedName.ok) {
       setMintError("Confirm a recipient name before minting.");
+      return;
+    }
+    if (!walletConnected) {
+      setMintError("Connect a wallet on Avalanche Fuji to mint.");
+      onConnectWallet?.();
       return;
     }
     setMinting(true);
@@ -154,12 +206,22 @@ function Certificate({
     setPhase("preview");
   }
 
+  function handleReset() {
+    if (!confirmReset) {
+      setConfirmReset(true);
+      return;
+    }
+    setConfirmReset(false);
+    onRetry?.();
+  }
+
   const artifact = (
     <CertificateArtifact
       artwork={userImage}
       recipientName={issuedName}
       scorePercent={scorePercent}
       difficulty={difficulty}
+      pathLabel={PATH_LABEL}
       credentialId={onChainCredential?.credentialId ? `#${onChainCredential.credentialId}` : certId}
       verificationStatus={artifactStatus.id}
       walletAddress={address}
@@ -178,19 +240,11 @@ function Certificate({
   );
 
   return (
-    <div className="page certificate">
+    <div className="page credentials-page">
       <header className="page-header">
         <p className="kicker">Forjora credential</p>
-        <h1>
-          {phase === "forge"
-            ? "Certificate in progress"
-            : phase === "name"
-              ? "Your certificate is ready"
-              : phase === "preview"
-                ? "Certificate preview"
-                : "Forged certificate"}
-        </h1>
-        <p className="lede">{CREDENTIAL_EXPLAINER.body}</p>
+        <h1>{header.title}</h1>
+        <p className="lede">{header.lede}</p>
         <p className="certificate-status-row">
           <CredentialStatusBadge status={artifactStatus} />
           {onChainCredential ? (
@@ -201,51 +255,72 @@ function Certificate({
         </p>
       </header>
 
-      {Object.keys(sectionScores).length === 0 && (
-        <EmptyState
-          title={EMPTY_STATES.noQuizzes.title}
-          body="You can still preview the forge. Take a quiz first if you want scores on-chain."
+      {walletConnected && !isFuji && phase === "issued" ? (
+        <NetworkGate
+          chainId={chainId}
+          switching={switchingNetwork}
+          error={networkError}
+          onSwitch={() => switchToFuji?.().catch(() => {})}
         />
-      )}
-      {acquiredPieces.length === 0 && (
-        <EmptyState
-          title={EMPTY_STATES.noPieces.title}
-          body={EMPTY_STATES.noPieces.body}
-        />
-      )}
+      ) : null}
 
       {phase === "forge" && (
         <section className="section-block">
+          {!hasScores && acquiredPieces.length === 0 ? (
+            <EmptyState
+              title={EMPTY_STATES.noQuizzes.title}
+              body="Take a quiz to earn points, then unlock puzzle pieces. You can preview the board below."
+              actionLabel="Go to Learn"
+              onAction={onLearn}
+            />
+          ) : acquiredPieces.length === 0 ? (
+            <EmptyState
+              title={EMPTY_STATES.noPieces.title}
+              body={EMPTY_STATES.noPieces.body}
+              actionLabel="Open the forge"
+              onAction={onPuzzle}
+            />
+          ) : null}
           <p className="kicker">Jigsaw</p>
           <p className="stat-value">{acquiredPieces.length} / {TOTAL_PIECES} pieces</p>
-          <JigsawBoard
-            artwork={userImage}
-            acquiredPieces={acquiredPieces}
-            complete={false}
-          />
-          <p className="meta-line">Seat every piece in the forge, then return here to name the recipient.</p>
+          <div className="credentials-jigsaw">
+            <JigsawBoard
+              artwork={userImage}
+              acquiredPieces={acquiredPieces}
+              complete={false}
+            />
+          </div>
+          <p className="note">Seat every piece in the forge, then return here to name the recipient.</p>
+          <div className="certificate-actions">
+            <Button onClick={onPuzzle}>Continue forging</Button>
+            {onLearn ? (
+              <Button variant="secondary" onClick={onLearn}>Back to Learn</Button>
+            ) : null}
+          </div>
         </section>
       )}
 
       {phase === "name" && (
         <form className="section-block recipient-form" onSubmit={submitName}>
-          <p>Who should this credential be issued to?</p>
-          <label className="recipient-label" htmlFor="recipient-name">Recipient name</label>
-          <input
-            id="recipient-name"
-            className="recipient-input"
-            value={nameInput}
-            onChange={(event) => {
-              setNameInput(event.target.value);
-              setNameError("");
-            }}
-            placeholder="Example: Alex Mwangi"
-            autoComplete="name"
-            maxLength={48}
-            required
-          />
+          <p>Who should this certificate name?</p>
+          <label className="auth-field" htmlFor="recipient-name">
+            <span>Recipient name</span>
+            <input
+              id="recipient-name"
+              className="recipient-input"
+              value={nameInput}
+              onChange={(event) => {
+                setNameInput(event.target.value);
+                setNameError("");
+              }}
+              placeholder="Example: Alex Mwangi"
+              autoComplete="name"
+              maxLength={48}
+              required
+            />
+          </label>
           {nameError && <p className="recipient-error" role="alert">{nameError}</p>}
-          <p className="meta-line">Required. Capitalization is kept as you type.</p>
+          <p className="note">Required. Capitalization is kept as you type. The name is not stored on-chain.</p>
           <Button type="submit">Continue</Button>
         </form>
       )}
@@ -253,19 +328,19 @@ function Certificate({
       {phase === "preview" && (
         <section className="section-block">
           {artifact}
-          <p className="meta-line">This name will appear on your credential.</p>
-          <p className="meta-line">{previewStatus.body}</p>
+          <p className="note">This name will appear on your credential artwork.</p>
+          <p className="note">{previewStatus.body}</p>
           {onChainStatus.id === "attested" && (
-            <p className="meta-line" role="status">{previewStatus.remintNote}</p>
+            <p className="note" role="status">{previewStatus.remintNote}</p>
           )}
           {!onChainImageUri && (
-            <p className="meta-line">
+            <p className="note">
               Certificate artwork is not pinned yet. The credential still mints; explorers will not show an image.
             </p>
           )}
           <div className="quiz-nav quiz-nav-end">
             <Button variant="secondary" onClick={() => setPhase("name")}>Edit name</Button>
-            <Button onClick={() => setPhase("issued")}>Confirm certificate</Button>
+            <Button onClick={() => setPhase("issued")}>Continue to mint</Button>
           </div>
         </section>
       )}
@@ -282,69 +357,80 @@ function Certificate({
               {loadingCredential && <p role="status">Loading credential from Fuji…</p>}
               {!loadingCredential && verificationView && (
                 <>
+                  <p className="note">{onChainStatus.body}</p>
                   <CredentialDetails view={verificationView} />
                   {onLookup && (
-                    <p>
+                    <div className="certificate-actions">
                       <Button
                         variant="secondary"
                         onClick={() => onLookup(onChainCredential.credentialId, onChainCredential.walletAddress)}
                       >
                         Open public lookup
                       </Button>
-                    </p>
+                    </div>
                   )}
                 </>
               )}
             </section>
           )}
-          {!loadingCredential && !onChainCredential && !mintTx && (
-            <EmptyState
-              title={EMPTY_STATES.noCredential.title}
-              body={EMPTY_STATES.noCredential.body}
-            />
-          )}
 
-          {mintTx && isTxHash(mintTx) && (
-            <p className="mint-success">
-              Minted.{" "}
-              <a href={safeExternalHref(`${FUJI_EXPLORER_TX}${mintTx}`)} target="_blank" rel="noopener noreferrer">
-                View transaction on Snowtrace
-              </a>
-            </p>
-          )}
-
-          <div className="certificate-actions">
-            <Button
-              onClick={handleMint}
-              disabled={minting || !!mintTx || !CONTRACT_ADDRESS || !savedName.ok}
-            >
-              {minting
-                ? "Minting..."
-                : mintTx
-                  ? "Minted on-chain"
-                  : CONTRACT_ADDRESS
-                    ? "Claim Forjora claimed credential on Fuji"
-                    : "Mint unavailable"}
-            </Button>
-            <Button variant="secondary" onClick={onRetry}>Start over</Button>
-          </div>
-          {mintError && (
-            <EmptyState
-              variant="error"
-              title={ERROR_STATES.mint.title}
-              body={`${mintError} ${ERROR_STATES.mint.body}`}
-            />
-          )}
-          {!onChainImageUri && (
-            <p className="meta-line">
-              Pin certificate artwork as ipfs:// or https:// so Snowtrace can load the image.
-            </p>
-          )}
-          {!CONTRACT_ADDRESS && (
-            <p className="deploy-hint">
-              On-chain minting is not available in this app yet.
-            </p>
-          )}
+          <section className="section-block">
+            <h2>{mintTx ? "Minted on Fuji" : "Claim on Fuji"}</h2>
+            <p>{previewStatus.body}</p>
+            {!walletConnected ? (
+              <p className="note">Connect a wallet to publish this claimed snapshot. Learning does not require one.</p>
+            ) : null}
+            {onChainStatus.id === "attested" && !mintTx ? (
+              <p className="note" role="status">{previewStatus.remintNote}</p>
+            ) : null}
+            {mintTx && isTxHash(mintTx) ? (
+              <p className="mint-success" role="status">
+                Minted.{" "}
+                <a href={safeExternalHref(`${FUJI_EXPLORER_TX}${mintTx}`)} target="_blank" rel="noopener noreferrer">
+                  View transaction on Snowtrace
+                </a>
+              </p>
+            ) : null}
+            {!onChainImageUri && (
+              <p className="note">
+                Pin certificate artwork as ipfs:// or https:// so Snowtrace can load the image.
+              </p>
+            )}
+            {!CONTRACT_ADDRESS && (
+              <p className="deploy-hint">On-chain minting is not available in this app yet.</p>
+            )}
+            {mintError && (
+              <EmptyState
+                variant="error"
+                title={ERROR_STATES.mint.title}
+                body={`${mintError} ${ERROR_STATES.mint.body}`}
+              />
+            )}
+            <div className="certificate-actions">
+              {!walletConnected ? (
+                <Button onClick={onConnectWallet}>Connect wallet</Button>
+              ) : (
+                <Button
+                  onClick={handleMint}
+                  disabled={minting || !!mintTx || !CONTRACT_ADDRESS || !savedName.ok}
+                >
+                  {minting
+                    ? "Minting..."
+                    : mintTx
+                      ? "Minted on-chain"
+                      : CONTRACT_ADDRESS
+                        ? "Claim Forjora claimed credential on Fuji"
+                        : "Mint unavailable"}
+                </Button>
+              )}
+              <Button variant="ghost" onClick={handleReset}>
+                {confirmReset ? "Confirm reset local progress" : "Reset local progress"}
+              </Button>
+              {confirmReset ? (
+                <Button variant="ghost" onClick={() => setConfirmReset(false)}>Cancel</Button>
+              ) : null}
+            </div>
+          </section>
         </>
       )}
     </div>

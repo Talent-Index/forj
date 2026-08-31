@@ -12,7 +12,7 @@ function EmptyState({
       {title && <h3 className="empty-state-title">{title}</h3>}
       {body && <p className="empty-state-body">{body}</p>}
       {actionLabel && onAction && (
-        <button className={variant === "error" ? "btn-primary" : "btn-secondary"} onClick={onAction}>
+        <button className={`btn ${variant === "error" ? "btn-primary" : "btn-secondary"}`} onClick={onAction}>
           {actionLabel}
         </button>
       )}

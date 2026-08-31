@@ -20,6 +20,7 @@ function CertificateArtifact({
   explorerUrl,
   verificationUrl = "",
   compact = false,
+  pathLabel = "Avalanche Developer Path",
 }) {
   const trust = resolveCredentialStatus(verificationStatus);
   const shareHref = isSameOriginAssetPath(verificationUrl) || isCredentialShareUrl(verificationUrl)
@@ -44,7 +45,7 @@ function CertificateArtifact({
           <div className="certificate-art-fallback" aria-hidden="true" />
         )}
       </div>
-      <p className="certificate-path">Avalanche Fundamentals</p>
+      <p className="certificate-path">{pathLabel}</p>
       <p className="certificate-score-line">
         Score · {scorePercent}%
         <span>Difficulty · {difficulty}</span>
