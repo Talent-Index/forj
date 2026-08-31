@@ -490,7 +490,7 @@ function App() {
     if (page === "progress") {
       return (
         <ProgressPage
-          address={wallet.address}
+          address={wallet.address || account?.walletAddress}
           walletName={wallet.walletName}
           chainId={wallet.chainId}
           isFuji={wallet.isFuji}
@@ -528,7 +528,7 @@ function App() {
     if (page === "credentials") {
       return (
           <Certificate
-            address={wallet.address}
+            address={wallet.address || account?.walletAddress}
             totalPoints={totalPoints}
             acquiredPieces={acquiredPieces}
             sectionScores={sectionScores}
@@ -547,6 +547,7 @@ function App() {
             }}
             onLearn={goLearnHome}
             onConnectWallet={openModal}
+            injectorConnected={Boolean(wallet.address)}
             isFuji={wallet.isFuji}
             chainId={wallet.chainId}
             switchingNetwork={wallet.switching}

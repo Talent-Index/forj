@@ -21,6 +21,15 @@ export function quizPercent(sectionScores = {}) {
   return Math.round((correct / (SCORE_SECTIONS.length * QUESTIONS_PER_QUIZ)) * 100);
 }
 
+export function sectionScoresFromCredential(credential) {
+  if (!credential?.difficulty) return {};
+  return {
+    easy: { correct: Number(credential.difficulty.easy?.correct) || 0 },
+    medium: { correct: Number(credential.difficulty.medium?.correct) || 0 },
+    hard: { correct: Number(credential.difficulty.hard?.correct) || 0 },
+  };
+}
+
 export function highestDifficulty(sectionScores = {}) {
   if (sectionScores.hard?.correct === QUESTIONS_PER_QUIZ) return "Hard";
   if (sectionScores.medium?.correct === QUESTIONS_PER_QUIZ) return "Medium";

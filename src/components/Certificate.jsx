@@ -13,11 +13,12 @@ import { resolveCredentialImageUri } from "../utils/ipfs";
 import { playFinishSound } from "../utils/sounds";
 import { CREDENTIAL_EXPLAINER, EMPTY_STATES, ERROR_STATES } from "../utils/onboarding";
 import { useOnChainCredential } from "../hooks/useOnChainCredential";
+import { getFujiPublicClient } from "../utils/fujiClient";
 import { validateRecipientName } from "../utils/recipient";
 import { CREDENTIAL_SCHEMA_VERSION } from "../utils/credentialModel";
 import { CREDENTIAL_STATES, LEARNER_MINT_STATUS, resolveCredentialStatus } from "../utils/credentialStatus";
 import EmptyState from "./EmptyState";
-import CredentialDetails from "./CredentialDetails";
+import ExistingCertificate from "./ExistingCertificate";
 import CertificateArtifact from "./CertificateArtifact";
 import CredentialStatusBadge from "./CredentialStatusBadge";
 import NetworkGate from "./NetworkGate";
@@ -84,6 +85,7 @@ function Certificate({
   chainId = null,
   switchingNetwork = false,
   networkError = "",
+  injectorConnected = false,
 }) {
   const puzzleComplete = acquiredPieces.length >= TOTAL_PIECES;
   const savedName = validateRecipientName(recipientName);
@@ -98,12 +100,14 @@ function Certificate({
   const [mintTx, setMintTx] = useState(null);
   const [mintError, setMintError] = useState(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const readClient = publicClient || (address ? getFujiPublicClient() : null);
   const {
     credential: onChainCredential,
     transactionHash,
     loading: loadingCredential,
+    error: credentialError,
     reload: loadOnChainCredential,
-  } = useOnChainCredential(address, publicClient);
+  } = useOnChainCredential(address, readClient);
   const verificationView = useMemo(
     () =>
       onChainCredential
@@ -128,7 +132,8 @@ function Certificate({
   const onChainImageUri = resolveCredentialImageUri(userImage);
   const minted = Boolean(mintTx) || Boolean(onChainCredential);
   const header = headerFor(phase, { minted, onChain: Boolean(onChainCredential) });
-  const walletConnected = Boolean(address);
+  const hasLookupAddress = Boolean(address);
+  const canMint = injectorConnected;
   const hasScores = Object.keys(sectionScores).length > 0;
 
   async function handleMint() {
@@ -140,7 +145,7 @@ function Certificate({
       setMintError("Confirm a recipient name before minting.");
       return;
     }
-    if (!walletConnected) {
+    if (!canMint) {
       setMintError("Connect a wallet on Avalanche Fuji to mint.");
       onConnectWallet?.();
       return;
@@ -255,7 +260,19 @@ function Certificate({
         </p>
       </header>
 
-      {walletConnected && !isFuji && phase === "issued" ? (
+      <ExistingCertificate
+        credential={onChainCredential}
+        view={verificationView}
+        loading={loadingCredential}
+        error={credentialError}
+        walletConnected={hasLookupAddress}
+        recipientName={issuedName}
+        artworkFallback={userImage}
+        onLookup={onLookup}
+        onConnectWallet={onConnectWallet}
+      />
+
+      {canMint && !isFuji && phase === "issued" ? (
         <NetworkGate
           chainId={chainId}
           switching={switchingNetwork}
@@ -351,33 +368,10 @@ function Certificate({
             {artifact}
           </section>
 
-          {(loadingCredential || onChainCredential) && (
-            <section className="section-block">
-              <h2>Credential verification</h2>
-              {loadingCredential && <p role="status">Loading credential from Fuji…</p>}
-              {!loadingCredential && verificationView && (
-                <>
-                  <p className="note">{onChainStatus.body}</p>
-                  <CredentialDetails view={verificationView} />
-                  {onLookup && (
-                    <div className="certificate-actions">
-                      <Button
-                        variant="secondary"
-                        onClick={() => onLookup(onChainCredential.credentialId, onChainCredential.walletAddress)}
-                      >
-                        Open public lookup
-                      </Button>
-                    </div>
-                  )}
-                </>
-              )}
-            </section>
-          )}
-
           <section className="section-block">
             <h2>{mintTx ? "Minted on Fuji" : "Claim on Fuji"}</h2>
             <p>{previewStatus.body}</p>
-            {!walletConnected ? (
+            {!canMint ? (
               <p className="note">Connect a wallet to publish this claimed snapshot. Learning does not require one.</p>
             ) : null}
             {onChainStatus.id === "attested" && !mintTx ? (
@@ -407,7 +401,7 @@ function Certificate({
               />
             )}
             <div className="certificate-actions">
-              {!walletConnected ? (
+              {!canMint ? (
                 <Button onClick={onConnectWallet}>Connect wallet</Button>
               ) : (
                 <Button

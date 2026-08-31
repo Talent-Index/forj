@@ -2,10 +2,11 @@ import { EMPTY_STATES, PATH_COPY } from "../../utils/onboarding";
 import { computeLearnerDashboard, shortAddress, walletExplorerUrl } from "../../utils/learnerStats";
 import { FUJI_CHAIN_ID } from "../../utils/wallet";
 import { useOnChainCredential } from "../../hooks/useOnChainCredential";
+import { getFujiPublicClient } from "../../utils/fujiClient";
 import { Button, Card, ProgressBar } from "../ui/primitives";
 import EmptyState from "../EmptyState";
+import ExistingCertificate from "../ExistingCertificate";
 import Achievements from "../Achievements";
-import CredentialDetails from "../CredentialDetails";
 import { buildCredentialVerificationView } from "../../utils/credentialLookup";
 
 function ProgressPage({
@@ -34,7 +35,7 @@ function ProgressPage({
     spentPoints,
   });
   const { credential, transactionHash, loading: credentialLoading, error: credentialError } =
-    useOnChainCredential(address, publicClient);
+    useOnChainCredential(address, publicClient || (address ? getFujiPublicClient() : null));
   const credentialView = credential
     ? buildCredentialVerificationView(credential, { transactionHash })
     : null;
@@ -156,34 +157,16 @@ function ProgressPage({
         <Button variant="secondary" onClick={onPuzzle}>Open puzzle</Button>
       </section>
 
-      <section className="section-block">
-        <h2>Credential verification</h2>
-        {credentialLoading && <p role="status">Loading credential from Fuji…</p>}
-        {!credentialLoading && credentialView && (
-          <CredentialDetails view={credentialView} />
-        )}
-        {!credentialLoading && !credential && (
-          <EmptyState
-            title={EMPTY_STATES.noCredential.title}
-            body={credentialError || EMPTY_STATES.noCredential.body}
-            actionLabel="Open credentials"
-            onAction={onCredentials}
-          />
-        )}
-        {credential && (
-          <div className="quiz-nav">
-            <Button variant="secondary" onClick={onCredentials}>View certificate</Button>
-            {onLookup && (
-              <Button
-                variant="secondary"
-                onClick={() => onLookup(credential.credentialId, credential.walletAddress)}
-              >
-                Open lookup
-              </Button>
-            )}
-          </div>
-        )}
-      </section>
+      <ExistingCertificate
+        credential={credential}
+        view={credentialView}
+        loading={credentialLoading}
+        error={credentialError}
+        walletConnected={Boolean(address)}
+        onLookup={onLookup}
+        showQr={false}
+        actions={<Button variant="secondary" onClick={onCredentials}>Open credentials</Button>}
+      />
 
       <section className="section-block">
         <h2>Learning statistics</h2>

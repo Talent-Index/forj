@@ -12,7 +12,7 @@ import {
   normalizeRecipientName,
   validateRecipientName,
 } from "../src/utils/recipient.js";
-import { highestDifficulty, quizPercent } from "../src/utils/certificateView.js";
+import { highestDifficulty, quizPercent, sectionScoresFromCredential } from "../src/utils/certificateView.js";
 import {
   createMemoryStorage,
   createProgressStore,
@@ -63,6 +63,13 @@ assert.equal(validateRecipientName("A".repeat(RECIPIENT_MAX + 1)).ok, false);
 assert.equal(quizPercent({ easy: { correct: 5 }, medium: { correct: 4 }, hard: { correct: 3 } }), 80);
 assert.equal(highestDifficulty({ easy: { correct: 5 }, hard: { correct: 5 } }), "Hard");
 assert.equal(highestDifficulty({ easy: { correct: 5 } }), "Easy");
+assert.deepEqual(
+  sectionScoresFromCredential({
+    difficulty: { easy: { correct: 5 }, medium: { correct: 2 }, hard: { correct: 0 } },
+  }),
+  { easy: { correct: 5 }, medium: { correct: 2 }, hard: { correct: 0 } }
+);
+assert.deepEqual(sectionScoresFromCredential(null), {});
 
 const wallet = `0x${"d".repeat(40)}`;
 const store = createProgressStore(createMemoryStorage());

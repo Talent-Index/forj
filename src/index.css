@@ -874,6 +874,19 @@ img {
   max-width: 420px;
 }
 
+.existing-certificate-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.existing-certificate-record {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
 .mint-success {
   color: var(--success);
 }
@@ -1382,7 +1395,8 @@ img {
   .puzzle-layout,
   .credential-paths,
   .explainers-grid,
-  .feature-grid {
+  .feature-grid,
+  .existing-certificate-layout {
     grid-template-columns: 1fr;
   }
 
