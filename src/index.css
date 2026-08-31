@@ -361,6 +361,11 @@ img {
   color: var(--success);
 }
 
+.badge-warning {
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -1163,11 +1168,101 @@ img {
   gap: 12px;
 }
 
+.settings-page {
+  max-width: 720px;
+}
+
 .settings-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
+
+.settings-row:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.settings-label {
+  font-weight: 650;
+  color: var(--text);
+}
+
+.card .settings-label,
+.card .profile-identity-name,
+.card .profile-wallet-status {
+  color: var(--text);
+}
+
+.settings-form {
+  display: grid;
+  gap: 12px;
+  max-width: 420px;
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.settings-wallet-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-identity {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.profile-avatar-edit {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.profile-avatar-lg {
+  width: 96px;
+  height: 96px;
+  min-width: 96px;
+  min-height: 96px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.profile-avatar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.profile-identity-copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.profile-identity-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.settings-danger {
+  background: var(--danger-bg);
 }
 
 .first-run-steps {
@@ -2056,6 +2151,17 @@ img {
   border-radius: 999px;
   overflow: hidden;
   padding: 0;
+  border: 1px solid var(--border);
+}
+
+.profile-trigger[aria-expanded="true"] {
+  border-color: var(--accent);
+}
+
+.profile-trigger:focus-visible,
+.profile-menu-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .avatar-image {
@@ -2089,14 +2195,14 @@ img {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  width: min(360px, calc(100vw - 32px));
+  width: min(320px, calc(100vw - 32px));
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 16px;
   display: grid;
-  gap: 12px;
+  gap: 16px;
   z-index: 40;
 }
 
@@ -2107,6 +2213,25 @@ img {
   align-items: center;
 }
 
+.profile-popover-identity {
+  min-width: 0;
+}
+
+.profile-popover-identity strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-email {
+  color: var(--muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .profile-popover-avatar {
   width: 48px;
   height: 48px;
@@ -2114,40 +2239,56 @@ img {
   min-height: 48px;
   border-radius: 999px;
   overflow: hidden;
-}
-
-.profile-upload {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 12px;
-}
-
-.profile-upload input {
-  font: inherit;
-}
-
-.profile-password,
-.profile-wallet {
-  display: grid;
-  gap: 8px;
-}
-
-.profile-password input {
-  min-height: 40px;
   border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  padding: 8px 10px;
-  font: inherit;
 }
 
-.profile-popover-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 8px;
+.profile-popover-wallet {
+  display: grid;
+  gap: 6px;
+  padding: 12px 0;
   border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-wallet-status {
+  color: var(--text);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.profile-popover-wallet .btn {
+  justify-self: start;
+  min-height: 36px;
+  padding: 0 12px;
+}
+
+.profile-popover-nav {
+  display: grid;
+  gap: 4px;
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-menu-item:hover {
+  background: var(--surface-2);
+}
+
+.avatar-fallback.profile-avatar-lg {
+  font-size: 28px;
 }
 
 .wallet-reconnect {
@@ -2250,6 +2391,20 @@ img {
 }
 
 @media (max-width: 860px) {
+  .profile-identity {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .profile-avatar-edit {
+    justify-items: start;
+  }
+
+  .settings-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .landing-hero,
   .landing-steps,
   .landing-split,

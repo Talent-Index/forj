@@ -1,11 +1,63 @@
-import { Button, Card } from "../ui/primitives";
-import { ThemeToggle, ZoomToggle } from "../layout/Navbar";
+import { useEffect, useRef, useState } from "react";
+import { MIN_PASSWORD_LENGTH } from "../../utils/auth";
+import { readAvatarFile } from "../../utils/avatar";
+import { safeAvatarSrc } from "../../utils/frontendSecurity";
 import { shortAddress } from "../../utils/learnerStats";
+import { WALLET_GUIDANCE } from "../../utils/onboarding";
+import { validateRecipientName } from "../../utils/recipient";
+import { WALLET_LABELS } from "../../utils/wallet";
+import { AvatarFace } from "../auth/AvatarFace";
+import { ThemeToggle, ZoomToggle } from "../layout/Navbar";
+import { Badge, Button, Card } from "../ui/primitives";
+
+function signInMethod(account) {
+  if (account?.provider === "google" && account?.hasPassword) return "Google · password set";
+  if (account?.provider === "google") return "Google";
+  return account?.hasPassword ? "Email and password" : "Email";
+}
+
+function Field({
+  id,
+  label,
+  type = "text",
+  value,
+  onChange,
+  autoComplete,
+  placeholder,
+  required = false,
+}) {
+  const [visible, setVisible] = useState(false);
+  const isPassword = type === "password";
+  return (
+    <label className="auth-field" htmlFor={id}>
+      <span>{label}</span>
+      <span className={isPassword ? "auth-password-wrap" : undefined}>
+        <input
+          id={id}
+          type={isPassword && visible ? "text" : type}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          autoComplete={autoComplete}
+          placeholder={placeholder}
+          required={required}
+        />
+        {isPassword ? (
+          <button type="button" className="auth-password-toggle" onClick={() => setVisible((current) => !current)}>
+            {visible ? "Hide" : "Show"}
+          </button>
+        ) : null}
+      </span>
+    </label>
+  );
+}
 
 function SettingsPage({
   account,
   address,
   isFuji,
+  walletName,
+  lastWalletId,
+  walletAvailable,
   theme,
   onToggleTheme,
   zoom,
@@ -14,69 +66,330 @@ function SettingsPage({
   onToggleMotion,
   onReset,
   onConnectWallet,
+  onReconnectWallet,
   onDisconnectWallet,
   onSignOut,
   onDeleteAccount,
+  onUpdateAvatar,
+  onChangePassword,
+  onSetPassword,
+  onUpdateProfile,
 }) {
+  const fileRef = useRef(null);
+  const [name, setName] = useState(account?.name || "");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [busy, setBusy] = useState("");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  useEffect(() => {
+    setName(account?.name || "");
+  }, [account?.name]);
+
+  const lastWalletName = lastWalletId ? WALLET_LABELS[lastWalletId] : "";
+  const canReconnect = Boolean(!address && lastWalletId && walletAvailable?.[lastWalletId]);
+  const hasPhoto = Boolean(safeAvatarSrc(account?.avatarUrl));
+  const nameDirty = name.trim() !== (account?.name || "").trim();
+
+  function clearStatus() {
+    setError("");
+    setMessage("");
+  }
+
+  async function handleAvatar(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !onUpdateAvatar) return;
+    setBusy("avatar");
+    clearStatus();
+    const parsed = await readAvatarFile(file);
+    if (!parsed.ok) {
+      setBusy("");
+      setError(parsed.error);
+      return;
+    }
+    const result = await onUpdateAvatar(parsed.avatarUrl);
+    setBusy("");
+    if (!result?.ok) {
+      setError(result?.error || "Could not save that photo.");
+      return;
+    }
+    setMessage("Profile photo updated.");
+  }
+
+  async function handleRemovePhoto() {
+    if (!onUpdateAvatar) return;
+    setBusy("avatar");
+    clearStatus();
+    const result = await onUpdateAvatar("");
+    setBusy("");
+    if (!result?.ok) {
+      setError(result?.error || "Could not remove that photo.");
+      return;
+    }
+    setMessage("Profile photo removed.");
+  }
+
+  async function handleName(event) {
+    event.preventDefault();
+    if (!onUpdateProfile) return;
+    const recipient = validateRecipientName(name);
+    if (!recipient.ok) {
+      setError(recipient.error);
+      setMessage("");
+      return;
+    }
+    setBusy("name");
+    clearStatus();
+    const result = await onUpdateProfile({ name: recipient.name });
+    setBusy("");
+    if (!result?.ok) {
+      setError(result?.error || "Could not save your name.");
+      return;
+    }
+    setName(result.account?.name || recipient.name);
+    setMessage("Display name saved.");
+  }
+
+  async function handlePassword(event) {
+    event.preventDefault();
+    const action = account?.hasPassword ? onChangePassword : onSetPassword;
+    if (!action) return;
+    setBusy("password");
+    clearStatus();
+    const result = account?.hasPassword
+      ? await onChangePassword({ currentPassword, password, confirmPassword })
+      : await onSetPassword({ password, confirmPassword });
+    setBusy("");
+    if (!result?.ok) {
+      setError(result?.error || "Could not update password.");
+      return;
+    }
+    setCurrentPassword("");
+    setPassword("");
+    setConfirmPassword("");
+    setMessage(account?.hasPassword ? "Password updated." : "Password created. You can sign in with email now.");
+  }
+
+  async function handleDelete() {
+    if (!onDeleteAccount) return;
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      setConfirmReset(false);
+      return;
+    }
+    setBusy("delete");
+    clearStatus();
+    const result = await onDeleteAccount();
+    setBusy("");
+    if (!result?.ok) {
+      setConfirmDelete(false);
+      setError(result?.error || "Could not delete this account.");
+    }
+  }
+
+  function handleReset() {
+    if (!confirmReset) {
+      setConfirmReset(true);
+      setConfirmDelete(false);
+      return;
+    }
+    setConfirmReset(false);
+    onReset?.();
+    setMessage("Local quiz and puzzle cache cleared for this browser.");
+  }
+
   return (
-    <div className="page">
+    <div className="page settings-page">
       <header className="page-header">
         <p className="kicker">Account</p>
         <h1>Profile</h1>
+        <p className="lede">
+          Your Forjora account holds progress across devices. A wallet is optional until you mint a Fuji credential.
+        </p>
       </header>
 
+      {error ? <p className="auth-error" role="alert">{error}</p> : null}
+      {message ? <p className="auth-info" role="status">{message}</p> : null}
+
       <Card className="settings-block">
-        <h2>Forjora account</h2>
-        <p className="meta-line">Email · {account?.email || "—"}</p>
-        <p className="meta-line">Name · {account?.name || "—"}</p>
-        <p className="meta-line">Sign-in · {account?.provider === "google" ? "Google" : "Email"}</p>
-        <Button variant="secondary" onClick={onSignOut}>Sign out</Button>
-        {onDeleteAccount ? (
-          <Button variant="danger" onClick={onDeleteAccount}>Delete account</Button>
-        ) : null}
+        <h2>Identity</h2>
+        <div className="profile-identity">
+          <div className="profile-avatar-edit">
+            <AvatarFace account={account} className="profile-avatar-lg" />
+            <div className="profile-avatar-actions">
+              <input
+                ref={fileRef}
+                className="visually-hidden"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={handleAvatar}
+                disabled={busy === "avatar"}
+              />
+              <Button
+                variant="secondary"
+                disabled={busy === "avatar"}
+                onClick={() => fileRef.current?.click()}
+              >
+                {hasPhoto ? "Change photo" : "Upload photo"}
+              </Button>
+              {hasPhoto ? (
+                <Button variant="ghost" disabled={busy === "avatar"} onClick={handleRemovePhoto}>
+                  Remove
+                </Button>
+              ) : null}
+            </div>
+          </div>
+          <div className="profile-identity-copy">
+            <p className="profile-identity-name">{account?.name || "Learner"}</p>
+            <p className="profile-email">{account?.email || "—"}</p>
+            <p className="meta-line">{signInMethod(account)}</p>
+          </div>
+        </div>
+
+        <form className="settings-form" onSubmit={handleName}>
+          <Field
+            id="settings-name"
+            label="Display name"
+            value={name}
+            onChange={(value) => { clearStatus(); setName(value); }}
+            autoComplete="name"
+            placeholder="Your name"
+            required
+          />
+          <Button type="submit" variant="secondary" disabled={busy === "name" || !nameDirty}>
+            {busy === "name" ? "Saving…" : "Save name"}
+          </Button>
+        </form>
+      </Card>
+
+      <Card className="settings-block">
+        <h2>{account?.hasPassword ? "Password" : "Create a password"}</h2>
+        {account?.hasPassword ? (
+          <p>Change the password used to sign in with email.</p>
+        ) : (
+          <p className="note">Add a password if you also want to sign in with email.</p>
+        )}
+        <form className="settings-form" onSubmit={handlePassword}>
+          {account?.hasPassword ? (
+            <Field
+              id="settings-current-password"
+              label="Current password"
+              type="password"
+              value={currentPassword}
+              onChange={setCurrentPassword}
+              autoComplete="current-password"
+            />
+          ) : null}
+          <Field
+            id="settings-new-password"
+            label="New password"
+            type="password"
+            value={password}
+            onChange={setPassword}
+            autoComplete="new-password"
+            placeholder={`${MIN_PASSWORD_LENGTH}+ characters`}
+          />
+          <Field
+            id="settings-confirm-password"
+            label="Confirm password"
+            type="password"
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+            autoComplete="new-password"
+          />
+          <Button type="submit" variant="secondary" disabled={Boolean(busy)}>
+            {account?.hasPassword ? "Update password" : "Create password"}
+          </Button>
+        </form>
       </Card>
 
       <Card className="settings-block">
         <h2>Wallet</h2>
-        <p className="meta-line">{address ? shortAddress(address) : "Not connected"}</p>
-        <p className="meta-line">Network · {address ? (isFuji ? "Avalanche Fuji" : "Not Fuji") : "—"}</p>
-        <p>Connect a wallet to:</p>
-        <ul className="settings-list">
-          <li>Save on-chain credentials</li>
-          <li>Claim blockchain records</li>
-          <li>Record achievements on Avalanche</li>
-        </ul>
-        {address ? (
-          <Button variant="secondary" onClick={onDisconnectWallet}>Disconnect</Button>
-        ) : (
-          <Button onClick={onConnectWallet}>Connect Wallet</Button>
-        )}
+        <div className="settings-wallet-status">
+          <p className="profile-wallet-status">
+            {address ? `${walletName || "Wallet"} · ${shortAddress(address)}` : "Not connected"}
+          </p>
+          {address ? (
+            <Badge tone={isFuji ? "success" : "warning"}>{isFuji ? "Avalanche Fuji" : "Not Fuji"}</Badge>
+          ) : null}
+        </div>
+        <p>{WALLET_GUIDANCE.body}</p>
+        <div className="settings-actions">
+          {address ? (
+            <Button variant="secondary" onClick={onDisconnectWallet}>Disconnect</Button>
+          ) : canReconnect ? (
+            <Button onClick={onReconnectWallet}>Reconnect {lastWalletName}</Button>
+          ) : (
+            <Button onClick={onConnectWallet}>Connect wallet</Button>
+          )}
+        </div>
       </Card>
 
       <Card className="settings-block">
         <h2>Preferences</h2>
         <div className="settings-row">
-          <span>Theme</span>
+          <div>
+            <p className="settings-label">Theme</p>
+            <p className="note">{theme === "dark" ? "Charcoal dark" : "Paper light"}</p>
+          </div>
           <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
         </div>
         <div className="settings-row">
-          <span>Page zoom</span>
+          <div>
+            <p className="settings-label">Page zoom</p>
+            <p className="note">This device only</p>
+          </div>
           <ZoomToggle zoom={zoom} onCycleZoom={onCycleZoom} />
         </div>
         <div className="settings-row">
-          <span>Reduced motion</span>
+          <div>
+            <p className="settings-label">Motion</p>
+            <p className="note">{reducedMotion ? "Animations reduced" : "Full motion"}</p>
+          </div>
           <Button variant="secondary" onClick={() => onToggleMotion(!reducedMotion)}>
-            {reducedMotion ? "On" : "Off"}
+            {reducedMotion ? "Use full motion" : "Reduce motion"}
           </Button>
         </div>
       </Card>
 
       <Card className="settings-block">
+        <h2>Session</h2>
+        <p>Sign out on this device. Progress stays on your Forjora account.</p>
+        <Button variant="secondary" onClick={onSignOut}>Sign out</Button>
+      </Card>
+
+      <Card className="settings-block settings-danger">
         <h2>Data</h2>
-        <p>Reset clears quiz scores, puzzle pieces, and local cache for this account in this browser. Your signed-in progress remains on your Forjora account unless you delete the account.</p>
-        <Button variant="danger" onClick={onReset} disabled={!account}>
-          Reset local progress
-        </Button>
+        <p>
+          Reset clears quiz scores, puzzle pieces, and local cache for this account in this browser.
+          Signed-in progress remains on your Forjora account unless you delete the account.
+        </p>
+        <div className="settings-actions">
+          <Button variant="danger" onClick={handleReset} disabled={!account}>
+            {confirmReset ? "Confirm reset" : "Reset local progress"}
+          </Button>
+          {confirmReset ? (
+            <Button variant="ghost" onClick={() => setConfirmReset(false)}>Cancel</Button>
+          ) : null}
+        </div>
+        {onDeleteAccount ? (
+          <>
+            <p>Delete permanently removes this Forjora account. On-chain credentials are not burned.</p>
+            <div className="settings-actions">
+              <Button variant="danger" onClick={handleDelete} disabled={busy === "delete"}>
+                {confirmDelete ? "Confirm delete account" : "Delete account"}
+              </Button>
+              {confirmDelete ? (
+                <Button variant="ghost" onClick={() => setConfirmDelete(false)}>Cancel</Button>
+              ) : null}
+            </div>
+          </>
+        ) : null}
       </Card>
     </div>
   );

@@ -1,6 +1,6 @@
 function MobileNav({ page, onNavigate, isAuthenticated, loggedInLinks, loggedOutLinks }) {
   const items = isAuthenticated
-    ? [...loggedInLinks, { id: "settings", label: "More" }]
+    ? [...loggedInLinks, { id: "settings", label: "Profile" }]
     : [...loggedOutLinks.filter((item) => item.id !== "learn"), { id: "landing", label: "Home" }, { id: "about", label: "About" }]
         .filter((item, index, list) => list.findIndex((entry) => entry.id === item.id) === index)
         .slice(0, 4);

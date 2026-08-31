@@ -454,6 +454,9 @@ function App() {
           account={account}
           address={wallet.address}
           isFuji={wallet.isFuji}
+          walletName={wallet.walletName}
+          lastWalletId={wallet.lastWalletId}
+          walletAvailable={wallet.available}
           theme={theme.theme}
           onToggleTheme={theme.toggleTheme}
           zoom={zoom.zoom}
@@ -462,7 +465,11 @@ function App() {
           onToggleMotion={theme.setReducedMotion}
           onReset={handleFullReset}
           onConnectWallet={openModal}
-          onDisconnectWallet={wallet.disconnect}
+          onReconnectWallet={() => wallet.connect(wallet.lastWalletId)}
+          onDisconnectWallet={() => {
+            wallet.disconnect();
+            auth.unlinkWallet();
+          }}
           onSignOut={() => {
             auth.signOut();
             setPage("landing");
@@ -470,7 +477,12 @@ function App() {
           onDeleteAccount={async () => {
             const result = await auth.deleteAccount();
             if (result.ok) setPage("landing");
+            return result;
           }}
+          onUpdateAvatar={auth.updateAvatar}
+          onChangePassword={auth.changePassword}
+          onSetPassword={auth.setPassword}
+          onUpdateProfile={auth.updateProfile}
         />
       );
     }
@@ -594,9 +606,6 @@ function App() {
         walletModal={walletModal}
         onOpenAuth={openAuth}
         profile={{
-          onUpdateAvatar: auth.updateAvatar,
-          onChangePassword: auth.changePassword,
-          onSetPassword: auth.setPassword,
           onDisconnectWallet: () => {
             wallet.disconnect();
             auth.unlinkWallet();

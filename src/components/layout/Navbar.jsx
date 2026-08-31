@@ -154,9 +154,6 @@ function Navbar({
               <ProfileMenu
                 account={account}
                 wallet={wallet}
-                onUpdateAvatar={profile?.onUpdateAvatar}
-                onChangePassword={profile?.onChangePassword}
-                onSetPassword={profile?.onSetPassword}
                 onReconnectWallet={() => wallet.connect(wallet.lastWalletId)}
                 onConnectWallet={walletModal.openModal}
                 onDisconnectWallet={profile?.onDisconnectWallet}
