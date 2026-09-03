@@ -1,42 +1,25 @@
 import { useState } from "react";
-import { PRODUCT_LOOP } from "../utils/brand";
 import { DIFFICULTY_LEVELS, PATH_COPY } from "../utils/onboarding";
 import { BrandMark } from "./brand/ForjoraMark";
 import { Button } from "./ui/primitives";
+import { Icon } from "./ui/Icon";
 import JigsawBoard from "./JigsawBoard";
 import forgeCertificate from "../assets/forge-certificate.jpg";
 
 const HOW_STEPS = [
-  {
-    n: "01",
-    title: "LEARN",
-    body: "Explore Avalanche concepts through structured learning.",
-  },
-  {
-    n: "02",
-    title: "CHALLENGE",
-    body: "Test your knowledge with interactive quizzes.",
-  },
-  {
-    n: "03",
-    title: "FORGE",
-    body: "Complete your puzzle and earn your credential.",
-  },
+  { n: "01", icon: "learn", title: "Learn" },
+  { n: "02", icon: "progress", title: "Challenge" },
+  { n: "03", icon: "badge", title: "Forge" },
 ];
 
-const FORGE_STEPS = [
-  "Earn points",
-  "Unlock pieces",
-  "Complete the puzzle",
-  "Reveal your certificate",
-];
+const FORGE_STEPS = ["Points", "Pieces", "Puzzle", "Certificate"];
 
 const PREVIEW_PIECES = [0, 1, 2, 4, 5, 8];
 
 const LEVEL_BODY = {
-  easy: "Learn the core concepts behind Avalanche, C-Chain, validators, wallets, and the ecosystem.",
-  medium: "Go deeper into validators, C-Chain IDs, Subnet-EVM, ICM, and L1 architecture.",
-  hard: "Study Snow protocols, Coreth, Teleporter, ACP-77, and validator economics.",
+  easy: "Wallets, C-Chain, validators.",
+  medium: "Subnets, ICM, L1s.",
+  hard: "Snow, Coreth, ACP-77.",
 };
 
 function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) {
@@ -51,7 +34,6 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
           <div className="landing-brand">
             <BrandMark className="landing-brand-lockup" />
           </div>
-          <p className="landing-kicker">Avalanche learning platform</p>
           <h1 className="landing-display">
             LEARN.
             <br />
@@ -59,39 +41,36 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
             <br />
             PROVE.
           </h1>
-          <p className="landing-loop">{PRODUCT_LOOP}</p>
           <p className="landing-lede">
-            Master Avalanche through interactive challenges. Record a claimed score
-            on-chain, or wait for an issuer-attested credential.
+            Study Avalanche. Record a claimed score, or wait for an issuer-attested credential.
           </p>
           <div className="landing-hero-actions">
-            <Button className="btn-solid" onClick={onStart}>{signedIn ? "Continue Learning →" : "Start Learning →"}</Button>
+            <Button className="btn-solid" onClick={onStart}>
+              <Icon name="learn" size={16} />
+              {signedIn ? "Continue Learning →" : "Start Learning →"}
+            </Button>
             {!signedIn && (
               <p className="landing-secondary">
-                Already have an account?{" "}
                 <button type="button" className="text-link" onClick={onSignIn}>Sign in</button>
               </p>
             )}
           </div>
-          <p className="landing-built">Built on Avalanche</p>
         </div>
       </section>
 
       <section id="how-it-works" className="landing-section">
-        <p className="landing-kicker">How Forjora works</p>
         <div className="landing-steps">
           {HOW_STEPS.map((step) => (
             <article key={step.n} className="landing-step">
-              <span className="landing-step-n">{step.n}</span>
+              <Icon name={step.icon} size={22} />
               <h2>{step.title}</h2>
-              <p>{step.body}</p>
             </article>
           ))}
         </div>
       </section>
 
       <section id="learning-levels" className="landing-section">
-        <p className="landing-kicker">Learning levels</p>
+        <p className="landing-kicker">Levels</p>
         <div className="level-switch" role="tablist" aria-label="Learning levels">
           {DIFFICULTY_LEVELS.map((item) => (
             <button
@@ -107,7 +86,6 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
           ))}
         </div>
         <div className="level-panel">
-          <p className="landing-kicker">{copy.kicker}</p>
           <h2>{copy.title}</h2>
           <p>{LEVEL_BODY[level.id]}</p>
           <p className="meta-line">{level.questionsPerQuiz} questions</p>
@@ -119,7 +97,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
 
       <section id="the-forge" className="landing-section landing-split">
         <div>
-          <h2 className="landing-heading">Your progress becomes the certificate.</h2>
+          <h2 className="landing-heading">Progress becomes the certificate.</h2>
           <ol className="forge-ladder">
             {FORGE_STEPS.map((step, index) => (
               <li key={step}>
@@ -140,12 +118,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
 
       <section id="credential" className="landing-section landing-credential">
         <div>
-          <p className="landing-kicker">Forged, not just claimed.</p>
           <h2 className="landing-heading">Your certificate</h2>
-          <p>
-            A unique certificate is revealed when your puzzle is complete.
-            Personalize it with the recipient's name and record your achievement on Avalanche.
-          </p>
           <dl className="credential-distinction">
             <div className="credential-path-claimed">
               <dt>Claimed</dt>
@@ -156,15 +129,18 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
               <dd>Issuer-authorized achievement.</dd>
             </div>
           </dl>
-          <Button variant="secondary" onClick={onExploreCredentials}>Explore Credentials →</Button>
+          <Button variant="secondary" onClick={onExploreCredentials}>
+            Explore Credentials →
+          </Button>
         </div>
       </section>
 
       <section className="landing-finale">
         <div className="landing-finale-inner">
           <h2>Ready to forge?</h2>
-          <p>Learn Avalanche. Build your skills. Earn your credential.</p>
-          <Button className="btn-solid-inverse" onClick={onStart}>{signedIn ? "Continue Learning →" : "Start Learning →"}</Button>
+          <Button className="btn-solid-inverse" onClick={onStart}>
+            {signedIn ? "Continue Learning →" : "Start Learning →"}
+          </Button>
         </div>
       </section>
     </div>

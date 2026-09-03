@@ -1,5 +1,5 @@
 import { TRACKS } from "../../data/learning";
-import { PRODUCT_LOOP, PRODUCT_NAME, PRODUCT_TAGLINE } from "../../utils/brand";
+import { PRODUCT_NAME, PRODUCT_TAGLINE } from "../../utils/brand";
 import { CONTRACT_ADDRESS } from "../../utils/contract";
 import { CREDENTIAL_STATES } from "../../utils/credentialStatus";
 import {
@@ -12,6 +12,7 @@ import {
 } from "../../utils/onboarding";
 import CredentialStatusBadge from "../CredentialStatusBadge";
 import { Button, Card } from "../ui/primitives";
+import { Icon } from "../ui/Icon";
 import { safeExternalHref } from "../../utils/frontendSecurity";
 
 const CONTRACT_EXPLORER = CONTRACT_ADDRESS
@@ -33,28 +34,23 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
   return (
     <div className="page about-page">
       <header className="page-header">
-        <p className="kicker">About</p>
         <h1>{INTRODUCTION.title}</h1>
-        <p className="about-loop-line">{PRODUCT_LOOP}</p>
         <p className="lede">{INTRODUCTION.body}</p>
         <div className="about-header-actions">
           <Button onClick={() => onNavigate?.("learn")}>
-            {isAuthenticated ? "Continue learning" : "Start learning"}
+            {isAuthenticated ? "Continue" : "Start"}
           </Button>
         </div>
       </header>
 
       <section className="section-block">
         <h2>The loop</h2>
-        <p>
-          {PRODUCT_TAGLINE} Follow a structured Avalanche path, then optionally publish a soulbound
-          snapshot on Fuji. A claimed mint is not an independently assessed exam.
-        </p>
+        <p>{PRODUCT_TAGLINE} A claimed mint is not an independently assessed exam.</p>
         <ol className="about-loop">
           {LEARNING_PROGRESSION.map((step) => (
             <li key={step.step}>
               <span className="about-loop-n" aria-hidden="true">
-                {String(step.step).padStart(2, "0")}
+                <Icon name={["learn", "progress", "board", "puzzle", "badge"][step.step - 1] || "info"} size={18} />
               </span>
               <div>
                 <h3>{step.title}</h3>
@@ -67,12 +63,8 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
       </section>
 
       <section className="section-block">
-        <h2>What you study</h2>
-        <p>
-          Six Avalanche tracks, in order: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts,
-          ICM, and Developer. Lessons unlock sequentially. Easy, Medium, and Hard quizzes sit on
-          Fundamentals, Architecture, and the Developer capstone.
-        </p>
+        <h2>Tracks</h2>
+        <p>Six Avalanche tracks, in order. Quizzes sit on Fundamentals, Architecture, and Developer.</p>
         <div className="about-tracks">
           {TRACKS.map((track) => (
             <article key={track.id} className="about-track">
@@ -85,7 +77,7 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
       </section>
 
       <section className="section-block">
-        <h2>Account and wallet</h2>
+        <h2>Account</h2>
         <div className="split">
           {ACCOUNT_POINTS.map((item) => (
             <Card key={item.title}>
@@ -139,12 +131,10 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
       </section>
 
       <section className="section-block">
-        <h2>Community ranking</h2>
+        <h2>Board</h2>
         <p>
-          The live board is community ranking among verified accounts, including people who
-          already signed up. Standing comes from first-time learning events learners publish
-          under rules. It is not on-chain, not issuer-attested, and not a proctored exam.
-          Quiz retries do not farm standing. Hide yourself on the Board page at any time.
+          Community ranking from first-time learning events. Not on-chain, not issuer-attested,
+          not a proctored exam. Hide on the Board page anytime.
         </p>
       </section>
     </div>

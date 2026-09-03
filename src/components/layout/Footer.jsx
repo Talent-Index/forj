@@ -1,13 +1,9 @@
 import { BrandMark } from "../brand/ForjoraMark";
-import { PRODUCT_LOOP } from "../../utils/brand";
 
 function Footer({ onNavigate }) {
   return (
     <footer className="site-footer">
-      <div className="footer-brand">
-        <BrandMark />
-        <p>{PRODUCT_LOOP}</p>
-      </div>
+      <BrandMark />
       <nav className="footer-links" aria-label="Footer">
         <button type="button" onClick={() => onNavigate("learn")}>Learn</button>
         <button type="button" onClick={() => onNavigate("credentials")}>Credentials</button>
@@ -15,7 +11,7 @@ function Footer({ onNavigate }) {
         <button type="button" onClick={() => onNavigate("privacy")}>Privacy</button>
         <button type="button" onClick={() => onNavigate("terms")}>Terms</button>
       </nav>
-      <p className="footer-note">Built on Avalanche · claimed scores are not proctored exams</p>
+      <p className="footer-note">Claimed scores are not exams</p>
     </footer>
   );
 }

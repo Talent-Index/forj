@@ -1,10 +1,10 @@
 import { EMPTY_STATES, PATH_COPY } from "../../utils/onboarding";
 import { computeLearnerDashboard, shortAddress, walletExplorerUrl } from "../../utils/learnerStats";
-import { FUJI_CHAIN_ID } from "../../utils/wallet";
 import { useOnChainCredential } from "../../hooks/useOnChainCredential";
 import { getFujiPublicClient } from "../../utils/fujiClient";
 import { safeExternalHref } from "../../utils/frontendSecurity";
 import { Button, Card, ProgressBar } from "../ui/primitives";
+import { Icon } from "../ui/Icon";
 import EmptyState from "../EmptyState";
 import ExistingCertificate from "../ExistingCertificate";
 import Achievements from "../Achievements";
@@ -12,7 +12,6 @@ import { buildCredentialVerificationView } from "../../utils/credentialLookup";
 
 function ProgressPage({
   address,
-  walletName,
   chainId,
   isFuji,
   sectionScores,
@@ -47,39 +46,35 @@ function ProgressPage({
   return (
     <div className="page">
       <header className="page-header">
-        <p className="kicker">Forjora progress</p>
-        <h1>Learner dashboard</h1>
-        <p className="lede">
-          Track quizzes, points, puzzle pieces, and your Fuji credential for this wallet.
-        </p>
+        <h1>Progress</h1>
       </header>
 
       {stats.isNewLearner && (
         <EmptyState
           title={EMPTY_STATES.noAttempts.title}
-          body="Take the Easy quiz to fill this dashboard. Points, puzzle pieces, achievements, and credentials appear after you start learning."
+          body="Take Easy to fill this page."
           actionLabel="Start Easy"
           onAction={() => onContinue("easy")}
         />
       )}
 
       <section className="section-block">
-        <h2>Progression</h2>
+        <h2>Standing</h2>
         <div className="stat-row">
           <Card className="stat-compact">
-            <p className="kicker">Level</p>
+            <p className="kicker"><Icon name="progress" size={14} /> Level</p>
             <p className="stat-value">{progression?.level?.level ?? 1}</p>
-            <p className="meta-line">{progression?.summary?.xp ?? 0} XP · {progression?.level?.xpForNextLevel ?? 0} to next</p>
+            <p className="meta-line">{progression?.summary?.xp ?? 0} XP</p>
           </Card>
           <Card className="stat-compact">
-            <p className="kicker">Streak</p>
+            <p className="kicker"><Icon name="flame" size={14} /> Streak</p>
             <p className="stat-value">{progression?.streakCurrent ?? 0}</p>
-            <p className="meta-line">Longest {progression?.streakLongest ?? 0} days (UTC)</p>
+            <p className="meta-line">Best {progression?.streakLongest ?? 0}</p>
           </Card>
           <Card className="stat-compact">
-            <p className="kicker">Path</p>
+            <p className="kicker"><Icon name="path" size={14} /> Path</p>
             <p className="stat-value">{progression?.path?.percent ?? 0}%</p>
-            <p className="meta-line">{progression?.nextItem?.title || "Start the fundamentals track"}</p>
+            <p className="meta-line">{progression?.nextItem?.title || "Fundamentals"}</p>
           </Card>
         </div>
         {progression?.level && (
@@ -88,16 +83,16 @@ function ProgressPage({
       </section>
 
       <section className="section-block">
-        <h2>Overall progress</h2>
+        <h2>Quiz</h2>
         <ProgressBar
           label={`Quiz ${stats.quizCorrect}/${stats.quizTotal} · Puzzle ${stats.puzzleCount}/${stats.puzzleTotal}`}
           value={stats.overallPercent}
         />
-        <p className="meta-line">{stats.overallPercent}% of quizzes and puzzle</p>
+        <p className="meta-line">{stats.overallPercent}%</p>
       </section>
 
       <section className="section-block">
-        <h2>Difficulty completion</h2>
+        <h2>Levels</h2>
         <div className="dashboard-difficulties">
         {stats.difficulties.map((row) => {
           const copy = PATH_COPY[row.id] || { kicker: row.name, title: row.name };
@@ -112,7 +107,7 @@ function ProgressPage({
                   : "Not started"}
               </p>
               <p className="meta-line">
-                {row.complete ? "Complete" : row.attempted ? "In progress" : "Not started"}
+                {row.complete ? "Done" : row.attempted ? "Open" : "New"}
               </p>
               <Button
                 variant={row.attempted ? "secondary" : "primary"}
@@ -130,17 +125,17 @@ function ProgressPage({
         <h2>Points</h2>
         <div className="stat-row">
           <Card className="stat-compact">
-            <p className="kicker">Total points</p>
+            <p className="kicker">Total</p>
             <p className="stat-value">{stats.totalPoints}</p>
-            <p className="meta-line">{stats.maxPoints} max from current scores</p>
+            <p className="meta-line">{stats.maxPoints} max</p>
           </Card>
           <Card className="stat-compact">
-            <p className="kicker">Available to spend</p>
+            <p className="kicker">Spend</p>
             <p className="stat-value">{stats.remainingPoints}</p>
-            <p className="meta-line">{stats.spentPoints} spent on pieces</p>
+            <p className="meta-line">{stats.spentPoints} spent</p>
           </Card>
           <Card className="stat-compact">
-            <p className="kicker">Puzzle</p>
+            <p className="kicker"><Icon name="puzzle" size={14} /> Puzzle</p>
             <p className="stat-value">{stats.puzzleCount}/{stats.puzzleTotal}</p>
             <p className="meta-line">{stats.puzzlePercent}% complete</p>
           </Card>
@@ -148,14 +143,14 @@ function ProgressPage({
       </section>
 
       <section className="section-block">
-        <h2>Puzzle completion</h2>
-        <ProgressBar label={`${stats.puzzleCount} of ${stats.puzzleTotal} pieces`} value={stats.puzzlePercent} />
+        <h2>Puzzle</h2>
+        <ProgressBar label={`${stats.puzzleCount} / ${stats.puzzleTotal}`} value={stats.puzzlePercent} />
         <p>
           {stats.puzzleComplete
-            ? "All pieces unlocked. Preview and mint from Credentials."
-            : "Spend 5 points per piece. Retries replace quiz scores; they do not stack extra points."}
+            ? "Complete. Mint from Credentials."
+            : "5 pts per piece. Retries replace scores."}
         </p>
-        <Button variant="secondary" onClick={onPuzzle}>Open puzzle</Button>
+        <Button variant="secondary" onClick={onPuzzle}>Puzzle</Button>
       </section>
 
       <ExistingCertificate
@@ -166,11 +161,11 @@ function ProgressPage({
         walletConnected={Boolean(address)}
         onLookup={onLookup}
         showQr={false}
-        actions={<Button variant="secondary" onClick={onCredentials}>Open credentials</Button>}
+        actions={<Button variant="secondary" onClick={onCredentials}>Credentials</Button>}
       />
 
       <section className="section-block">
-        <h2>Learning statistics</h2>
+        <h2>Stats</h2>
         <div className="stat-row">
           <div>
             <p className="kicker">Attempts</p>
@@ -186,21 +181,20 @@ function ProgressPage({
           </div>
         </div>
         <p className="meta-line">
-          Attempts · Easy {stats.attemptsBySection.easy} · Medium {stats.attemptsBySection.medium} · Hard {stats.attemptsBySection.hard}
+          Easy {stats.attemptsBySection.easy} · Medium {stats.attemptsBySection.medium} · Hard {stats.attemptsBySection.hard}
         </p>
-        <p className="meta-line">Accuracy uses every saved attempt. Points use your current section scores only.</p>
       </section>
 
       <section className="section-block">
-        <h2>Wallet</h2>
+        <h2><Icon name="wallet" size={16} /> Wallet</h2>
         <p>{displayAddress || "Not connected"}</p>
         <p className="meta-line">
-          {walletName || "Wallet"} · {isFuji ? "Avalanche Fuji" : `Chain ${chainId || "unknown"}`} · ID {chainId || FUJI_CHAIN_ID}
+          {isFuji ? "Fuji" : `Chain ${chainId || "—"}`}
         </p>
         {safeExternalHref(explorerUrl) && (
           <p>
             <a href={safeExternalHref(explorerUrl)} target="_blank" rel="noopener noreferrer">
-              View address on Snowtrace
+              Snowtrace
             </a>
           </p>
         )}
@@ -217,7 +211,7 @@ function ProgressPage({
 
       {!stats.isNewLearner && (
         <div className="quiz-nav quiz-nav-end">
-          <Button variant="secondary" onClick={onLearn}>Back to Learn</Button>
+          <Button variant="secondary" onClick={onLearn}>Learn</Button>
           <Button onClick={() => onContinue(next.id)}>
             Continue {PATH_COPY[next?.id]?.kicker || next?.name}
           </Button>

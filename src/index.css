@@ -149,6 +149,14 @@ img {
   padding: 8px 12px;
   min-height: 44px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ui-icon {
+  flex-shrink: 0;
+  display: block;
 }
 
 .nav-link:hover,
@@ -232,7 +240,9 @@ img {
   color: var(--muted);
   font-size: 9.39px;
   display: flex;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
   flex-wrap: wrap;
 }
 
@@ -365,6 +375,9 @@ img {
 .section-block h2 {
   font-size: clamp(20.23px, 2.89vw, 28.9px);
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .card h3,
@@ -400,6 +413,9 @@ img {
 
 .kicker {
   color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .visually-hidden {
@@ -438,6 +454,7 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   min-height: 44px;
   padding: 0 16px;
   border: 1px solid transparent;
@@ -855,7 +872,9 @@ img {
 }
 
 .empty-state-icon {
-  display: none;
+  display: flex;
+  color: var(--accent);
+  margin-bottom: 8px;
 }
 
 .section-select,

@@ -5,9 +5,9 @@ import { useLiveLeaderboard } from "../../hooks/useLiveLeaderboard";
 import { Button, Card } from "../ui/primitives";
 
 function statusCopy(status) {
-  if (status === "live") return "Live · community event log (not a trusted ledger)";
-  if (status === "local") return "Offline preview · this device only";
-  return "Connecting to the live board…";
+  if (status === "live") return "Live · community ranking";
+  if (status === "local") return "Offline preview";
+  return "Connecting…";
 }
 
 function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
@@ -43,8 +43,7 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
   return (
     <div className="page">
       <header className="page-header">
-        <p className="kicker">Leaderboard</p>
-        <h1>Learner ranking</h1>
+        <h1>Board</h1>
         <p className="lede">{LEADERBOARD_DISCLAIMER}</p>
         <p className="meta-line">{statusCopy(board.status)}</p>
       </header>
@@ -90,8 +89,8 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
         {board.rows.length === 0 ? (
           <p className="meta-line">
             {board.status === "connecting"
-              ? "Loading signed-in learners who opted in…"
-              : "No opted-in learners on the live board yet."}
+              ? "Loading…"
+              : "No one on the board yet."}
           </p>
         ) : (
           <ol className="leaderboard-list">
@@ -100,7 +99,7 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
                 <Card>
                   <p className="kicker">#{row.rank} {row.learnerId === learnerId ? "You" : row.displayName}</p>
                   <p className="stat-value">{windowName === "weekly" ? row.weeklyXp ?? 0 : row.xp} XP</p>
-                  <p className="meta-line">Level {row.level} · {row.achievementCount} achievements · {row.completionPercent}% path</p>
+                  <p className="meta-line">Lv {row.level} · {row.achievementCount} · {row.completionPercent}%</p>
                   {row.authority === LEADERBOARD_AUTHORITY.localPreview && (
                     <p className="note">Local fallback for this row.</p>
                   )}
@@ -110,7 +109,7 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
           </ol>
         )}
       </section>
-      <Button variant="secondary" onClick={onLearn}>Back to Learn</Button>
+      <Button variant="secondary" onClick={onLearn}>Learn</Button>
     </div>
   );
 }

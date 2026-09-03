@@ -208,9 +208,7 @@ function SettingsPage({
       <header className="page-header">
         <p className="kicker">Account</p>
         <h1>Profile</h1>
-        <p className="lede">
-          Your Forjora account holds progress across devices. A wallet is optional until you mint a Fuji credential. Linking copies this browser’s wallet-local quiz and puzzle snapshot onto the account; the wallet snapshot wins if both exist.
-        </p>
+        <p className="lede">Progress follows this account. A wallet is only needed to mint.</p>
       </header>
 
       {error ? <p className="auth-error" role="alert">{error}</p> : null}
@@ -270,9 +268,9 @@ function SettingsPage({
       <Card className="settings-block">
         <h2>{account?.hasPassword ? "Password" : "Create a password"}</h2>
         {account?.hasPassword ? (
-          <p>Change the password used to sign in with email.</p>
+          <p>Email sign-in password.</p>
         ) : (
-          <p className="note">Add a password if you also want to sign in with email.</p>
+          <p className="note">Optional, for email sign-in.</p>
         )}
         <form className="settings-form" onSubmit={handlePassword}>
           {account?.hasPassword ? (
@@ -359,15 +357,14 @@ function SettingsPage({
 
       <Card className="settings-block">
         <h2>Session</h2>
-        <p>Sign out on this device. Progress stays on your Forjora account.</p>
+        <p>Sign out on this device. Progress stays on the account.</p>
         <Button variant="secondary" onClick={onSignOut}>Sign out</Button>
       </Card>
 
       <Card className="settings-block settings-danger">
         <h2>Data</h2>
         <p>
-          Reset clears quiz scores, puzzle pieces, and local cache for this account in this browser.
-          Signed-in progress remains on your Forjora account unless you delete the account.
+          Reset clears this browser’s quiz and puzzle cache. Account progress stays unless you delete the account.
         </p>
         <div className="settings-actions">
           <Button variant="danger" onClick={handleReset} disabled={!account}>
@@ -379,7 +376,7 @@ function SettingsPage({
         </div>
         {onDeleteAccount ? (
           <>
-            <p>Delete permanently removes this Forjora account. On-chain credentials are not burned.</p>
+            <p>Delete removes this account. On-chain credentials are not burned.</p>
             <div className="settings-actions">
               <Button variant="danger" onClick={handleDelete} disabled={busy === "delete"}>
                 {confirmDelete ? "Confirm delete account" : "Delete account"}

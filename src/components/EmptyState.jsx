@@ -1,5 +1,7 @@
+import { Icon } from "./ui/Icon";
+
 function EmptyState({
-  icon = "ℹ️",
+  icon = "info",
   title,
   body,
   actionLabel,
@@ -8,7 +10,9 @@ function EmptyState({
 }) {
   return (
     <div className={`empty-state empty-state-${variant}`} role={variant === "error" ? "alert" : "status"}>
-      <div className="empty-state-icon" aria-hidden="true">{icon}</div>
+      <div className="empty-state-icon" aria-hidden="true">
+        <Icon name={icon} size={22} />
+      </div>
       {title && <h3 className="empty-state-title">{title}</h3>}
       {body && <p className="empty-state-body">{body}</p>}
       {actionLabel && onAction && (

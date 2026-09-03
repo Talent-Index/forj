@@ -1,4 +1,4 @@
-import Navbar, { LOGGED_IN_LINKS, LOGGED_OUT_LINKS } from "./Navbar";
+import Navbar from "./Navbar";
 import Footer from "./Footer";
 import MobileNav from "./MobileNav";
 
@@ -39,8 +39,6 @@ function AppShell({
         page={page}
         onNavigate={onNavigate}
         isAuthenticated={isAuthenticated}
-        loggedInLinks={LOGGED_IN_LINKS}
-        loggedOutLinks={LOGGED_OUT_LINKS}
       />
     </div>
   );

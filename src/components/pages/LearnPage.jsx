@@ -54,9 +54,8 @@ function LearnPage({
     return (
       <div className="page">
         <header className="page-header">
-          <p className="kicker">Lesson</p>
           <h1>{lesson.title}</h1>
-          <p className="lede">{unlocked ? "Read, then mark complete. This counts as learning activity." : "This lesson is locked."}</p>
+          <p className="lede">{unlocked ? "Read, then mark complete." : "Locked."}</p>
         </header>
         <article className="card lesson-body">
           {lesson.body.split("\n\n").map((paragraph) => (
@@ -69,7 +68,7 @@ function LearnPage({
           )}
         </article>
         <div className="quiz-nav quiz-nav-end">
-          <Button variant="secondary" onClick={() => setLessonId(null)}>Back to track</Button>
+          <Button variant="secondary" onClick={() => setLessonId(null)}>Track</Button>
           <Button
             disabled={!unlocked || complete}
             onClick={() => {
@@ -90,14 +89,13 @@ function LearnPage({
         <header className="page-header">
           <p className="kicker">{activeTrack.difficulty}</p>
           <h1>{activeTrack.name}</h1>
-          <p className="lede">{activeTrack.description}</p>
         </header>
         <ProgressBar label={`${activeTrack.completedCount}/${activeTrack.totalCount} modules`} value={activeTrack.percent} />
-        {!activeTrack.unlocked && <p className="meta-line">Complete the previous track to unlock this one.</p>}
+        {!activeTrack.unlocked && <p className="meta-line">Finish the previous track first.</p>}
         {activeTrack.modules.map((module) => (
           <section className="section-block" key={module.id}>
             <h2>{module.name}</h2>
-            <p className="meta-line">{module.complete ? "Complete" : module.unlocked ? "In progress" : "Locked"} · {module.percent}%</p>
+            <p className="meta-line">{module.complete ? "Done" : module.unlocked ? "Open" : "Locked"} · {module.percent}%</p>
             {module.lessons.map((item) => (
               <Card key={item.id} className="lesson-row">
                 <div>
@@ -115,12 +113,12 @@ function LearnPage({
             ))}
             {module.quizId && (
               <Button disabled={!module.unlocked} onClick={() => onSelectSection(module.quizId)}>
-                {module.complete ? "Retry assessment" : "Take assessment"}
+                {module.complete ? "Retry quiz" : "Quiz"}
               </Button>
             )}
           </section>
         ))}
-        <Button variant="secondary" onClick={() => setTrackId(null)}>All tracks</Button>
+        <Button variant="secondary" onClick={() => setTrackId(null)}>Tracks</Button>
       </div>
     );
   }
@@ -128,9 +126,7 @@ function LearnPage({
   return (
     <div className="page">
       <header className="page-header">
-        <p className="kicker">Forjora learning</p>
-        <h1>{path.name || "Avalanche Developer Path"}</h1>
-        <p className="lede">{path.description || "Lessons unlock in order. Quizzes still use retry-safe scoring."}</p>
+        <h1>{path.name || "Avalanche path"}</h1>
       </header>
 
       <section className="section-block">
@@ -159,10 +155,10 @@ function LearnPage({
               <Card key={track.id} className={`track-card ${progress.complete ? "is-complete" : ""} ${unlocked ? "" : "is-locked"}`}>
                 <p className="kicker">{track.difficulty}</p>
                 <h3>{track.name}</h3>
-                <p>{track.description}</p>
-                <p className="meta-line">{progress.percent}% · {unlocked ? (progress.complete ? "Complete" : "Unlocked") : "Locked"}</p>
+                <p className="track-copy">{track.description}</p>
+                <p className="meta-line">{progress.percent}% · {unlocked ? (progress.complete ? "Done" : "Open") : "Locked"}</p>
                 <Button variant="secondary" onClick={() => setTrackId(track.id)}>
-                  {unlocked ? "Open track" : "View requirements"}
+                  {unlocked ? "Open" : "Locked"}
                 </Button>
               </Card>
             );

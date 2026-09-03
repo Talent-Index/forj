@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import { BrandMark } from "../brand/ForjoraMark";
 import { WalletModal } from "../wallet/WalletControls";
 import ProfileMenu from "../auth/ProfileMenu";
+import { Icon } from "../ui/Icon";
 
 const LOGGED_OUT_LINKS = [
-  { id: "learn", label: "Learn" },
-  { id: "credentials", label: "Credentials" },
-  { id: "about", label: "About" },
+  { id: "learn", label: "Learn", icon: "learn" },
+  { id: "credentials", label: "Credentials", icon: "badge" },
+  { id: "about", label: "About", icon: "about" },
 ];
 
 const LOGGED_IN_LINKS = [
-  { id: "learn", label: "Learn" },
-  { id: "progress", label: "Progress" },
-  { id: "leaderboard", label: "Board" },
-  { id: "credentials", label: "Credentials" },
+  { id: "learn", label: "Learn", icon: "learn" },
+  { id: "progress", label: "Progress", icon: "progress" },
+  { id: "leaderboard", label: "Board", icon: "board" },
+  { id: "credentials", label: "Credentials", icon: "badge" },
 ];
 
 function ConnectedNotice({ address }) {
@@ -38,7 +39,7 @@ function ConnectedNotice({ address }) {
 function ZoomToggle({ zoom = 100, onCycleZoom }) {
   return (
     <button
-      className="btn btn-ghost btn-icon zoom-toggle"
+      className="btn btn-ghost btn-icon zoom-toggle nav-extra"
       onClick={onCycleZoom}
       aria-label={`Browser-style page zoom ${zoom} percent. Click to cycle 100, 125, 150, 175.`}
       title={`Zoom ${zoom}%`}
@@ -125,6 +126,7 @@ function Navbar({
               className={`nav-link ${page === item.id ? "is-active" : ""}`}
               onClick={() => onNavigate(item.id)}
             >
+              <Icon name={item.icon} size={16} />
               {item.label}
             </button>
           ))}
@@ -134,19 +136,19 @@ function Navbar({
           <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
           {!isAuthenticated ? (
             <>
-              <button className="btn btn-ghost" onClick={() => onOpenAuth("signin")}>
-                Sign In
+              <button className="btn btn-ghost nav-extra" onClick={() => onOpenAuth("signin")}>
+                Sign in
               </button>
               <button className="btn btn-solid" onClick={() => onOpenAuth("signup")}>
-                Start Learning
+                Start
               </button>
             </>
           ) : (
             <>
               <ConnectedNotice address={wallet.address} />
               {!wallet.address ? (
-                <button className="btn btn-ghost" onClick={walletModal.openModal}>
-                  Connect Wallet
+                <button className="btn btn-ghost nav-extra" onClick={walletModal.openModal}>
+                  Connect
                 </button>
               ) : null}
               <ProfileMenu

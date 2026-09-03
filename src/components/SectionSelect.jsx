@@ -7,10 +7,7 @@ function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzz
   return (
     <section className="section-block">
       <h2>Assessments</h2>
-      <p className="meta-line">
-        Easy, Medium, and Hard are the path quizzes. Retries replace that section’s points.
-        Points available · {totalPoints}
-      </p>
+      <p className="meta-line">Retries replace that section’s points · {totalPoints} pts</p>
       <div className="difficulty-grid">
         {sections.map((section) => {
           const score = sectionScores[section.id];
@@ -38,7 +35,7 @@ function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzz
           );
         })}
       </div>
-      <Button variant="secondary" onClick={onGoToPuzzle}>Open puzzle</Button>
+      <Button variant="secondary" onClick={onGoToPuzzle}>Puzzle</Button>
     </section>
   );
 }
