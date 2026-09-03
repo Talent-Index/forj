@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { PIECE_COST, TOTAL_PIECES } from "../src/data/questions.js";
+import { TRACK_CERTIFICATES } from "../src/data/learning.js";
 import {
   availablePoints,
   redeemPiece,
@@ -12,6 +13,8 @@ import {
 
 assert.equal(PIECE_COST, 5);
 assert.equal(TOTAL_PIECES, 16);
+const quizPieces = TRACK_CERTIFICATES.filter((item) => item.kind === "quiz").flatMap((item) => item.pieceIndexes);
+assert.deepEqual([...quizPieces].sort((a, b) => a - b), [...Array(TOTAL_PIECES).keys()]);
 
 let state = { totalPoints: 12, acquiredPieces: [] };
 assert.equal(availablePoints(state.totalPoints, state.acquiredPieces), 12);
@@ -36,7 +39,7 @@ state = { totalPoints: 12, acquiredPieces: second.acquiredPieces };
 
 const third = redeemPiece(state, 7);
 assert.equal(third.ok, false);
-assert.match(third.error, /Need 5 points/);
+assert.match(third.error, /Need 5/);
 assert.deepEqual(third.acquiredPieces, [0, 3]);
 assert.equal(third.available, 2);
 assert.ok(third.available >= 0);
@@ -71,5 +74,19 @@ assert.deepEqual(restored.acquiredPieces, [0, 3]);
 assert.equal(restored.spentPoints, spentPointsFor([0, 3]));
 assert.equal(restored.totalPoints, 12);
 assert.equal(availablePoints(restored.totalPoints, restored.acquiredPieces), 2);
+
+const scoped = redeemPiece({
+  totalPoints: 15,
+  sectionScores: { easy: { pointsEarned: 15 } },
+  acquiredPieces: [],
+}, 3);
+assert.equal(scoped.ok, false);
+
+const easySeat = redeemPiece({
+  totalPoints: 15,
+  sectionScores: { easy: { pointsEarned: 15 } },
+  acquiredPieces: [],
+}, 0);
+assert.equal(easySeat.ok, true);
 
 console.log("puzzle redemption tests passed");

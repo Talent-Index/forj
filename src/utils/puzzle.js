@@ -1,4 +1,5 @@
 import { PIECE_COST, TOTAL_PIECES } from "../data/questions.js";
+import { TRACK_CERTIFICATES } from "../data/learning.js";
 
 export { PIECE_COST, TOTAL_PIECES };
 
@@ -29,6 +30,25 @@ export function availablePoints(totalPoints, acquiredPieces) {
   return Math.max(0, toNonNegativeInt(totalPoints) - spentPointsFor(acquiredPieces));
 }
 
+function certificateForPiece(index) {
+  return TRACK_CERTIFICATES.find((item) => item.pieceIndexes.includes(index)) || null;
+}
+
+function quizEarned(sectionScores, quizId) {
+  return Math.max(0, Number(sectionScores?.[quizId]?.pointsEarned) || 0);
+}
+
+export function availablePointsForPiece(state, index) {
+  const acquiredPieces = normalizePieces(state?.acquiredPieces);
+  const certificate = certificateForPiece(index);
+  if (certificate?.quizId && state?.sectionScores) {
+    const earned = quizEarned(state.sectionScores, certificate.quizId);
+    const spent = certificate.pieceIndexes.filter((piece) => acquiredPieces.includes(piece)).length * PIECE_COST;
+    return Math.max(0, earned - spent);
+  }
+  return availablePoints(state?.totalPoints, acquiredPieces);
+}
+
 function snapshot(pieces, totalPoints, error = null) {
   const acquiredPieces = normalizePieces(pieces);
   const spentPoints = spentPointsFor(acquiredPieces);
@@ -53,11 +73,14 @@ export function redeemPiece(state, index) {
   if (acquiredPieces.includes(pieceIndex)) {
     return snapshot(acquiredPieces, totalPoints, "That piece is already unlocked.");
   }
-  if (availablePoints(totalPoints, acquiredPieces) < PIECE_COST) {
+  const available = availablePointsForPiece(state, pieceIndex);
+  if (available < PIECE_COST) {
+    const certificate = certificateForPiece(pieceIndex);
+    const label = certificate?.quizLabel || "this";
     return snapshot(
       acquiredPieces,
       totalPoints,
-      `Need ${PIECE_COST} points to unlock a piece. You have ${availablePoints(totalPoints, acquiredPieces)}.`
+      `Need ${PIECE_COST} ${label} points to unlock this piece. You have ${available}.`
     );
   }
 

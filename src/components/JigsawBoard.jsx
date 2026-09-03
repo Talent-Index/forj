@@ -19,6 +19,8 @@ function JigsawBoard({
   lastUnlocked = null,
   selectedIndex = null,
   showLabels = true,
+  activeIndexes = null,
+  affordableIndexes = null,
   onSelect,
 }) {
   return (
@@ -38,12 +40,21 @@ function JigsawBoard({
       {PIECES.map((piece) => {
         const acquired = acquiredPieces.includes(piece.index);
         const selected = selectedIndex === piece.index;
-        const state = pieceState({ acquired, canAfford, complete, selected });
-        const clickable = interactive && !acquired && canAfford;
+        const active = !activeIndexes || activeIndexes.includes(piece.index);
+        const affordable = affordableIndexes
+          ? affordableIndexes.includes(piece.index)
+          : canAfford;
+        const state = pieceState({
+          acquired,
+          canAfford: Boolean(active && affordable),
+          complete,
+          selected,
+        });
+        const clickable = interactive && !acquired && active && affordable;
         return (
           <g
             key={piece.index}
-            className={`jigsaw-piece is-${state} ${lastUnlocked === piece.index ? "is-enter" : ""}`}
+            className={`jigsaw-piece is-${state} ${lastUnlocked === piece.index ? "is-enter" : ""} ${active ? "" : "is-dimmed"}`}
             role={clickable ? "button" : "img"}
             tabIndex={clickable ? 0 : undefined}
             aria-label={
@@ -51,7 +62,7 @@ function JigsawBoard({
                 ? `Piece ${piece.index + 1} unlocked`
                 : selected
                   ? `Selected piece ${piece.index + 1}. Click again to unlock for ${PIECE_COST} points`
-                  : canAfford
+                  : clickable
                     ? `Select piece ${piece.index + 1} to unlock for ${PIECE_COST} points`
                     : `Piece ${piece.index + 1} locked, needs ${PIECE_COST} points`
             }

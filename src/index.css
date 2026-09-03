@@ -2767,3 +2767,48 @@ img {
   background: var(--accent-text);
 }
 
+.track-cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.track-cert-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.track-cert-card.is-locked {
+  color: var(--muted);
+}
+
+.track-cert-card .certificate-artifact {
+  padding: 16px 12px;
+}
+
+.track-cert-actions {
+  margin-top: auto;
+}
+
+.jigsaw-piece.is-dimmed {
+  opacity: 0.38;
+}
+
+.ach-icon {
+  display: flex;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.achievement-item.locked .ach-icon {
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .track-cert-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

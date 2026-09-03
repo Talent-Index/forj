@@ -187,7 +187,7 @@ assert.equal(attested.easyCorrect, 5);
 // Achievements reflect actual learner activity.
 const locked = evaluateAchievements(emptyProgress());
 assert.equal(locked.every((item) => item.earned === false), true);
-assert.equal(locked.length, 8);
+assert.equal(locked.length, 14);
 
 const unlocked = evaluateAchievements({
   sectionScores: {
@@ -202,6 +202,7 @@ const unlocked = evaluateAchievements({
     { sectionId: "hard", correct: 5, total: 5 },
   ],
   hasCredential: true,
+  completedTracks: { l1s: true, "c-chain": true, icm: true },
 });
 assert.equal(unlocked.every((item) => item.earned), true);
 

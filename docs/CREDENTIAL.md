@@ -17,7 +17,7 @@ The record includes:
 - When it was minted  
 - Network and contract  
 
-The snapshot is what was written at mint. It is not a live feed of later quiz retries.
+Track certificates in the app are learning records for each path track. They are not extra on-chain tokens. The mint is still one current soulbound snapshot per wallet. The snapshot is what was written at mint. It is not a live feed of later quiz retries.
 
 ## Frozen credential
 

@@ -116,6 +116,75 @@ export const TRACKS = [
   },
 ];
 
+/**
+ * Off-chain track certificates. Quiz tracks spend that quiz's points on a
+ * reserved piece range (Easy 3, Medium 5, Hard 8 = 16). Lesson tracks
+ * complete when the track itself completes. The on-chain claimed record
+ * remains one soulbound snapshot of the path.
+ */
+export const TRACK_CERTIFICATES = Object.freeze([
+  {
+    id: "fundamentals",
+    trackId: "fundamentals",
+    title: "Fundamentals Certificate",
+    quizId: "easy",
+    quizLabel: "Easy",
+    icon: "learn",
+    pieceIndexes: Object.freeze([0, 1, 2]),
+    kind: "quiz",
+  },
+  {
+    id: "architecture",
+    trackId: "architecture",
+    title: "Architecture Certificate",
+    quizId: "medium",
+    quizLabel: "Medium",
+    icon: "progress",
+    pieceIndexes: Object.freeze([3, 4, 5, 6, 7]),
+    kind: "quiz",
+  },
+  {
+    id: "l1s",
+    trackId: "l1s",
+    title: "L1s Certificate",
+    quizId: null,
+    quizLabel: null,
+    icon: "path",
+    pieceIndexes: Object.freeze([]),
+    kind: "track",
+  },
+  {
+    id: "c-chain",
+    trackId: "c-chain",
+    title: "C-Chain Certificate",
+    quizId: null,
+    quizLabel: null,
+    icon: "wallet",
+    pieceIndexes: Object.freeze([]),
+    kind: "track",
+  },
+  {
+    id: "icm",
+    trackId: "icm",
+    title: "ICM Certificate",
+    quizId: null,
+    quizLabel: null,
+    icon: "board",
+    pieceIndexes: Object.freeze([]),
+    kind: "track",
+  },
+  {
+    id: "developer",
+    trackId: "developer",
+    title: "Developer Certificate",
+    quizId: "hard",
+    quizLabel: "Hard",
+    icon: "badge",
+    pieceIndexes: Object.freeze([8, 9, 10, 11, 12, 13, 14, 15]),
+    kind: "quiz",
+  },
+]);
+
 export const MODULES = [
   {
     id: "fund-lessons",
@@ -367,6 +436,7 @@ export const LEARNING_CATALOG = {
   version: LEARNING_CATALOG_VERSION,
   paths: LEARNING_PATHS,
   tracks: TRACKS,
+  certificates: TRACK_CERTIFICATES,
   modules: MODULES,
   lessons: LESSONS,
   pathById: indexById(LEARNING_PATHS),

@@ -1,29 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PIECE_COST, TOTAL_PIECES, MAX_POINTS } from "../data/questions";
-import { availablePoints, redeemPiece } from "../utils/puzzle";
+import { TRACK_CERTIFICATES } from "../data/learning";
+import { availablePoints, availablePointsForPiece, redeemPiece } from "../utils/puzzle";
+import { certificateById } from "../utils/trackCertificates";
 import { playCorrectSound } from "../utils/sounds";
 import { EMPTY_STATES, ERROR_STATES, PUZZLE_EXPLAINER } from "../utils/onboarding";
 import EmptyState from "./EmptyState";
 import JigsawBoard from "./JigsawBoard";
 import { Button } from "./ui/primitives";
 
+const QUIZ_CERTS = TRACK_CERTIFICATES.filter((item) => item.kind === "quiz");
+
 function PuzzleBoard({
   totalPoints,
   spentPoints,
   acquiredPieces,
+  sectionScores = {},
+  trackId = "fundamentals",
   onAcquirePiece,
   onContinue,
   onBack,
   userImage,
 }) {
+  const initial = certificateById(trackId)?.kind === "quiz" ? trackId : "fundamentals";
+  const [activeId, setActiveId] = useState(initial);
+  useEffect(() => {
+    if (certificateById(trackId)?.kind === "quiz") setActiveId(trackId);
+  }, [trackId]);
   const [lastUnlocked, setLastUnlocked] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [message, setMessage] = useState(null);
+  const certificate = certificateById(activeId) || QUIZ_CERTS[0];
   const available = availablePoints(totalPoints, acquiredPieces);
   const spent = spentPoints ?? acquiredPieces.length * PIECE_COST;
   const complete = acquiredPieces.length === TOTAL_PIECES;
-  const canAfford = available >= PIECE_COST;
   const forgeCost = TOTAL_PIECES * PIECE_COST;
+  const affordableIndexes = certificate.pieceIndexes.filter(
+    (index) => availablePointsForPiece({ totalPoints, acquiredPieces, sectionScores }, index) >= PIECE_COST
+  );
 
   function handleAcquire(index) {
     if (selectedIndex !== index) {
@@ -31,7 +45,7 @@ function PuzzleBoard({
       setMessage(null);
       return;
     }
-    const result = redeemPiece({ totalPoints, acquiredPieces }, index);
+    const result = redeemPiece({ totalPoints, acquiredPieces, sectionScores }, index);
     if (!result.ok) {
       setMessage(result.error);
       return;
@@ -46,20 +60,29 @@ function PuzzleBoard({
   return (
     <div className="page puzzle-board">
       <header className="page-header">
-        <p className="kicker">The forge</p>
-        <h1>{complete ? "Certificate assembled" : "Certificate in progress"}</h1>
-        <p className="lede">
-          {complete
-            ? "The jigsaw has settled. Reveal the forged certificate and enter the recipient name."
-            : "Spend points to seat interlocking pieces. Each piece forges more of the Forjora certificate."}
-        </p>
+        <h1>{complete ? "Path assembled" : certificate.title}</h1>
       </header>
 
+      <div className="quiz-nav">
+        {QUIZ_CERTS.map((item) => (
+          <Button
+            key={item.id}
+            variant={item.id === activeId ? "primary" : "secondary"}
+            onClick={() => {
+              setActiveId(item.id);
+              setSelectedIndex(null);
+              setMessage(null);
+            }}
+          >
+            {item.quizLabel}
+          </Button>
+        ))}
+      </div>
+
       <section className="section-block forge-progress">
-        <p className="kicker">Forging the credential</p>
-        <p className="stat-value">{acquiredPieces.length} / {TOTAL_PIECES} pieces</p>
+        <p className="stat-value">{acquiredPieces.length} / {TOTAL_PIECES}</p>
         <p className="meta-line">
-          {spent} / {forgeCost} points seated · {available} remaining of {totalPoints} earned
+          {spent} / {forgeCost} seated · {available} leftover
         </p>
         <p className="meta-line">{PUZZLE_EXPLAINER.body}</p>
       </section>
@@ -68,7 +91,7 @@ function PuzzleBoard({
         <EmptyState
           title={EMPTY_STATES.noPoints.title}
           body={EMPTY_STATES.noPoints.body}
-          actionLabel="Back to quizzes"
+          actionLabel="Learn"
           onAction={onBack}
         />
       )}
@@ -80,29 +103,30 @@ function PuzzleBoard({
         />
       )}
       {complete && (
-        <p className="forge-complete-banner" role="status">Last piece unlocked. The certificate is ready to reveal.</p>
+        <p className="forge-complete-banner" role="status">Path certificate is ready to name.</p>
       )}
 
       <div className="puzzle-layout">
         <JigsawBoard
           artwork={userImage}
           acquiredPieces={acquiredPieces}
-          canAfford={canAfford && !complete}
           complete={complete}
           interactive={!complete}
           lastUnlocked={lastUnlocked}
           selectedIndex={selectedIndex}
+          activeIndexes={certificate.pieceIndexes}
+          affordableIndexes={affordableIndexes}
           onSelect={handleAcquire}
         />
         <aside className="card">
-          <p className="kicker">Materials</p>
-          <p className="stat-value">{available}</p>
-          <p className="meta-line">Points still available</p>
-          <p className="meta-line">Each piece costs {PIECE_COST}. Max quiz score is {MAX_POINTS}.</p>
+          <p className="kicker">{certificate.quizLabel}</p>
+          <p className="stat-value">{affordableIndexes.length}</p>
+          <p className="meta-line">Pieces you can seat from this quiz</p>
+          <p className="meta-line">{PIECE_COST} pts each. Max path score {MAX_POINTS}.</p>
           <div className="quiz-nav quiz-nav-end">
             <Button variant="secondary" onClick={onBack}>Back</Button>
             <Button onClick={onContinue} disabled={acquiredPieces.length === 0}>
-              {complete ? "Reveal certificate" : "View certificate"}
+              {complete ? "Reveal" : "Certificates"}
             </Button>
           </div>
         </aside>

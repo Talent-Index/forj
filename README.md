@@ -15,9 +15,9 @@ The mark is a geometric **F / upward pathway** in charcoal with a gold accent st
 1. Follow a structured Avalanche path (tracks, lessons, and quizzes).
 2. Complete Easy, Medium, and Hard challenges. Retries replace a section’s score; they do not stack extra points.
 3. Earn points, XP, levels, achievements, and a UTC learning streak.
-4. Spend points to seat interlocking pieces of a 4×4 certificate jigsaw.
-5. When the puzzle is complete, reveal a personalized certificate (blacksmith, forge, and crafted diamond).
-6. Optionally mint a soulbound credential. A minted record has a shareable URL and QR.
+4. Spend each quiz’s points on that track’s certificate pieces (Easy 3, Medium 5, Hard 8).
+5. Track certificates show as in progress or achieved. Lesson tracks complete with the track.
+6. Optionally mint one soulbound path credential. A minted record has a shareable URL and QR.
 
 ## What learners get
 
@@ -26,6 +26,7 @@ The mark is a geometric **F / upward pathway** in charcoal with a gold accent st
 - **Six Avalanche tracks:** Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, and Developer.
 - **XP and levels** from real completions, not quiz retries.
 - **Achievements** and **streaks** from the same learning events.
+- **Track certificates** on Credentials: in progress and achieved. Quiz points seat that track’s pieces.
 - A **true interlocking puzzle**, not square tiles pretending to be pieces.
 - An opt-in **live leaderboard**. Verified accounts appear by default, including people who already signed up and including at 0 XP. Standing is derived from an append-only event log. It is not issuer-attested and not on-chain.
 

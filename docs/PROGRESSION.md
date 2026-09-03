@@ -58,9 +58,9 @@ Badges unlock from the same events: first quiz, perfect score, difficulty comple
 
 ## Puzzle
 
-Sixteen interlocking pieces. Each has a stable identity, a seat on the board, and a point cost. States: locked, available, selected, unlocked, completed.
+Sixteen interlocking pieces. Easy seats 3, Medium 5, Hard 8. Each piece has a stable identity, a seat on the board, and a point cost. Quiz points only spend on that quiz’s pieces.
 
-Rules: no duplicate unlock, no spending below zero, no invented piece ids. Completing all sixteen reveals the certificate and continues to naming and credential.
+Each track also has a **track certificate**. Quiz tracks are achieved when those pieces are seated. Lesson tracks are achieved when the track is complete. Credentials shows both in-progress and achieved certificates. Completing all sixteen pieces still reveals the path certificate and continues to naming and the optional claimed mint.
 
 ## Leaderboard
 

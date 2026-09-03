@@ -11,7 +11,7 @@ import {
 import { isTxHash, safeExternalHref } from "../utils/frontendSecurity";
 import { resolveCredentialImageUri } from "../utils/ipfs";
 import { playFinishSound } from "../utils/sounds";
-import { CREDENTIAL_EXPLAINER, EMPTY_STATES, ERROR_STATES } from "../utils/onboarding";
+import { CREDENTIAL_EXPLAINER, ERROR_STATES } from "../utils/onboarding";
 import { useOnChainCredential } from "../hooks/useOnChainCredential";
 import { getFujiPublicClient } from "../utils/fujiClient";
 import { validateRecipientName } from "../utils/recipient";
@@ -28,6 +28,7 @@ import {
   quizPercent,
 } from "../utils/certificateView";
 import JigsawBoard from "./JigsawBoard";
+import TrackCertificateGallery from "./TrackCertificateGallery";
 import { Button } from "./ui/primitives";
 import { buildCredentialVerificationView, publicCredentialPath } from "../utils/credentialLookup";
 
@@ -36,8 +37,8 @@ const PATH_LABEL = LEARNING_PATHS[0]?.name || "Avalanche Developer Path";
 function headerFor(phase, { minted, onChain }) {
   if (phase === "forge") {
     return {
-      title: "Certificate in progress",
-      lede: "Seat all 16 interlocking pieces, then name the recipient and mint a Forjora claimed record on Fuji.",
+      title: "Certificates",
+      lede: "Each track has its own certificate. Quiz points seat that track’s pieces. Lesson tracks complete with the track. The Fuji mint is still one claimed path snapshot.",
     };
   }
   if (phase === "name") {
@@ -81,6 +82,7 @@ function Certificate({
   onPuzzle,
   onLearn,
   onConnectWallet,
+  progress = null,
   isFuji = false,
   chainId = null,
   switchingNetwork = false,
@@ -134,7 +136,6 @@ function Certificate({
   const header = headerFor(phase, { minted, onChain: Boolean(onChainCredential) });
   const hasLookupAddress = Boolean(address);
   const canMint = injectorConnected;
-  const hasScores = Object.keys(sectionScores).length > 0;
 
   async function handleMint() {
     if (!CONTRACT_ADDRESS) {
@@ -282,39 +283,36 @@ function Certificate({
       ) : null}
 
       {phase === "forge" && (
-        <section className="section-block">
-          {!hasScores && acquiredPieces.length === 0 ? (
-            <EmptyState
-              title={EMPTY_STATES.noQuizzes.title}
-              body="Take a quiz to earn points, then unlock puzzle pieces. You can preview the board below."
-              actionLabel="Go to Learn"
-              onAction={onLearn}
-            />
-          ) : acquiredPieces.length === 0 ? (
-            <EmptyState
-              title={EMPTY_STATES.noPieces.title}
-              body={EMPTY_STATES.noPieces.body}
-              actionLabel="Open the forge"
-              onAction={onPuzzle}
-            />
-          ) : null}
-          <p className="kicker">Jigsaw</p>
-          <p className="stat-value">{acquiredPieces.length} / {TOTAL_PIECES} pieces</p>
-          <div className="credentials-jigsaw">
-            <JigsawBoard
-              artwork={userImage}
-              acquiredPieces={acquiredPieces}
-              complete={false}
-            />
-          </div>
-          <p className="note">Seat every piece in the forge, then return here to name the recipient.</p>
-          <div className="certificate-actions">
-            <Button onClick={onPuzzle}>Continue forging</Button>
-            {onLearn ? (
-              <Button variant="secondary" onClick={onLearn}>Back to Learn</Button>
-            ) : null}
-          </div>
-        </section>
+        <>
+          <TrackCertificateGallery
+            acquiredPieces={acquiredPieces}
+            sectionScores={sectionScores}
+            progress={progress}
+            recipientName={issuedName || recipientName}
+            artwork={userImage}
+            onForge={onPuzzle}
+            onLearn={onLearn}
+          />
+          <section className="section-block">
+            <h2>Path snapshot</h2>
+            <p className="stat-value">{acquiredPieces.length} / {TOTAL_PIECES} pieces</p>
+            <div className="credentials-jigsaw">
+              <JigsawBoard
+                artwork={userImage}
+                acquiredPieces={acquiredPieces}
+                complete={false}
+                showLabels={false}
+              />
+            </div>
+            <p className="note">Easy seats 3 pieces, Medium 5, Hard 8. Seat all 16 to name and mint the path credential.</p>
+            <div className="certificate-actions">
+              <Button onClick={() => onPuzzle?.()}>Forge</Button>
+              {onLearn ? (
+                <Button variant="secondary" onClick={onLearn}>Learn</Button>
+              ) : null}
+            </div>
+          </section>
+        </>
       )}
 
       {phase === "name" && (

@@ -41,13 +41,14 @@ Existing browser progress is moved onto the account once, so a returning learner
 - One event stream drives XP, levels, achievements, streaks, path completion, puzzle events, and credentials.
 - Quiz retries do not farm XP.
 - Streaks use UTC calendar days. Duplicate activity on the same UTC day does not inflate the streak.
-- Achievements unlock from events (first quiz, perfect score, difficulties, streak, puzzle, credential, track, path).
+- Achievements unlock from events (first quiz, perfect score, difficulties, streak, puzzle, credential, track certificates, path).
 - Dashboard shows level, XP, streak, puzzle count, path progress, and the next recommended activity.
 
 ## Puzzle and certificate
 
-- Sixteen interlocking jigsaw pieces. Points buy a piece; the same piece cannot be bought twice.
-- Completing the puzzle reveals the certificate, asks for a recipient name, then continues to the credential flow.
+- Sixteen interlocking pieces, reserved by quiz: Easy 3, Medium 5, Hard 8. Points from a quiz only seat that quiz’s pieces.
+- Each of the six tracks has a certificate. Quiz tracks are achieved when their pieces are seated. Lesson tracks (L1s, C-Chain, ICM) are achieved when the track is complete.
+- Credentials shows in-progress and achieved track certificates. Seating all 16 pieces still reveals the path certificate for naming and the optional claimed mint.
 - Artwork: Forjora forge certificate image — blacksmith in a workshop presenting a crafted diamond; banners say Forjora and Learn · Forge · Prove, not “certified” or “verified”.
 
 ## Credentials

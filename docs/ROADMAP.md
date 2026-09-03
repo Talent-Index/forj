@@ -42,7 +42,7 @@ Remaining: issuer-key operations, attested mint in the learner UI, versioning an
 
 ## Phase 4 — Gamification ✅ *Live ranking*
 
-Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle and certificate reveal, default-on live ranking from the append-only event log (learners can hide). Product copy treats the board as community ranking. Lesson completion events are allowlisted in Firestore rules.
+Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle, per-track certificates, default-on live ranking from the append-only event log (learners can hide). Product copy treats the board as community ranking. Lesson completion events are allowlisted in Firestore rules.
 
 Remaining: a persisted XP ledger written only by a trusted service. Rank is not issuer-attested, not on-chain, and not tamper-proof until that ledger exists.
 

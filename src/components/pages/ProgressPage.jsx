@@ -206,6 +206,7 @@ function ProgressPage({
           acquiredPieces={acquiredPieces}
           attempts={attempts}
           hasCredential={Boolean(credential)}
+          completedTracks={progression?.state?.completedTracks}
         />
       </section>
 

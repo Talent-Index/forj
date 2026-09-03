@@ -34,7 +34,7 @@ export const LEARNING_PROGRESSION = [
   {
     step: 4,
     title: "Unlock puzzle pieces",
-    body: `Spend ${PIECE_COST} points per piece on a 16-piece interlocking jigsaw. Completing it forges the Forjora certificate.`,
+    body: `Spend ${PIECE_COST} points per piece. Easy seats 3, Medium 5, Hard 8. Completing a track’s pieces forges that track’s certificate.`,
   },
   {
     step: 5,
@@ -71,7 +71,7 @@ export const POINTS_EXPLAINER = {
 
 export const PUZZLE_EXPLAINER = {
   title: "Puzzle pieces",
-  body: `The certificate is a 16-piece interlocking jigsaw. Each piece costs ${PIECE_COST} points. You cannot buy the same piece twice or go below zero remaining points.`,
+  body: `Quiz points seat that quiz’s certificate pieces (${PIECE_COST} each). Easy 3, Medium 5, Hard 8. You cannot buy the same piece twice or spend another quiz’s points.`,
   pieceCost: PIECE_COST,
   totalPieces: TOTAL_PIECES,
 };
@@ -114,7 +114,7 @@ export const EMPTY_STATES = {
   },
   noPoints: {
     title: "No points to spend",
-    body: `Quiz points unlock puzzle pieces at ${PIECE_COST} points each. Complete a section, then return here.`,
+    body: `Quiz points unlock that quiz’s certificate pieces at ${PIECE_COST} points each. Complete a section, then return here.`,
   },
   noPieces: {
     title: "No puzzle pieces yet",

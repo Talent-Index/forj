@@ -1,4 +1,5 @@
 import { evaluateAchievements } from "../utils/achievements";
+import { Icon } from "./ui/Icon";
 
 function Achievements(props) {
   const evaluated = evaluateAchievements(props);
@@ -6,9 +7,9 @@ function Achievements(props) {
 
   return (
     <div className="card">
-      <h3 className="achievements-title">Achievements</h3>
+      <h3 className="achievements-title">Badges</h3>
       <p className="achievements-summary">
-        {earnedCount}/{evaluated.length} unlocked from your saved progress
+        {earnedCount}/{evaluated.length}
       </p>
       <div className="achievements-grid">
         {evaluated.map((achievement) => (
@@ -17,6 +18,9 @@ function Achievements(props) {
             className={`achievement-item ${achievement.earned ? "earned" : "locked"}`}
             title={achievement.desc}
           >
+            <span className="ach-icon" aria-hidden="true">
+              <Icon name={achievement.icon || "badge"} size={16} />
+            </span>
             <span className="ach-name">{achievement.name}</span>
             <span className="meta-line">{achievement.desc}</span>
             <span className="ach-status">{achievement.earned ? "Unlocked" : "Locked"}</span>

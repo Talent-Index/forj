@@ -68,6 +68,7 @@ function App() {
   const [page, setPage] = useState(pageFromLocation);
   const [view, setView] = useState(VIEWS.SECTIONS);
   const [activeSection, setActiveSection] = useState(null);
+  const [forgeTrackId, setForgeTrackId] = useState("fundamentals");
   const [totalPoints, setTotalPoints] = useState(0);
   const [spentPoints, setSpentPoints] = useState(0);
   const [acquiredPieces, setAcquiredPieces] = useState([]);
@@ -293,13 +294,13 @@ function App() {
 
   const handleAcquirePiece = useCallback((index) => {
     setAcquiredPieces((prev) => {
-      const result = redeemPiece({ totalPoints, acquiredPieces: prev }, index);
+      const result = redeemPiece({ totalPoints, acquiredPieces: prev, sectionScores }, index);
       if (!result.ok) return prev;
       setSpentPoints(result.spentPoints);
       progression.unlockPiece(index);
       return result.acquiredPieces;
     });
-  }, [progression, totalPoints]);
+  }, [progression, sectionScores, totalPoints]);
 
   const handleFullReset = useCallback(() => {
     if (ownerId) {
@@ -538,6 +539,7 @@ function App() {
           onContinue={startSection}
           onLearn={goLearnHome}
           onPuzzle={() => {
+            setForgeTrackId("fundamentals");
             setView(VIEWS.PUZZLE);
             setPage("learn");
           }}
@@ -576,7 +578,9 @@ function App() {
             userImage={userImage}
             onLookup={openLookup}
             onClaimed={progression.claimCredential}
-            onPuzzle={() => {
+            progress={progression.state}
+            onPuzzle={(trackId) => {
+              setForgeTrackId(trackId || "fundamentals");
               setView(VIEWS.PUZZLE);
               setPage("learn");
             }}
@@ -605,6 +609,8 @@ function App() {
           totalPoints={totalPoints}
           spentPoints={spentPoints}
           acquiredPieces={acquiredPieces}
+          sectionScores={sectionScores}
+          trackId={forgeTrackId}
           onAcquirePiece={handleAcquirePiece}
           onContinue={() => {
             setView(VIEWS.CERTIFICATE);
@@ -622,7 +628,10 @@ function App() {
         totalPoints={totalPoints}
         completedSections={completedSections}
         onSelectSection={startSection}
-        onGoToPuzzle={() => setView(VIEWS.PUZZLE)}
+        onGoToPuzzle={() => {
+          setForgeTrackId("fundamentals");
+          setView(VIEWS.PUZZLE);
+        }}
         onCompleteLesson={progression.completeLesson}
       />
     );
