@@ -2866,3 +2866,9 @@ img {
   background: var(--surface);
 }
 
+[data-theme="light"] .ui-icon,
+[data-theme="light"] .theme-icon,
+[data-theme="light"] .zoom-icon {
+  stroke-width: 1.85;
+}
+
