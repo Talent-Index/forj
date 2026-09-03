@@ -78,9 +78,11 @@ export {
 export {
   LEADERBOARD_AUTHORITY,
   LEADERBOARD_DISCLAIMER,
+  LEADERBOARD_FALLBACK_NAME,
   LEADERBOARD_PREFERENCE_KEYS,
   applyLeaderboardPreference,
   joinLeaderboardByDefault,
+  normalizeBoardName,
   snapshotFromProgression,
   compareLearners,
   rankLearners,

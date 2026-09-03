@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { applyProgressEvent, emptyProgression } from "../src/utils/progression/engine.js";
 import { EVENT_TYPES } from "../src/utils/progression/events.js";
 import {
@@ -39,7 +42,12 @@ assert.equal(
 );
 
 const unsigned = applyLeaderboardPreference({}, { optIn: true, displayName: "" });
-assert.equal(unsigned.ok, false);
+assert.equal(unsigned.ok, true);
+assert.equal(unsigned.preference.displayName, "Learner");
+
+const numbered = applyLeaderboardPreference({}, { optIn: true, displayName: "Alex 42" });
+assert.equal(numbered.ok, true);
+assert.equal(numbered.preference.displayName, "Alex 42");
 
 const named = applyLeaderboardPreference({}, { optIn: true, displayName: "Dana Learner" });
 assert.equal(named.ok, true);
@@ -66,8 +74,16 @@ assert.equal(keepHidden.applied, false);
 assert.equal(keepHidden.preference.optIn, false);
 
 const unnamedJoin = joinLeaderboardByDefault(null, "");
-assert.equal(unnamedJoin.ok, false);
-assert.equal(unnamedJoin.applied, false);
+assert.equal(unnamedJoin.ok, true);
+assert.equal(unnamedJoin.applied, true);
+assert.equal(unnamedJoin.preference.displayName, "Learner");
+
+const rename = joinLeaderboardByDefault(
+  { optIn: true, displayName: "Learner", hideWallet: true },
+  "Dana Learner"
+);
+assert.equal(rename.applied, true);
+assert.equal(rename.preference.displayName, "Dana Learner");
 
 const t0 = Date.UTC(2026, 0, 5, 12);
 function complete(state, type, sourceId, timestamp, metadata = {}) {
@@ -162,8 +178,24 @@ assert.equal(compareLearners(
   { xp: 10, completionPercent: 10, achievementCount: 1, firstAchievementAt: 1 }
 ) > 0, true);
 
+const page = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/components/pages/LeaderboardPage.jsx"), "utf8");
+assert.match(page, /role="switch"/);
+assert.match(page, /Visible as \$\{displayName\}/);
+assert.match(page, /Hidden from the board/);
+assert.doesNotMatch(page, /<h2>Privacy<\/h2>/);
+assert.doesNotMatch(page, /Show me on the live board/);
+
 const snap = snapshotFromProgression(replayedAda, { displayName: "Ada" });
 assert.equal(snap.authority, LEADERBOARD_AUTHORITY.eventLog);
 assert.equal(snap.xp, getXP(replayedAda));
+
+const sync = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/utils/backend/leaderboardSync.js"), "utf8");
+const firebaseInit = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/firebase.js"), "utf8");
+const progressionHook = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/hooks/useProgression.js"), "utf8");
+assert.match(sync, /export async function fetchLiveLeaderboard/);
+assert.match(sync, /getDocs\(optedInPreferenceQuery\(\)\)/);
+assert.match(firebaseInit, /experimentalAutoDetectLongPolling:\s*true/);
+assert.match(progressionHook, /await writeLeaderboardPreference\(id, joined.preference\)/);
+assert.doesNotMatch(progressionHook, /writeLeaderboardPreference\(id, joined.preference\)\.catch\(\(\) => \{\}\)/);
 
 console.log("live leaderboard scoring tests passed");

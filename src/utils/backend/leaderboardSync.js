@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
   onSnapshot,
   query,
   setDoc,
@@ -53,18 +54,40 @@ export async function writeLeaderboardPreference(userId, patch, extras = {}) {
   return { ok: true, preference: applied.preference };
 }
 
+function optedInPreferenceQuery() {
+  return query(
+    collection(db, COLLECTIONS.leaderboardPreferences),
+    where("optIn", "==", true)
+  );
+}
+
+function optedInEventQuery() {
+  return query(
+    collection(db, COLLECTIONS.progressEvents),
+    where("optIn", "==", true)
+  );
+}
+
+function rowsFromSnaps(prefSnap, eventSnap) {
+  const preferences = prefSnap.docs.map((item) => ({ id: item.id, ...item.data() }));
+  const events = eventSnap.docs.map((item) => item.data());
+  return buildLiveLeaderboard(preferences, events);
+}
+
+export async function fetchLiveLeaderboard() {
+  const [prefSnap, eventSnap] = await Promise.all([
+    withTimeout(getDocs(optedInPreferenceQuery()), FIRESTORE_TIMEOUT_MS),
+    withTimeout(getDocs(optedInEventQuery()), FIRESTORE_TIMEOUT_MS),
+  ]);
+  return rowsFromSnaps(prefSnap, eventSnap);
+}
+
 const LIVE_UNSUB_DELAY_MS = 500;
 let liveBoard = null;
 
 function startLiveBoard() {
-  const prefQuery = query(
-    collection(db, COLLECTIONS.leaderboardPreferences),
-    where("optIn", "==", true)
-  );
-  const eventQuery = query(
-    collection(db, COLLECTIONS.progressEvents),
-    where("optIn", "==", true)
-  );
+  const prefQuery = optedInPreferenceQuery();
+  const eventQuery = optedInEventQuery();
 
   const listeners = new Map();
   let preferences = [];
@@ -88,13 +111,31 @@ function startLiveBoard() {
     preferences = snap.docs.map((item) => ({ id: item.id, ...item.data() }));
     prefReady = true;
     emit();
-  }, fail);
+  }, (err) => {
+    if (!prefReady) fail(err);
+  });
 
   const unsubEvents = onSnapshot(eventQuery, (snap) => {
     events = snap.docs.map((item) => item.data());
     eventReady = true;
     emit();
-  }, fail);
+  }, (err) => {
+    if (!eventReady) fail(err);
+  });
+
+  Promise.all([
+    getDocs(prefQuery),
+    getDocs(eventQuery),
+  ]).then(([prefSnap, eventSnap]) => {
+    if (prefReady && eventReady) return;
+    preferences = prefSnap.docs.map((item) => ({ id: item.id, ...item.data() }));
+    events = eventSnap.docs.map((item) => item.data());
+    prefReady = true;
+    eventReady = true;
+    emit();
+  }).catch((err) => {
+    if (!prefReady || !eventReady) fail(err);
+  });
 
   return {
     listeners,

@@ -39,6 +39,19 @@ function lastEventTime(state) {
   return Math.max(...events.map((event) => Number(event.timestamp) || 0));
 }
 
+export const LEADERBOARD_FALLBACK_NAME = "Learner";
+const BOARD_NAME_RE = /^[\p{L}\p{M}\p{N}][\p{L}\p{M}\p{N}\s.'’-]*$/u;
+
+export function normalizeBoardName(value) {
+  const recipient = validateRecipientName(value);
+  if (recipient.ok) return recipient.name;
+  const trimmed = sanitizePlainText(String(value || ""), 48);
+  if (trimmed.length >= 2 && BOARD_NAME_RE.test(trimmed)) return trimmed;
+  const compact = trimmed.replace(/[^\p{L}\p{M}\p{N}\s.'’-]/gu, "").replace(/\s+/g, " ").trim();
+  if (compact.length >= 2 && BOARD_NAME_RE.test(compact)) return compact;
+  return LEADERBOARD_FALLBACK_NAME;
+}
+
 export function applyLeaderboardPreference(current = {}, patch = {}, extras = {}) {
   const hideWallet = patch.hideWallet != null
     ? Boolean(patch.hideWallet)
@@ -48,11 +61,9 @@ export function applyLeaderboardPreference(current = {}, patch = {}, extras = {}
     ? patch.displayName
     : (extras.displayName || current.displayName || "");
   if (optIn) {
-    const recipient = validateRecipientName(rawName);
-    if (!recipient.ok) return { ok: false, error: recipient.error || "Enter a name to appear on the board." };
     return {
       ok: true,
-      preference: { optIn: true, displayName: recipient.name, hideWallet },
+      preference: { optIn: true, displayName: normalizeBoardName(rawName), hideWallet },
     };
   }
   const trimmed = sanitizePlainText(rawName, 48);
@@ -63,10 +74,28 @@ export function applyLeaderboardPreference(current = {}, patch = {}, extras = {}
 }
 
 export function joinLeaderboardByDefault(existingPreference, displayName) {
+  const boardName = normalizeBoardName(displayName);
   if (existingPreference) {
+    const currentName = typeof existingPreference.displayName === "string"
+      ? existingPreference.displayName
+      : "";
+    const shouldRename = Boolean(existingPreference.optIn)
+      && boardName !== currentName
+      && boardName !== LEADERBOARD_FALLBACK_NAME;
+    if (shouldRename) {
+      return {
+        ok: true,
+        applied: true,
+        preference: {
+          optIn: true,
+          displayName: boardName,
+          hideWallet: existingPreference.hideWallet !== false,
+        },
+      };
+    }
     return { ok: true, applied: false, preference: existingPreference };
   }
-  const applied = applyLeaderboardPreference({}, { optIn: true, displayName });
+  const applied = applyLeaderboardPreference({}, { optIn: true, displayName: boardName });
   if (!applied.ok) return { ...applied, applied: false };
   return { ok: true, applied: true, preference: applied.preference };
 }

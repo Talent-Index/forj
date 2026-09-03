@@ -60,7 +60,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 
 ## Leaderboard
 
-New learners appear on the live board under their display name. They can hide. Standing is derived from an append-only log of first-time learning events that learners publish under rules (lesson ids are allowlisted). Learners cannot write XP totals or rank fields. Quiz retries do not farm standing. The board is **community ranking**, not a tamper-proof exam.
+New verified accounts appear on the live board under their display name, including at 0 XP. They can hide. Standing is derived from an append-only log of first-time learning events that learners publish under rules (lesson ids are allowlisted). Learners cannot write XP totals or rank fields. Quiz retries do not farm standing. The board is **community ranking**, not a tamper-proof exam.
 
 It is not a league with an issuer, not on-chain, and not a verified exam. A claimed credential remains distinct from this board.
 

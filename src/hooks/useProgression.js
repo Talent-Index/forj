@@ -59,7 +59,9 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
 
   useEffect(() => {
     const id = progressOwnerId(learnerId);
-    if (!id || !ready || !hydrated || joinedFor.current === id) return undefined;
+    if (!id || !ready || !hydrated) return undefined;
+    const joinKey = `${id}:${displayName || ""}`;
+    if (joinedFor.current === joinKey) return undefined;
     let cancelled = false;
     readLeaderboardPreference(id)
       .then(async (pref) => {
@@ -69,8 +71,8 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
           displayName || stateRef.current.leaderboard?.displayName
         );
         if (!joined.ok) return;
-        joinedFor.current = id;
         if (!joined.applied) {
+          joinedFor.current = joinKey;
           const next = {
             ...stateRef.current,
             leaderboard: { ...stateRef.current.leaderboard, ...joined.preference },
@@ -80,9 +82,14 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
           store.save(id, next);
           return;
         }
-        await writeLeaderboardPreference(id, joined.preference).catch(() => {});
+        try {
+          await writeLeaderboardPreference(id, joined.preference);
+        } catch {
+          await writeLeaderboardPreference(id, joined.preference);
+        }
         await setProgressEventsOptIn(id, true).catch(() => {});
-        if (cancelled || !stateRef.current) return;
+        if (cancelled || migratedFor.current !== id || !stateRef.current) return;
+        joinedFor.current = joinKey;
         const next = {
           ...stateRef.current,
           leaderboard: { ...stateRef.current.leaderboard, ...joined.preference },

@@ -351,7 +351,8 @@ service cloud.firestore {
     }
 
     match /leaderboardPreferences/{userId} {
-      allow read: if isAuthenticated() && (isOwner(userId) || resource.data.optIn == true);
+      allow get: if isAuthenticated() && (isOwner(userId) || resource.data.optIn == true);
+      allow list: if isAuthenticated() && resource.data.optIn == true;
       allow create: if isOwner(userId) && isValidLeaderboardPreference(request.resource.data) && uidUnchanged(userId);
       allow update: if isOwner(userId)
         && isValidLeaderboardPreference(request.resource.data)
@@ -369,8 +370,10 @@ service cloud.firestore {
     }
 
     match /progressEvents/{eventId} {
-      allow read: if isAuthenticated()
+      allow get: if isAuthenticated()
         && (resource.data.userId == request.auth.uid || resource.data.optIn == true);
+      allow list: if isAuthenticated() && resource.data.optIn == true;
+      allow list: if isAuthenticated() && resource.data.userId == request.auth.uid;
       allow create: if isAuthenticated()
         && isValidProgressEvent(request.resource.data)
         && request.resource.data.userId == request.auth.uid

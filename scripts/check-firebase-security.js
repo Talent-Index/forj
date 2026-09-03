@@ -44,6 +44,8 @@ assert.match(firestoreRules, /validSectionScore\(data\.sectionScores\.easy\)/);
 assert.match(firestoreRules, /acquiredPieces\.hasOnly/);
 assert.match(firestoreRules, /!\('email' in data\.metadata\)/);
 assert.match(firestoreRules, /resource\.data\.userId == request\.auth\.uid/);
+assert.match(firestoreRules, /allow list: if isAuthenticated\(\) && resource.data.optIn == true/);
+assert.match(firestoreRules, /allow get: if isAuthenticated\(\) && \(isOwner\(userId\) \|\| resource.data.optIn == true\)/);
 assert.doesNotMatch(firestoreRules, /status == 'released'/);
 assert.match(LEADERBOARD_DISCLAIMER, /not a tamper-proof exam/i);
 assert.match(progressionDoc, /community ranking/i);

@@ -16,6 +16,7 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState("");
   const optedIn = Boolean(progression?.state?.leaderboard?.optIn);
+  const displayName = progression?.state?.leaderboard?.displayName || "Learner";
   const board = useLiveLeaderboard({
     progression,
     windowName,
@@ -48,18 +49,25 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
         <p className="meta-line">{statusCopy(board.status)}</p>
       </header>
 
-      <section className="section-block">
-        <h2>Privacy</h2>
-        <p className="meta-line">
-          You appear on the live board by default under your display name.
-          Hide anytime. Rank is community standing from learner-published events — not a verified exam and not an issuer-attested credential.
-        </p>
+      <section className="board-visibility" aria-label="Board visibility">
         {(actionError || board.error) && (
           <p className="auth-error" role="alert">{actionError || board.error}</p>
         )}
-        <Button variant={optedIn ? "secondary" : "primary"} onClick={toggleOptIn} disabled={busy}>
-          {busy ? "Saving…" : optedIn ? "Hide me from the board" : "Show me on the live board"}
-        </Button>
+        <button
+          type="button"
+          className="board-visibility-row"
+          role="switch"
+          aria-checked={optedIn}
+          aria-label={optedIn ? "Hide from the live board" : "Show on the live board"}
+          aria-busy={busy}
+          disabled={busy}
+          onClick={toggleOptIn}
+        >
+          <span className="board-visibility-status">
+            {busy ? "Saving…" : optedIn ? `Visible as ${displayName}` : "Hidden from the board"}
+          </span>
+          <span className="board-switch" aria-hidden="true" />
+        </button>
       </section>
 
       <div className="quiz-nav">

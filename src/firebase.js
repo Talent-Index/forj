@@ -23,7 +23,10 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 function firestoreDb() {
   try {
-    return initializeFirestore(app, { ignoreUndefinedProperties: true });
+    return initializeFirestore(app, {
+      ignoreUndefinedProperties: true,
+      experimentalAutoDetectLongPolling: true,
+    });
   } catch {
     return getFirestore(app);
   }
