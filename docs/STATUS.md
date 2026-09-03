@@ -55,7 +55,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Soulbound NFT. It cannot be transferred.
 - Learner mint records a **claimed** score.
 - The contract also supports **issuer-attested** mint with an owner signature. That path is not the default learner UI.
-- Public lookup by credential ID or holder wallet, signed in or out. A found record is an on-chain record, not a verified exam.
+- Shareable lookup by credential ID or holder wallet (URL and QR). Lookup is not listed in the primary navigation. A found record is an on-chain record, not a verified exam.
 - Forjora does not issue credentials on Avalanche C-Chain today.
 
 ## Leaderboard

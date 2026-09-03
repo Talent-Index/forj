@@ -23,7 +23,7 @@ Signed domain: `name`, `version`, `chainId`, `verifyingContract`. Signed payload
 | --- | --- |
 | Learner | Publish a **claimed** score to their own wallet |
 | Issuer (contract owner) | Sign an attested authorization; hand the issuer role to a new owner who must accept it |
-| Public | Look up a token. Lookup does not attest a score |
+| Public | Open a shareable token URL. Looking it up does not attest a score |
 
 A pending owner cannot attest until they accept. The issuer role cannot be abandoned. Signing keys never live in the learner browser.
 

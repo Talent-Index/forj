@@ -6,7 +6,6 @@ import ProfileMenu from "../auth/ProfileMenu";
 const LOGGED_OUT_LINKS = [
   { id: "learn", label: "Learn" },
   { id: "credentials", label: "Credentials" },
-  { id: "lookup", label: "Lookup" },
   { id: "about", label: "About" },
 ];
 
@@ -15,7 +14,6 @@ const LOGGED_IN_LINKS = [
   { id: "progress", label: "Progress" },
   { id: "leaderboard", label: "Board" },
   { id: "credentials", label: "Credentials" },
-  { id: "lookup", label: "Lookup" },
 ];
 
 function ConnectedNotice({ address }) {

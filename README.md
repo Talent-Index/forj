@@ -17,7 +17,7 @@ The mark is a geometric **F / upward pathway** in charcoal with a gold accent st
 3. Earn points, XP, levels, achievements, and a UTC learning streak.
 4. Spend points to seat interlocking pieces of a 4×4 certificate jigsaw.
 5. When the puzzle is complete, reveal a personalized certificate (blacksmith, forge, and crafted diamond).
-6. Optionally mint a soulbound credential. Anyone can look up that public Fuji record.
+6. Optionally mint a soulbound credential. A minted record has a shareable URL and QR.
 
 ## What learners get
 
@@ -38,7 +38,7 @@ There are two kinds of on-chain record:
 | **Forjora claimed** | The learner published their own scores. |
 | **Forjora issuer-attested** | The contract owner authorized that record with a signature. |
 
-A claimed score is not an independently verified assessment. Public lookup shows that a record exists on Fuji and stays available after sign-in. Lookup is not issuer attestation. Explorer links show on-chain presence, not certification.
+A claimed score is not an independently verified assessment. A shareable URL or QR shows that a record exists on Fuji. Opening that link is not issuer attestation, and lookup is not listed in the primary navigation. Explorer links show on-chain presence, not certification.
 
 The live Fuji credential sits on [`SkillForgeCredential`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) at [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df). That on-chain name is the legacy contract identity. Forjora does not issue credentials on Avalanche C-Chain today.
 

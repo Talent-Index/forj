@@ -177,8 +177,16 @@ assert.match(app, /\/credential/);
 assert.match(app, /PUBLIC_PAGES.has\(page\) && page !== "landing"/);
 
 const navbar = readFileSync(join(root, "src/components/layout/Navbar.jsx"), "utf8");
-assert.match(navbar, /LOGGED_OUT_LINKS[\s\S]*id: "lookup"/);
-assert.match(navbar, /LOGGED_IN_LINKS[\s\S]*id: "lookup"/);
+assert.doesNotMatch(navbar, /LOGGED_OUT_LINKS[\s\S]*id: "lookup"/);
+assert.doesNotMatch(navbar, /LOGGED_IN_LINKS[\s\S]*id: "lookup"/);
+assert.doesNotMatch(
+  readFileSync(join(root, "src/components/layout/Footer.jsx"), "utf8"),
+  /onNavigate\("lookup"\)/
+);
+assert.doesNotMatch(
+  readFileSync(join(root, "src/components/pages/AboutPage.jsx"), "utf8"),
+  /onNavigate\?\.\("lookup"\)/
+);
 
 const qr = readFileSync(join(root, "src/components/CredentialQr.jsx"), "utf8");
 assert.match(qr, /qrcode/);

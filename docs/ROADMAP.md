@@ -36,7 +36,7 @@ Remaining: richer certificate polish and deeper path content beyond the first si
 
 ## Phase 3 — Credentials 🟡
 
-Shipped: credential model, soulbound metadata, claimed vs attested, owner-signed attested mint on the contract, public lookup, QR/share URL.
+Shipped: credential model, soulbound metadata, claimed vs attested, owner-signed attested mint on the contract, shareable credential URL/QR (lookup is not in primary nav).
 
 Remaining: issuer-key operations, attested mint in the learner UI, versioning and revocation.
 

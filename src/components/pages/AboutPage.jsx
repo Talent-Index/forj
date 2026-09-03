@@ -41,9 +41,6 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
           <Button onClick={() => onNavigate?.("learn")}>
             {isAuthenticated ? "Continue learning" : "Start learning"}
           </Button>
-          <Button variant="secondary" onClick={() => onNavigate?.("lookup")}>
-            Look up a credential
-          </Button>
         </div>
       </header>
 
@@ -139,18 +136,6 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
             . Explorer links show that a token exists. They do not mean an issuer reviewed the score.
           </p>
         ) : null}
-      </section>
-
-      <section className="section-block">
-        <h2>Look up a credential</h2>
-        <p>
-          Anyone can open Lookup and read a Fuji record by credential ID or holder wallet, signed in
-          or out. A found record is an on-chain snapshot. Looking it up does not make a Forjora
-          claimed score issuer-attested.
-        </p>
-        <Button variant="secondary" onClick={() => onNavigate?.("lookup")}>
-          Open lookup
-        </Button>
       </section>
 
       <section className="section-block">
