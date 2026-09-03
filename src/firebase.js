@@ -1,5 +1,4 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore, initializeFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -33,8 +32,3 @@ function firestoreDb() {
 }
 export const db = firestoreDb();
 export const storage = getStorage(app);
-
-export const analyticsReady =
-  typeof window === "undefined"
-    ? Promise.resolve(null)
-    : isSupported().then((supported) => (supported ? getAnalytics(app) : null));

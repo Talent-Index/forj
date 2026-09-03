@@ -63,6 +63,7 @@ const byKey = Object.fromEntries(headerBlock.map((row) => [row.key, row.value]))
 assert.match(byKey["Content-Security-Policy"] || "", /default-src 'self'/);
 assert.match(byKey["Content-Security-Policy"] || "", /frame-ancestors 'none'/);
 assert.match(byKey["Content-Security-Policy"] || "", /www\.recaptcha\.net/);
+assert.doesNotMatch(byKey["Content-Security-Policy"] || "", /googletagmanager/);
 assert.equal(byKey["X-Content-Type-Options"], "nosniff");
 assert.equal(byKey["X-Frame-Options"], "DENY");
 assert.equal(byKey["Cross-Origin-Opener-Policy"], "same-origin-allow-popups");

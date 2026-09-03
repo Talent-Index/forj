@@ -188,6 +188,8 @@ assert.equal(isCredentialShareUrl("https://skillforge.example/admin"), false);
 assert.equal(sanitizePlainText("<Ada>"), "Ada");
 
 assert.doesNotMatch(srcBlob, /dangerouslySetInnerHTML/);
+assert.doesNotMatch(srcBlob, /from ["']firebase\/analytics["']/);
+assert.doesNotMatch(srcBlob, /\bgetAnalytics\b/);
 assert.match(certificate, /prepareClaimedMint/);
 assert.match(certificate, /value: prepared\.value/);
 assert.doesNotMatch(certificate, /VITE_CREDENTIAL_CONTRACT/);
