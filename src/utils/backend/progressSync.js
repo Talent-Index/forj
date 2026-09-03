@@ -15,9 +15,11 @@ import { replayEvents } from "../progression/replay";
 import {
   COLLECTIONS,
   SCHEMA_VERSION,
+  isAllowedAnalyticsType,
   isAllowedProgressEventSource,
   isClientEventType,
   progressEventDocId,
+  sanitizeClientPayload,
   sanitizeProgressEventSourceId,
 } from "./schema";
 import { FIRESTORE_TIMEOUT_MS, withTimeout } from "./timeout";
@@ -30,7 +32,7 @@ function eventPayload(userId, event) {
     type: event.type,
     sourceId,
     eventKey: `${event.type}:${sourceId}`,
-    metadata: event.metadata && typeof event.metadata === "object" ? event.metadata : {},
+    metadata: sanitizeClientPayload(event.metadata),
     clientTimestamp: Number(event.timestamp) || Date.now(),
     optIn: Boolean(event.optIn),
     createdAt: serverTimestamp(),
@@ -106,11 +108,13 @@ export async function readQuizProgress(userId) {
 export { replayEvents };
 
 export async function writeAnalyticsEvent(userId, type, payload = {}) {
+  if (!userId || !isAllowedAnalyticsType(type)) return { ok: false };
   await setDoc(doc(collection(db, COLLECTIONS.analyticsEvents)), {
     schemaVersion: SCHEMA_VERSION,
     userId,
     type,
-    payload,
+    payload: sanitizeClientPayload(payload),
     createdAt: serverTimestamp(),
   });
+  return { ok: true };
 }

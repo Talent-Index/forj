@@ -116,6 +116,47 @@ export function sanitizeProgressEventSourceId(sourceId) {
   return String(sourceId ?? "").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120);
 }
 
+const BLOCKED_PAYLOAD_KEYS = new Set([
+  "email",
+  "name",
+  "wallet",
+  "password",
+  "token",
+  "secret",
+  "phone",
+  "ssn",
+]);
+const MAX_METADATA_KEYS = 12;
+const MAX_METADATA_STRING = 120;
+
+function isPlainObject(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+/** Drop PII keys and nested objects before a client write. */
+export function sanitizeClientPayload(raw, maxKeys = MAX_METADATA_KEYS) {
+  if (!isPlainObject(raw)) return {};
+  const out = {};
+  for (const [key, value] of Object.entries(raw)) {
+    if (Object.keys(out).length >= maxKeys) break;
+    const name = String(key);
+    if (!name || name.length > 40) continue;
+    if (BLOCKED_PAYLOAD_KEYS.has(name.toLowerCase())) continue;
+    if (typeof value === "boolean") {
+      out[name] = value;
+    } else if (typeof value === "number" && Number.isFinite(value)) {
+      out[name] = value;
+    } else if (typeof value === "string") {
+      out[name] = value.slice(0, MAX_METADATA_STRING);
+    }
+  }
+  return out;
+}
+
+export function isAllowedAnalyticsType(type) {
+  return ANALYTICS_EVENT_TYPES.includes(type);
+}
+
 export function progressEventDocId(userId, type, sourceId) {
   const source = sanitizeProgressEventSourceId(sourceId);
   return `${userId}_${type}_${source}`.slice(0, 700);

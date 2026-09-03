@@ -3,6 +3,7 @@ import { computeLearnerDashboard, shortAddress, walletExplorerUrl } from "../../
 import { FUJI_CHAIN_ID } from "../../utils/wallet";
 import { useOnChainCredential } from "../../hooks/useOnChainCredential";
 import { getFujiPublicClient } from "../../utils/fujiClient";
+import { safeExternalHref } from "../../utils/frontendSecurity";
 import { Button, Card, ProgressBar } from "../ui/primitives";
 import EmptyState from "../EmptyState";
 import ExistingCertificate from "../ExistingCertificate";
@@ -196,9 +197,9 @@ function ProgressPage({
         <p className="meta-line">
           {walletName || "Wallet"} · {isFuji ? "Avalanche Fuji" : `Chain ${chainId || "unknown"}`} · ID {chainId || FUJI_CHAIN_ID}
         </p>
-        {explorerUrl && (
+        {safeExternalHref(explorerUrl) && (
           <p>
-            <a href={explorerUrl} target="_blank" rel="noreferrer">
+            <a href={safeExternalHref(explorerUrl)} target="_blank" rel="noopener noreferrer">
               View address on Snowtrace
             </a>
           </p>

@@ -12,6 +12,7 @@ import {
 } from "../../utils/onboarding";
 import CredentialStatusBadge from "../CredentialStatusBadge";
 import { Button, Card } from "../ui/primitives";
+import { safeExternalHref } from "../../utils/frontendSecurity";
 
 const CONTRACT_EXPLORER = CONTRACT_ADDRESS
   ? `https://testnet.snowtrace.io/address/${CONTRACT_ADDRESS}`
@@ -125,14 +126,14 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
         <h2>{FUJI_EXPLAINER.title}</h2>
         <p>{FUJI_EXPLAINER.body}</p>
         <p>
-          <a href={FUJI_EXPLAINER.faucetUrl} target="_blank" rel="noreferrer">Get Fuji test AVAX</a>
+          <a href={safeExternalHref(FUJI_EXPLAINER.faucetUrl)} target="_blank" rel="noopener noreferrer">Get Fuji test AVAX</a>
           {" — "}
           {FUJI_EXPLAINER.faucetHint}
         </p>
         {CONTRACT_EXPLORER ? (
           <p className="note">
             Live Fuji credential contract:{" "}
-            <a href={CONTRACT_EXPLORER} target="_blank" rel="noreferrer">
+            <a href={safeExternalHref(CONTRACT_EXPLORER)} target="_blank" rel="noopener noreferrer">
               View on Snowtrace
             </a>
             . Explorer links show that a token exists. They do not mean an issuer reviewed the score.

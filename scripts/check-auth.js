@@ -23,6 +23,13 @@ assert.match(emailPasswordFormIssue({
   confirmPassword: "forge-skill-1",
   mode: "signup",
 }), /name/i);
+assert.match(emailPasswordFormIssue({
+  name: "Dana",
+  email: "dana@example.com",
+  password: "dana@example.com",
+  confirmPassword: "dana@example.com",
+  mode: "signup",
+}), /email address as your password/i);
 
 const storage = createMemoryStorage();
 const auth = createAuthStore(storage);
@@ -123,5 +130,11 @@ const linked = auth.linkWallet(googleEmailSignIn.account.id, `0x${"a".repeat(40)
 assert.equal(linked.ok, true);
 assert.equal(linked.account.walletAddress, `0x${"a".repeat(40)}`);
 assert.equal(onboardingStage(linked.account), "ready");
+
+const { checkAuthRateLimit, recordAuthOutcome } = await import("../src/utils/authRateLimit.js");
+globalThis.__forjoraAuthRate = {};
+for (let i = 0; i < 5; i += 1) recordAuthOutcome("signin", false, 1_000);
+assert.match(checkAuthRateLimit("signin", 1_000), /Too many attempts/);
+assert.equal(checkAuthRateLimit("signin", 1_000 + 60_000), "");
 
 console.log("auth account tests passed");

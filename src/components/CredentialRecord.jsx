@@ -2,6 +2,7 @@ import { describeMetadataUri } from "../utils/credentialModel";
 import { shortAddress } from "../utils/learnerStats";
 import { QUESTIONS_PER_QUIZ } from "../utils/quiz";
 import { EXPLORER_LINK_LABEL, resolveCredentialStatus } from "../utils/credentialStatus";
+import { safeExternalHref } from "../utils/frontendSecurity";
 import CredentialStatusBadge from "./CredentialStatusBadge";
 
 function CredentialRecord({ credential }) {
@@ -49,9 +50,9 @@ function CredentialRecord({ credential }) {
         Schema v{credential.version?.schema ?? credential.schemaVersion}
       </p>
       {metadata && <p className="meta-line">Metadata: {metadata}</p>}
-      {credential.explorerUrl && (
+      {safeExternalHref(credential.explorerUrl) && (
         <p>
-          <a href={credential.explorerUrl} target="_blank" rel="noreferrer">{EXPLORER_LINK_LABEL}</a>
+          <a href={safeExternalHref(credential.explorerUrl)} target="_blank" rel="noopener noreferrer">{EXPLORER_LINK_LABEL}</a>
         </p>
       )}
     </div>

@@ -25,6 +25,16 @@ export const DEFAULT_C_CHAIN_RPC = "https://api.avax.network/ext/bc/C/rpc";
 export const SNOWTRACE_ORIGIN = "https://testnet.snowtrace.io";
 export const IPFS_GATEWAY_ORIGIN = "https://ipfs.io";
 
+const EXTERNAL_HREF_HOSTS = new Set([
+  "testnet.snowtrace.io",
+  "ipfs.io",
+  "build.avax.network",
+  "www.avax.network",
+  "avax.network",
+  "core.app",
+  "www.core.app",
+]);
+
 const SECRET_NAME = /^(VITE_)?(PRIVATE_KEY|PINATA_JWT|MNEMONIC|SECRET|AWS_SECRET)/i;
 const PRIVATE_HOST = /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/i;
 const C_CHAIN_RPC_HOSTS = new Set(["api.avax.network"]);
@@ -179,7 +189,7 @@ export function safeExternalHref(value) {
     const url = new URL(value);
     if (url.protocol !== "https:") return "";
     if (url.username || url.password) return "";
-    if (url.hostname === "testnet.snowtrace.io" || url.hostname === "ipfs.io") return url.toString();
+    if (EXTERNAL_HREF_HOSTS.has(url.hostname)) return url.toString();
     return "";
   } catch {
     return "";

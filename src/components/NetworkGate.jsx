@@ -1,5 +1,6 @@
 import { networkLabel } from "../utils/wallet";
 import { ERROR_STATES, FUJI_EXPLAINER } from "../utils/onboarding";
+import { safeExternalHref } from "../utils/frontendSecurity";
 import EmptyState from "./EmptyState";
 
 function NetworkGate({ chainId, switching, error, onSwitch }) {
@@ -15,7 +16,7 @@ function NetworkGate({ chainId, switching, error, onSwitch }) {
       {error && <p className="note">{error}</p>}
       <p className="note">
         Need test AVAX?{" "}
-        <a href={FUJI_EXPLAINER.faucetUrl} target="_blank" rel="noreferrer">Fuji faucet</a>
+        <a href={safeExternalHref(FUJI_EXPLAINER.faucetUrl)} target="_blank" rel="noopener noreferrer">Fuji faucet</a>
       </p>
     </div>
   );

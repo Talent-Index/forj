@@ -28,5 +28,5 @@ These cannot be proven from the working tree alone:
 ## Related controls
 
 - Public env allowlist: `src/utils/frontendSecurity.js`  
-- CI: `scripts/check-frontend-security.js`, `scripts/check-firebase-security.js`  
+- CI: `scripts/check-frontend-security.js` (includes `vite.config.js` integrity), `scripts/check-firebase-security.js`  
 - Threat model: [THREAT-MODEL.md](./THREAT-MODEL.md)

@@ -44,6 +44,7 @@ import {
   applySignupIdentity,
   mergeHydratedProfile,
 } from "../utils/profileOnboarding";
+import { checkAuthRateLimit, recordAuthOutcome } from "../utils/authRateLimit";
 import { validateRecipientName } from "../utils/recipient";
 
 const googleProvider = new GoogleAuthProvider();
@@ -150,6 +151,8 @@ export function useAuth() {
       mode: "signup",
     });
     if (formIssue) return { ok: false, error: formIssue };
+    const limited = checkAuthRateLimit("signup");
+    if (limited) return { ok: false, error: limited };
     const recipient = validateRecipientName(name);
     if (!recipient.ok) return { ok: false, error: recipient.error };
     const normalized = normalizeEmail(email);
@@ -169,8 +172,10 @@ export function useAuth() {
       };
       setUser(credential.user);
       setAccount(accountState);
+      recordAuthOutcome("signup", true);
       return { ok: true, account: accountState };
     } catch (error) {
+      recordAuthOutcome("signup", true);
       return { ok: false, error: mapAuthError(error) };
     }
   }, []);
@@ -178,6 +183,8 @@ export function useAuth() {
   const signInWithEmail = useCallback(async ({ email, password }) => {
     const formIssue = emailPasswordFormIssue({ email, password, mode: "signin" });
     if (formIssue) return { ok: false, error: formIssue };
+    const limited = checkAuthRateLimit("signin");
+    if (limited) return { ok: false, error: limited };
     try {
       const credential = await signInWithEmailAndPassword(auth, normalizeEmail(email), password);
       await refreshAuthSession(credential.user);
@@ -185,8 +192,10 @@ export function useAuth() {
         await persistVerifiedProfile(credential.user, credential.user.displayName);
       }
       const profile = await hydrate(auth.currentUser || credential.user);
+      recordAuthOutcome("signin", true);
       return { ok: true, account: profile };
     } catch (error) {
+      recordAuthOutcome("signin", false);
       return {
         ok: false,
         error: mapAuthError(error),
@@ -250,10 +259,14 @@ export function useAuth() {
 
   const requestPasswordReset = useCallback(async (email) => {
     if (!isValidEmail(email)) return { ok: false, error: "Enter a valid email address." };
+    const limited = checkAuthRateLimit("reset");
+    if (limited) return { ok: false, error: limited };
     try {
       await sendPasswordResetEmail(auth, normalizeEmail(email), { url: actionUrl() });
+      recordAuthOutcome("reset", true);
       return { ok: true };
     } catch (error) {
+      recordAuthOutcome("reset", true);
       if (error.code === "auth/user-not-found") return { ok: true };
       return { ok: false, error: mapAuthError(error) };
     }

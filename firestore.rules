@@ -181,12 +181,14 @@ service cloud.firestore {
         && data.totalPoints is int && data.totalPoints >= 0 && data.totalPoints <= 80
         && data.spentPoints is int && data.spentPoints >= 0 && data.spentPoints <= 80
         && data.acquiredPieces is list && data.acquiredPieces.size() <= 16
+        && data.acquiredPieces.hasOnly([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
         && data.sectionScores is map
         && data.sectionScores.keys().hasOnly(['easy', 'medium', 'hard'])
         && (!('easy' in data.sectionScores) || validSectionScore(data.sectionScores.easy))
         && (!('medium' in data.sectionScores) || validSectionScore(data.sectionScores.medium))
         && (!('hard' in data.sectionScores) || validSectionScore(data.sectionScores.hard))
         && data.completedSections is list && data.completedSections.size() <= 3
+        && data.completedSections.hasOnly(['easy', 'medium', 'hard'])
         && data.attempts is list && data.attempts.size() <= 40
         && data.recipientName is string && data.recipientName.size() <= 80
         && data.updatedAt is timestamp
@@ -277,6 +279,10 @@ service cloud.firestore {
         && !('xp' in data.metadata)
         && !('level' in data.metadata)
         && !('rank' in data.metadata)
+        && !('email' in data.metadata)
+        && !('name' in data.metadata)
+        && !('wallet' in data.metadata)
+        && !('password' in data.metadata)
         && data.optIn is bool
         && data.clientTimestamp is int
         && data.createdAt is timestamp;
@@ -309,11 +315,18 @@ service cloud.firestore {
         && hasOnlyAllowedFields(['schemaVersion', 'userId', 'type', 'payload', 'createdAt'])
         && data.schemaVersion is int && data.schemaVersion == 1
         && data.userId == request.auth.uid
-        && data.type is string && data.type.size() <= 80
+        && data.type in [
+          'quiz_started', 'quiz_completed', 'lesson_completed', 'module_completed',
+          'track_completed', 'path_completed', 'xp_earned', 'achievement_unlocked',
+          'streak_milestone', 'puzzle_piece_unlocked', 'puzzle_completed',
+          'credential_claimed', 'credential_attested'
+        ]
         && data.payload is map
+        && data.payload.keys().size() <= 12
         && !('email' in data.payload)
         && !('name' in data.payload)
         && !('wallet' in data.payload)
+        && !('password' in data.payload)
         && data.createdAt is timestamp;
     }
 
@@ -372,8 +385,7 @@ service cloud.firestore {
     }
 
     match /wallets/{walletId} {
-      allow read: if isAuthenticated()
-        && (resource.data.userId == request.auth.uid || resource.data.status == 'released');
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
       allow create: if isAuthenticated()
         && isValidWallet(request.resource.data, walletId)
         && request.resource.data.status == 'active';

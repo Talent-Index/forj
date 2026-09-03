@@ -54,9 +54,9 @@ Review date: **28 August 2026**. Live Fuji contract under review is distinct fro
 | **B2 Browser ↔ Wallet** | App intent UI | Extension / mobile wallet | Fuji-only prep; allowlisted wallets; param validation; user confirms tx |
 | **B3 Wallet ↔ Fuji contract** | Signed txs from learner EOA | `SkillForgeCredential` | Solidity access control; soulbound; score caps |
 | **B4 Issuer ops ↔ Contract** | Owner key (off-app) | Attested mint path | EIP-712 domain + nonce + deadline; **no learner-UI signing** |
-| **B5 Public internet ↔ App host** | Deployed SPA | Anyone | Host TLS (platform); **no in-repo CSP / security headers** |
+| **B5 Public internet ↔ App host** | Deployed SPA | Anyone | Host TLS (platform); CSP / security headers in `vercel.json`; `vite.config.js` integrity checked in CI |
 | **B6 Public ↔ Chain explorers / RPC / IPFS** | Read-only clients | Third parties | URL allowlists in frontend helpers; public RPC trust |
-| **B7 CI ↔ Repo / deploy** | GitHub Actions `verify` | Maintainers, secrets store | Lint, tests, check scripts, build; **no Dependabot / CodeQL in-repo** |
+| **B7 CI ↔ Repo / deploy** | GitHub Actions `verify` | Maintainers, secrets store | Lint, tests, check scripts, build; Dependabot present; `vite.config.js` must stay small and unobfuscated |
 
 There is **no** application API server and **no** Cloud Functions tier. Authorization for off-chain data is almost entirely **Firestore/Storage rules + client honesty**.
 
@@ -229,8 +229,8 @@ Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, 
 
 ### D. Supply chain / ops
 
-- Dependency compromise  
-- Secrets in Git or `VITE_*`  
+- Dependency compromise; obfuscated build-config implants (`vite.config.js` must remain a short, readable Vite config)
+- Secrets in Git or `VITE_*`
 - CI privilege / deploy branch protection (ops)  
 - Hosting without security headers  
 
@@ -248,13 +248,14 @@ Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, 
 | XP / leaderboard farming via client events | Progression / board | Medium (product integrity) | Medium | Lesson sources allowlisted; quiz/puzzle caps apply; **residual** until trusted XP ledger — board is community ranking |
 | Cross-user profile/progress read/write | Learner accounts | High | Low if rules deployed | Owner checks; deny-by-default catch-all |
 | Unverified email using Firestore | Learner data | Medium | Low after rules deploy | Rules require `email_verified` — **deploy rules to production** |
-| XSS → session/tx trickery | Accounts / wallet | High | Low–Medium | No `dangerouslySetInnerHTML`; URL/media sanitizers; **no CSP** |
+| XSS → session/tx trickery | Accounts / wallet | High | Low–Medium | No `dangerouslySetInnerHTML`; URL/media sanitizers; CSP in `vercel.json` |
 | Malicious artwork / avatar URI | Browser | Medium | Low | `safeMediaSrc` / `safeAvatarSrc`; SVG data URLs rejected |
 | Wallet on wrong network | Funds / failed mint | Medium | Medium | Fuji gate + prep rejection |
 | Seed phrase phishing via UI | Wallet | Critical | Process | App must never ask; none in code paths reviewed |
 | Firestore reserved collection enablement without backend | Credentials / issuer | Critical | Future risk | Keep deny-all until trusted writers exist |
-| Dependency RCE in build | Supply chain | High | Low–Medium | `npm audit` high gate in verify; no Dependabot config |
-| Hosting header stripping / clickjacking | Session UX | Medium | Low on Vercel | Headers/CSP in `vercel.json`; confirm on live host |
+| Dependency RCE in build | Supply chain | High | Low–Medium | `npm audit` high gate in verify; Dependabot config present |
+| Hosting header stripping / clickjacking | Session UX | Medium | Low on Vercel | Headers/CSP in `vercel.json` (COOP `same-origin-allow-popups` for Google popup); confirm on live host |
+| Build-config implant / supply chain | Dev workstation / CI secrets | Critical | Low after integrity check | `check-frontend-security` rejects obfuscated `vite.config.js` |
 | Public lookup overshared as “verified” | Reputation / honesty | High (product) | Process | Copy + status badges; regression checks |
 
 ---
@@ -285,8 +286,8 @@ It does **not** by itself satisfy the full 23-section execution checklist or the
 | App Check | Client scaffolding optional via `VITE_FIREBASE_APPCHECK_SITE_KEY`; **console enforcement** still required |
 | Trusted XP / quiz validation | No Cloud Functions / server referee; board copy + lesson allowlist reduce abuse but do not eliminate quiz metadata gaming |
 | Firestore `email_verified` | Enforced in rules (deploy rules to production Firebase) |
-| Security headers / CSP | Shipped in `vercel.json` for Vercel hosts |
-| Rate limiting | No app-layer limits |
+| Security headers / CSP | Shipped in `vercel.json` for Vercel hosts (COOP + recaptcha origins) |
+| Rate limiting | Client auth throttle shipped; Firebase Auth quotas; no app-layer IP limits (no API server) |
 | Dependabot | Config present; secret scanning / branch protection still ops |
 | Storage uploads | Rules exist (verified email); unused path |
 | Issuer infrastructure & monitoring | Production-gate blocked |

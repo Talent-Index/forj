@@ -9,6 +9,7 @@ import {
   isTrackUnlocked,
 } from "../../utils/progression/paths.js";
 import { Button, Card, ProgressBar } from "../ui/primitives";
+import { safeExternalHref } from "../../utils/frontendSecurity";
 import SectionSelect from "../SectionSelect";
 
 function LearnPage({
@@ -61,9 +62,9 @@ function LearnPage({
           {lesson.body.split("\n\n").map((paragraph) => (
             <p key={paragraph.slice(0, 24)}>{paragraph}</p>
           ))}
-          {lesson.reference && (
+          {lesson.reference && safeExternalHref(lesson.reference.url) && (
             <p className="meta-line">
-              <a href={lesson.reference.url} target="_blank" rel="noreferrer">{lesson.reference.title}</a>
+              <a href={safeExternalHref(lesson.reference.url)} target="_blank" rel="noopener noreferrer">{lesson.reference.title}</a>
             </p>
           )}
         </article>

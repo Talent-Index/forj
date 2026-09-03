@@ -7,6 +7,7 @@ import {
   QUESTION_STATUSES,
   isClientEventType,
   progressEventDocId,
+  sanitizeClientPayload,
   walletDocId,
 } from "../src/utils/backend/schema.js";
 import { mapAuthError } from "../src/utils/backend/authErrors.js";
@@ -38,5 +39,15 @@ assert.equal(progressOwnerId("acc_" + "c".repeat(24)), "acc_" + "c".repeat(24));
 
 assert.equal(mapAuthError({ code: "auth/email-already-in-use" }).includes("already exists"), true);
 assert.equal(mapAuthError({ code: "auth/wrong-password" }).includes("incorrect"), true);
+
+assert.deepEqual(
+  sanitizeClientPayload({
+    email: "hidden@example.com",
+    difficulty: "hard",
+    correct: 5,
+    nested: { email: "x" },
+  }),
+  { difficulty: "hard", correct: 5 }
+);
 
 console.log("backend schema tests passed");

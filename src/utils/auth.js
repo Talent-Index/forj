@@ -85,7 +85,12 @@ export function emailPasswordFormIssue({
     return "";
   }
   if (mode === "forgot") return "";
-  return passwordIssue(password, confirmPassword);
+  const issue = passwordIssue(password, confirmPassword);
+  if (issue) return issue;
+  if (typeof password === "string" && password.toLowerCase() === normalizeEmail(email)) {
+    return "Do not use your email address as your password.";
+  }
+  return "";
 }
 
 async function sha256Hex(value) {
@@ -156,6 +161,7 @@ export function authOwnerId(account) {
 }
 
 export function createAuthStore(storage = defaultStorage()) {
+  // Local mock for check scripts only. Production sign-in uses Firebase Auth in useAuth.js.
   function loadAccounts() {
     const rows = readJson(storage, AUTH_ACCOUNTS_KEY, []);
     return Array.isArray(rows) ? rows : [];

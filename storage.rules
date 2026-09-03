@@ -13,8 +13,9 @@ service firebase.storage {
       allow read: if isVerifiedUser() && request.auth.uid == userId;
       allow write: if isVerifiedUser()
         && request.auth.uid == userId
+        && fileName.matches('^[a-zA-Z0-9._-]{1,80}$')
         && request.resource.size < 350 * 1024
-        && request.resource.contentType.matches('image/.*');
+        && request.resource.contentType in ['image/jpeg', 'image/png', 'image/webp'];
     }
 
     match /credential-assets/{allPaths=**} {

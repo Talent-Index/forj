@@ -45,6 +45,10 @@ const viteConfig = readFileSync(join(root, "vite.config.js"), "utf8");
 const certificate = readFileSync(join(root, "src/components/Certificate.jsx"), "utf8");
 
 assert.match(viteConfig, /envPrefix: "VITE_"/);
+assert.ok(viteConfig.length < 2000, "vite.config.js is unexpectedly large");
+assert.doesNotMatch(viteConfig, /_0x[0-9a-f]{4}/i);
+assert.doesNotMatch(viteConfig, /eval\s*\(/);
+assert.doesNotMatch(viteConfig, /child_process|createRequire|spawn\s*\(/);
 assert.doesNotMatch(srcBlob, /import\.meta\.env\.(VITE_)?(PRIVATE_KEY|PINATA_JWT)/);
 assert.doesNotMatch(envExample, /VITE_PRIVATE_KEY/);
 assert.doesNotMatch(envExample, /VITE_PINATA/);
@@ -173,6 +177,8 @@ assert.equal(prepareClaimedMint({
 assert.equal(safeExternalHref("javascript:alert(1)"), "");
 assert.equal(safeExternalHref("https://evil.example/phish"), "");
 assert.match(safeExternalHref("https://testnet.snowtrace.io/tx/0xabc"), /snowtrace/);
+assert.match(safeExternalHref("https://build.avax.network/docs"), /build\.avax/);
+assert.match(safeExternalHref("https://core.app/tools/testnet-faucet/"), /core\.app/);
 assert.equal(safeMediaSrc("javascript:alert(1)"), "");
 assert.equal(safeMediaSrc("/src/assets/forge-certificate.jpg"), "/src/assets/forge-certificate.jpg");
 assert.equal(safeAvatarSrc("data:image/svg+xml,<svg></svg>"), "");

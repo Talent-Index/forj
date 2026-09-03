@@ -12,6 +12,7 @@ import {
 } from "../utils/quiz";
 import { playCorrectSound, playWrongSound, playSectionCompleteSound } from "../utils/sounds";
 import { ERROR_STATES, PATH_COPY } from "../utils/onboarding";
+import { safeExternalHref } from "../utils/frontendSecurity";
 import { Button, ProgressBar } from "./ui/primitives";
 import EmptyState from "./EmptyState";
 
@@ -430,9 +431,9 @@ function Quiz({ sectionId, onComplete, onBack }) {
           {feedback.isCorrect && <p className="meta-line">+{pointsPerQ} points</p>}
           <p>{feedback.explanation}</p>
           {feedback.funFact && <p className="quiz-fun-fact">{feedback.funFact}</p>}
-          {feedback.reference && (
+          {feedback.reference && safeExternalHref(feedback.reference.url) && (
             <p>
-              <a href={feedback.reference.url} target="_blank" rel="noreferrer">
+              <a href={safeExternalHref(feedback.reference.url)} target="_blank" rel="noopener noreferrer">
                 Learn more: {feedback.reference.title}
               </a>
             </p>

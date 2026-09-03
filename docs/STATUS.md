@@ -1,6 +1,6 @@
 # Forjora — Status
 
-Last updated: 28 August 2026
+Last updated: 3 September 2026
 
 This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
@@ -23,7 +23,7 @@ Fuji contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.sn
 
 The learner-facing mark is **Forjora**: a geometric “F” / upward pathway icon in charcoal with a gold accent step, plus a bold FORJORA wordmark. Brand feeling: Learn → Build → Prove → Advance.
 
-Learners use an **account** (email/password or Google). Name, email, and password create the account; a verification link must be opened before the learner is treated as signed in for progress. Progress follows that account across browsers and devices. **Email verification is required** before account-backed Firestore and Storage access. A **wallet** is optional until the learner mints and is not a signup gate. Switching wallets does not move another person’s XP or puzzle. Signing out does not leave progress on the next session’s account.
+Learners use an **account** (email/password or Google). Name, email, and password create the account; a verification link must be opened before the learner is treated as signed in for progress. Progress follows that account across browsers and devices. **Email verification is required** before account-backed Firestore and Storage access. Repeated sign-in, signup, and password-reset attempts are throttled in the app, in addition to Firebase Auth quotas. A **wallet** is optional until the learner mints and is not a signup gate. Switching wallets does not move another person’s XP or puzzle. Signing out does not leave progress on the next session’s account.
 
 Privacy Policy and Terms of Service are linked from signup and the footer.
 
