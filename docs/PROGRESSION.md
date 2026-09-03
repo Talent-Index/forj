@@ -17,6 +17,7 @@ Progress belongs to the **learner account**, not the wallet.
 - Sign in with email or Google. Learn without connecting a wallet.
 - Progress follows the account across devices. A browser cache is only a working copy.
 - Connect a wallet only to mint or inspect an on-chain credential. A wallet cannot be linked to two accounts at once.
+- When a wallet links, any **non-empty** quiz and puzzle snapshot stored for that wallet in this browser replaces the account copy. An empty wallet does not wipe the account. Missing wallet events are copied; events already on the account stay (first write wins).
 - Changing wallets does not transfer another account’s XP or puzzle.
 - Signing out does not leave the next person with your streak.
 

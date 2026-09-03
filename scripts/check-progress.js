@@ -10,6 +10,13 @@ import {
   progressStorageKey,
   sanitizeProgress,
 } from "../src/utils/progress.js";
+import {
+  eventsToWriteFromWallet,
+  preferWalletEvents,
+  preferWalletProgress,
+  primitivesFromQuiz,
+} from "../src/utils/walletProgress.js";
+import { EVENT_TYPES } from "../src/utils/progression/events.js";
 
 const WALLET_A = `0x${"a".repeat(40)}`;
 const WALLET_B = `0x${"b".repeat(40)}`;
@@ -120,5 +127,48 @@ const FIREBASE_UID = "SkillForgeUid0123456789abcd";
 assert.equal(progressStorageKey(FIREBASE_UID), `skillforge.progress.v${STORAGE_VERSION}.account.${FIREBASE_UID}`);
 assert.equal(store.save(FIREBASE_UID, snapshot({ recipientName: "Firebase Learner" })), true);
 assert.equal(store.load(FIREBASE_UID).recipientName, "Firebase Learner");
+
+const accountQuiz = snapshot({
+  sectionScores: { medium: { correct: 5, total: 5, pointsEarned: 25 } },
+  completedSections: ["medium"],
+  acquiredPieces: [7],
+  totalPoints: 25,
+  recipientName: "Account Dana",
+});
+const walletQuiz = snapshot({
+  sectionScores: { easy: { correct: 3, total: 5, pointsEarned: 9 } },
+  completedSections: ["easy"],
+  acquiredPieces: [0, 1],
+  totalPoints: 9,
+  recipientName: "Wallet Dana",
+});
+const walletWins = preferWalletProgress(accountQuiz, walletQuiz);
+assert.equal(walletWins.usedWallet, true);
+assert.equal(walletWins.quiz.sectionScores.easy.correct, 3);
+assert.equal(walletWins.quiz.sectionScores.medium, undefined);
+assert.deepEqual(walletWins.quiz.acquiredPieces, [0, 1]);
+assert.equal(walletWins.quiz.recipientName, "Wallet Dana");
+
+const emptyWalletKeepsAccount = preferWalletProgress(accountQuiz, emptyProgress());
+assert.equal(emptyWalletKeepsAccount.usedWallet, false);
+assert.equal(emptyWalletKeepsAccount.quiz.sectionScores.medium.correct, 5);
+assert.equal(emptyWalletKeepsAccount.quiz.recipientName, "Account Dana");
+
+const accountEvents = [
+  { type: EVENT_TYPES.QUIZ_COMPLETED, sourceId: "easy", timestamp: 10, metadata: { correct: 2 } },
+  { type: EVENT_TYPES.LESSON_COMPLETED, sourceId: "fundamentals-1", timestamp: 11 },
+];
+const walletEvents = [
+  { type: EVENT_TYPES.QUIZ_COMPLETED, sourceId: "easy", timestamp: 20, metadata: { correct: 5 } },
+  { type: EVENT_TYPES.PUZZLE_PIECE_UNLOCKED, sourceId: "piece-0", timestamp: 21, metadata: { index: 0 } },
+];
+const mergedEvents = preferWalletEvents(accountEvents, walletEvents);
+assert.equal(mergedEvents.find((event) => event.sourceId === "easy").metadata.correct, 5);
+assert.equal(mergedEvents.some((event) => event.sourceId === "fundamentals-1"), true);
+assert.equal(mergedEvents.some((event) => event.sourceId === "piece-0"), true);
+
+const missing = eventsToWriteFromWallet(accountEvents, walletEvents);
+assert.deepEqual(missing.map((event) => event.sourceId), ["piece-0"]);
+assert.equal(primitivesFromQuiz(walletQuiz).some((event) => event.type === EVENT_TYPES.QUIZ_COMPLETED && event.sourceId === "easy"), true);
 
 console.log("progress storage tests passed");

@@ -209,7 +209,7 @@ function SettingsPage({
         <p className="kicker">Account</p>
         <h1>Profile</h1>
         <p className="lede">
-          Your Forjora account holds progress across devices. A wallet is optional until you mint a Fuji credential.
+          Your Forjora account holds progress across devices. A wallet is optional until you mint a Fuji credential. Linking copies this browser’s wallet-local quiz and puzzle snapshot onto the account; the wallet snapshot wins if both exist.
         </p>
       </header>
 

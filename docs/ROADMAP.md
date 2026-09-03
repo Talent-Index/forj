@@ -48,7 +48,7 @@ Remaining: a persisted XP ledger written only by a trusted service. Rank is not 
 
 ## Phase 5 — Platform 🟡
 
-Shipped: learner accounts persist progress, quiz state, and puzzle state beyond a single browser. Wallets link to the account without becoming the account. Clients cannot write XP or rank.
+Shipped: learner accounts persist progress, quiz state, and puzzle state beyond a single browser. Wallets link to the account without becoming the account. A non-empty wallet-local snapshot replaces the account copy on link. Clients cannot write XP or rank.
 
 Remaining: question management, learning analytics, issuer dashboard, and production monitoring. Live rank already replays the append-only event log.
 

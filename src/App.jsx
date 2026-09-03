@@ -25,7 +25,6 @@ import {
   applySectionResult,
   clearProgress,
   emptyProgress,
-  isEmptyProgress,
   loadProgress,
   saveProgress,
 } from "./utils/progress";
@@ -37,8 +36,9 @@ import {
   parseLookupQuery,
   publicCredentialPath,
 } from "./utils/credentialLookup";
-import { migrateAndHydrate } from "./utils/backend/migrate";
+import { adoptLinkedWalletProgress, migrateAndHydrate } from "./utils/backend/migrate";
 import { writeQuizProgress } from "./utils/backend/progressSync";
+import { normalizeAddress } from "./utils/progress";
 
 const VIEWS = PROGRESS_VIEWS;
 const PUBLIC_PAGES = new Set(["landing", "about", "lookup", "privacy", "terms"]);
@@ -85,7 +85,10 @@ function App() {
   const [locationKey, setLocationKey] = useState(() =>
     typeof window === "undefined" ? "/" : `${window.location.pathname}${window.location.search}`
   );
+  const [progressRevision, setProgressRevision] = useState(0);
+  const [walletLinkError, setWalletLinkError] = useState("");
   const authActionHandled = useRef(false);
+  const walletAdoptedFor = useRef(null);
   const userImage = forgeCertificate;
   const account = auth.account;
   const ownerId = account?.id || null;
@@ -96,7 +99,7 @@ function App() {
     sectionScores,
     acquiredPieces,
     attempts,
-  }, { ready: progressReady, displayName: account?.name || "" });
+  }, { ready: progressReady, displayName: account?.name || "", revision: progressRevision });
 
   const applyProgress = useCallback((snapshot) => {
     const next = snapshot || emptyProgress();
@@ -114,6 +117,8 @@ function App() {
   useEffect(() => {
     if (!ownerId) {
       setHydratedOwner(null);
+      walletAdoptedFor.current = null;
+      setWalletLinkError("");
       applyProgress(emptyProgress());
       setPage((current) => (PUBLIC_PAGES.has(current) ? current : "landing"));
       return undefined;
@@ -121,13 +126,6 @@ function App() {
     let cancelled = false;
     (async () => {
       let snapshot = loadProgress(ownerId);
-      if (isEmptyProgress(snapshot) && wallet.address) {
-        const fromWallet = loadProgress(wallet.address);
-        if (!isEmptyProgress(fromWallet)) {
-          saveProgress(ownerId, fromWallet);
-          snapshot = fromWallet;
-        }
-      }
       if (auth.user) {
         try {
           const hydrated = await migrateAndHydrate(auth.user, snapshot);
@@ -146,7 +144,7 @@ function App() {
     return () => {
       cancelled = true;
     };
-  }, [account?.name, applyProgress, auth.user, ownerId, wallet.address]);
+  }, [account?.name, applyProgress, auth.user, ownerId]);
 
   useEffect(() => {
     if (!progressReady) return;
@@ -178,10 +176,47 @@ function App() {
   ]);
 
   useEffect(() => {
-    if (account?.id && wallet.address && account.walletAddress !== wallet.address) {
-      linkWallet(wallet.address);
-    }
-  }, [account?.id, account?.walletAddress, linkWallet, wallet.address]);
+    const address = normalizeAddress(wallet.address);
+    if (!ownerId || !auth.user || !address || !progressReady) return undefined;
+    const key = `${ownerId}:${address}`;
+    if (walletAdoptedFor.current === key) return undefined;
+
+    let cancelled = false;
+    (async () => {
+      setWalletLinkError("");
+      if (normalizeAddress(account?.walletAddress) !== address) {
+        const linked = await linkWallet(address);
+        if (cancelled) return;
+        if (!linked.ok) {
+          setWalletLinkError(linked.error || "Could not link this wallet to your account.");
+          walletAdoptedFor.current = `fail:${key}`;
+          return;
+        }
+      }
+      try {
+        const adopted = await adoptLinkedWalletProgress(auth.user, address);
+        if (cancelled) return;
+        walletAdoptedFor.current = key;
+        if (adopted?.adopted && adopted.quiz) {
+          applyProgress(adopted.quiz);
+          setProgressRevision((value) => value + 1);
+        }
+      } catch {
+        if (!cancelled) walletAdoptedFor.current = key;
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    account?.walletAddress,
+    applyProgress,
+    auth.user,
+    linkWallet,
+    ownerId,
+    progressReady,
+    wallet.address,
+  ]);
 
   useEffect(() => {
     if (wallet.address && open) closeModal();
@@ -619,6 +654,14 @@ function App() {
           },
         }}
       >
+        {walletLinkError ? (
+          <div className="feedback-banner" role="alert">
+            <p>{walletLinkError}</p>
+            <button type="button" className="btn btn-ghost" onClick={() => setWalletLinkError("")}>
+              Dismiss
+            </button>
+          </div>
+        ) : null}
         {progression.feedback?.length > 0 && (
           <div className="feedback-banner" role="status">
             {progression.feedback.slice(0, 3).map((item, index) => (

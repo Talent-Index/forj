@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   CLIENT_EVENT_TYPES,
   COLLECTIONS,
@@ -49,5 +52,13 @@ assert.deepEqual(
   }),
   { difficulty: "hard", correct: 5 }
 );
+
+const migrate = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/utils/backend/migrate.js"), "utf8");
+const app = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/App.jsx"), "utf8");
+assert.match(migrate, /export async function adoptLinkedWalletProgress/);
+assert.match(migrate, /preferWalletProgress/);
+assert.match(app, /adoptLinkedWalletProgress/);
+assert.match(app, /Could not link this wallet to your account/);
+assert.doesNotMatch(app, /isEmptyProgress\(snapshot\) && wallet\.address/);
 
 console.log("backend schema tests passed");

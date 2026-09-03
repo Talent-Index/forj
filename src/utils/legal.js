@@ -7,7 +7,7 @@ export const LEGAL_PAGES = Object.freeze({
     sections: [
       {
         heading: "What we collect",
-        body: "Forjora uses an account (email or Google) so your learning progress can follow you. We store the display name you choose, quiz and puzzle progress, and append-only learning events used to derive XP. If you connect a wallet, we store that address to link a mint. We do not ask for a password to your wallet. Issuer signing keys are not stored in the learner app.",
+        body: "Forjora uses an account (email or Google) so your learning progress can follow you. We store the display name you choose, quiz and puzzle progress, and append-only learning events used to derive XP. If you connect a wallet, we store that address to link a mint. If this browser has quiz or puzzle progress keyed to that wallet, we copy it onto your account; that wallet snapshot replaces the account copy when both exist. We do not ask for a password to your wallet. Issuer signing keys are not stored in the learner app.",
       },
       {
         heading: "Leaderboard",
@@ -35,7 +35,7 @@ export const LEGAL_PAGES = Object.freeze({
       },
       {
         heading: "Accounts and wallets",
-        body: "An account is required to keep progress. A wallet is optional until you mint. You are responsible for your account, your wallet approvals, and any test AVAX you use on Fuji. Fuji test assets have no production market value.",
+        body: "An account is required to keep progress. A wallet is optional until you mint. Connecting a wallet links it to your signed-in account. A non-empty wallet-local quiz or puzzle snapshot in this browser replaces the account copy. A wallet already linked to another account is not adopted. You are responsible for your account, your wallet approvals, and any test AVAX you use on Fuji. Fuji test assets have no production market value.",
       },
       {
         heading: "Scores and credentials",

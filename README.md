@@ -21,7 +21,7 @@ The mark is a geometric **F / upward pathway** in charcoal with a gold accent st
 
 ## What learners get
 
-- An **account** (email or Google) that holds progress across devices. A wallet is optional until mint.
+- An **account** (email or Google) that holds progress across devices. A wallet is optional until mint. Linking copies that wallet’s local quiz and puzzle snapshot onto the account; the wallet snapshot wins if both exist.
 - **Privacy Policy** and **Terms of Service** for the account and learning record.
 - **Six Avalanche tracks:** Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, and Developer.
 - **XP and levels** from real completions, not quiz retries.

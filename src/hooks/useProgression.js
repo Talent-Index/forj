@@ -29,7 +29,7 @@ function browserStorage() {
   return createMemoryStorage();
 }
 
-export function useProgression(learnerId, quizSnapshot, { ready = false, displayName = "" } = {}) {
+export function useProgression(learnerId, quizSnapshot, { ready = false, displayName = "", revision = 0 } = {}) {
   const store = useMemo(() => createProgressionStore(browserStorage()), []);
   const stateRef = useRef(null);
   const migratedFor = useRef(null);
@@ -53,9 +53,9 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
     setState(loaded);
     setHydrated(true);
     migratedFor.current = id;
-    // Hydrate once per learner. Migration is idempotent if called again from dispatch.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- quizSnapshot is read once on account switch
-  }, [learnerId, ready, store]);
+    // Hydrate once per learner, and again after a wallet-progress adopt (revision).
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- quizSnapshot is read on account switch or revision
+  }, [learnerId, ready, revision, store]);
 
   useEffect(() => {
     const id = progressOwnerId(learnerId);

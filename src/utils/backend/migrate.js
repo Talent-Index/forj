@@ -1,7 +1,22 @@
 import { AUTH_STORAGE_VERSION } from "../auth";
-import { STORAGE_VERSION, isEmptyProgress, loadProgress, saveProgress } from "../progress";
+import {
+  STORAGE_VERSION,
+  emptyProgress,
+  isEmptyProgress,
+  loadProgress,
+  normalizeAddress,
+  saveProgress,
+} from "../progress";
 import { loadProgression, saveProgression } from "../progression";
 import { EVENT_TYPES } from "../progression/events";
+import { migrateFromQuizProgress } from "../progression/engine";
+import {
+  eventsToWriteFromWallet,
+  preferWalletEvents,
+  preferWalletProgress,
+  primitiveEvents,
+  primitivesFromQuiz,
+} from "../walletProgress";
 import { markMigrated, readLearnerProfile } from "./learner";
 import { readProgressEvents, readQuizProgress, replayEvents, writeProgressEvent, writeQuizProgress } from "./progressSync";
 
@@ -99,4 +114,65 @@ export async function migrateAndHydrate(user, localQuiz) {
   }
 
   return { quiz, events };
+}
+
+/**
+ * After a successful wallet link, copy this browser's wallet-keyed snapshot onto the
+ * signed-in account. A non-empty wallet quiz replaces the account quiz. Missing
+ * wallet events are written; existing cloud events stay (first-write-wins).
+ */
+export async function adoptLinkedWalletProgress(user, walletAddress) {
+  const uid = user?.uid;
+  const address = normalizeAddress(walletAddress);
+  if (!uid || !address) return { ok: false, adopted: false, quiz: null };
+
+  const walletQuiz = loadProgress(address);
+  const walletProgression = loadProgression(address);
+  const accountLocal = loadProgress(uid);
+
+  let remoteQuiz = emptyProgress();
+  let remoteEvents = [];
+  try {
+    remoteQuiz = await readQuizProgress(uid);
+    remoteEvents = await readProgressEvents(uid);
+  } catch {
+    // Keep going with local snapshots if Firestore is unavailable.
+  }
+
+  const accountQuiz = !isEmptyProgress(remoteQuiz) ? remoteQuiz : accountLocal;
+  const { quiz, usedWallet } = preferWalletProgress(accountQuiz, walletQuiz);
+  const walletEvents = [
+    ...primitiveEvents(walletProgression.events),
+    ...(usedWallet ? primitivesFromQuiz(walletQuiz) : []),
+  ];
+  const toWrite = eventsToWriteFromWallet(remoteEvents, walletEvents);
+  const mergedEvents = preferWalletEvents(remoteEvents, walletEvents);
+
+  if (!usedWallet && toWrite.length === 0) {
+    return { ok: true, adopted: false, quiz: accountQuiz };
+  }
+
+  saveProgress(uid, quiz);
+  try {
+    if (usedWallet) await writeQuizProgress(uid, quiz);
+  } catch {
+    // Local account copy still holds the wallet snapshot.
+  }
+  for (const event of toWrite) {
+    try {
+      await writeProgressEvent(uid, { ...event, learnerId: uid });
+    } catch {
+      // First-write-wins; skip if rules or network reject a duplicate.
+    }
+  }
+
+  const replayed = replayEvents(uid, mergedEvents, {
+    sectionScores: quiz.sectionScores,
+    attemptCount: quiz.attempts?.length || 0,
+    hasCredential: mergedEvents.some((event) => event.type === EVENT_TYPES.CREDENTIAL_CLAIMED),
+  });
+  const next = usedWallet ? migrateFromQuizProgress(replayed, quiz) : replayed;
+  saveProgression(uid, { ...next, learnerId: uid });
+
+  return { ok: true, adopted: true, quiz };
 }
