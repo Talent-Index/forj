@@ -67,6 +67,11 @@ assert.equal(manifest.name, "Forjora");
 assert.equal(manifest.short_name, "Forjora");
 assert.match(JSON.stringify(manifest.icons), /favicon\.svg|forjora-mark\.svg/);
 
+const css = readFileSync(join(root, "src/index.css"), "utf8");
+assert.match(css, /--accent-ink:\s*#6f5420/);
+assert.match(css, /color-scheme:\s*light/);
+assert.match(html, /theme-color" content="#e9e4d8"/);
+
 const mark = readFileSync(join(root, "src/components/brand/ForjoraMark.jsx"), "utf8");
 assert.match(mark, /brand-mark-accent/);
 assert.match(mark, /BrandMark/);

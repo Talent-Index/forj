@@ -10,10 +10,18 @@ function readStored(key, fallback) {
   }
 }
 
+export const THEME_CHROME = Object.freeze({
+  light: "#e9e4d8",
+  dark: "#161513",
+});
+
 export function applyDocumentTheme(theme, reducedMotion) {
   if (typeof document === "undefined") return;
   document.documentElement.dataset.theme = theme;
   document.documentElement.dataset.reducedMotion = reducedMotion ? "true" : "false";
+  const chrome = theme === "dark" ? THEME_CHROME.dark : THEME_CHROME.light;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", chrome);
 }
 
 export function getInitialTheme() {
