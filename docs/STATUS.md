@@ -12,7 +12,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | Identity | Account sign-in (email or Google) with progress on the learner account |
 | Learning experience | Partial — onboarding, explanations, dashboard, and structured tracks shipped |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
-| Gamification | Live opt-in community ranking from a learner-published event log (not a trusted ledger); XP, levels, achievements, streaks, path engine |
+| Gamification | Live community ranking of verified accounts from a learner-published event log (not a trusted ledger); XP, levels, achievements, streaks, path engine |
 | Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
 | Security & Launch | Partial — production readiness gate is **closed**; launch validation **not approved** for public launch |
 | Fuji credential | Live |
@@ -60,7 +60,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 
 ## Leaderboard
 
-New verified accounts appear on the live board under their display name, including at 0 XP. They can hide. Standing is derived from an append-only log of first-time learning events that learners publish under rules (lesson ids are allowlisted). Learners cannot write XP totals or rank fields. Quiz retries do not farm standing. The board is **community ranking**, not a tamper-proof exam.
+New verified accounts appear on the live board under their display name, including at 0 XP and including people who signed up before opening Board. They can hide. Standing is derived from an append-only log of first-time learning events that learners publish under rules (lesson ids are allowlisted). Learners cannot write XP totals or rank fields. Quiz retries do not farm standing. The board is **community ranking**, not a tamper-proof exam.
 
 It is not a league with an issuer, not on-chain, and not a verified exam. A claimed credential remains distinct from this board.
 

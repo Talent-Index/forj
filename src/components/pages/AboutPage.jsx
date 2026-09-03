@@ -141,8 +141,9 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
       <section className="section-block">
         <h2>Community ranking</h2>
         <p>
-          The live board is opt-in community ranking from first-time learning events learners
-          publish under rules. It is not on-chain, not issuer-attested, and not a proctored exam.
+          The live board is community ranking among verified accounts, including people who
+          already signed up. Standing comes from first-time learning events learners publish
+          under rules. It is not on-chain, not issuer-attested, and not a proctored exam.
           Quiz retries do not farm standing. Hide yourself on the Board page at any time.
         </p>
       </section>

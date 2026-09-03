@@ -10,7 +10,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../firebase";
-import { applyLeaderboardPreference, buildLiveLeaderboard } from "../progression/leaderboard";
+import { applyLeaderboardPreference, buildLiveLeaderboard, mergeAccountRoster } from "../progression/leaderboard";
 import { COLLECTIONS, SCHEMA_VERSION } from "./schema";
 import { FIRESTORE_TIMEOUT_MS, withTimeout } from "./timeout";
 
@@ -51,6 +51,11 @@ export async function writeLeaderboardPreference(userId, patch, extras = {}) {
     createdAt,
     updatedAt: stamp(),
   }), FIRESTORE_TIMEOUT_MS);
+  await withTimeout(setDoc(doc(db, COLLECTIONS.users, userId), {
+    displayName: applied.preference.displayName,
+    boardVisible: applied.preference.optIn,
+    updatedAt: stamp(),
+  }, { merge: true }), FIRESTORE_TIMEOUT_MS).catch(() => {});
   return { ok: true, preference: applied.preference };
 }
 
@@ -68,18 +73,35 @@ function optedInEventQuery() {
   );
 }
 
-function rowsFromSnaps(prefSnap, eventSnap) {
+function rosterFromSnap(snap) {
+  return snap.docs.map((item) => {
+    const data = item.data() || {};
+    return {
+      userId: data.userId || item.id,
+      displayName: typeof data.displayName === "string" ? data.displayName : "",
+      boardVisible: data.boardVisible !== false,
+    };
+  });
+}
+
+function rowsFromSnaps(userSnap, prefSnap, eventSnap) {
+  const roster = rosterFromSnap(userSnap);
   const preferences = prefSnap.docs.map((item) => ({ id: item.id, ...item.data() }));
   const events = eventSnap.docs.map((item) => item.data());
-  return buildLiveLeaderboard(preferences, events);
+  return buildLiveLeaderboard(mergeAccountRoster(roster, preferences), events);
+}
+
+function emptySnap() {
+  return { docs: [] };
 }
 
 export async function fetchLiveLeaderboard() {
-  const [prefSnap, eventSnap] = await Promise.all([
+  const [userSnap, prefSnap, eventSnap] = await Promise.all([
+    withTimeout(getDocs(collection(db, COLLECTIONS.users)), FIRESTORE_TIMEOUT_MS).catch(() => emptySnap()),
     withTimeout(getDocs(optedInPreferenceQuery()), FIRESTORE_TIMEOUT_MS),
     withTimeout(getDocs(optedInEventQuery()), FIRESTORE_TIMEOUT_MS),
   ]);
-  return rowsFromSnaps(prefSnap, eventSnap);
+  return rowsFromSnaps(userSnap, prefSnap, eventSnap);
 }
 
 const LIVE_UNSUB_DELAY_MS = 500;
@@ -88,24 +110,37 @@ let liveBoard = null;
 function startLiveBoard() {
   const prefQuery = optedInPreferenceQuery();
   const eventQuery = optedInEventQuery();
+  const usersRef = collection(db, COLLECTIONS.users);
 
   const listeners = new Map();
+  let roster = [];
   let preferences = [];
   let events = [];
+  let rosterReady = false;
   let prefReady = false;
   let eventReady = false;
   let lastRows = null;
   let pendingUnsub = null;
 
   function emit() {
-    if (!prefReady || !eventReady) return;
-    lastRows = buildLiveLeaderboard(preferences, events);
+    if (!rosterReady || !prefReady || !eventReady) return;
+    lastRows = buildLiveLeaderboard(mergeAccountRoster(roster, preferences), events);
     for (const { onChange } of listeners.values()) onChange(lastRows);
   }
 
   function fail(err) {
     for (const { onError } of listeners.values()) onError?.(err);
   }
+
+  const unsubUsers = onSnapshot(usersRef, (snap) => {
+    roster = rosterFromSnap(snap);
+    rosterReady = true;
+    emit();
+  }, () => {
+    roster = [];
+    rosterReady = true;
+    emit();
+  });
 
   const unsubPrefs = onSnapshot(prefQuery, (snap) => {
     preferences = snap.docs.map((item) => ({ id: item.id, ...item.data() }));
@@ -121,6 +156,18 @@ function startLiveBoard() {
     emit();
   }, (err) => {
     if (!eventReady) fail(err);
+  });
+
+  getDocs(usersRef).then((userSnap) => {
+    if (rosterReady) return;
+    roster = rosterFromSnap(userSnap);
+    rosterReady = true;
+    emit();
+  }).catch(() => {
+    if (rosterReady) return;
+    roster = [];
+    rosterReady = true;
+    emit();
   });
 
   Promise.all([
@@ -152,6 +199,7 @@ function startLiveBoard() {
       this.clearPending();
       pendingUnsub = setTimeout(() => {
         if (listeners.size > 0) return;
+        unsubUsers();
         unsubPrefs();
         unsubEvents();
         if (liveBoard === this) liveBoard = null;

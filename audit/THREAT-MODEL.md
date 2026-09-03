@@ -68,7 +68,7 @@ There is **no** application API server and **no** Cloud Functions tier. Authoriz
 | --- | --- | --- |
 | Web SPA (host TBD; Vercel observed in deploy logs) | Public HTTPS | Bundle includes public Firebase web config |
 | Firebase Auth | Public client SDK | Email/password + Google; authorized domains must be ops-managed |
-| Cloud Firestore | Client SDK under rules | Owner docs + opt-in leaderboard reads |
+| Cloud Firestore | Client SDK under rules | Owner docs, authenticated `users` roster, opt-in leaderboard events |
 | Firebase Storage | Rules for `/avatars/{uid}/*`; app does not upload today | Avatars stored as Firestore data URLs |
 | Fuji JSON-RPC | Public / configured HTTPS host | Must not point at C-Chain for learner mint |
 | Fuji contract | Public chain | Claimed mint is open to any wallet |
@@ -113,7 +113,7 @@ Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, 
 | Create Auth user / sign in | Anyone with provider access | Firebase Auth |
 | Read/write own profile, quiz cache, wallet link | Authenticated uid (owner) | Firestore rules |
 | Publish opt-in leaderboard events | Authenticated owner | Rules + event schema |
-| Read others’ opted-in board data | Any authenticated user | Rules (`optIn == true`) |
+| Read others’ board roster and opted-in events | Any authenticated user | Rules (`users` list; `optIn == true` events) |
 | `mintCredential` (claimed) | Any EOA for self | Contract |
 | Sign EIP-712 attestation | Current contract `owner()` only | Off-chain key + contract recover |
 | `mintCredentialWithAuthorization` | Signed learner as `msg.sender` | Contract |
@@ -163,7 +163,8 @@ Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, 
 
 | Resource | Cross-user read | Cross-user write |
 | --- | --- | --- |
-| `learnerProfiles` / `users` / `quizProgress` | Denied | Denied |
+| `learnerProfiles` / `quizProgress` | Denied | Denied |
+| `users` | Allowed for authenticated (uid, provider, optional displayName, optional boardVisible; no email) | Owner write |
 | `leaderboardPreferences` / `progressEvents` with `optIn` | Allowed (by design) | Write only as owner; delete denied for events |
 | `wallets` active | Owner (released readable more broadly) | Cannot reassign `userId` |
 | Deny-all credential/issuer collections | Denied | Denied |

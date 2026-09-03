@@ -16,9 +16,21 @@ import { normalizeAddress } from "../progress";
 import { safeAvatarSrc } from "../frontendSecurity";
 import { COLLECTIONS, SCHEMA_VERSION, WALLET_STATUSES, walletDocId } from "./schema";
 import { FIRESTORE_TIMEOUT_MS, withTimeout } from "./timeout";
+import { normalizeBoardName } from "../progression/leaderboard";
 
 function stamp() {
   return serverTimestamp();
+}
+
+async function syncUserBoardListing(userId, { displayName, boardVisible } = {}) {
+  if (!userId) return;
+  const patch = { updatedAt: stamp() };
+  if (displayName != null) patch.displayName = normalizeBoardName(displayName);
+  if (boardVisible != null) patch.boardVisible = Boolean(boardVisible);
+  await withTimeout(
+    setDoc(doc(db, COLLECTIONS.users, userId), patch, { merge: true }),
+    FIRESTORE_TIMEOUT_MS
+  ).catch(() => {});
 }
 
 export function profileFromDoc(user, data = {}) {
@@ -71,14 +83,25 @@ export async function ensureLearnerDocuments(user) {
     return profileFromDoc(user, {});
   }
   const writes = [];
+  const boardName = normalizeBoardName(user.displayName || "");
   if (!userSnap.exists()) {
     writes.push(setDoc(userRef, {
       schemaVersion: SCHEMA_VERSION,
       userId: user.uid,
       provider: user.providerData?.some((item) => item.providerId === "google.com") ? "google" : "email",
+      displayName: boardName,
+      boardVisible: true,
       createdAt: stamp(),
       updatedAt: stamp(),
     }));
+  } else {
+    const data = userSnap.data() || {};
+    if (!data.displayName) {
+      writes.push(setDoc(userRef, {
+        displayName: boardName,
+        updatedAt: stamp(),
+      }, { merge: true }));
+    }
   }
   if (!profileSnap.exists()) {
     writes.push(setDoc(profileRef, fullLearnerProfile(user, {}, {})));
@@ -114,15 +137,20 @@ export async function upsertLearnerProfile(user, patch) {
   if (existing === null) {
     const data = fullLearnerProfile(authUser, {}, patch);
     await setDoc(profileRef, data);
+    await syncUserBoardListing(authUser.uid, { displayName: data.name, boardVisible: true });
     return data;
   }
   if (existing) {
     await setDoc(profileRef, patchFields, { merge: true });
+    if (patchFields.name) {
+      await syncUserBoardListing(authUser.uid, { displayName: patchFields.name });
+    }
     return { ...existing, ...patchFields };
   }
   try {
     const data = fullLearnerProfile(authUser, {}, patch);
     await setDoc(profileRef, data);
+    await syncUserBoardListing(authUser.uid, { displayName: data.name, boardVisible: true });
     return data;
   } catch {
     await setDoc(profileRef, patchFields, { merge: true });

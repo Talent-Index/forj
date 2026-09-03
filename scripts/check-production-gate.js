@@ -90,7 +90,7 @@ assert.match(privacy, /Fuji/);
 assert.match(terms, /does not currently offer credential issuance on Avalanche C-Chain/);
 assert.match(terms, /no pause switch/);
 assert.match(terms, /claimed score/);
-assert.equal(LEGAL_PAGES.privacy.updated, "28 August 2026");
+assert.equal(LEGAL_PAGES.privacy.updated, "3 September 2026");
 assert.equal(LEGAL_PAGES.terms.updated, "28 August 2026");
 
 assert.match(credentialDoc, /does \*\*not\*\* issue this credential on Avalanche C-Chain today/);

@@ -154,6 +154,42 @@ export function rankLearners(entries, { window = "global", trackId, now = Date.n
   return list.map((row, index) => ({ ...row, rank: index + 1 }));
 }
 
+/** Verified accounts are on the board unless they hid. Missing boardVisible means visible. */
+export function mergeAccountRoster(roster = [], preferences = []) {
+  const prefs = new Map();
+  for (const row of preferences || []) {
+    const userId = row.userId || row.learnerId || row.id;
+    if (!userId) continue;
+    prefs.set(userId, row);
+  }
+  const seen = new Set();
+  const merged = [];
+  for (const member of roster || []) {
+    const userId = member.userId || member.id;
+    if (!userId) continue;
+    seen.add(userId);
+    const pref = prefs.get(userId);
+    if (pref && pref.optIn === false) continue;
+    if (member.boardVisible === false) continue;
+    merged.push({
+      userId,
+      optIn: true,
+      displayName: normalizeBoardName(pref?.displayName || member.displayName || member.name || ""),
+      hideWallet: pref?.hideWallet !== false && member.hideWallet !== false,
+    });
+  }
+  for (const [userId, pref] of prefs) {
+    if (seen.has(userId) || pref.optIn === false) continue;
+    merged.push({
+      userId,
+      optIn: true,
+      displayName: normalizeBoardName(pref.displayName || ""),
+      hideWallet: pref.hideWallet !== false,
+    });
+  }
+  return merged;
+}
+
 export function groupEventsByUser(events) {
   const map = new Map();
   for (const event of events || []) {

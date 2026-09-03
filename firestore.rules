@@ -12,8 +12,11 @@ service cloud.firestore {
     //   - schemaVersion: int (required)
     //   - userId: string == uid (required, immutable)
     //   - provider: string email|google (required)
+    //   - displayName: string <= 48 (optional; board listing)
+    //   - boardVisible: bool (optional; missing means visible)
     //   - createdAt, updatedAt: timestamp
-    // Owner read/write. No email/PII.
+    // Owner write. Authenticated read/list for the live board roster.
+    // No email/PII.
     //
     // Collection: learnerProfiles
     // Document ID: uid
@@ -123,12 +126,17 @@ service cloud.firestore {
 
     function isValidUser(data) {
       return requiredKeys(['schemaVersion', 'userId', 'provider', 'createdAt', 'updatedAt'])
-        && hasOnlyAllowedFields(['schemaVersion', 'userId', 'provider', 'createdAt', 'updatedAt'])
+        && hasOnlyAllowedFields([
+          'schemaVersion', 'userId', 'provider', 'createdAt', 'updatedAt',
+          'displayName', 'boardVisible'
+        ])
         && data.schemaVersion is int && data.schemaVersion == 1
         && data.userId is string && data.userId == request.auth.uid
         && data.provider in ['email', 'google']
         && data.createdAt is timestamp
-        && data.updatedAt is timestamp;
+        && data.updatedAt is timestamp
+        && optionalString('displayName', 48)
+        && (!('boardVisible' in data) || data.boardVisible == null || data.boardVisible is bool);
     }
 
     function isValidLearnerProfile(data) {
@@ -331,7 +339,7 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      allow read: if isOwner(userId);
+      allow get, list: if isAuthenticated();
       allow create: if isOwner(userId) && isValidUser(request.resource.data) && uidUnchanged(userId);
       allow update: if isOwner(userId)
         && isValidUser(request.resource.data)

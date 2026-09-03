@@ -46,6 +46,8 @@ assert.match(firestoreRules, /!\('email' in data\.metadata\)/);
 assert.match(firestoreRules, /resource\.data\.userId == request\.auth\.uid/);
 assert.match(firestoreRules, /allow list: if isAuthenticated\(\) && resource.data.optIn == true/);
 assert.match(firestoreRules, /allow get: if isAuthenticated\(\) && \(isOwner\(userId\) \|\| resource.data.optIn == true\)/);
+assert.match(firestoreRules, /match \/users\/\{userId\} \{[\s\S]*?allow get, list: if isAuthenticated\(\)/);
+assert.match(firestoreRules, /match \/learnerProfiles\/\{userId\} \{[\s\S]*?allow read: if isOwner\(userId\)/);
 assert.doesNotMatch(firestoreRules, /status == 'released'/);
 assert.match(LEADERBOARD_DISCLAIMER, /not a tamper-proof exam/i);
 assert.match(progressionDoc, /community ranking/i);
@@ -72,5 +74,6 @@ assert.match(byKey["Permissions-Policy"] || "", /camera=\(\)/);
 assert.match(secretsAudit, /None found/);
 assert.match(secretsAudit, /\.env/);
 assert.match(threatModel, /THREAT-MODEL|email_verified|App Check/i);
+assert.match(threatModel, /authenticated \(uid, provider, optional displayName, optional boardVisible/);
 
 console.log("firebase security hardening checks passed");

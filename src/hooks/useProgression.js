@@ -72,6 +72,13 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
         );
         if (!joined.ok) return;
         if (!joined.applied) {
+          if (pref && pref.optIn === false) {
+            try {
+              await writeLeaderboardPreference(id, joined.preference);
+            } catch {
+              // Hide stays local if the listing write fails.
+            }
+          }
           joinedFor.current = joinKey;
           const next = {
             ...stateRef.current,

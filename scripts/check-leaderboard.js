@@ -12,6 +12,7 @@ import {
   joinLeaderboardByDefault,
   buildLiveLeaderboard,
   compareLearners,
+  mergeAccountRoster,
   rankLearners,
   snapshotFromProgression,
 } from "../src/utils/progression/leaderboard.js";
@@ -84,6 +85,31 @@ const rename = joinLeaderboardByDefault(
 );
 assert.equal(rename.applied, true);
 assert.equal(rename.preference.displayName, "Dana Learner");
+
+const roster = mergeAccountRoster(
+  [
+    { userId: "ada", displayName: "Ada" },
+    { userId: "beau", displayName: "Beau", boardVisible: false },
+    { userId: "cody", displayName: "Cody" },
+    { userId: "dana" },
+  ],
+  [
+    { userId: "ada", optIn: true, displayName: "Ada Prime" },
+    { userId: "cody", optIn: false, displayName: "Cody" },
+    { userId: "eve", optIn: true, displayName: "Eve" },
+  ]
+);
+assert.equal(roster.find((row) => row.userId === "ada")?.displayName, "Ada Prime");
+assert.equal(roster.some((row) => row.userId === "beau"), false);
+assert.equal(roster.some((row) => row.userId === "cody"), false);
+assert.equal(roster.find((row) => row.userId === "dana")?.displayName, "Learner");
+assert.equal(roster.some((row) => row.userId === "eve"), true);
+assert.equal(roster.every((row) => row.optIn === true), true);
+
+const unsignedRoster = mergeAccountRoster([{ userId: "old", displayName: "" }], []);
+assert.equal(unsignedRoster.length, 1);
+assert.equal(unsignedRoster[0].userId, "old");
+assert.equal(unsignedRoster[0].displayName, "Learner");
 
 const t0 = Date.UTC(2026, 0, 5, 12);
 function complete(state, type, sourceId, timestamp, metadata = {}) {
@@ -192,10 +218,15 @@ assert.equal(snap.xp, getXP(replayedAda));
 const sync = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/utils/backend/leaderboardSync.js"), "utf8");
 const firebaseInit = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/firebase.js"), "utf8");
 const progressionHook = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/hooks/useProgression.js"), "utf8");
+const learner = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/utils/backend/learner.js"), "utf8");
 assert.match(sync, /export async function fetchLiveLeaderboard/);
+assert.match(sync, /getDocs\(collection\(db, COLLECTIONS.users\)\)/);
+assert.match(sync, /mergeAccountRoster/);
 assert.match(sync, /getDocs\(optedInPreferenceQuery\(\)\)/);
+assert.match(learner, /boardVisible: true/);
 assert.match(firebaseInit, /experimentalAutoDetectLongPolling:\s*true/);
 assert.match(progressionHook, /await writeLeaderboardPreference\(id, joined.preference\)/);
+assert.match(progressionHook, /pref && pref.optIn === false/);
 assert.doesNotMatch(progressionHook, /writeLeaderboardPreference\(id, joined.preference\)\.catch\(\(\) => \{\}\)/);
 
 console.log("live leaderboard scoring tests passed");

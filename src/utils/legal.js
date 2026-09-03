@@ -3,7 +3,7 @@ export const LEGAL_PAGES = Object.freeze({
     id: "privacy",
     path: "/privacy",
     title: "Privacy Policy",
-    updated: "28 August 2026",
+    updated: "3 September 2026",
     sections: [
       {
         heading: "What we collect",
@@ -11,7 +11,7 @@ export const LEGAL_PAGES = Object.freeze({
       },
       {
         heading: "Leaderboard",
-        body: "New learners appear on the live board under their display name. Standing is derived from learning events. You can hide yourself on the Board page at any time. Hiding removes your name from the public ranking. Rank is not issuer-attested and not on-chain.",
+        body: "Verified accounts appear on the live board under their display name, including accounts that already signed up. Standing is derived from learning events. You can hide yourself on the Board page at any time. Hiding removes your name from the public ranking. Rank is not issuer-attested and not on-chain.",
       },
       {
         heading: "What is public",

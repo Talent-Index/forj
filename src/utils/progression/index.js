@@ -83,6 +83,7 @@ export {
   applyLeaderboardPreference,
   joinLeaderboardByDefault,
   normalizeBoardName,
+  mergeAccountRoster,
   snapshotFromProgression,
   compareLearners,
   rankLearners,

@@ -64,7 +64,7 @@ Rules: no duplicate unlock, no spending below zero, no invented piece ids. Compl
 
 ## Leaderboard
 
-An opt-in **live board** among signed-in learners. New verified accounts appear by default at 0 XP under their display name (or Learner if that name cannot be shown) and can hide. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
+An opt-in **live board** among signed-in learners. Verified accounts appear by default, including people who already signed up, at 0 XP under their display name (or Learner if that name cannot be shown). They can hide. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
 
 Standing is derived from an append-only learning event log that learners publish under security rules. One completion per allowed source (listed lessons, quiz difficulties, puzzle pieces, credential claim). Quiz retries do not farm XP. Learners cannot write XP totals or rank fields.
 
