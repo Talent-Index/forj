@@ -17,7 +17,7 @@ The mark is a geometric **F / upward pathway** in charcoal with a gold accent st
 3. Earn points, XP, levels, achievements, and a UTC learning streak.
 4. Spend each quiz’s points on that track’s certificate pieces (Easy 3, Medium 5, Hard 8).
 5. Track certificates show as in progress or achieved. Lesson tracks complete with the track.
-6. Optionally mint one soulbound path credential. A minted record has a shareable URL and QR.
+6. Optionally mint one soulbound path credential. A minted record has a shareable URL and QR. Sharing that URL (or the site) shows Forjora forge artwork in the link preview — branding, not attestation.
 
 ## What learners get
 

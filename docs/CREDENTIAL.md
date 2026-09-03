@@ -51,7 +51,7 @@ Unknown or missing status is treated as **claimed** (fail closed). Explorer link
 
 ## Lookup
 
-A minted credential has a shareable URL and QR. Lookup is not listed in the primary navigation. Anyone who has the link can open the Fuji record without signing in. Finding a record is not the same as attesting a score.
+A minted credential has a shareable URL and QR. Lookup is not listed in the primary navigation. Anyone who has the link can open the Fuji record without signing in. Finding a record is not the same as attesting a score. The link card uses Forjora forge artwork; that preview is branding, not an attested score.
 
 ## On-chain record
 

@@ -44,7 +44,18 @@ const html = readFileSync(join(root, "index.html"), "utf8");
 assert.match(html, /Forjora — Learn\. Forge\. Prove\./);
 assert.match(html, /og:title/);
 assert.match(html, /twitter:title/);
+assert.match(html, /og:image" content="\/og-image\.jpg"/);
+assert.match(html, /twitter:image" content="\/og-image\.jpg"/);
+assert.match(html, /summary_large_image/);
+assert.match(html, /apple-touch-icon\.png/);
+assert.doesNotMatch(html, /og:image" content="[^"]*\.svg"/);
 assert.match(html, /site.webmanifest/);
+
+const ogImage = readFileSync(join(root, "public/og-image.jpg"));
+assert.equal(ogImage[0], 0xff);
+assert.equal(ogImage[1], 0xd8);
+assert.ok(ogImage.length > 50_000, "og-image.jpg should be a real raster card, not a stub");
+assert.ok(readFileSync(join(root, "public/apple-touch-icon.png")).length > 500);
 
 const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
 assert.equal(pkg.name, "forjora");
