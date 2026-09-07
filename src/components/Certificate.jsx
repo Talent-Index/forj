@@ -293,8 +293,12 @@ function Certificate({
             onForge={onPuzzle}
             onLearn={onLearn}
           />
-          <section className="section-block">
+          <section className="section-block path-credential-panel">
+            <p className="kicker">Path credential</p>
             <h2>Path snapshot</h2>
+            <p className="meta-line">
+              One claimed Fuji mint after all sixteen pieces. Track certificates above stay off-chain.
+            </p>
             <p className="stat-value">{acquiredPieces.length} / {TOTAL_PIECES} pieces</p>
             <div className="credentials-jigsaw">
               <JigsawBoard

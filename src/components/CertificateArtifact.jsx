@@ -42,7 +42,10 @@ function CertificateArtifact({
         {safeMediaSrc(artwork) ? (
           <img src={safeMediaSrc(artwork)} alt="Blacksmith in a forge presenting a crafted diamond" />
         ) : (
-          <div className="certificate-art-fallback" aria-hidden="true" />
+          <div className="certificate-art-fallback" aria-hidden="true">
+            <span className="certificate-art-fallback-mark">FORJORA</span>
+            <span className="certificate-art-fallback-tag">Learn · Forge · Prove</span>
+          </div>
         )}
       </div>
       <p className="certificate-path">{pathLabel}</p>

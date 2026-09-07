@@ -1,6 +1,6 @@
 # Forjora — Status
 
-Last updated: 3 September 2026
+Last updated: 7 September 2026
 
 This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
@@ -10,7 +10,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | --- | --- |
 | Foundation (wallet, quiz, scoring, puzzle, CI) | Complete |
 | Identity | Account sign-in (email or Google) with progress on the learner account |
-| Learning experience | Partial — onboarding, explanations, dashboard, and structured tracks shipped |
+| Learning experience | Partial — six deeper tracks, polished track vs path certificates; content beyond these tracks not shipped |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
 | Gamification | Live community ranking of verified accounts from a learner-published event log (not a trusted ledger); XP, levels, achievements, streaks, path engine |
 | Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
@@ -34,7 +34,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Easy, Medium, and Hard quizzes: five unique questions per attempt, with hints and explanations after submit.
 - Retry-safe **points**: a later attempt on the same difficulty replaces that section’s score.
 - Structured **path** with six tracks: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer.
-- Lessons unlock in order. Quizzes sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone).
+- Lessons unlock in order. Each lesson has a deeper body and an official Avalanche reference. Quizzes sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone).
 
 ## Progression
 
@@ -48,7 +48,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 
 - Sixteen interlocking pieces, reserved by quiz: Easy 3, Medium 5, Hard 8. Points from a quiz only seat that quiz’s pieces.
 - Each of the six tracks has a certificate. Quiz tracks are achieved when their pieces are seated. Lesson tracks (L1s, C-Chain, ICM) are achieved when the track is complete.
-- Credentials shows in-progress and achieved track certificates. Seating all 16 pieces still reveals the path certificate for naming and the optional claimed mint.
+- Credentials separates **track certificates** (off-chain learning records, in progress or achieved) from the **path snapshot** (sixteen pieces → name → optional claimed Fuji mint). Achieved track cards do not pretend to be on-chain tokens.
 - Artwork: Forjora forge certificate image — blacksmith in a workshop presenting a crafted diamond; banners say Forjora and Learn · Forge · Prove, not “certified” or “verified”.
 
 ## Credentials

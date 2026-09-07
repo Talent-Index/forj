@@ -58,12 +58,15 @@ function LearnPage({
           <p className="lede">{unlocked ? "Read, then mark complete." : "Locked."}</p>
         </header>
         <article className="card lesson-body">
-          {lesson.body.split("\n\n").map((paragraph) => (
-            <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+          {lesson.body.split("\n\n").map((paragraph, index) => (
+            <p key={`${lesson.id}-${index}`}>{paragraph}</p>
           ))}
           {lesson.reference && safeExternalHref(lesson.reference.url) && (
-            <p className="meta-line">
-              <a href={safeExternalHref(lesson.reference.url)} target="_blank" rel="noopener noreferrer">{lesson.reference.title}</a>
+            <p className="lesson-reference">
+              <span className="kicker">Official reference</span>
+              <a href={safeExternalHref(lesson.reference.url)} target="_blank" rel="noopener noreferrer">
+                {lesson.reference.title}
+              </a>
             </p>
           )}
         </article>

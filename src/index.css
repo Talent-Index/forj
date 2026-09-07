@@ -1690,6 +1690,57 @@ img {
   object-fit: cover;
 }
 
+.certificate-art-fallback {
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  aspect-ratio: 1;
+  background:
+    linear-gradient(160deg, var(--surface-2) 0%, var(--bg) 55%, var(--surface-2) 100%);
+  border: 1px dashed var(--border);
+  color: var(--text);
+  text-align: center;
+  padding: 24px;
+}
+
+.certificate-art-fallback-mark {
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.certificate-art-fallback-tag {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.certificate-artifact.is-compact {
+  padding: 20px 16px;
+}
+
+.certificate-artifact.is-compact .certificate-title {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.certificate-artifact.is-compact .certificate-recipient {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.certificate-artifact.is-compact .certificate-art-frame {
+  max-width: 220px;
+  margin-bottom: 12px;
+}
+
+.certificate-artifact.is-compact .certificate-trust-body {
+  font-size: 10px;
+  margin-bottom: 0;
+}
+
 .certificate-awarded {
   font-size: 9.39px;
   letter-spacing: 0.12em;
@@ -2697,6 +2748,19 @@ img {
   margin-bottom: 12px;
 }
 
+.lesson-reference {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.lesson-reference a {
+  font-weight: 600;
+}
+
 .jigsaw-piece.is-selected .jigsaw-fill {
   fill: var(--surface);
 }
@@ -2788,6 +2852,15 @@ img {
   background: var(--accent-text);
 }
 
+.track-cert-intro .meta-line {
+  margin-top: 6px;
+  max-width: 40em;
+}
+
+.path-credential-panel .kicker {
+  margin-bottom: 4px;
+}
+
 .track-cert-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -2799,18 +2872,87 @@ img {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-height: 100%;
 }
 
 .track-cert-card.is-locked {
   color: var(--muted);
 }
 
-.track-cert-card .certificate-artifact {
-  padding: 16px 12px;
+.track-cert-card.is-achieved {
+  border-color: var(--accent-ink);
+}
+
+.track-cert-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.track-cert-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--accent-ink);
+  background: var(--surface-2);
+  flex-shrink: 0;
+}
+
+.track-cert-card.is-achieved .track-cert-icon {
+  border-color: var(--accent-ink);
+  background: var(--warning-bg);
+}
+
+.track-cert-achieved {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.track-cert-art {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  max-width: 140px;
+  margin: 4px 0 2px;
+}
+
+.track-cert-art img,
+.track-cert-art .certificate-art-fallback {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.track-cert-art .certificate-art-fallback {
+  padding: 12px;
+  gap: 4px;
+}
+
+.track-cert-art .certificate-art-fallback-mark {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+
+.track-cert-art .certificate-art-fallback-tag {
+  font-size: 7px;
+}
+
+.track-cert-recipient {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
 .track-cert-actions {
   margin-top: auto;
+  padding-top: 4px;
 }
 
 .jigsaw-piece.is-dimmed {

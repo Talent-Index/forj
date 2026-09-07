@@ -48,7 +48,7 @@ The **Avalanche Developer Path** contains six tracks in order of dependency:
 5. Avalanche ICM  
 6. Avalanche Developer Track  
 
-Earlier required work unlocks later work. Optional lessons do not block a module. Easy / Medium / Hard quizzes are the assessments for Fundamentals, Architecture, and the Developer capstone.
+Earlier required work unlocks later work. Optional lessons do not block a module. Easy / Medium / Hard quizzes are the assessments for Fundamentals, Architecture, and the Developer capstone. Lessons carry deeper Avalanche explanations and official Builder Hub references.
 
 The dashboard’s “next” item is the first unlocked incomplete lesson or quiz on that path.
 
@@ -60,7 +60,7 @@ Badges unlock from the same events: first quiz, perfect score, difficulty comple
 
 Sixteen interlocking pieces. Easy seats 3, Medium 5, Hard 8. Each piece has a stable identity, a seat on the board, and a point cost. Quiz points only spend on that quiz’s pieces.
 
-Each track also has a **track certificate**. Quiz tracks are achieved when those pieces are seated. Lesson tracks are achieved when the track is complete. Credentials shows both in-progress and achieved certificates. Completing all sixteen pieces still reveals the path certificate and continues to naming and the optional claimed mint.
+Each track also has a **track certificate**. Quiz tracks are achieved when those pieces are seated. Lesson tracks are achieved when the track is complete. Credentials shows track certificates as learning records (in progress or achieved) separately from the path snapshot. Completing all sixteen pieces still reveals the path certificate and continues to naming and the optional claimed mint. Track certificates are not extra on-chain tokens.
 
 ## Leaderboard
 

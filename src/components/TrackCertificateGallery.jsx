@@ -1,8 +1,8 @@
 import { PIECE_COST } from "../data/questions.js";
 import { describeAllTrackCertificates } from "../utils/trackCertificates.js";
+import { safeMediaSrc } from "../utils/frontendSecurity.js";
 import { Icon } from "./ui/Icon";
 import { Button, Card, ProgressBar } from "./ui/primitives";
-import CertificateArtifact from "./CertificateArtifact";
 
 function statusLabel(status) {
   if (status === "achieved") return "Achieved";
@@ -20,22 +20,36 @@ function TrackCertificateCard({
   const quizPercent = cert.quizId && cert.needed
     ? Math.round((cert.seated / cert.needed) * 100)
     : cert.trackPercent;
+  const art = safeMediaSrc(artwork);
+
   return (
     <Card className={`track-cert-card is-${cert.status}`}>
-      <p className="kicker">
-        <Icon name={cert.icon} size={14} />
-        {statusLabel(cert.status)}
-      </p>
+      <div className="track-cert-head">
+        <span className="track-cert-icon" aria-hidden="true">
+          <Icon name={cert.icon} size={18} />
+        </span>
+        <p className="kicker">{statusLabel(cert.status)}</p>
+      </div>
+
       {cert.achieved ? (
-        <CertificateArtifact
-          compact
-          artwork={artwork}
-          recipientName={recipientName}
-          scorePercent={cert.kind === "quiz" ? 100 : cert.trackPercent}
-          difficulty={cert.quizLabel || "Track"}
-          credentialId={`FJ-${cert.id.toUpperCase()}`}
-          pathLabel={cert.title}
-        />
+        <div className="track-cert-achieved">
+          <div className="track-cert-art" aria-hidden={!art}>
+            {art ? (
+              <img src={art} alt="" />
+            ) : (
+              <div className="certificate-art-fallback" />
+            )}
+          </div>
+          <h3>{cert.title}</h3>
+          <p className="meta-line">{cert.trackName}</p>
+          <p className="track-cert-recipient">{recipientName || "Learner"}</p>
+          <p className="note">
+            {cert.kind === "quiz"
+              ? `${cert.needed} pieces seated · learning record`
+              : "Track complete · learning record"}
+          </p>
+          <p className="meta-line">Not an on-chain mint</p>
+        </div>
       ) : (
         <>
           <h3>{cert.title}</h3>
@@ -53,8 +67,14 @@ function TrackCertificateCard({
           ) : (
             <ProgressBar label={`${cert.trackPercent}% track`} value={cert.trackPercent} />
           )}
+          <p className="note">
+            {cert.kind === "quiz"
+              ? "Quiz points seat this track’s pieces."
+              : "Finish the track lessons to achieve this certificate."}
+          </p>
         </>
       )}
+
       <div className="track-cert-actions">
         {cert.status === "locked" ? (
           <Button variant="secondary" disabled>Locked</Button>
@@ -88,6 +108,13 @@ function TrackCertificateGallery({
 
   return (
     <>
+      <section className="section-block track-cert-intro">
+        <h2>Track certificates</h2>
+        <p className="meta-line">
+          Learning records for each path track. They are not extra Fuji tokens.
+          Seat all 16 pieces below to name and mint the path credential.
+        </p>
+      </section>
       {open.length > 0 && (
         <section className="section-block">
           <h2>In progress</h2>
