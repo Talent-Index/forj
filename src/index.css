@@ -3259,10 +3259,18 @@ img {
 }
 
 .landing-hero .doodle-field-item {
-  opacity: 0.28;
+  opacity: 0.34;
 }
 
 .landing-hero .doodle-field-item.is-accent {
+  opacity: 0.62;
+}
+
+.landing-section .doodle-field-item {
+  opacity: 0.3;
+}
+
+.landing-section .doodle-field-item.is-accent {
   opacity: 0.55;
 }
 
