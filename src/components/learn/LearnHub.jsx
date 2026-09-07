@@ -1,6 +1,6 @@
-import { Button, Card, ProgressBar } from "./ui/primitives";
-import { AnimatedDoodle, DoodleText } from "./doodles";
-import { LEARN_CATEGORIES } from "../utils/learningPresentation";
+import { Button, Card, ProgressBar } from "../ui/primitives";
+import { AnimatedDoodle, DoodleText } from "../doodles";
+import { LEARN_CATEGORIES } from "../../utils/learningPresentation";
 
 function LearnHub({
   path,
