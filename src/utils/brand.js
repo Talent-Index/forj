@@ -9,9 +9,9 @@ export const PRODUCT_DESCRIPTION =
 export const PRODUCT_KICKER = "Avalanche learning";
 
 /** UI brand palette for marks (matches theme tokens). */
-export const BRAND_INK = "#1a1916";
+export const BRAND_INK = "#121110";
 export const BRAND_PAPER = "#f3f0e8";
-export const BRAND_ACCENT = "#c4a35a";
+export const BRAND_ACCENT = "#e07a3a";
 
 export const LEGACY_CONTRACT_ID = "SkillForgeCredential";
 export const LEGACY_TOKEN_NAME = "SkillForge Avalanche Credential";

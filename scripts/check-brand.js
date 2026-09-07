@@ -68,15 +68,17 @@ assert.equal(manifest.short_name, "Forjora");
 assert.match(JSON.stringify(manifest.icons), /favicon\.svg|forjora-mark\.svg/);
 
 const css = readFileSync(join(root, "src/index.css"), "utf8");
-assert.match(css, /--accent-ink:\s*#6f5420/);
+assert.match(css, /--accent:\s*#e07a3a/);
+assert.match(css, /--accent-ink:\s*#b54f1c/);
 assert.match(css, /color-scheme:\s*light/);
+assert.match(css, /\.doodle-draw/);
 assert.match(html, /theme-color" content="#e9e4d8"/);
 
 const mark = readFileSync(join(root, "src/components/brand/ForjoraMark.jsx"), "utf8");
 assert.match(mark, /brand-mark-accent/);
 assert.match(mark, /BrandMark/);
 assert.match(html, /favicon\.svg/);
-assert.match(readFileSync(join(root, "public/forjora-mark.svg"), "utf8"), /#c4a35a/);
-assert.match(readFileSync(join(root, "public/favicon.svg"), "utf8"), /#c4a35a/);
+assert.match(readFileSync(join(root, "public/forjora-mark.svg"), "utf8"), /#e07a3a/);
+assert.match(readFileSync(join(root, "public/favicon.svg"), "utf8"), /#e07a3a/);
 
 console.log("Forjora brand checks passed; SkillForgeCredential remains the on-chain name");

@@ -11,8 +11,8 @@ function readStored(key, fallback) {
 }
 
 export const THEME_CHROME = Object.freeze({
-  light: "#e9e4d8",
-  dark: "#161513",
+  light: "#ebe4d6",
+  dark: "#121110",
 });
 
 export function applyDocumentTheme(theme, reducedMotion) {
