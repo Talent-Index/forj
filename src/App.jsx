@@ -634,6 +634,7 @@ function App() {
           setView(VIEWS.PUZZLE);
         }}
         onCompleteLesson={progression.completeLesson}
+        onCredentials={() => setPage("credentials")}
       />
     );
   }

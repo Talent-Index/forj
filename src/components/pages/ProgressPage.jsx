@@ -10,6 +10,7 @@ import EmptyState from "../EmptyState";
 import ExistingCertificate from "../ExistingCertificate";
 import Achievements from "../Achievements";
 import { buildCredentialVerificationView } from "../../utils/credentialLookup";
+import { skillsFromPath } from "../../utils/learningPresentation";
 
 function ProgressPage({
   address,
@@ -92,6 +93,44 @@ function ProgressPage({
         {progression?.level && (
           <ProgressBar label={`Level ${progression.level.level}`} value={progression.level.percent} />
         )}
+      </section>
+
+      {progression?.nextItem && progression.nextItem.kind !== "none" && (
+        <section className="section-block path-continue learn-continue">
+          <div>
+            <p className="kicker">Continue learning</p>
+            <h2>{progression.nextItem.title}</h2>
+            {progression.nextItem.reason ? (
+              <p className="meta-line">{progression.nextItem.reason}</p>
+            ) : null}
+          </div>
+          <Button
+            disabled={progression.nextItem.locked || progression.nextItem.kind === "complete"}
+            onClick={() => {
+              if (progression.nextItem.kind === "quiz") onContinue(progression.nextItem.id);
+              else onLearn?.();
+            }}
+          >
+            Continue →
+          </Button>
+        </section>
+      )}
+
+      <section className="section-block">
+        <h2>Skills</h2>
+        <p className="meta-line">Track progress as demonstrated skill — not issuer attestation.</p>
+        <div className="learn-skills-grid">
+          {skillsFromPath(progression?.state).map((row) => (
+            <Card key={row.trackId} className="stat-compact">
+              <p className="kicker">{row.complete ? "Demonstrated" : "In progress"}</p>
+              <h3>{row.name}</h3>
+              <ProgressBar value={row.percent} />
+              {row.skills?.length ? (
+                <p className="meta-line">{row.skills.slice(0, 2).join(" · ")}</p>
+              ) : null}
+            </Card>
+          ))}
+        </div>
       </section>
 
       <section className="section-block">

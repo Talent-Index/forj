@@ -10,7 +10,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | --- | --- |
 | Foundation (wallet, quiz, scoring, puzzle, CI) | Complete |
 | Identity | Account sign-in (email or Google) with progress on the learner account |
-| Learning experience | Partial — six deeper tracks, polished track vs path certificates; content beyond these tracks not shipped |
+| Learning experience | Partial — Learn hub with track discovery, vertical track journeys, lesson workspace; six Avalanche tracks; content beyond these tracks not shipped |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
 | Gamification | Live community ranking of verified accounts from a learner-published event log (not a trusted ledger); XP, levels, achievements, streaks, path engine |
 | Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
@@ -31,9 +31,11 @@ Existing browser progress is moved onto the account once, so a returning learner
 
 ## Learning
 
-- Easy, Medium, and Hard quizzes: five unique questions per attempt, with hints and explanations after submit.
-- Retry-safe **points**: a later attempt on the same difficulty replaces that section’s score.
-- Structured **path** with six tracks: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer.
+- **Learn on Forjora** hub: continue learning, category filters, track cards (modules · lessons · challenges · skills · progress), and knowledge-check challenges.
+- Track pages use a vertical **learning path** (completed / current / locked) ending in a credential milestone.
+- Lesson workspace: track nav · lesson body · progress/skills rail (stacks on mobile).
+- Easy, Medium, and Hard quizzes remain the practical challenges (Spark / Build / Forge). Retries replace that section’s points.
+- Structured path with six tracks: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer.
 - Lessons unlock in order. Each lesson has a deeper body and an official Avalanche reference. Quizzes sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone).
 
 ## Progression

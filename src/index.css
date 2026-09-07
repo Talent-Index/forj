@@ -2915,6 +2915,279 @@ img {
   font-weight: 600;
 }
 
+/* --- Learn hub / track journey / lesson workspace --- */
+
+.learn-hub-hero .lede {
+  max-width: 36rem;
+}
+
+.learn-hub-doodles {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.learn-continue {
+  align-items: stretch;
+}
+
+.learn-continue-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: min(100%, 14rem);
+}
+
+.learn-hub-head {
+  margin-bottom: 12px;
+}
+
+.learn-hub-head h2 {
+  margin-bottom: 4px;
+}
+
+.learn-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.learn-filter {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  min-height: 40px;
+  padding: 6px 12px;
+  text-transform: uppercase;
+}
+
+.learn-filter.is-active {
+  border-color: var(--accent-ink);
+  color: var(--accent-ink);
+}
+
+.learn-track-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.learn-track-card .btn {
+  margin-top: auto;
+}
+
+.learn-skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+}
+
+.learn-skill-chips span {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 4px 8px;
+}
+
+.learn-track-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  color: var(--muted);
+  font-size: 13px;
+  margin: 8px 0 12px;
+}
+
+.learn-stage-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.learn-stage-rail li:not(:last-child)::after {
+  content: "→";
+  margin-left: 12px;
+  color: var(--border);
+}
+
+.learn-path-doodle {
+  margin-top: 8px;
+}
+
+.learn-journey {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--border);
+}
+
+.learn-journey-step {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 12px;
+  margin: 0 0 20px;
+  padding-left: 16px;
+  position: relative;
+}
+
+.learn-journey-mark {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.learn-journey-step.is-completed .learn-journey-mark,
+.learn-journey-step.is-current .learn-journey-mark {
+  color: var(--accent-ink);
+}
+
+.learn-journey-step.is-locked {
+  opacity: 0.72;
+}
+
+.learn-journey-body h3,
+.learn-journey-body h4 {
+  margin: 0 0 4px;
+}
+
+.learn-journey-actions {
+  margin-top: 10px;
+}
+
+.learn-challenge-row {
+  border-color: var(--accent-ink);
+}
+
+.lesson-workspace {
+  display: grid;
+  grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr) minmax(12rem, 16rem);
+  gap: 20px;
+  align-items: start;
+}
+
+.lesson-nav,
+.lesson-rail {
+  position: sticky;
+  top: calc(var(--nav-h) + 12px);
+}
+
+.lesson-nav-list {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.lesson-nav-item {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-left: 2px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  margin-bottom: 4px;
+  padding: 8px 10px;
+}
+
+.lesson-nav-item.is-current {
+  border-left-color: var(--accent-ink);
+  color: var(--text);
+}
+
+.lesson-nav-item.is-complete {
+  color: var(--text);
+}
+
+.lesson-nav-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.lesson-nav-index {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.lesson-rail-card {
+  margin-bottom: 12px;
+}
+
+.lesson-skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lesson-skill-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.learn-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 960px) {
+  .lesson-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .lesson-nav,
+  .lesson-rail {
+    position: static;
+  }
+
+  .learn-continue {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 640px) {
+  .learn-journey-step {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    padding-left: 12px;
+  }
+
+  .learn-stage-rail li:not(:last-child)::after {
+    content: "";
+    margin-left: 0;
+  }
+
+  .learn-stage-rail {
+    flex-direction: column;
+  }
+}
+
 .jigsaw-piece.is-selected .jigsaw-fill {
   fill: var(--surface);
 }

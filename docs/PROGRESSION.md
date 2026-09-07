@@ -3,10 +3,12 @@
 Every completed activity should move the learner toward a finished certificate and, if they choose, an on-chain record.
 
 ```text
-LEARN → PATH → TRACK → LESSON / QUIZ
-  → XP, LEVEL, ACHIEVEMENT, STREAK
+LEARN → PATH → TRACK → MODULE → LESSON / CHALLENGE (QUIZ)
+  → XP, LEVEL, ACHIEVEMENT, STREAK, SKILLS
   → PUZZLE → CERTIFICATE → CREDENTIAL → LEADERBOARD
 ```
+
+The Learn UI presents this as a structured journey (hub → track path → lesson workspace → challenge → credential), without changing the underlying event model.
 
 UI never invents XP or streak by itself. Completions become **progress events**. Those events update path state, XP, achievements, streaks, puzzle history, and (when relevant) credential flags.
 

@@ -1,16 +1,22 @@
 import { useMemo, useState } from "react";
-import { LEARNING_CATALOG, TRACKS, getLearningCatalog } from "../../data/learning.js";
+import { LEARNING_CATALOG, getLearningCatalog } from "../../data/learning.js";
 import {
   getTrackProgress,
   getPathProgress,
   getNextLearningItem,
   isLessonUnlocked,
   isLessonComplete,
-  isTrackUnlocked,
 } from "../../utils/progression/paths.js";
-import { Button, Card, ProgressBar } from "../ui/primitives";
-import { safeExternalHref } from "../../utils/frontendSecurity";
+import {
+  listTrackCards,
+  buildTrackJourney,
+  lessonContext,
+  TRACK_PRESENTATION,
+} from "../../utils/learningPresentation.js";
 import SectionSelect from "../SectionSelect";
+import LearnHub from "../learn/LearnHub";
+import TrackJourney from "../learn/TrackJourney";
+import LessonWorkspace from "../learn/LessonWorkspace";
 
 function LearnPage({
   progression,
@@ -20,9 +26,11 @@ function LearnPage({
   onSelectSection,
   onGoToPuzzle,
   onCompleteLesson,
+  onCredentials,
 }) {
   const [trackId, setTrackId] = useState(null);
   const [lessonId, setLessonId] = useState(null);
+  const [category, setCategory] = useState("All");
   const catalog = getLearningCatalog();
   const state = progression?.state;
   const path = useMemo(
@@ -33,8 +41,13 @@ function LearnPage({
     () => getNextLearningItem(state || {}, catalog.defaultPathId),
     [state, catalog.defaultPathId]
   );
-  const lesson = lessonId ? catalog.lessonById[lessonId] : null;
+  const trackCards = useMemo(
+    () => listTrackCards(state || {}, category),
+    [state, category]
+  );
   const activeTrack = trackId ? getTrackProgress(state || {}, trackId) : null;
+  const journey = activeTrack ? buildTrackJourney(activeTrack) : [];
+  const context = lessonId ? lessonContext(lessonId, state || {}, catalog) : null;
 
   function continueNext() {
     if (!nextItem || nextItem.locked) return;
@@ -46,137 +59,121 @@ function LearnPage({
     if (nextItem.kind === "quiz") {
       onSelectSection(nextItem.id);
     }
+    if (nextItem.kind === "track") {
+      setTrackId(nextItem.trackId);
+      setLessonId(null);
+    }
   }
 
-  if (lesson) {
-    const unlocked = isLessonUnlocked(state || {}, lesson.id);
-    const complete = isLessonComplete(state || {}, lesson.id);
+  function openLesson(id) {
+    const ctx = lessonContext(id, state || {}, catalog);
+    if (ctx?.track?.id) setTrackId(ctx.track.id);
+    setLessonId(id);
+  }
+
+  function afterLessonComplete(id) {
+    onCompleteLesson(id);
+    const ctx = lessonContext(id, {
+      ...state,
+      completedLessons: { ...(state?.completedLessons || {}), [id]: Date.now() },
+    }, catalog);
+    if (!ctx) {
+      setLessonId(null);
+      return;
+    }
+    const index = ctx.siblings.findIndex((item) => item.id === id);
+    const following = ctx.siblings[index + 1];
+    if (following) {
+      setLessonId(following.id);
+      return;
+    }
+    if (ctx.module?.quizId) {
+      setLessonId(null);
+      return;
+    }
+    setLessonId(null);
+  }
+
+  if (context?.lesson) {
+    const unlocked = isLessonUnlocked(state || {}, context.lesson.id);
+    const complete = isLessonComplete(state || {}, context.lesson.id);
+    const index = context.siblings.findIndex((item) => item.id === context.lesson.id);
+    const following = context.siblings[index + 1];
+    let nextAction = null;
+    if (complete && following) {
+      nextAction = {
+        title: following.title,
+        detail: "Next lesson in this module",
+        cta: "Open next lesson",
+        onClick: () => openLesson(following.id),
+      };
+    } else if (complete && context.module?.quizId) {
+      nextAction = {
+        title: "Knowledge check",
+        detail: "Challenge to prove this module",
+        cta: "Start challenge",
+        onClick: () => onSelectSection(context.module.quizId),
+      };
+    } else if (!complete) {
+      nextAction = {
+        title: "Complete lesson",
+        detail: "Mark complete to unlock the next step",
+        cta: null,
+        onClick: null,
+      };
+    }
+
     return (
-      <div className="page">
-        <header className="page-header">
-          <h1>{lesson.title}</h1>
-          <p className="lede">{unlocked ? "Read, then mark complete." : "Locked."}</p>
-        </header>
-        <article className="card lesson-body">
-          {lesson.body.split("\n\n").map((paragraph, index) => (
-            <p key={`${lesson.id}-${index}`}>{paragraph}</p>
-          ))}
-          {lesson.reference && safeExternalHref(lesson.reference.url) && (
-            <p className="lesson-reference">
-              <span className="kicker">Official reference</span>
-              <a href={safeExternalHref(lesson.reference.url)} target="_blank" rel="noopener noreferrer">
-                {lesson.reference.title}
-              </a>
-            </p>
-          )}
-        </article>
-        <div className="quiz-nav quiz-nav-end">
-          <Button variant="secondary" onClick={() => setLessonId(null)}>Track</Button>
-          <Button
-            disabled={!unlocked || complete}
-            onClick={() => {
-              onCompleteLesson(lesson.id);
-              setLessonId(null);
-            }}
-          >
-            {complete ? "Completed" : "Mark complete"}
-          </Button>
-        </div>
-      </div>
+      <LessonWorkspace
+        context={context}
+        unlocked={unlocked}
+        complete={complete}
+        xp={progression?.summary?.xp ?? 0}
+        nextAction={nextAction}
+        onBackTrack={() => setLessonId(null)}
+        onOpenLesson={openLesson}
+        onComplete={afterLessonComplete}
+        onNext={undefined}
+      />
     );
   }
 
   if (activeTrack) {
     return (
-      <div className="page">
-        <header className="page-header">
-          <p className="kicker">{activeTrack.difficulty}</p>
-          <h1>{activeTrack.name}</h1>
-        </header>
-        <ProgressBar label={`${activeTrack.completedCount}/${activeTrack.totalCount} modules`} value={activeTrack.percent} />
-        {!activeTrack.unlocked && <p className="meta-line">Finish the previous track first.</p>}
-        {activeTrack.modules.map((module) => (
-          <section className="section-block" key={module.id}>
-            <h2>{module.name}</h2>
-            <p className="meta-line">{module.complete ? "Done" : module.unlocked ? "Open" : "Locked"} · {module.percent}%</p>
-            {module.lessons.map((item) => (
-              <Card key={item.id} className="lesson-row">
-                <div>
-                  <h3>{item.title}</h3>
-                  <p className="meta-line">{item.complete ? "Complete" : item.unlocked ? "Ready" : "Locked"}</p>
-                </div>
-                <Button
-                  variant="secondary"
-                  disabled={!item.unlocked}
-                  onClick={() => setLessonId(item.id)}
-                >
-                  {item.complete ? "Review" : "Open"}
-                </Button>
-              </Card>
-            ))}
-            {module.quizId && (
-              <Button disabled={!module.unlocked} onClick={() => onSelectSection(module.quizId)}>
-                {module.complete ? "Retry quiz" : "Quiz"}
-              </Button>
-            )}
-          </section>
-        ))}
-        <Button variant="secondary" onClick={() => setTrackId(null)}>Tracks</Button>
-      </div>
+      <TrackJourney
+        track={activeTrack}
+        journey={journey}
+        presentation={TRACK_PRESENTATION[activeTrack.id]}
+        onBack={() => setTrackId(null)}
+        onOpenLesson={openLesson}
+        onStartQuiz={onSelectSection}
+        onCredentials={onCredentials}
+      />
     );
   }
 
   return (
-    <div className="page">
-      <header className="page-header">
-        <h1>{path.name || "Avalanche path"}</h1>
-      </header>
-
-      <section className="section-block">
-        <ProgressBar label={`Path ${path.completedCount}/${path.totalCount} tracks`} value={path.percent} />
-        {nextItem && (
-          <div className="path-continue">
-            <div>
-              <p className="kicker">Next</p>
-              <h2>{nextItem.title}</h2>
-              {nextItem.reason && <p className="meta-line">{nextItem.reason}</p>}
-            </div>
-            <Button disabled={nextItem.locked || nextItem.kind === "complete"} onClick={continueNext}>
-              Continue
-            </Button>
-          </div>
-        )}
-      </section>
-
-      <section className="section-block">
-        <h2>Tracks</h2>
-        <div className="track-grid">
-          {TRACKS.map((track) => {
-            const progress = getTrackProgress(state || {}, track.id);
-            const unlocked = isTrackUnlocked(state || {}, track.id);
-            return (
-              <Card key={track.id} className={`track-card ${progress.complete ? "is-complete" : ""} ${unlocked ? "" : "is-locked"}`}>
-                <p className="kicker">{track.difficulty}</p>
-                <h3>{track.name}</h3>
-                <p className="track-copy">{track.description}</p>
-                <p className="meta-line">{progress.percent}% · {unlocked ? (progress.complete ? "Done" : "Open") : "Locked"}</p>
-                <Button variant="secondary" onClick={() => setTrackId(track.id)}>
-                  {unlocked ? "Open" : "Locked"}
-                </Button>
-              </Card>
-            );
-          })}
-        </div>
-      </section>
-
-      <SectionSelect
-        sectionScores={sectionScores}
-        totalPoints={totalPoints}
-        completedSections={completedSections}
-        onSelectSection={onSelectSection}
-        onGoToPuzzle={onGoToPuzzle}
-      />
-    </div>
+    <LearnHub
+      path={path}
+      nextItem={nextItem}
+      trackCards={trackCards}
+      category={category}
+      onCategory={setCategory}
+      onContinue={continueNext}
+      onOpenTrack={(id) => {
+        setTrackId(id);
+        setLessonId(null);
+      }}
+      assessments={
+        <SectionSelect
+          sectionScores={sectionScores}
+          totalPoints={totalPoints}
+          completedSections={completedSections}
+          onSelectSection={onSelectSection}
+          onGoToPuzzle={onGoToPuzzle}
+        />
+      }
+    />
   );
 }
 

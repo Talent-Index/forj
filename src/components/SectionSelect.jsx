@@ -7,7 +7,6 @@ import { Doodle } from "./doodles";
 function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzzle, completedSections }) {
   return (
     <section className="section-block">
-      <h2>Assessments</h2>
       <p className="meta-line">Retries replace that section’s points · {totalPoints} pts</p>
       <div className="difficulty-grid">
         {sections.map((section) => {
