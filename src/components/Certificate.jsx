@@ -30,15 +30,32 @@ import {
 import JigsawBoard from "./JigsawBoard";
 import TrackCertificateGallery from "./TrackCertificateGallery";
 import { Button } from "./ui/primitives";
+import { AnimatedDoodle, Doodle, DoodleText } from "./doodles";
+import {
+  PuzzleProgress,
+  PuzzleMilestoneList,
+  CertificateCard,
+  CertificateViewer,
+  CredentialStatus,
+} from "./achievements";
+import {
+  evaluateLearningCertificates,
+  highestSkillTiers,
+} from "../utils/achievements";
+import { fragmentProgress } from "../utils/fragments";
+import { FRAGMENTS_PER_PIECE, FORGE_LEVEL_META } from "../utils/quizConfig";
+import { TIER_ROMAN } from "../utils/achievementCatalog";
 import { buildCredentialVerificationView, publicCredentialPath } from "../utils/credentialLookup";
 
 const PATH_LABEL = LEARNING_PATHS[0]?.name || "Avalanche Developer Path";
 
-function headerFor(phase, { minted, onChain }) {
+function headerFor(phase, { minted, onChain, puzzleComplete }) {
   if (phase === "forge") {
     return {
-      title: "Certificates",
-      lede: "Each track has its own learning record. Quiz points seat that track’s pieces. Lesson tracks complete with the track. The Fuji mint is still one claimed path snapshot — not an attested exam.",
+      title: "Credentials",
+      lede: puzzleComplete
+        ? "Puzzle complete. Name the recipient, then optionally mint a claimed Fuji path snapshot. Track and learning certificates stay off-chain."
+        : "Track certificates and learning certificates are path evidence. Seat all sixteen puzzle pieces to unlock naming and the optional claimed Fuji mint.",
     };
   }
   if (phase === "name") {
@@ -50,7 +67,7 @@ function headerFor(phase, { minted, onChain }) {
   if (phase === "preview") {
     return {
       title: "Certificate preview",
-      lede: "Confirm the claimed certificate. Learner mint is always Forjora claimed.",
+      lede: "Confirm the claimed path certificate. Learner mint is always Forjora claimed — not issuer-attested.",
     };
   }
   if (minted || onChain) {
@@ -81,8 +98,11 @@ function Certificate({
   onLookup,
   onPuzzle,
   onLearn,
+  onProgress,
   onConnectWallet,
   progress = null,
+  achievements = [],
+  puzzleFragments = 0,
   isFuji = false,
   chainId = null,
   switchingNetwork = false,
@@ -102,6 +122,7 @@ function Certificate({
   const [mintTx, setMintTx] = useState(null);
   const [mintError, setMintError] = useState(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [openLearningCert, setOpenLearningCert] = useState(null);
   const readClient = publicClient || (address ? getFujiPublicClient() : null);
   const {
     credential: onChainCredential,
@@ -133,9 +154,60 @@ function Certificate({
   const issuedName = savedName.ok ? savedName.name : validateRecipientName(nameInput).name;
   const onChainImageUri = resolveCredentialImageUri(userImage);
   const minted = Boolean(mintTx) || Boolean(onChainCredential);
-  const header = headerFor(phase, { minted, onChain: Boolean(onChainCredential) });
+  const header = headerFor(phase, {
+    minted,
+    onChain: Boolean(onChainCredential),
+    puzzleComplete,
+  });
   const hasLookupAddress = Boolean(address);
   const canMint = injectorConnected;
+  const fragments = fragmentProgress(puzzleFragments);
+  const skillHighlights = highestSkillTiers(
+    (achievements || []).filter((item) => item.family === "skills" && item.earned)
+  );
+  const learningCertCtx = useMemo(
+    () => ({
+      completedQuizzes: progress?.completedQuizzes || {},
+      sectionScores: sectionScores || {},
+      puzzleCount: acquiredPieces.length,
+      puzzleComplete,
+      hasCredential: Boolean(onChainCredential),
+      completedTracks: progress?.completedTracks || {},
+      completedPaths: progress?.completedPaths || {},
+    }),
+    [
+      progress?.completedQuizzes,
+      progress?.completedTracks,
+      progress?.completedPaths,
+      sectionScores,
+      acquiredPieces.length,
+      puzzleComplete,
+      onChainCredential,
+    ]
+  );
+  const learningCertificates = useMemo(
+    () =>
+      evaluateLearningCertificates(learningCertCtx, {
+        recipientName: issuedName || recipientName || "Learner",
+        learnerKey: address || issuedName || "LOCAL",
+      }),
+    [learningCertCtx, issuedName, recipientName, address]
+  );
+  const earnedLearningCerts = learningCertificates.filter((row) => row.earned);
+  const masteryLines = ["easy", "medium", "hard", "master"]
+    .map((id) => {
+      const row = sectionScores?.[id];
+      if (!row) return null;
+      const total = Number(row.total) || 0;
+      const correct = Number(row.correct) || 0;
+      if (!total) return null;
+      return {
+        id,
+        label: FORGE_LEVEL_META[id]?.forgeLabel || id,
+        percent: Math.round((correct / total) * 100),
+      };
+    })
+    .filter(Boolean);
 
   async function handleMint() {
     if (!CONTRACT_ADDRESS) {
@@ -248,7 +320,7 @@ function Certificate({
   return (
     <div className="page credentials-page">
       <header className="page-header">
-        <p className="kicker">Forjora credential</p>
+        <p className="kicker">Forjora credentials</p>
         <h1>{header.title}</h1>
         <p className="lede">{header.lede}</p>
         <p className="certificate-status-row">
@@ -260,6 +332,29 @@ function Certificate({
           )}
         </p>
       </header>
+
+      <section className="section-block credentials-journey" aria-label="Credential journey">
+        <p className="kicker">Journey</p>
+        <ol className="credentials-journey-steps">
+          <li className={acquiredPieces.length > 0 || earnedLearningCerts.length ? "is-done" : ""}>
+            Learn & assess
+          </li>
+          <li className={fragments.fragments > 0 || acquiredPieces.length > 0 ? "is-done" : ""}>
+            XP & fragments
+          </li>
+          <li className={acquiredPieces.length > 0 ? "is-done" : ""}>
+            Puzzle pieces
+          </li>
+          <li className={earnedLearningCerts.length > 0 ? "is-done" : ""}>
+            Learning certificates
+          </li>
+          <li className={puzzleComplete ? "is-done" : ""}>Path snapshot</li>
+          <li className={onChainCredential || mintTx ? "is-done" : ""}>Fuji mint</li>
+        </ol>
+        <p className="meta-line">
+          The puzzle is the journey. Learning certificates are path proof. The Fuji mint is an optional claimed on-chain snapshot.
+        </p>
+      </section>
 
       <ExistingCertificate
         credential={onChainCredential}
@@ -273,6 +368,21 @@ function Certificate({
         onConnectWallet={onConnectWallet}
       />
 
+      {onChainCredential && verificationView ? (
+        <section className="section-block">
+          <CredentialStatus
+            verificationStatus={onChainStatus.id}
+            credentialId={
+              onChainCredential.credentialId
+                ? `#${onChainCredential.credentialId}`
+                : certId
+            }
+            issuedLabel=""
+            onVerify={onLookup}
+          />
+        </section>
+      ) : null}
+
       {canMint && !isFuji && phase === "issued" ? (
         <NetworkGate
           chainId={chainId}
@@ -284,6 +394,149 @@ function Certificate({
 
       {phase === "forge" && (
         <>
+          <section className="section-block">
+            <h2>Credential puzzle</h2>
+            <PuzzleProgress
+              puzzleCount={acquiredPieces.length}
+              complete={puzzleComplete}
+              onPuzzle={() => onPuzzle?.("fundamentals")}
+            />
+            <p className="meta-line">
+              Fragments {fragments.fragments} · {fragments.towardNext}/{FRAGMENTS_PER_PIECE} toward next piece
+              {" · "}
+              {totalPoints} quiz pts seated toward Easy / Medium / Hard pieces
+            </p>
+            <PuzzleMilestoneList puzzleCount={acquiredPieces.length} />
+            <div className="credentials-jigsaw">
+              <JigsawBoard
+                artwork={userImage}
+                acquiredPieces={acquiredPieces}
+                complete={puzzleComplete}
+                showLabels={false}
+              />
+            </div>
+            {puzzleComplete ? (
+              <div className="card credentials-puzzle-complete">
+                <AnimatedDoodle
+                  type="diamond"
+                  animation="achievement"
+                  stages={["draw", "reveal", "stamp"]}
+                  trigger="immediate"
+                  size={28}
+                  variant="accent"
+                />
+                <p className="kicker">
+                  <DoodleText trigger="immediate" mark="underline">Puzzle complete</DoodleText>
+                </p>
+                <p className="lede">16 / 16 pieces · Achievement unlocked · Forjora path certificate ready</p>
+                <p className="meta-line">
+                  Name the recipient, then optionally mint a claimed Fuji record. Track and learning certificates above remain off-chain.
+                </p>
+                <div className="certificate-actions">
+                  <Button onClick={() => setPhase(savedName.ok ? "preview" : "name")}>
+                    Continue to path certificate
+                  </Button>
+                  {onProgress ? (
+                    <Button variant="secondary" onClick={onProgress}>View achievements</Button>
+                  ) : null}
+                </div>
+              </div>
+            ) : (
+              <div className="certificate-actions">
+                <Button onClick={() => onPuzzle?.()}>Forge pieces</Button>
+                {onLearn ? (
+                  <Button variant="secondary" onClick={onLearn}>Learn</Button>
+                ) : null}
+              </div>
+            )}
+          </section>
+
+          <section className="section-block">
+            <h2>Skills demonstrated</h2>
+            {skillHighlights.length || masteryLines.length ? (
+              <>
+                {skillHighlights.length > 0 ? (
+                  <ul className="skill-achievement-list">
+                    {skillHighlights.map((item) => (
+                      <li key={item.skillId}>
+                        <div className="skill-achievement-chip">
+                          <span className="kicker">{item.displayName}</span>
+                          <span className="stat-value">
+                            {TIER_ROMAN[item.tier]} · {item.tierLabel}
+                          </span>
+                          <span className="meta-line">{item.skillLabel}</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {masteryLines.length > 0 ? (
+                  <ul className="credentials-mastery-list">
+                    {masteryLines.map((row) => (
+                      <li key={row.id}>
+                        <span className="result-mark-ok">✓</span>
+                        <span>{row.label}</span>
+                        <span className="meta-line">{row.percent}% mastery</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </>
+            ) : (
+              <EmptyState
+                doodle="hammer"
+                title="Skills appear as you prove them"
+                body="Assessments and tracks unlock skill ladders and mastery lines here."
+                actionLabel="Explore learning"
+                onAction={onLearn}
+              />
+            )}
+          </section>
+
+          <section className="section-block">
+            <h2>Learning certificates</h2>
+            <p className="meta-line">
+              Formal path certificates (Foundation → Master). Not Fuji mints and not issuer-attested.
+            </p>
+            {earnedLearningCerts.length === 0 && learningCertificates.every((c) => !c.earned) ? (
+              <EmptyState
+                doodle="certificate"
+                title="No learning certificates yet"
+                body="Finish the required tracks and assessments to earn Foundation through Master path certificates."
+                actionLabel="Explore learning"
+                onAction={onLearn}
+              />
+            ) : null}
+            <div className="track-cert-grid">
+              {learningCertificates.map((cert) => (
+                <CertificateCard
+                  key={cert.id}
+                  certificate={cert}
+                  onOpen={setOpenLearningCert}
+                />
+              ))}
+            </div>
+            {openLearningCert ? (
+              <div className="learning-cert-viewer">
+                <CertificateViewer
+                  certificate={openLearningCert}
+                  recipientName={issuedName || recipientName || "Learner"}
+                />
+                {openLearningCert.earned ? (
+                  <CredentialStatus
+                    learningRecord
+                    credentialId={openLearningCert.credentialId}
+                    issuedLabel={openLearningCert.issuedLabel}
+                    onVerify={onLookup}
+                  />
+                ) : null}
+                <Button variant="secondary" onClick={() => setOpenLearningCert(null)}>
+                  Close certificate
+                </Button>
+              </div>
+            ) : null}
+          </section>
+
           <TrackCertificateGallery
             acquiredPieces={acquiredPieces}
             sectionScores={sectionScores}
@@ -293,26 +546,29 @@ function Certificate({
             onForge={onPuzzle}
             onLearn={onLearn}
           />
+
           <section className="section-block path-credential-panel">
             <p className="kicker">Path credential</p>
-            <h2>Path snapshot</h2>
+            <h2>Claimed Fuji snapshot</h2>
             <p className="meta-line">
-              One claimed Fuji mint after all sixteen pieces. Track certificates above stay off-chain.
+              One optional claimed mint after all sixteen pieces. Learning and track certificates stay off-chain.
             </p>
             <p className="stat-value">{acquiredPieces.length} / {TOTAL_PIECES} pieces</p>
-            <div className="credentials-jigsaw">
-              <JigsawBoard
-                artwork={userImage}
-                acquiredPieces={acquiredPieces}
-                complete={false}
-                showLabels={false}
-              />
-            </div>
-            <p className="note">Easy seats 3 pieces, Medium 5, Hard 8. Seat all 16 to name and mint the path credential.</p>
+            <p className="note">
+              Easy seats 3, Medium 5, Hard 8 with quiz points. Fragments also convert into pieces (5 = 1).
+            </p>
             <div className="certificate-actions">
-              <Button onClick={() => onPuzzle?.()}>Forge</Button>
-              {onLearn ? (
-                <Button variant="secondary" onClick={onLearn}>Learn</Button>
+              {puzzleComplete ? (
+                <Button onClick={() => setPhase(savedName.ok ? "preview" : "name")}>
+                  Name & mint path credential
+                </Button>
+              ) : (
+                <Button onClick={() => onPuzzle?.()}>Continue forging</Button>
+              )}
+              {onProgress ? (
+                <Button variant="secondary" onClick={onProgress}>
+                  <Doodle type="badge" size={14} variant="ink" /> Achievements
+                </Button>
               ) : null}
             </div>
           </section>

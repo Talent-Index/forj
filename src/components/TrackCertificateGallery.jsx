@@ -126,8 +126,8 @@ function TrackCertificateGallery({
       <section className="section-block track-cert-intro">
         <h2>Track certificates</h2>
         <p className="meta-line">
-          Learning records for each path track. They are not extra Fuji tokens.
-          Seat all 16 pieces below to name and mint the path credential.
+          Learning records for each path track. They are not extra Fuji tokens and sit beside
+          Foundation → Master learning certificates above.
         </p>
       </section>
       {open.length > 0 && (

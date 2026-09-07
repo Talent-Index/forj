@@ -683,12 +683,15 @@ function App() {
             onLookup={openLookup}
             onClaimed={progression.claimCredential}
             progress={progression.state}
+            achievements={progression.achievements}
+            puzzleFragments={puzzleFragments}
             onPuzzle={(trackId) => {
               setForgeTrackId(trackId || "fundamentals");
               setView(VIEWS.PUZZLE);
               setPage("learn");
             }}
             onLearn={goLearnHome}
+            onProgress={() => setPage("progress")}
             onConnectWallet={openModal}
             injectorConnected={Boolean(wallet.address)}
             isFuji={wallet.isFuji}

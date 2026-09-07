@@ -3713,11 +3713,60 @@ img {
   margin: 8px 0;
 }
 
-.achievement-feedback-stack {
+.credentials-journey-steps {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.credentials-journey-steps li {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  color: var(--muted);
+  background: var(--surface-2);
+  font-size: 0.85rem;
+}
+
+.credentials-journey-steps li.is-done {
+  color: var(--text);
+  border-color: var(--text);
+  background: var(--surface);
+}
+
+.credentials-puzzle-complete {
+  margin-top: 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 12px;
+}
+
+.credentials-mastery-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.credentials-mastery-list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+}
+
+@media (max-width: 860px) {
+  .credentials-journey-steps {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 860px) {
