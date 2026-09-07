@@ -3015,3 +3015,313 @@ img {
   stroke-width: 1.85;
 }
 
+/* --- Doodle forge system --- */
+
+.doodle {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  overflow: visible;
+}
+
+.doodle-ink {
+  color: var(--text);
+}
+
+.doodle-muted {
+  color: var(--muted);
+}
+
+.doodle-accent {
+  color: var(--accent-ink);
+}
+
+.doodle-earth {
+  color: var(--earth);
+}
+
+.doodle-draw path,
+.doodle-draw circle,
+.doodle-draw line,
+.doodle-draw polyline,
+.doodle-draw polygon {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: doodle-draw 720ms ease forwards;
+}
+
+@keyframes doodle-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.doodle-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.doodle-field-item {
+  position: absolute;
+  opacity: 0.55;
+}
+
+.doodle-field-item.is-accent {
+  opacity: 0.85;
+}
+
+.landing-hero,
+.landing-section,
+.forge-stat-wrap,
+.challenge-sheet,
+.about-sketch,
+.path-credential-panel {
+  position: relative;
+}
+
+.landing-hero-copy,
+.landing-section > *:not(.doodle-field),
+.forge-journey,
+.challenge-sheet-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.sketch-underline {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.sketch-underline::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: transparent;
+  border-bottom: 2px solid var(--accent-ink);
+  border-radius: 40% 60% 50% 50%;
+  transform: rotate(-1.2deg);
+}
+
+.nav-link.is-active,
+.mobile-nav-item.is-active {
+  background: transparent;
+  position: relative;
+}
+
+.nav-link.is-active::after,
+.mobile-nav-item.is-active .mobile-nav-sketch {
+  content: "";
+  display: block;
+  width: 70%;
+  height: 2px;
+  margin: 2px auto 0;
+  border-bottom: 2px solid var(--accent-ink);
+  border-radius: 40% 60%;
+  transform: rotate(-1deg);
+}
+
+.mobile-nav-item.is-active {
+  background: transparent;
+}
+
+.brand-diamond {
+  margin-right: 2px;
+  color: var(--accent-ink);
+}
+
+.forge-journey {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.forge-journey-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.forge-journey-n {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.forge-journey-step h3 {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.forge-journey-step p {
+  color: var(--muted);
+  max-width: 16rem;
+  margin: 0;
+}
+
+.forge-journey-line {
+  display: none;
+}
+
+.difficulty-forge-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.challenge-sheet {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.challenge-sheet .option-btn.wrong {
+  border-color: var(--earth);
+  background: var(--warning-bg);
+  color: var(--text);
+}
+
+.feedback-nice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--success);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.feedback-not-yet {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--earth);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.xp-callout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+.forge-stat-wrap {
+  position: relative;
+}
+
+.forge-stat-doodle {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.about-sketch-flow {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+}
+
+.about-sketch-flow li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.doodle-divider {
+  display: flex;
+  justify-content: center;
+  color: var(--muted);
+  margin: 12px 0;
+  opacity: 0.7;
+}
+
+.loading-forge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.empty-state-doodle {
+  color: var(--accent-ink);
+  margin-bottom: 8px;
+}
+
+.achievement-item.is-unlocked .doodle-draw path {
+  animation-delay: 80ms;
+}
+
+.lookup-seal {
+  display: inline-flex;
+  margin: 8px 0;
+  color: var(--accent-ink);
+}
+
+@media (max-width: 860px) {
+  .doodle-field-item.is-decorative {
+    display: none;
+  }
+
+  .forge-journey {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .landing-hero .doodle-field-item {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doodle-draw path,
+  .doodle-draw circle,
+  .doodle-draw line,
+  .doodle-draw polyline,
+  .doodle-draw polygon {
+    animation: none !important;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+[data-reduced-motion="true"] .doodle-draw path,
+[data-reduced-motion="true"] .doodle-draw circle,
+[data-reduced-motion="true"] .doodle-draw line,
+[data-reduced-motion="true"] .doodle-draw polyline,
+[data-reduced-motion="true"] .doodle-draw polygon {
+  animation: none !important;
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+}
+
+

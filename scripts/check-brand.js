@@ -72,7 +72,7 @@ assert.match(css, /--accent:\s*#e07a3a/);
 assert.match(css, /--accent-ink:\s*#b54f1c/);
 assert.match(css, /color-scheme:\s*light/);
 assert.match(css, /\.doodle-draw/);
-assert.match(html, /theme-color" content="#e9e4d8"/);
+assert.match(html, /theme-color" content="#ebe4d6"/);
 
 const mark = readFileSync(join(root, "src/components/brand/ForjoraMark.jsx"), "utf8");
 assert.match(mark, /brand-mark-accent/);
