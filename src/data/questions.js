@@ -1,4 +1,8 @@
-import { QUESTIONS_PER_QUIZ } from "../utils/quiz.js";
+import {
+  CREDENTIAL_SCORE_MAX,
+  CREDENTIAL_SCORE_SECTIONS,
+} from "../utils/quizConfig.js";
+import { GENERATED_QUESTION_BANK } from "./generatedQuestions.js";
 
 export const QUESTION_TOPICS = [
   "fundamentals",
@@ -82,7 +86,7 @@ export const sections = [
     icon: "🟢",
     pointsPerQuestion: 3,
     timePerQuestion: 20,
-    description: "Avalanche fundamentals — C-Chain, L1s, ICM, validators, and Fuji",
+    description: "Foundation — Avalanche fundamentals for understanding before you build",
     questions: [
       {
         id: "e1",
@@ -324,7 +328,7 @@ export const sections = [
     icon: "🟡",
     pointsPerQuestion: 5,
     timePerQuestion: 15,
-    description: "Validators, C-Chain IDs, Subnet-EVM, ICM, and L1 architecture",
+    description: "Builder — apply Avalanche concepts to practical situations",
     questions: [
       {
         id: "m1",
@@ -586,7 +590,7 @@ export const sections = [
     icon: "🔴",
     pointsPerQuestion: 8,
     timePerQuestion: 12,
-    description: "Snow protocols, Coreth, Teleporter, ACP-77, and validator economics",
+    description: "Advanced — problem-solving across architecture, security, and tooling",
     questions: [
       {
         id: "h1",
@@ -847,7 +851,32 @@ export const sections = [
       },
     ],
   },
+  {
+    id: "master",
+    name: "Master",
+    icon: "◆",
+    pointsPerQuestion: 10,
+    timePerQuestion: 18,
+    description: "Mastery — deep reasoning, security, and systems judgment",
+    questions: [],
+  },
 ];
+
+function mergeGenerated(section) {
+  const extra = GENERATED_QUESTION_BANK[section.id] || [];
+  const seen = new Set((section.questions || []).map((q) => q.id));
+  const merged = (section.questions || []).slice();
+  for (const question of extra) {
+    if (seen.has(question.id)) continue;
+    seen.add(question.id);
+    merged.push(question);
+  }
+  return { ...section, questions: merged };
+}
+
+for (let i = 0; i < sections.length; i += 1) {
+  sections[i] = mergeGenerated(sections[i]);
+}
 
 export const PUZZLE_SIZE = 4;
 export const PIECE_COST = 5;
@@ -864,7 +893,7 @@ export function getSectionById(id) {
   return sections.find((s) => s.id === id);
 }
 
-export const MAX_POINTS = sections.reduce(
-  (sum, s) => sum + s.pointsPerQuestion * QUESTIONS_PER_QUIZ,
-  0
-);
+/** Claimed Fuji score budget (frozen): 3×5 + 5×5 + 8×5 = 80. */
+export const MAX_POINTS = sections
+  .filter((s) => CREDENTIAL_SCORE_SECTIONS.includes(s.id))
+  .reduce((sum, s) => sum + s.pointsPerQuestion * CREDENTIAL_SCORE_MAX, 0);

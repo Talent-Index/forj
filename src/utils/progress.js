@@ -1,10 +1,19 @@
 import { getSectionById } from "../data/questions.js";
-import { QUESTIONS_PER_QUIZ } from "./quiz.js";
+import {
+  CREDENTIAL_SCORE_MAX,
+  CREDENTIAL_SCORE_SECTIONS,
+  QUIZ_SECTION_ORDER,
+  quizLengthFor,
+} from "./quizConfig.js";
 import { spentPointsFor, normalizePieces } from "./puzzle.js";
 import { validateRecipientName } from "./recipient.js";
+import { normalizeFragments } from "./fragments.js";
 
 export const STORAGE_VERSION = 1;
-export const SCORE_SECTIONS = ["easy", "medium", "hard"];
+/** Credential / puzzle seating sections (Easy · Medium · Hard). */
+export const SCORE_SECTIONS = [...CREDENTIAL_SCORE_SECTIONS];
+/** All assessment sections including Mastery. */
+export const QUIZ_SECTIONS = [...QUIZ_SECTION_ORDER];
 export const PROGRESS_VIEWS = {
   SECTIONS: "sections",
   QUIZ: "quiz",
@@ -14,6 +23,7 @@ export const PROGRESS_VIEWS = {
 
 const VIEW_VALUES = new Set(Object.values(PROGRESS_VIEWS));
 const MAX_ATTEMPTS = 40;
+const MAX_SEEN_QUESTIONS = 400;
 
 function toNonNegativeInt(value) {
   const n = Number(value);
@@ -70,6 +80,13 @@ export function emptyProgress() {
     completedSections: [],
     attempts: [],
     recipientName: "",
+    puzzleFragments: 0,
+    fragmentKeys: {},
+    fragmentPieceCredits: 0,
+    seenQuestionIds: [],
+    activitiesSinceQuiz: 0,
+    quizThreshold: 0,
+    pendingKnowledgeCheck: false,
   };
 }
 
@@ -77,20 +94,28 @@ export function emptySectionScores() {
   return {};
 }
 
+function pointsForResult(sectionId, correct) {
+  if (!CREDENTIAL_SCORE_SECTIONS.includes(sectionId)) return 0;
+  const section = getSectionById(sectionId);
+  if (!section) return 0;
+  const capped = Math.min(toNonNegativeInt(correct), CREDENTIAL_SCORE_MAX);
+  return capped * section.pointsPerQuestion;
+}
+
 export function normalizeSectionResult(result) {
   const sectionId = result?.sectionId;
-  if (!SCORE_SECTIONS.includes(sectionId)) return null;
+  if (!QUIZ_SECTIONS.includes(sectionId)) return null;
 
   const section = getSectionById(sectionId);
   if (!section) return null;
 
-  const total = QUESTIONS_PER_QUIZ;
+  const total = quizLengthFor(sectionId);
   const correct = Math.min(toNonNegativeInt(result.correct), total);
   return {
     sectionId,
     correct,
     total,
-    pointsEarned: correct * section.pointsPerQuestion,
+    pointsEarned: pointsForResult(sectionId, correct),
     wrong: Math.min(toNonNegativeInt(result.wrong), total),
   };
 }
@@ -107,7 +132,7 @@ function sanitizeSectionScores(rawScores) {
   if (!rawScores || typeof rawScores !== "object" || Array.isArray(rawScores)) {
     return sectionScores;
   }
-  for (const sectionId of SCORE_SECTIONS) {
+  for (const sectionId of QUIZ_SECTIONS) {
     if (!rawScores[sectionId]) continue;
     const normalized = normalizeSectionResult({
       sectionId,
@@ -129,7 +154,7 @@ function sanitizeCompletedSections(value, sectionScores) {
   const seen = new Set();
   const completed = [];
   for (const sectionId of merged) {
-    if (!SCORE_SECTIONS.includes(sectionId) || seen.has(sectionId)) continue;
+    if (!QUIZ_SECTIONS.includes(sectionId) || seen.has(sectionId)) continue;
     seen.add(sectionId);
     completed.push(sectionId);
   }
@@ -148,9 +173,32 @@ function sanitizeAttempts(value) {
   return attempts;
 }
 
+function sanitizeFragmentKeys(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const keys = {};
+  for (const sectionId of QUIZ_SECTIONS) {
+    if (value[sectionId]) keys[sectionId] = true;
+  }
+  return keys;
+}
+
+function sanitizeSeenQuestionIds(value) {
+  if (!Array.isArray(value)) return [];
+  const seen = new Set();
+  const next = [];
+  for (const item of value) {
+    const id = String(item || "").trim();
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    next.push(id);
+    if (next.length >= MAX_SEEN_QUESTIONS) break;
+  }
+  return next;
+}
+
 function sanitizeView(view, activeSection) {
   const nextView = VIEW_VALUES.has(view) ? view : PROGRESS_VIEWS.SECTIONS;
-  const nextSection = SCORE_SECTIONS.includes(activeSection) ? activeSection : null;
+  const nextSection = QUIZ_SECTIONS.includes(activeSection) ? activeSection : null;
   if (nextView === PROGRESS_VIEWS.QUIZ && !nextSection) {
     return { view: PROGRESS_VIEWS.SECTIONS, activeSection: null };
   }
@@ -177,6 +225,13 @@ export function sanitizeProgress(raw) {
       spentPoints: spentPointsFor(acquiredPieces),
       totalPoints: recomputeTotalPoints(sectionScores),
       recipientName: recipient.ok ? recipient.name : "",
+      puzzleFragments: normalizeFragments(raw.puzzleFragments),
+      fragmentKeys: sanitizeFragmentKeys(raw.fragmentKeys),
+      fragmentPieceCredits: toNonNegativeInt(raw.fragmentPieceCredits),
+      seenQuestionIds: sanitizeSeenQuestionIds(raw.seenQuestionIds),
+      activitiesSinceQuiz: toNonNegativeInt(raw.activitiesSinceQuiz),
+      quizThreshold: toNonNegativeInt(raw.quizThreshold),
+      pendingKnowledgeCheck: Boolean(raw.pendingKnowledgeCheck),
     };
   } catch {
     return emptyProgress();
@@ -213,6 +268,11 @@ export function applyAttemptHistory(attempts) {
     (state, result) => applySectionResult(state.sectionScores, result),
     { sectionScores: emptySectionScores(), totalPoints: 0 }
   );
+}
+
+export function mergeSeenQuestionIds(existing, questionIds = []) {
+  const next = sanitizeSeenQuestionIds([...(existing || []), ...questionIds]);
+  return next;
 }
 
 function readRaw(storage, ownerId) {
@@ -271,6 +331,7 @@ export function isEmptyProgress(progress) {
     next.acquiredPieces.length === 0 &&
     next.completedSections.length === 0 &&
     next.attempts.length === 0 &&
+    next.puzzleFragments === 0 &&
     !next.recipientName
   );
 }

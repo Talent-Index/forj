@@ -1,4 +1,6 @@
-export const QUESTIONS_PER_QUIZ = 5;
+import { QUESTIONS_PER_QUIZ, quizLengthFor } from "./quizConfig.js";
+
+export { QUESTIONS_PER_QUIZ, quizLengthFor } from "./quizConfig.js";
 
 export const POST_SUBMIT_KEYS = ["answer", "explanation", "funFact", "reference"];
 
@@ -60,12 +62,15 @@ export function isLearnerQuestion(question) {
 }
 
 export function toLearnerQuestion(question, sectionId) {
+  const options = Array.isArray(question.options) ? question.options.slice() : [];
   return {
     id: question.id,
     question: question.question,
-    options: question.options.slice(),
+    options,
     hint: typeof question.hint === "string" ? question.hint : "",
     sectionId: sectionId ?? question.sectionId ?? null,
+    topic: question.topic || null,
+    skill: question.skill || null,
   };
 }
 
@@ -150,7 +155,7 @@ export function getQuestionBankStatus(section, count = QUESTIONS_PER_QUIZ) {
       ok: false,
       size: 0,
       needed: count,
-      error: "Unknown difficulty. Choose Easy, Medium, or Hard.",
+      error: "Unknown difficulty. Choose Foundation, Builder, Advanced, or Mastery.",
     };
   }
   const size = getValidQuestions(section.questions).length;
@@ -183,16 +188,57 @@ export function shuffle(items, random = Math.random) {
 }
 
 export function selectQuizQuestions(section, options = {}) {
-  const count = options.count ?? QUESTIONS_PER_QUIZ;
+  const count = options.count ?? quizLengthFor(section?.id);
   const random = options.random ?? Math.random;
+  const seenIds = new Set((options.seenIds || []).map(String));
   const bank = getQuestionBankStatus(section, count);
   if (!bank.ok) {
     return { ok: false, error: bank.error, questions: [] };
   }
 
-  const selected = shuffle(getValidQuestions(section.questions), random).slice(0, count);
-  const ids = selected.map((question) => question.id || question.question);
-  if (new Set(ids).size !== count || selected.length !== count) {
+  const pool = getValidQuestions(section.questions);
+  const fresh = pool.filter((question) => !seenIds.has(String(question.id || question.question)));
+  const source = fresh.length >= count ? fresh : pool;
+
+  const byTopic = new Map();
+  for (const question of shuffle(source, random)) {
+    const topic = question.topic || "general";
+    if (!byTopic.has(topic)) byTopic.set(topic, []);
+    byTopic.get(topic).push(question);
+  }
+  const topicKeys = shuffle([...byTopic.keys()], random);
+  const selected = [];
+  const used = new Set();
+  let guard = 0;
+  while (selected.length < count && guard < count * 20) {
+    guard += 1;
+    let added = false;
+    for (const topic of topicKeys) {
+      if (selected.length >= count) break;
+      const bucket = byTopic.get(topic) || [];
+      while (bucket.length) {
+        const next = bucket.shift();
+        const key = String(next.id || next.question);
+        if (used.has(key)) continue;
+        used.add(key);
+        selected.push(next);
+        added = true;
+        break;
+      }
+    }
+    if (!added) {
+      for (const question of source) {
+        const key = String(question.id || question.question);
+        if (used.has(key)) continue;
+        used.add(key);
+        selected.push(question);
+        if (selected.length >= count) break;
+      }
+      break;
+    }
+  }
+
+  if (selected.length !== count) {
     return {
       ok: false,
       error: `Could not build a ${count}-question ${section.name} quiz without duplicates.`,
@@ -203,6 +249,9 @@ export function selectQuizQuestions(section, options = {}) {
   return {
     ok: true,
     error: null,
-    questions: selected.map((question) => toLearnerQuestion(question, section.id)),
+    questions: selected.map((question) => {
+      const learner = toLearnerQuestion(question, section.id);
+      return { ...learner, options: shuffle(learner.options, random) };
+    }),
   };
 }
