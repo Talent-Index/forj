@@ -16,7 +16,7 @@ The mark is a geometric **F / upward pathway** in charcoal with a gold accent st
 2. Complete Easy, Medium, and Hard challenges. Retries replace a section’s score; they do not stack extra points.
 3. Earn points, XP, levels, achievements, and a UTC learning streak.
 4. Spend each quiz’s points on that track’s certificate pieces (Easy 3, Medium 5, Hard 8).
-5. Track certificates show as in progress or achieved. Lesson tracks complete with the track.
+5. Track certificates show as in progress or achieved learning records (not Fuji tokens). Lesson tracks complete with the track.
 6. Optionally mint one soulbound path credential. A minted record has a shareable URL and QR. Sharing that URL (or the site) shows Forjora forge artwork in the link preview — branding, not attestation.
 
 ## What learners get

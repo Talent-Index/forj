@@ -3,7 +3,7 @@
  * UI should read this file instead of hardcoding track or path rules.
  */
 
-export const LEARNING_CATALOG_VERSION = 1;
+export const LEARNING_CATALOG_VERSION = 2;
 
 export const QUIZ_MODULE_IDS = {
   easy: "fund-quiz",
