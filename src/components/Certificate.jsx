@@ -340,37 +340,43 @@ function Certificate({
           {[
             {
               id: "learn",
-              label: "Learn & assess",
+              label: "Learn",
+              detail: "Learn & assess",
               icon: "learn",
               done: acquiredPieces.length > 0 || earnedLearningCerts.length > 0,
             },
             {
               id: "fragments",
-              label: "XP & fragments",
+              label: "Fragments",
+              detail: "XP & fragments",
               icon: "spark",
               done: fragments.fragments > 0 || acquiredPieces.length > 0,
             },
             {
               id: "puzzle",
-              label: "Puzzle pieces",
+              label: "Puzzle",
+              detail: "Puzzle pieces",
               icon: "puzzle",
               done: acquiredPieces.length > 0,
             },
             {
               id: "learning-certs",
-              label: "Learning certificates",
+              label: "Certificates",
+              detail: "Learning certificates",
               icon: "certificate",
               done: earnedLearningCerts.length > 0,
             },
             {
               id: "path",
-              label: "Path snapshot",
+              label: "Path",
+              detail: "Path snapshot",
               icon: "path",
               done: puzzleComplete,
             },
             {
               id: "fuji",
-              label: "Fuji mint",
+              label: "Fuji",
+              detail: "Fuji mint",
               icon: "shield",
               done: Boolean(onChainCredential || mintTx),
               alert: puzzleComplete && !onChainCredential && !mintTx,
@@ -381,13 +387,19 @@ function Certificate({
               className={[step.done ? "is-done" : "", step.alert ? "has-alert" : ""]
                 .filter(Boolean)
                 .join(" ")}
-              title={step.label}
+              title={step.detail}
             >
               <span className="credentials-journey-icon" aria-hidden="true">
                 <Icon name={step.icon} size={18} />
                 {step.alert ? <span className="nav-alert-dot" /> : null}
               </span>
-              <span className="visually-hidden">{step.label}{step.done ? " — complete" : ""}</span>
+              <span className="credentials-journey-label">
+                {step.label}
+                <span className="visually-hidden">
+                  {step.done ? " — complete" : ""}
+                  {step.detail !== step.label ? ` (${step.detail})` : ""}
+                </span>
+              </span>
             </li>
           ))}
         </ol>

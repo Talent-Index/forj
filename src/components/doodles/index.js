@@ -1,5 +1,7 @@
 export { Doodle } from "./Doodle.jsx";
 export { DoodleField } from "./DoodleField.jsx";
+export { PageDoodles } from "./PageDoodles.jsx";
+export { buildDenseDoodleField, PAGE_DOODLE_THEME } from "./buildDenseDoodleField.js";
 export { DoodleDivider } from "./DoodleDivider.jsx";
 export { AnimatedDoodle } from "./AnimatedDoodle.jsx";
 export { DoodleArrow } from "./DoodleArrow.jsx";

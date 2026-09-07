@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   CONTRACT_ADDRESS,
   CREDENTIAL_ABI,
@@ -32,6 +32,7 @@ export function useOnChainCredential(address, publicClient) {
   const [transactionHash, setTransactionHash] = useState("");
   const [loading, setLoading] = useState(Boolean(CONTRACT_ADDRESS && address && publicClient));
   const [error, setError] = useState(null);
+  const hashRequestId = useRef(0);
 
   const reload = useCallback(async () => {
     if (!CONTRACT_ADDRESS || !publicClient || !address) {
@@ -42,6 +43,7 @@ export function useOnChainCredential(address, publicClient) {
       return null;
     }
 
+    const requestId = ++hashRequestId.current;
     setLoading(true);
     setError(null);
     try {
@@ -53,8 +55,10 @@ export function useOnChainCredential(address, publicClient) {
       });
 
       if (!tokenId || tokenId === 0n) {
-        setCredential(null);
-        setTransactionHash("");
+        if (requestId === hashRequestId.current) {
+          setCredential(null);
+          setTransactionHash("");
+        }
         return null;
       }
 
@@ -91,22 +95,43 @@ export function useOnChainCredential(address, publicClient) {
           chainId: Number(chainId) || FUJI_CHAIN_ID,
         }
       );
-      const hash = await findMintTransactionHash(publicClient, tokenId);
+
+      if (requestId !== hashRequestId.current) return next;
+
+      // Paint credential first; mint hash is optional enrichment.
       setCredential(next);
-      setTransactionHash(hash || "");
+      setLoading(false);
+
+      findMintTransactionHash(publicClient, tokenId)
+        .then((hash) => {
+          if (requestId !== hashRequestId.current) return;
+          setTransactionHash(hash || "");
+        })
+        .catch(() => {
+          if (requestId !== hashRequestId.current) return;
+          setTransactionHash("");
+        });
+
       return next;
     } catch (err) {
-      setCredential(null);
-      setTransactionHash("");
-      setError(err?.shortMessage || err?.message || "Could not read credential.");
+      if (requestId === hashRequestId.current) {
+        setCredential(null);
+        setTransactionHash("");
+        setError(err?.shortMessage || err?.message || "Could not read credential.");
+      }
       return null;
     } finally {
-      setLoading(false);
+      if (requestId === hashRequestId.current) {
+        setLoading(false);
+      }
     }
   }, [address, publicClient]);
 
   useEffect(() => {
     reload();
+    return () => {
+      hashRequestId.current += 1;
+    };
   }, [reload]);
 
   return { credential, transactionHash, loading, error, reload };

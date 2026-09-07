@@ -1,8 +1,9 @@
-import { AnimatedDoodle, Doodle, DoodleText } from "../doodles";
+import { Doodle } from "../doodles";
 import { TIER_ROMAN } from "../../utils/achievementCatalog";
 
 /**
  * Collectible Forjora badge tile — reuses card / border / doodle language.
+ * Grid uses static doodles so Progress stays fast; detail views can animate.
  */
 export function BadgeCard({
   achievement,
@@ -23,38 +24,25 @@ export function BadgeCard({
       title={achievement?.description || title}
     >
       <span className="badge-card-icon ach-icon" aria-hidden="true">
-        {earned ? (
-          <AnimatedDoodle
-            type={doodle}
-            animation="achievement"
-            stages={["draw", "reveal", "stamp"]}
-            trigger="viewport"
-            size={compact ? 20 : 28}
-            variant="accent"
-          />
-        ) : (
-          <Doodle type={doodle} size={compact ? 20 : 28} variant="muted" />
-        )}
+        <Doodle
+          type={doodle}
+          size={compact ? 20 : 28}
+          variant={earned ? "accent" : "muted"}
+        />
       </span>
       <span className="badge-card-name ach-name">{title}</span>
       {achievement?.skillLabel ? (
         <span className="meta-line badge-card-skill">{achievement.skillLabel}</span>
       ) : null}
       {tierRoman ? (
-        <span className="badge-card-tier kicker">Level {tierRoman}{achievement.tierLabel ? ` · ${achievement.tierLabel}` : ""}</span>
+        <span className="badge-card-tier kicker">
+          Level {tierRoman}
+          {achievement.tierLabel ? ` · ${achievement.tierLabel}` : ""}
+        </span>
       ) : achievement?.familyLabel ? (
         <span className="badge-card-tier kicker">{achievement.familyLabel}</span>
       ) : null}
-      <span className="ach-status">
-        {earned ? (
-          <>
-            <AnimatedDoodle type="check" animation="draw" trigger="viewport" size={12} variant="accent" />
-            <DoodleText trigger="viewport" mark="underline">Earned</DoodleText>
-          </>
-        ) : (
-          "Locked"
-        )}
-      </span>
+      <span className="ach-status">{earned ? "Earned" : "Locked"}</span>
     </button>
   );
 }

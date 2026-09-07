@@ -127,13 +127,13 @@ function Navbar({
             <button
               key={item.id}
               type="button"
-              className={`nav-link nav-link-icon ${page === item.id ? "is-active" : ""}`}
+              className={`nav-link nav-link-labeled ${page === item.id ? "is-active" : ""}`}
               onClick={() => onNavigate(item.id)}
-              aria-label={item.label}
+              aria-current={page === item.id ? "page" : undefined}
               title={item.label}
             >
               <Icon name={item.icon} size={18} />
-              <span className="visually-hidden">{item.label}</span>
+              <span className="nav-link-label">{item.label}</span>
             </button>
           ))}
         </nav>

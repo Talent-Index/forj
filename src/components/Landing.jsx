@@ -10,11 +10,12 @@ import {
   DoodleDivider,
   DoodleText,
   doodleTiming,
+  buildDenseDoodleField,
 } from "./doodles";
 import JigsawBoard from "./JigsawBoard";
 import forgeCertificate from "../assets/forge-certificate.jpg";
 
-const HERO_DOODLES = [
+const HERO_CURATED = [
   { type: "pencil", top: "6%", left: "4%", size: 28, rotate: -8, decorative: false, animation: "slide", delay: 80 },
   { type: "underline", top: "11%", left: "12%", size: 34, animation: "underline", delay: 160 },
   { type: "book", top: "5%", right: "6%", size: 30, rotate: 7, decorative: false, animation: "open", delay: 220 },
@@ -24,108 +25,75 @@ const HERO_DOODLES = [
   { type: "code", top: "16%", right: "14%", size: 22, rotate: -6, animation: "draw", delay: 400 },
   { type: "question", top: "36%", left: "3%", size: 24, rotate: -4, decorative: false, animation: "wiggle", delay: 480 },
   { type: "cap", top: "28%", right: "4%", size: 22, rotate: 10, animation: "draw", delay: 520 },
-  { type: "gear", top: "42%", right: "18%", size: 18, rotate: 18, animation: "draw", delay: 560 },
-  { type: "blueprint", top: "32%", left: "14%", size: 24, rotate: -5, animation: "draw", delay: 600 },
-  { type: "blocks", top: "52%", left: "5%", size: 20, rotate: 6, animation: "assemble", delay: 640 },
-  { type: "tools", top: "58%", right: "7%", size: 22, rotate: -9, animation: "draw", delay: 680 },
   { type: "hammer", bottom: "14%", left: "6%", size: 28, rotate: -6, decorative: false, animation: "tap", delay: 720 },
-  { type: "anvil", bottom: "8%", left: "18%", size: 24, rotate: 3, animation: "draw", delay: 760 },
-  { type: "fire", bottom: "20%", left: "28%", size: 20, rotate: -10, variant: "accent", animation: "spark", delay: 800 },
   { type: "diamond", bottom: "12%", right: "6%", size: 28, variant: "accent", accent: true, decorative: false, animation: "draw", delay: 840 },
   { type: "certificate", top: "48%", right: "3%", size: 24, rotate: -7, animation: "stamp", delay: 880 },
   { type: "seal", bottom: "28%", right: "12%", size: 20, rotate: 8, variant: "accent", accent: true, animation: "stamp", delay: 920 },
-  { type: "check", bottom: "18%", right: "22%", size: 18, variant: "accent", accent: true, animation: "draw", delay: 960 },
   { type: "blockchain", top: "62%", right: "5%", size: 26, rotate: 4, animation: "connect", delay: 1000 },
-  { type: "nodes", top: "72%", right: "16%", size: 22, rotate: -5, animation: "connect", delay: 1040 },
-  { type: "chain", top: "22%", left: "38%", size: 18, rotate: -8, animation: "draw", delay: 360 },
-  { type: "wallet", top: "68%", left: "4%", size: 22, rotate: -8, animation: "draw", delay: 1080 },
-  { type: "contract", bottom: "34%", right: "4%", size: 22, rotate: 5, animation: "draw", delay: 1120 },
   { type: "puzzle", top: "14%", left: "48%", size: 18, rotate: 9, animation: "assemble", delay: 440 },
-  { type: "trophy", bottom: "10%", right: "34%", size: 22, rotate: 6, animation: "draw", delay: 1160 },
-  { type: "medal", top: "40%", left: "22%", size: 18, rotate: -12, animation: "draw", delay: 700 },
   { type: "star", top: "26%", right: "32%", size: 16, rotate: 15, variant: "accent", accent: true, animation: "spark", delay: 300 },
-  { type: "badge", bottom: "42%", left: "8%", size: 18, rotate: 11, animation: "stamp", delay: 820 },
-  { type: "shield", top: "55%", right: "28%", size: 18, rotate: -4, animation: "draw", delay: 900 },
-  { type: "mountain", bottom: "6%", left: "40%", size: 22, rotate: 2, animation: "draw", delay: 1200 },
-  { type: "quiz", top: "44%", right: "38%", size: 18, rotate: -6, animation: "draw", delay: 740 },
-  { type: "arrow", bottom: "38%", right: "26%", size: 18, rotate: 22, animation: "draw", delay: 980 },
-  { type: "arrowDown", top: "34%", left: "46%", size: 16, animation: "draw", delay: 540 },
-  { type: "pointer", bottom: "48%", left: "30%", size: 16, rotate: -18, animation: "draw", delay: 660 },
-  { type: "circle", top: "9%", right: "40%", size: 14, animation: "draw", delay: 200 },
-  { type: "signature", bottom: "24%", left: "14%", size: 24, rotate: -3, animation: "write", delay: 1100 },
-  { type: "stamp", top: "78%", left: "22%", size: 18, rotate: 7, animation: "stamp", delay: 1240 },
-  { type: "idcard", bottom: "16%", left: "48%", size: 20, rotate: -5, animation: "draw", delay: 1280 },
-  { type: "divider", top: "70%", left: "36%", size: 28, rotate: -2, animation: "underline", delay: 1320 },
-  { type: "pencil", top: "84%", right: "30%", size: 18, rotate: 14, animation: "slide", delay: 1360 },
-  { type: "book", bottom: "4%", right: "44%", size: 18, rotate: -8, animation: "open", delay: 1400 },
-  { type: "hammer", top: "80%", left: "10%", size: 20, rotate: 12, animation: "tap", delay: 1440 },
-  { type: "diamond", top: "60%", left: "20%", size: 16, rotate: 8, variant: "accent", animation: "draw", delay: 1480 },
-  { type: "fire", top: "20%", right: "42%", size: 16, rotate: -16, animation: "spark", delay: 380 },
-  { type: "code", bottom: "30%", left: "36%", size: 16, rotate: 4, animation: "draw", delay: 860 },
-  { type: "question", bottom: "8%", right: "48%", size: 16, rotate: 10, animation: "wiggle", delay: 1520 },
-  { type: "certificate", bottom: "40%", right: "18%", size: 18, rotate: -11, animation: "stamp", delay: 940 },
-  { type: "spark", bottom: "50%", left: "16%", size: 14, rotate: 20, variant: "accent", accent: true, animation: "spark", delay: 580 },
-  { type: "nodes", top: "50%", left: "42%", size: 16, rotate: -7, animation: "connect", delay: 1020 },
-  { type: "gear", bottom: "22%", right: "40%", size: 16, rotate: 25, animation: "draw", delay: 1180 },
-  { type: "star", bottom: "36%", left: "50%", size: 14, rotate: -20, animation: "spark", delay: 780 },
-  { type: "check", top: "74%", right: "40%", size: 14, variant: "accent", animation: "draw", delay: 1260 },
-  { type: "wallet", top: "12%", left: "62%", size: 16, rotate: 9, animation: "draw", delay: 320 },
-  { type: "puzzle", bottom: "14%", left: "58%", size: 16, rotate: -14, animation: "assemble", delay: 1340 },
-  { type: "lightbulb", bottom: "44%", right: "8%", size: 18, rotate: 6, animation: "draw", delay: 1060 },
-  { type: "trophy", top: "86%", left: "50%", size: 18, rotate: -4, animation: "draw", delay: 1560 },
-  { type: "seal", top: "38%", left: "8%", size: 16, rotate: -9, animation: "stamp", delay: 620 },
-  { type: "blockchain", bottom: "6%", right: "20%", size: 20, rotate: 3, animation: "connect", delay: 1600 },
 ];
 
-const JOURNEY_DOODLES = [
-  { type: "book", top: "8%", left: "4%", size: 22, rotate: -6, animation: "open", delay: 0 },
-  { type: "pencil", top: "12%", right: "6%", size: 18, rotate: 10, animation: "slide", delay: 120 },
-  { type: "question", bottom: "18%", left: "8%", size: 18, animation: "wiggle", delay: 240 },
-  { type: "hammer", bottom: "12%", right: "10%", size: 22, rotate: -5, animation: "tap", delay: 360 },
-  { type: "certificate", top: "40%", right: "4%", size: 18, animation: "stamp", delay: 480 },
-  { type: "check", bottom: "8%", left: "30%", size: 16, variant: "accent", accent: true, animation: "draw", delay: 600 },
-  { type: "spark", top: "20%", left: "22%", size: 14, variant: "accent", accent: true, animation: "spark", delay: 180 },
-  { type: "diamond", bottom: "22%", right: "24%", size: 16, variant: "accent", animation: "draw", delay: 420 },
-  { type: "code", top: "55%", left: "6%", size: 16, animation: "draw", delay: 300 },
-  { type: "arrow", top: "30%", right: "18%", size: 16, rotate: 15, animation: "draw", delay: 540 },
-];
+const HERO_DOODLES = buildDenseDoodleField({
+  seed: "landing-hero",
+  theme: "landing",
+  count: 128,
+  curated: HERO_CURATED,
+  animateCount: 24,
+});
 
-const LEVEL_FIELD = [
-  { type: "fire", top: "6%", left: "6%", size: 18, rotate: -8, animation: "spark", delay: 0 },
-  { type: "blocks", top: "8%", right: "8%", size: 18, rotate: 6, animation: "assemble", delay: 100 },
-  { type: "hammer", bottom: "10%", left: "10%", size: 18, rotate: -4, animation: "tap", delay: 200 },
-  { type: "spark", top: "40%", left: "3%", size: 14, variant: "accent", accent: true, animation: "spark", delay: 80 },
-  { type: "star", bottom: "18%", right: "6%", size: 14, animation: "spark", delay: 160 },
-  { type: "pencil", bottom: "8%", right: "22%", size: 16, rotate: 12, animation: "slide", delay: 240 },
-  { type: "quiz", top: "22%", right: "4%", size: 16, animation: "draw", delay: 120 },
-  { type: "underline", top: "70%", left: "20%", size: 24, animation: "underline", delay: 280 },
-];
+const JOURNEY_DOODLES = buildDenseDoodleField({
+  seed: "landing-journey",
+  theme: "learn",
+  count: 108,
+  curated: [
+    { type: "book", top: "8%", left: "4%", size: 22, rotate: -6, animation: "open", delay: 0, decorative: false },
+    { type: "pencil", top: "12%", right: "6%", size: 18, rotate: 10, animation: "slide", delay: 120, decorative: false },
+    { type: "question", bottom: "18%", left: "8%", size: 18, animation: "wiggle", delay: 240, decorative: false },
+    { type: "hammer", bottom: "12%", right: "10%", size: 22, rotate: -5, animation: "tap", delay: 360, decorative: false },
+    { type: "certificate", top: "40%", right: "4%", size: 18, animation: "stamp", delay: 480 },
+    { type: "check", bottom: "8%", left: "30%", size: 16, variant: "accent", accent: true, animation: "draw", delay: 600 },
+  ],
+  animateCount: 14,
+});
 
-const FORGE_FIELD = [
-  { type: "hammer", top: "10%", left: "5%", size: 22, rotate: -6, animation: "tap", delay: 0 },
-  { type: "anvil", bottom: "12%", left: "8%", size: 20, animation: "draw", delay: 140 },
-  { type: "diamond", top: "14%", right: "8%", size: 20, variant: "accent", accent: true, animation: "draw", delay: 280 },
-  { type: "puzzle", bottom: "20%", right: "10%", size: 18, animation: "assemble", delay: 420 },
-  { type: "certificate", top: "48%", right: "4%", size: 18, animation: "stamp", delay: 560 },
-  { type: "arrowDown", top: "30%", left: "12%", size: 16, animation: "draw", delay: 200 },
-  { type: "gear", bottom: "30%", left: "4%", size: 16, rotate: 20, animation: "draw", delay: 340 },
-  { type: "check", bottom: "8%", right: "28%", size: 16, variant: "accent", animation: "draw", delay: 480 },
-  { type: "fire", top: "60%", left: "18%", size: 16, animation: "spark", delay: 620 },
-  { type: "seal", top: "22%", right: "22%", size: 16, animation: "stamp", delay: 700 },
-];
+const LEVEL_FIELD = buildDenseDoodleField({
+  seed: "landing-levels",
+  theme: "quiz",
+  count: 104,
+  curated: [
+    { type: "fire", top: "6%", left: "6%", size: 18, rotate: -8, animation: "spark", delay: 0, decorative: false },
+    { type: "blocks", top: "8%", right: "8%", size: 18, rotate: 6, animation: "assemble", delay: 100, decorative: false },
+    { type: "hammer", bottom: "10%", left: "10%", size: 18, rotate: -4, animation: "tap", delay: 200, decorative: false },
+  ],
+  animateCount: 12,
+});
 
-const CREDENTIAL_FIELD = [
-  { type: "certificate", top: "10%", left: "8%", size: 22, animation: "stamp", delay: 0 },
-  { type: "seal", top: "12%", right: "10%", size: 20, variant: "accent", accent: true, animation: "stamp", delay: 160 },
-  { type: "blockchain", bottom: "16%", left: "12%", size: 24, animation: "connect", delay: 320 },
-  { type: "nodes", bottom: "12%", right: "14%", size: 20, animation: "connect", delay: 480 },
-  { type: "check", top: "40%", right: "6%", size: 16, variant: "accent", animation: "draw", delay: 640 },
-  { type: "chain", top: "28%", left: "4%", size: 18, animation: "draw", delay: 240 },
-  { type: "signature", bottom: "28%", right: "8%", size: 20, animation: "write", delay: 400 },
-  { type: "idcard", top: "55%", left: "20%", size: 18, animation: "draw", delay: 560 },
-  { type: "shield", top: "18%", left: "30%", size: 16, animation: "draw", delay: 720 },
-  { type: "stamp", bottom: "8%", left: "40%", size: 16, animation: "stamp", delay: 800 },
-];
+const FORGE_FIELD = buildDenseDoodleField({
+  seed: "landing-forge",
+  theme: "puzzle",
+  count: 104,
+  curated: [
+    { type: "hammer", top: "10%", left: "5%", size: 22, rotate: -6, animation: "tap", delay: 0, decorative: false },
+    { type: "anvil", bottom: "12%", left: "8%", size: 20, animation: "draw", delay: 140, decorative: false },
+    { type: "diamond", top: "14%", right: "8%", size: 20, variant: "accent", accent: true, animation: "draw", delay: 280, decorative: false },
+    { type: "puzzle", bottom: "20%", right: "10%", size: 18, animation: "assemble", delay: 420 },
+  ],
+  animateCount: 12,
+});
+
+const CREDENTIAL_FIELD = buildDenseDoodleField({
+  seed: "landing-credential",
+  theme: "credentials",
+  count: 104,
+  curated: [
+    { type: "certificate", top: "10%", left: "8%", size: 22, animation: "stamp", delay: 0, decorative: false },
+    { type: "seal", top: "12%", right: "10%", size: 20, variant: "accent", accent: true, animation: "stamp", delay: 160, decorative: false },
+    { type: "blockchain", bottom: "16%", left: "12%", size: 24, animation: "connect", delay: 320, decorative: false },
+    { type: "nodes", bottom: "12%", right: "14%", size: 20, animation: "connect", delay: 480 },
+  ],
+  animateCount: 12,
+});
 
 const JOURNEY = [
   {
@@ -182,7 +150,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
   return (
     <div className="landing-page">
       <section className="landing-hero">
-        <DoodleField items={HERO_DOODLES} animate trigger="immediate" />
+        <DoodleField items={HERO_DOODLES} dense animate trigger="immediate" />
         <div className="landing-hero-copy">
           <div className="landing-brand">
             <BrandMark className="landing-brand-lockup" showDiamond />
@@ -238,7 +206,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
       </section>
 
       <section id="how-it-works" className="landing-section">
-        <DoodleField items={JOURNEY_DOODLES} animate trigger="viewport" />
+        <DoodleField items={JOURNEY_DOODLES} dense animate trigger="viewport" />
         <p className="landing-kicker">How Forjora works</p>
         <div className="forge-journey">
           {JOURNEY.map((step, index) => (
@@ -274,7 +242,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
       </section>
 
       <section id="learning-levels" className="landing-section">
-        <DoodleField items={LEVEL_FIELD} animate trigger="viewport" />
+        <DoodleField items={LEVEL_FIELD} dense animate trigger="viewport" />
         <p className="landing-kicker">Forge levels</p>
         <div className="level-switch" role="tablist" aria-label="Learning levels">
           {DIFFICULTY_LEVELS.map((item) => {
@@ -341,7 +309,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
       </section>
 
       <section id="the-forge" className="landing-section landing-split">
-        <DoodleField items={FORGE_FIELD} animate trigger="viewport" />
+        <DoodleField items={FORGE_FIELD} dense animate trigger="viewport" />
         <div>
           <h2 className="landing-heading">Progress becomes the certificate.</h2>
           <ol className="forge-ladder">
@@ -367,7 +335,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
       </section>
 
       <section id="credential" className="landing-section landing-credential">
-        <DoodleField items={CREDENTIAL_FIELD} animate trigger="viewport" />
+        <DoodleField items={CREDENTIAL_FIELD} dense animate trigger="viewport" />
         <div>
           <h2 className="landing-heading">Your credential</h2>
           <dl className="credential-distinction">

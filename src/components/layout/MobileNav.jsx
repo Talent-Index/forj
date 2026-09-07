@@ -3,7 +3,7 @@ import { Icon } from "../ui/Icon";
 const LOGGED_OUT_MOBILE = [
   { id: "landing", label: "Home", icon: "home" },
   { id: "learn", label: "Learn", icon: "learn" },
-  { id: "credentials", label: "Credentials", icon: "badge" },
+  { id: "credentials", label: "Credentials", short: "Creds", icon: "badge" },
   { id: "about", label: "About", icon: "about" },
 ];
 
@@ -11,7 +11,7 @@ const LOGGED_IN_MOBILE = [
   { id: "learn", label: "Learn", icon: "learn" },
   { id: "progress", label: "Progress", icon: "progress" },
   { id: "leaderboard", label: "Board", icon: "board" },
-  { id: "credentials", label: "Credentials", icon: "badge" },
+  { id: "credentials", label: "Credentials", short: "Creds", icon: "badge" },
 ];
 
 function MobileNav({ page, onNavigate, isAuthenticated }) {
@@ -25,11 +25,11 @@ function MobileNav({ page, onNavigate, isAuthenticated }) {
           type="button"
           className={`mobile-nav-item ${page === item.id ? "is-active" : ""}`}
           onClick={() => onNavigate(item.id)}
-          aria-label={item.label}
+          aria-current={page === item.id ? "page" : undefined}
           title={item.label}
         >
-          <Icon name={item.icon} size={22} />
-          <span className="visually-hidden">{item.label}</span>
+          <Icon name={item.icon} size={20} />
+          <span className="mobile-nav-label">{item.short || item.label}</span>
         </button>
       ))}
     </nav>

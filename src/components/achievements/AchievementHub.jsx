@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import EmptyState from "../EmptyState";
 import { Button } from "../ui/primitives";
 import { BadgeGrid } from "./BadgeGrid";
@@ -33,9 +33,12 @@ export function AchievementHub({
   const [familyTab, setFamilyTab] = useState("all");
   const [openCert, setOpenCert] = useState(null);
 
-  const list = achievements.length ? achievements : [];
+  const list = useMemo(
+    () => (achievements.length ? achievements : []),
+    [achievements]
+  );
 
-  const certCtx = {
+  const certificates = evaluateLearningCertificates({
     completedQuizzes: progression?.state?.completedQuizzes || {},
     sectionScores: sectionScores || {},
     puzzleCount,
@@ -48,18 +51,26 @@ export function AchievementHub({
     attemptCount: Array.isArray(progression?._attempts)
       ? progression._attempts.length
       : Object.keys(progression?.state?.completedQuizzes || {}).length,
-  };
-
-  const certificates = evaluateLearningCertificates(certCtx, {
+  }, {
     recipientName,
     learnerKey,
   });
-  const skillHighlights = highestSkillTiers(list.filter((item) => item.family === "skills"));
-  const visibleCount = list.filter((item) => !item.hidden || item.earned).length;
-  const earnedCount = list.filter((item) => item.earned).length;
-  const filtered = familyTab === "all"
-    ? list
-    : list.filter((item) => item.family === familyTab);
+  const skillHighlights = useMemo(
+    () => highestSkillTiers(list.filter((item) => item.family === "skills")),
+    [list]
+  );
+  const visibleCount = useMemo(
+    () => list.filter((item) => !item.hidden || item.earned).length,
+    [list]
+  );
+  const earnedCount = useMemo(
+    () => list.filter((item) => item.earned).length,
+    [list]
+  );
+  const filtered = useMemo(
+    () => (familyTab === "all" ? list : list.filter((item) => item.family === familyTab)),
+    [familyTab, list]
+  );
 
   if (!list.length && !certificates.length) {
     return (

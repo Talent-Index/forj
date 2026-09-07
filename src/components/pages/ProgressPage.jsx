@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import { EMPTY_STATES, PATH_COPY, FORGE_LEVEL_LABELS } from "../../utils/onboarding";
 import { computeLearnerDashboard, shortAddress, walletExplorerUrl } from "../../utils/learnerStats";
 import { useOnChainCredential } from "../../hooks/useOnChainCredential";
@@ -29,21 +30,49 @@ function ProgressPage({
   onLookup,
   progression,
 }) {
-  const stats = computeLearnerDashboard({
-    sectionScores,
-    attempts,
-    acquiredPieces,
-    totalPoints,
-    spentPoints,
-  });
+  const [showAchievements, setShowAchievements] = useState(false);
+  const stats = useMemo(
+    () => computeLearnerDashboard({
+      sectionScores,
+      attempts,
+      acquiredPieces,
+      totalPoints,
+      spentPoints,
+    }),
+    [sectionScores, attempts, acquiredPieces, totalPoints, spentPoints]
+  );
+  const fujiClient = useMemo(
+    () => publicClient || (address ? getFujiPublicClient() : null),
+    [publicClient, address]
+  );
   const { credential, transactionHash, loading: credentialLoading, error: credentialError } =
-    useOnChainCredential(address, publicClient || (address ? getFujiPublicClient() : null));
-  const credentialView = credential
-    ? buildCredentialVerificationView(credential, { transactionHash })
-    : null;
+    useOnChainCredential(address, fujiClient);
+  const credentialView = useMemo(
+    () => (credential ? buildCredentialVerificationView(credential, { transactionHash }) : null),
+    [credential, transactionHash]
+  );
   const next = stats.difficulties.find((row) => row.percent < 100) || stats.difficulties[0];
   const displayAddress = shortAddress(address);
   const explorerUrl = walletExplorerUrl(address);
+
+  useEffect(() => {
+    let cancelled = false;
+    const reveal = () => {
+      if (!cancelled) setShowAchievements(true);
+    };
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(reveal, { timeout: 600 });
+      return () => {
+        cancelled = true;
+        window.cancelIdleCallback?.(id);
+      };
+    }
+    const timer = window.setTimeout(reveal, 160);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <div className="page">
@@ -259,17 +288,21 @@ function ProgressPage({
       </section>
 
       <section className="section-block">
-        <Achievements
-          progression={progression}
-          sectionScores={sectionScores}
-          acquiredPieces={acquiredPieces}
-          attempts={attempts}
-          hasCredential={Boolean(credential)}
-          recipientName={progression?.state?.displayName || displayAddress || "Learner"}
-          onLearn={onLearn}
-          onPuzzle={onPuzzle}
-          onCredentials={onCredentials}
-        />
+        {showAchievements ? (
+          <Achievements
+            progression={progression}
+            sectionScores={sectionScores}
+            acquiredPieces={acquiredPieces}
+            attempts={attempts}
+            hasCredential={Boolean(credential)}
+            recipientName={progression?.state?.displayName || displayAddress || "Learner"}
+            onLearn={onLearn}
+            onPuzzle={onPuzzle}
+            onCredentials={onCredentials}
+          />
+        ) : (
+          <p className="meta-line" role="status">Loading forge achievements…</p>
+        )}
       </section>
 
       {!stats.isNewLearner && (

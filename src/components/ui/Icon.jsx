@@ -31,7 +31,7 @@ export function Icon({ name = "info", className = "", size = 18 }) {
       className={`ui-icon ${className}`.trim()}
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.6"
+      strokeWidth="1.85"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"

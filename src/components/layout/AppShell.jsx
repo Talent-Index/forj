@@ -1,6 +1,7 @@
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import MobileNav from "./MobileNav";
+import { PageDoodles } from "../doodles";
 
 function AppShell({
   page,
@@ -17,8 +18,9 @@ function AppShell({
   profile,
   children,
 }) {
+  const isLanding = page === "landing";
   return (
-    <div className={`shell ${isAuthenticated ? "shell-auth" : ""} ${page === "landing" ? "shell-landing" : ""}`}>
+    <div className={`shell ${isAuthenticated ? "shell-auth" : ""} ${isLanding ? "shell-landing" : ""}`}>
       <Navbar
         page={page}
         onNavigate={onNavigate}
@@ -33,7 +35,10 @@ function AppShell({
         onOpenAuth={onOpenAuth}
         profile={profile}
       />
-      <main className={`shell-main ${page === "landing" ? "is-landing" : ""}`}>{children}</main>
+      <main className={`shell-main ${isLanding ? "is-landing" : ""}`}>
+        {!isLanding ? <PageDoodles page={page} count={100} animate={false} /> : null}
+        {children}
+      </main>
       <Footer onNavigate={onNavigate} />
       <MobileNav
         page={page}

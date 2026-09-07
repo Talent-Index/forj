@@ -123,16 +123,32 @@ export async function findMintTransactionHash(client, tokenId, address = contrac
   try {
     const latest = await client.getBlockNumber();
     const configured = credentialDeployBlock();
-    const fromBlock = configured > 0n ? configured : latest > 4_000_000n ? latest - 4_000_000n : 0n;
-    const logs = await client.getLogs({
-      address,
-      event: CREDENTIAL_MINTED_EVENT,
-      args: { tokenId: id },
-      fromBlock,
-      toBlock: "latest",
-    });
-    const log = logs[logs.length - 1];
-    return log?.transactionHash || "";
+    // Prefer configured deploy block; otherwise scan a recent window in chunks
+    // (full multi-million-block getLogs is too slow for Progress).
+    const span = configured > 0n ? latest - configured : 250_000n;
+    const fromBlock = configured > 0n
+      ? configured
+      : latest > span
+        ? latest - span
+        : 0n;
+    const chunk = 40_000n;
+    let cursor = fromBlock;
+    let found = "";
+    while (cursor <= latest) {
+      const to = cursor + chunk - 1n > latest ? latest : cursor + chunk - 1n;
+      const logs = await client.getLogs({
+        address,
+        event: CREDENTIAL_MINTED_EVENT,
+        args: { tokenId: id },
+        fromBlock: cursor,
+        toBlock: to,
+      });
+      if (logs.length) {
+        found = logs[logs.length - 1]?.transactionHash || found;
+      }
+      cursor = to + 1n;
+    }
+    return found;
   } catch {
     return "";
   }
