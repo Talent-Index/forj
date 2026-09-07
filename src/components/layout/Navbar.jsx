@@ -161,7 +161,7 @@ function Navbar({
                 aria-label="Start"
                 title="Start"
               >
-                <Doodle type="arrow" size={16} variant="accent" />
+                <Doodle type="door" size={18} variant="accent" />
                 <span className="visually-hidden">Start</span>
               </button>
             </div>

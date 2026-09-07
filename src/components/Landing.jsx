@@ -208,7 +208,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
               aria-label={signedIn ? "Continue" : "Start"}
               title={signedIn ? "Continue" : "Start"}
             >
-              <AnimatedDoodle type="arrow" animation="draw" trigger="immediate" size={18} variant="accent" delay={doodleTiming.draw} />
+              <AnimatedDoodle type="door" animation="draw" trigger="immediate" size={20} variant="accent" delay={doodleTiming.draw} />
               <span className="visually-hidden">{signedIn ? "Continue" : "Start"}</span>
             </button>
             <button
@@ -332,7 +332,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
           </p>
           <button type="button" className="level-panel-cta" onClick={onStart}>
             <span>Start {forgeLabel}</span>
-            <AnimatedDoodle type="arrow" animation="draw" trigger="immediate" size={16} variant="accent" delay={400} />
+            <AnimatedDoodle type="door" animation="draw" trigger="immediate" size={16} variant="accent" delay={400} />
           </button>
           <span className="level-panel-note" aria-hidden="true">
             <AnimatedDoodle type="pencil" animation="slide" trigger="immediate" size={18} variant="muted" delay={520} />

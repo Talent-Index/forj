@@ -224,6 +224,14 @@ export const DOODLE_CATALOG = {
       "M38 20l12 12-12 12",
     ],
   },
+  door: {
+    paths: [
+      "M16 52 V12 h28 v40",
+      "M44 52 H52",
+      "M16 52 H12",
+    ],
+    circles: [[38, 34, 1.6]],
+  },
   arrowDown: {
     paths: [
       "M32 12v36",
