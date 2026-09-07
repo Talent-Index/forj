@@ -2120,10 +2120,14 @@ img {
 .landing-hero {
   display: block;
   text-align: center;
+  min-height: min(78vh, 720px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .landing-hero-copy {
-  max-width: 36rem;
+  max-width: 28rem;
   margin-inline: auto;
 }
 
@@ -2145,9 +2149,10 @@ img {
 }
 
 .landing-display {
-  font-size: clamp(48px, 8vw, 88px);
-  line-height: 0.92;
+  font-size: clamp(44px, 7vw, 76px);
+  line-height: 0.94;
   font-weight: 600;
+  margin: 0 0 28px;
 }
 
 .landing-lede,
@@ -2162,18 +2167,51 @@ img {
 .landing-hero-actions,
 .hero-actions {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin: 24px 0 16px;
-}
-
-.landing-hero-actions .btn {
-  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  gap: 8px 20px;
+  margin: 0;
+}
+
+.landing-cta-primary,
+.landing-cta-quiet {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
-  min-width: 11rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.landing-cta-primary {
+  color: var(--accent-ink);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--accent-ink);
+  border-radius: 0;
+}
+
+.landing-cta-primary:hover {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
+
+.landing-cta-quiet {
+  color: var(--muted);
+}
+
+.landing-cta-quiet:hover {
+  color: var(--text);
 }
 
 .landing-signin-link {
@@ -3030,6 +3068,38 @@ img {
   stroke-width: 1.85;
 }
 
+[data-theme="light"] .doodle-ink {
+  color: #121110;
+}
+
+[data-theme="light"] .doodle-muted {
+  color: #2c2824;
+}
+
+[data-theme="light"] .doodle-accent {
+  color: #8a3a12;
+}
+
+[data-theme="light"] .doodle-earth {
+  color: #5a4330;
+}
+
+[data-theme="light"] .doodle-field-item {
+  opacity: 0.78;
+}
+
+[data-theme="light"] .doodle-field-item.is-accent {
+  opacity: 0.92;
+}
+
+[data-theme="light"] .landing-hero .doodle-field-item {
+  opacity: 0.7;
+}
+
+[data-theme="light"] .landing-hero .doodle-field-item.is-accent {
+  opacity: 0.9;
+}
+
 /* --- Doodle forge system --- */
 
 .doodle {
@@ -3089,11 +3159,11 @@ img {
 }
 
 .landing-hero .doodle-field-item {
-  opacity: 0.38;
+  opacity: 0.28;
 }
 
 .landing-hero .doodle-field-item.is-accent {
-  opacity: 0.7;
+  opacity: 0.55;
 }
 
 .landing-hero,

@@ -7,38 +7,12 @@ import JigsawBoard from "./JigsawBoard";
 import forgeCertificate from "../assets/forge-certificate.jpg";
 
 const HERO_DOODLES = [
-  { type: "book", top: "6%", left: "5%", size: 38, rotate: -8, decorative: false },
-  { type: "pencil", top: "14%", right: "8%", size: 28, rotate: 12 },
-  { type: "spark", top: "4%", left: "28%", size: 18, rotate: -14, variant: "accent" },
-  { type: "notes", top: "9%", right: "28%", size: 22, rotate: 6 },
-  { type: "question", top: "38%", left: "3%", size: 24, rotate: -4 },
-  { type: "lightbulb", top: "22%", left: "14%", size: 20, rotate: 10 },
-  { type: "diamond", bottom: "20%", right: "7%", size: 32, variant: "accent", accent: true, decorative: false },
-  { type: "hammer", bottom: "10%", left: "10%", size: 34, rotate: -6, decorative: false },
-  { type: "anvil", bottom: "6%", left: "28%", size: 26, rotate: 4 },
-  { type: "puzzle", top: "11%", left: "44%", size: 20, rotate: 8 },
-  { type: "certificate", bottom: "26%", left: "5%", size: 26, rotate: -3 },
-  { type: "seal", bottom: "18%", left: "22%", size: 20, rotate: 8, variant: "accent" },
-  { type: "blockchain", top: "52%", right: "4%", size: 28, rotate: 4 },
-  { type: "nodes", top: "68%", right: "14%", size: 24, rotate: -6 },
-  { type: "check", bottom: "7%", right: "20%", size: 20, variant: "accent" },
-  { type: "code", top: "28%", right: "18%", size: 22, rotate: -8 },
-  { type: "gear", top: "44%", right: "24%", size: 18, rotate: 16 },
-  { type: "arrow", bottom: "38%", right: "30%", size: 18, rotate: 22 },
-  { type: "wallet", top: "62%", left: "6%", size: 22, rotate: -10 },
-  { type: "contract", bottom: "32%", right: "5%", size: 24, rotate: 5 },
-  { type: "star", top: "34%", left: "24%", size: 16, rotate: -18, variant: "accent" },
-  { type: "trophy", bottom: "14%", right: "36%", size: 22, rotate: 7 },
-  { type: "fire", top: "72%", left: "18%", size: 20, rotate: -12 },
-  { type: "blocks", top: "58%", left: "32%", size: 18, rotate: 9 },
-  { type: "blueprint", bottom: "42%", left: "8%", size: 24, rotate: -5 },
-  { type: "badge", top: "48%", right: "38%", size: 18, rotate: 14 },
-  { type: "mountain", bottom: "8%", left: "42%", size: 22, rotate: 3 },
-  { type: "chain", top: "18%", left: "62%", size: 20, rotate: -7 },
-  { type: "cap", bottom: "48%", right: "12%", size: 22, rotate: 11 },
-  { type: "tools", top: "78%", right: "26%", size: 20, rotate: -9 },
-  { type: "circle", top: "8%", right: "42%", size: 14, rotate: 0 },
-  { type: "underline", bottom: "55%", left: "40%", size: 28, rotate: -2 },
+  { type: "book", top: "10%", left: "8%", size: 28, rotate: -6, decorative: false },
+  { type: "spark", top: "12%", right: "10%", size: 18, rotate: 8, variant: "accent", accent: true },
+  { type: "hammer", bottom: "14%", left: "9%", size: 26, rotate: -4 },
+  { type: "diamond", bottom: "16%", right: "9%", size: 24, variant: "accent", accent: true, decorative: false },
+  { type: "pencil", top: "48%", left: "5%", size: 18, rotate: 10 },
+  { type: "certificate", top: "46%", right: "5%", size: 20, rotate: -8 },
 ];
 
 const JOURNEY = [
@@ -105,21 +79,18 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
             PROVE.
           </h1>
           <div className="landing-hero-actions">
-            <Button className="btn-solid" onClick={onStart}>
-              <Doodle type="book" size={16} variant="ink" />
-              {signedIn ? "Continue" : "Start"}
-            </Button>
-            <Button variant="secondary" onClick={onExploreCredentials}>
-              <Doodle type="certificate" size={16} variant="muted" />
-              Credentials
-            </Button>
+            <button type="button" className="landing-cta-primary" onClick={onStart}>
+              <Doodle type="arrow" size={14} variant="accent" />
+              <span>{signedIn ? "Continue" : "Start"}</span>
+            </button>
+            <button type="button" className="landing-cta-quiet" onClick={onExploreCredentials}>
+              <Doodle type="certificate" size={14} variant="muted" />
+              <span>Credentials</span>
+            </button>
             {!signedIn && (
-              <p className="landing-secondary">
-                <button type="button" className="text-link landing-signin-link" onClick={onSignIn}>
-                  <Doodle type="arrow" size={12} variant="muted" />
-                  Sign in
-                </button>
-              </p>
+              <button type="button" className="landing-cta-quiet" onClick={onSignIn}>
+                Sign in
+              </button>
             )}
           </div>
         </div>
