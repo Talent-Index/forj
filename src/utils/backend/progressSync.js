@@ -94,6 +94,13 @@ export async function writeQuizProgress(userId, snapshot) {
     completedSections: safe.completedSections,
     attempts: safe.attempts.slice(-40),
     recipientName: safe.recipientName || "",
+    puzzleFragments: safe.puzzleFragments,
+    fragmentKeys: safe.fragmentKeys,
+    fragmentPieceCredits: safe.fragmentPieceCredits,
+    seenQuestionIds: safe.seenQuestionIds.slice(-400),
+    activitiesSinceQuiz: safe.activitiesSinceQuiz,
+    quizThreshold: safe.quizThreshold,
+    pendingKnowledgeCheck: safe.pendingKnowledgeCheck,
     updatedAt: serverTimestamp(),
   });
   return true;

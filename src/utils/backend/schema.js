@@ -98,7 +98,7 @@ export function isAllowedProgressEventSource(type, sourceId) {
   const source = sanitizeProgressEventSourceId(sourceId);
   if (!source) return false;
   if (type === "QUIZ_STARTED" || type === "QUIZ_COMPLETED") {
-    return source === "easy" || source === "medium" || source === "hard";
+    return source === "easy" || source === "medium" || source === "hard" || source === "master";
   }
   if (type === "LESSON_COMPLETED") {
     return LESSON_EVENT_SOURCE_IDS.includes(source);

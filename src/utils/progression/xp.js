@@ -7,10 +7,11 @@ export const XP_CONFIG = Object.freeze({
 
 export const XP_REWARDS = Object.freeze({
   QUIZ_COMPLETED: Object.freeze({
-    easy: 50,
-    medium: 80,
-    hard: 120,
-    default: 50,
+    easy: 100,
+    medium: 175,
+    hard: 300,
+    master: 500,
+    default: 100,
   }),
   QUIZ_PERFECT: 25,
   LESSON_COMPLETED: 20,
