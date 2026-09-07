@@ -460,6 +460,7 @@ function App() {
     if (restoring) {
       return (
         <EmptyState
+          doodle={EMPTY_STATES.restoring.doodle}
           title={EMPTY_STATES.restoring.title}
           body={EMPTY_STATES.restoring.body}
         />

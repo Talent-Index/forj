@@ -1,4 +1,3 @@
-import { Icon } from "./ui/Icon";
 import { Doodle } from "./doodles";
 
 const DOODLE_BY_ICON = {
@@ -45,4 +44,3 @@ function EmptyState({
 }
 
 export default EmptyState;
-export { Icon };

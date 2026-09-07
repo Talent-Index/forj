@@ -86,6 +86,7 @@ function ExistingCertificate({
           <EmptyState
             title={EMPTY_STATES.noCredential.title}
             body={error || EMPTY_STATES.noCredential.body}
+            doodle={EMPTY_STATES.noCredential.doodle}
           />
           {actions ? <div className="certificate-actions">{actions}</div> : null}
         </>

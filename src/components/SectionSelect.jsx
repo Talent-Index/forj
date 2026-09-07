@@ -1,7 +1,8 @@
 import { sections } from "../data/questions";
 import { QUESTIONS_PER_QUIZ, getQuestionBankStatus } from "../utils/quiz";
-import { PATH_COPY } from "../utils/onboarding";
+import { PATH_COPY, FORGE_LEVEL_LABELS } from "../utils/onboarding";
 import { Button } from "./ui/primitives";
+import { Doodle } from "./doodles";
 
 function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzzle, completedSections }) {
   return (
@@ -14,6 +15,7 @@ function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzz
           const done = completedSections.includes(section.id);
           const bank = getQuestionBankStatus(section, QUESTIONS_PER_QUIZ);
           const copy = PATH_COPY[section.id];
+          const forgeLabel = FORGE_LEVEL_LABELS[section.id] || copy.kicker;
           return (
             <button
               key={section.id}
@@ -21,9 +23,16 @@ function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzz
               onClick={() => bank.ok && onSelectSection(section.id)}
               disabled={!bank.ok}
             >
-              <p className="kicker">{copy.kicker}</p>
+              <p className="kicker difficulty-forge-label">
+                <Doodle
+                  type={section.id === "easy" ? "fire" : section.id === "medium" ? "blocks" : "hammer"}
+                  size={14}
+                  variant="accent"
+                />
+                {forgeLabel}
+              </p>
               <h3>{copy.title}</h3>
-              <p className="meta-line">{QUESTIONS_PER_QUIZ} questions</p>
+              <p className="meta-line">{section.name} · {QUESTIONS_PER_QUIZ} questions</p>
               {!bank.ok && <span className="section-score">{bank.error}</span>}
               {score !== undefined && (
                 <span className="section-score">

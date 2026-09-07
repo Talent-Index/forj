@@ -201,14 +201,14 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
       {!loading && error === "not-found" && (
         <>
           <div className="verification-state verification-state-none verification-ownership-unknown">
-            <p className="kicker">Credential verification</p>
-            <h2>Verification state</h2>
-            <p>Not found</p>
+            <p className="kicker">Forjora on-chain record</p>
+            <h2>No record found</h2>
             <p className="meta-line">{missingVerification?.summary}</p>
           </div>
           <EmptyState
-            title={EMPTY_STATES.noLookup.title}
-            body={EMPTY_STATES.noLookup.body}
+          title={EMPTY_STATES.noLookup.title}
+          body={EMPTY_STATES.noLookup.body}
+          doodle={EMPTY_STATES.noLookup.doodle}
           />
         </>
       )}

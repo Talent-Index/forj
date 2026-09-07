@@ -4,7 +4,7 @@ Forjora is an Avalanche learning product. Learners study network concepts, compl
 
 Learning does not require a wallet. A wallet is needed only to mint or look up an on-chain record.
 
-The mark is a geometric **F / upward pathway** in charcoal with a gold accent step — skills, progress, and transformation without crypto clichés.
+The mark is a geometric **F / upward pathway** in charcoal with a forge-orange accent step — skills, progress, and transformation without crypto clichés. The UI uses a dark sketchbook-in-a-forge visual language: clean product chrome with hand-drawn doodle accents.
 
 ## The loop
 

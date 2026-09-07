@@ -1,8 +1,17 @@
 import { PIECE_COST } from "../data/questions.js";
 import { describeAllTrackCertificates } from "../utils/trackCertificates.js";
 import { safeMediaSrc } from "../utils/frontendSecurity.js";
-import { Icon } from "./ui/Icon";
 import { Button, Card, ProgressBar } from "./ui/primitives";
+import { Doodle } from "./doodles";
+
+const TRACK_DOODLE = {
+  fundamentals: "book",
+  architecture: "blueprint",
+  l1s: "mountain",
+  "c-chain": "contract",
+  icm: "nodes",
+  developer: "badge",
+};
 
 function statusLabel(status) {
   if (status === "achieved") return "Achieved";
@@ -21,12 +30,18 @@ function TrackCertificateCard({
     ? Math.round((cert.seated / cert.needed) * 100)
     : cert.trackPercent;
   const art = safeMediaSrc(artwork);
+  const doodleType = TRACK_DOODLE[cert.trackId] || TRACK_DOODLE[cert.id] || "certificate";
 
   return (
     <Card className={`track-cert-card is-${cert.status}`}>
       <div className="track-cert-head">
         <span className="track-cert-icon" aria-hidden="true">
-          <Icon name={cert.icon} size={18} />
+          <Doodle
+            type={doodleType}
+            size={18}
+            variant={cert.achieved ? "accent" : "muted"}
+            animated={Boolean(cert.achieved)}
+          />
         </span>
         <p className="kicker">{statusLabel(cert.status)}</p>
       </div>

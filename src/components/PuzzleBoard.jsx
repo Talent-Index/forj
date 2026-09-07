@@ -95,6 +95,7 @@ function PuzzleBoard({
 
       {available < PIECE_COST && acquiredPieces.length === 0 && (
         <EmptyState
+          doodle={EMPTY_STATES.noPoints.doodle}
           title={EMPTY_STATES.noPoints.title}
           body={EMPTY_STATES.noPoints.body}
           actionLabel="Learn"
