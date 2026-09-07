@@ -78,7 +78,7 @@ export function buildDenseDoodleField({
 } = {}) {
   const types = THEME_TYPES[theme] || THEME_TYPES.default;
   const rnd = mulberry32(hashSeed(`${seed}:${theme}:${count}`));
-  const target = Math.max(100, count);
+  const target = Math.max(1, Math.floor(count));
   const items = curated.map((item, index) => ({
     ...item,
     decorative: item.decorative !== undefined ? item.decorative : index >= 20,

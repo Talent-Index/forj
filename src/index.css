@@ -1446,12 +1446,16 @@ img {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 12px;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 420px;
 }
 
 .achievement-item {
   border: 1px solid var(--border);
   padding: 12px;
   border-radius: var(--radius);
+  content-visibility: auto;
+  contain-intrinsic-size: 120px 140px;
 }
 
 .achievement-item.locked {
@@ -4862,13 +4866,6 @@ img {
   .stat-row,
   .dashboard-difficulties {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .landing-hero .doodle-field-item {
-    opacity: 0.35;
   }
 }
 

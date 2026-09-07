@@ -61,13 +61,13 @@ function ProgressPage({
       if (!cancelled) setShowAchievements(true);
     };
     if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      const id = window.requestIdleCallback(reveal, { timeout: 600 });
+      const id = window.requestIdleCallback(reveal, { timeout: 320 });
       return () => {
         cancelled = true;
         window.cancelIdleCallback?.(id);
       };
     }
-    const timer = window.setTimeout(reveal, 160);
+    const timer = window.setTimeout(reveal, 80);
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
