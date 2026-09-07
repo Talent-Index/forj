@@ -3513,6 +3513,237 @@ img {
   color: var(--muted);
 }
 
+.badge-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+  width: 100%;
+  background: var(--surface);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.badge-card.is-selected {
+  border-color: var(--text);
+}
+
+.badge-card-tier {
+  margin: 0;
+}
+
+.badge-family-block {
+  margin-top: 16px;
+}
+
+.badge-detail-hero {
+  margin: 8px 0 12px;
+}
+
+.badge-tier-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 8px 0 12px;
+}
+
+.badge-tier-pip {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: var(--surface-2);
+}
+
+.badge-tier-pip.is-active {
+  color: var(--text);
+  border-color: var(--text);
+  background: var(--surface);
+}
+
+.badge-tier-pip.is-current {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.badge-req-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.badge-req-list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.streak-card,
+.puzzle-progress-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.streak-card-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.streak-calendar {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+
+.streak-calendar li {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 4px;
+  text-align: center;
+  background: var(--surface-2);
+}
+
+.streak-calendar li.is-active {
+  background: var(--surface);
+  border-color: var(--text);
+}
+
+.streak-day-mark {
+  display: block;
+  font-weight: 650;
+}
+
+.puzzle-milestone-list,
+.skill-achievement-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.puzzle-milestone-list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+}
+
+.puzzle-milestone-list li.is-earned {
+  border-color: var(--text);
+}
+
+.skill-achievement-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.skill-achievement-chip {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 10px 12px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.learning-cert-card {
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  width: 100%;
+}
+
+.learning-cert-viewer {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.learning-certificate.is-locked {
+  opacity: 0.85;
+}
+
+.learning-cert-skills ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.learning-cert-skills li {
+  display: flex;
+  gap: 8px;
+}
+
+.credential-status-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.achievement-unlock {
+  margin-bottom: 12px;
+}
+
+.achievement-unlock-hero {
+  margin: 8px 0;
+}
+
+.achievement-feedback-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 860px) {
+  .achievements-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .learning-cert-viewer .certificate-artifact {
+    padding: 16px;
+  }
+}
+
+@media print {
+  .learning-certificate {
+    box-shadow: none;
+    border: 1px solid #222;
+  }
+
+  .achievement-hub .learn-filters,
+  .achievement-hub .quiz-nav,
+  .streak-card,
+  .puzzle-progress-card {
+    display: none;
+  }
+}
+
 @media (max-width: 860px) {
   .track-cert-grid {
     grid-template-columns: 1fr;

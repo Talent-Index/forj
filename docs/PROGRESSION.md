@@ -30,7 +30,7 @@ Counts: finishing a quiz, a lesson, or a module.
 
 Does not count: opening a page, refreshing, clicking repeatedly, or submitting the same quiz again for extra streak or XP.
 
-Streaks use **UTC dates**. One qualifying activity per UTC day. Missing a UTC day resets the current streak; the longest streak remains.
+Streaks use **UTC dates**. One qualifying activity per UTC day (lesson, quiz, challenge — not merely opening the app). Missing a UTC day resets the current streak; the longest streak remains. Milestones include 3, 7, 14, 30, 60, 100, 180, and 365 days.
 
 ## XP and levels
 
@@ -59,7 +59,11 @@ The dashboard’s “next” item is the first unlocked incomplete lesson or qui
 
 ## Achievements
 
-Badges unlock from the same events: first quiz, perfect score, difficulty completion, Avalanche Explorer (fundamentals track), streak, puzzle, first credential, track, and path. Locked badges stay visible unless marked hidden.
+Badges unlock from the same events: first quiz, perfect score, difficulty completion, Avalanche Explorer (fundamentals track), streak milestones, puzzle piece counts, skill ladders (I–V), first credential, track, and path. Locked badges stay visible unless marked hidden.
+
+Families share one Forjora visual language: Learning, Performance, Puzzle, Streak, Skills, and Credentials. Skill badges progress Explorer → Builder → Practitioner → Specialist → Master without new brand colors.
+
+**Learning certificates** (Foundation → Master) are formal off-chain path records. They are not Fuji soulbound mints and are never described as issuer-attested.
 
 ## Puzzle
 

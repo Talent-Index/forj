@@ -45,7 +45,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Quiz retries do not farm XP or puzzle fragments.
 - Mastery (accuracy by difficulty) sits beside XP (activity). Puzzle progress shows pieces seated and fragments toward the next piece.
 - Streaks use UTC calendar days. Duplicate activity on the same UTC day does not inflate the streak.
-- Achievements unlock from events (first quiz, perfect score, difficulties, streak, puzzle milestones, credential, track certificates, path).
+- Achievements unlock from events (first quiz, perfect score, difficulties, streak milestones, puzzle milestones, skill ladders, credential, track certificates, path). The Progress forge shows family-grouped badges, streak calendar, puzzle milestones, and off-chain learning certificates — distinct from Fuji claimed or issuer-attested mints.
 - Dashboard shows level, XP, streak, puzzle count, path progress, and the next recommended activity.
 
 ## Puzzle and certificate

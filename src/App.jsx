@@ -6,6 +6,7 @@ import { useWalletModal } from "./hooks/useWalletModal";
 import { useAuth } from "./hooks/useAuth";
 import { useProgression } from "./hooks/useProgression";
 import { AchievementFeedback } from "./components/achievements/AchievementFeedback";
+import AppShell from "./components/layout/AppShell";
 import Quiz from "./components/Quiz";
 import PuzzleBoard from "./components/PuzzleBoard";
 import Certificate from "./components/Certificate";
