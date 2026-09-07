@@ -35,6 +35,9 @@
   --gap: 12px;
   --gap-lg: 16px;
   --grid-min: 200px;
+  --bp-sm: 640px;
+  --bp-md: 860px;
+  --bp-lg: 1100px;
 }
 
 [data-theme="dark"] {
@@ -75,12 +78,19 @@ body,
   min-height: 100%;
 }
 
+html {
+  overflow-x: clip;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
   font-family: Inter, system-ui, sans-serif;
   font-size: 11.56px;
   line-height: 1.5;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 button,
@@ -110,6 +120,9 @@ img {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .shell-main {
@@ -119,6 +132,7 @@ img {
   padding: var(--space-section) var(--pad-x) 48px;
   flex: 1;
   position: relative;
+  min-width: 0;
 }
 
 .navbar {
@@ -474,6 +488,8 @@ img {
   display: flex;
   flex-direction: column;
   gap: var(--space-page);
+  min-width: 0;
+  width: 100%;
 }
 
 .achievement-hub {
@@ -875,13 +891,13 @@ img {
 
 .stat-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
 .dashboard-difficulties {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   margin-top: 16px;
 }
@@ -1652,23 +1668,27 @@ img {
   }
 
   .path-continue {
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     gap: 12px;
   }
 
-  .path-continue .btn {
-    flex-shrink: 0;
+  .path-continue .btn,
+  .learn-continue-actions .btn {
+    width: 100%;
   }
 
-  .quiz-nav {
+  .quiz-nav,
+  .page-actions {
     flex-direction: row;
     flex-wrap: wrap;
   }
 
-  .quiz-nav .btn {
+  .quiz-nav .btn,
+  .page-actions .btn {
     width: auto;
     flex: 1 1 calc(50% - 6px);
+    min-width: min(100%, 9rem);
   }
 
   .quiz-score-grid {
@@ -1682,6 +1702,39 @@ img {
   .option-btn {
     min-height: 48px;
     align-items: flex-start;
+  }
+
+  .credentials-journey-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .credentials-journey-steps li {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .learn-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  .learn-filter {
+    flex: 0 0 auto;
+  }
+
+  .section-block {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: clamp(16px, 5vw, 22px);
+    overflow-wrap: anywhere;
   }
 }
 
