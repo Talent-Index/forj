@@ -5,7 +5,7 @@ import EmptyState from "./EmptyState";
 
 function NetworkGate({ chainId, switching, error, onSwitch }) {
   return (
-    <div className="card network-gate">
+    <div className="network-gate">
       <EmptyState
         variant="error"
         title="Wrong network"
@@ -13,7 +13,7 @@ function NetworkGate({ chainId, switching, error, onSwitch }) {
         actionLabel={switching ? "Switching…" : "Switch network"}
         onAction={onSwitch}
       />
-      {error && <p className="note">{error}</p>}
+      {error && <p className="note" role="alert">{error}</p>}
       <p className="note">
         Need test AVAX?{" "}
         <a href={safeExternalHref(FUJI_EXPLAINER.faucetUrl)} target="_blank" rel="noopener noreferrer">Fuji faucet</a>

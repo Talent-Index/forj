@@ -63,19 +63,21 @@ export function AchievementHub({
 
   if (!list.length && !certificates.length) {
     return (
-      <EmptyState
-        doodle="badge"
-        title="Your badges"
-        body="Your achievements will appear here as you learn, build, and prove your skills."
-        actionLabel="Explore learning"
-        onAction={onLearn}
-      />
+      <div className="achievement-hub">
+        <EmptyState
+          doodle="badge"
+          title="Your badges"
+          body="Your achievements will appear here as you learn, build, and prove your skills."
+          actionLabel="Explore learning"
+          onAction={onLearn}
+        />
+      </div>
     );
   }
 
   return (
     <div className="achievement-hub">
-      <header className="page-header" style={{ marginBottom: 12 }}>
+      <header className="page-header page-header-nested">
         <p className="kicker">Achievements</p>
         <h2>Forge achievements</h2>
         <p className="lede">

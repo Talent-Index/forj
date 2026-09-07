@@ -59,7 +59,7 @@ function CertificateArtifact({
       <p className="certificate-trust-body">{trust.body}</p>
       {!compact && (
         <dl className="certificate-meta">
-          <div><dt>Certificate ID</dt><dd>{credentialId}</dd></div>
+          <div><dt>Credential ID</dt><dd>{credentialId}</dd></div>
           <div><dt>Network</dt><dd>Avalanche Fuji · {chainId || 43113}</dd></div>
           <div><dt>Status</dt><dd>{trust.label}</dd></div>
           <div><dt>Wallet</dt><dd>{shortAddress(walletAddress) || "—"}</dd></div>

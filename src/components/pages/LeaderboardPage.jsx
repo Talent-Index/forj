@@ -43,6 +43,7 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
   return (
     <div className="page">
       <header className="page-header">
+        <p className="kicker">Community</p>
         <h1>Board</h1>
         <p className="lede">{LEADERBOARD_DISCLAIMER}</p>
         <p className="meta-line">{statusCopy(board.status)}</p>
@@ -69,7 +70,7 @@ function LeaderboardPage({ learnerId, progression, onToggleOptIn, onLearn }) {
         </button>
       </section>
 
-      <div className="quiz-nav">
+      <div className="page-actions quiz-nav">
         <Button variant={windowName === "global" ? "primary" : "secondary"} onClick={() => setWindowName("global")}>Global</Button>
         <Button variant={windowName === "weekly" ? "primary" : "secondary"} onClick={() => setWindowName("weekly")}>Weekly</Button>
         <Button variant={windowName === "track" ? "primary" : "secondary"} onClick={() => setWindowName("track")}>Track</Button>

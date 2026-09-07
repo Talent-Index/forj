@@ -49,7 +49,7 @@ export function CertificateViewer({
       {earned ? (
         <dl className="certificate-meta">
           <div><dt>Issued</dt><dd>{certificate.issuedLabel || "—"}</dd></div>
-          <div><dt>Credential ID</dt><dd>{certificate.credentialId || "—"}</dd></div>
+          <div><dt>Certificate ID</dt><dd>{certificate.credentialId || "—"}</dd></div>
           <div><dt>Status</dt><dd>Learning record · not on-chain</dd></div>
         </dl>
       ) : (

@@ -50,7 +50,7 @@ function ProgressPage({
       <header className="page-header">
         <p className="kicker">Your forge</p>
         <h1>Your Forge</h1>
-        <p className="lede">Level, streak, path, and quiz standing — community learning records, not attestation.</p>
+        <p className="lede">Level, streak, path, and challenge standing — community learning records, not attestation.</p>
       </header>
 
       {stats.isNewLearner && (
@@ -134,9 +134,9 @@ function ProgressPage({
       </section>
 
       <section className="section-block">
-        <h2>Quiz</h2>
+        <h2>Challenges</h2>
         <ProgressBar
-          label={`Quiz ${stats.quizCorrect}/${stats.quizTotal} · Puzzle ${stats.puzzleCount}/${stats.puzzleTotal}`}
+          label={`Challenges ${stats.quizCorrect}/${stats.quizTotal} · Puzzle ${stats.puzzleCount}/${stats.puzzleTotal}`}
           value={stats.overallPercent}
         />
         <p className="meta-line">{stats.overallPercent}%</p>
@@ -234,7 +234,7 @@ function ProgressPage({
             <p className="stat-value">{stats.accuracy}%</p>
           </div>
           <div>
-            <p className="kicker">Quiz score</p>
+            <p className="kicker">Challenge score</p>
             <p className="stat-value">{stats.quizPercent}%</p>
           </div>
         </div>
@@ -273,7 +273,7 @@ function ProgressPage({
       </section>
 
       {!stats.isNewLearner && (
-        <div className="quiz-nav quiz-nav-end">
+        <div className="page-actions quiz-nav quiz-nav-end">
           <Button variant="secondary" onClick={onLearn}>Learn</Button>
           <Button onClick={() => onContinue(next.id)}>
             Continue {FORGE_LEVEL_LABELS[next?.id] || PATH_COPY[next?.id]?.kicker || next?.name}

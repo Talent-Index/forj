@@ -9,7 +9,7 @@ LEARN → PRACTICE → QUIZ → XP + PUZZLE FRAGMENTS → PUZZLE PIECES
 
 Quizzes are knowledge checks inside that loop, not standalone exams. Lengths: Foundation 5, Builder 7, Advanced 10, Mastery 12. First completions award XP and fragments; retries replace scores without farming rewards.
 
-The Learn UI presents this as a structured journey (hub → track path → lesson workspace → challenge → credential), without changing the underlying event model.
+The Learn UI presents this as a structured journey (hub → track path → lesson workspace → challenge → credential), without changing the underlying event model. Learner-facing copy uses **challenge** for knowledge-check CTAs; off-chain path proof is a **learning / track certificate**; the optional Fuji mint is a **claimed credential**.
 
 UI never invents XP or streak by itself. Completions become **progress events**. Those events update path state, XP, achievements, streaks, puzzle history, and (when relevant) credential flags.
 

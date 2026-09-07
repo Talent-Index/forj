@@ -170,7 +170,7 @@ function LearnPage({
           ? {
               title: "Knowledge check ready",
               body: "You have completed enough learning activities. Take an assessment to earn XP and puzzle fragments.",
-              cta: "Open assessments",
+              cta: "Open challenges",
               onClick: () => {
                 const el = document.getElementById("forge-assessments");
                 el?.scrollIntoView({ behavior: "smooth", block: "start" });

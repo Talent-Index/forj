@@ -34,10 +34,11 @@ Existing browser progress is moved onto the account once, so a returning learner
 - **Learn on Forjora** hub: continue learning, category filters, track cards (modules · lessons · challenges · skills · progress), and knowledge-check challenges.
 - Track pages use a vertical **learning path** (completed / current / locked) ending in a credential milestone.
 - Lesson workspace: track nav · lesson body · progress/skills rail (stacks on mobile).
-- Easy, Medium, Hard, and Master quizzes are Foundation / Builder / Advanced / Mastery assessments (5 / 7 / 10 / 12 questions). Knowledge checks appear after a short stretch of learning, not on a fixed lesson count.
-- Quizzes award XP and puzzle fragments on first completion (retries do not farm rewards). Five fragments convert into one puzzle piece. Fuji seating/mint still uses the frozen Easy / Medium / Hard five-correct scale (80 points).
+- Easy, Medium, Hard, and Master quizzes are Foundation / Builder / Advanced / Mastery **challenges** in the learner UI (5 / 7 / 10 / 12 questions). Knowledge checks appear after a short stretch of learning, not on a fixed lesson count.
+- Challenges award XP and puzzle fragments on first completion (retries do not farm rewards). Five fragments convert into one puzzle piece. Fuji seating/mint still uses the frozen Easy / Medium / Hard five-correct scale (80 points).
 - Structured path with six tracks: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer.
-- Lessons unlock in order. Each lesson has a deeper body and an official Avalanche reference. Quizzes sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone; Mastery is assessment-only).
+- Lessons unlock in order. Each lesson has a deeper body and an official Avalanche reference. Challenges sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone; Mastery is challenge-only).
+- Shared layout tokens align nav, main, and footer gutters; page chrome (`page` → `page-header` → `section-block`) is consistent across Learn, Progress, Credentials, Board, and Profile.
 
 ## Progression
 

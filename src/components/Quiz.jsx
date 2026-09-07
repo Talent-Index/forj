@@ -30,7 +30,7 @@ function QuizError({ body, onBack, onRetry }) {
         variant="error"
         title={ERROR_STATES.quiz.title}
         body={body}
-        actionLabel={onRetry ? "Retry quiz" : "Back to paths"}
+        actionLabel={onRetry ? "Retry challenge" : "Back to paths"}
         onAction={onRetry || onBack}
       />
     </div>
@@ -248,12 +248,11 @@ function Quiz({
 
   if (phase === "loading") {
     return (
-      <div className="card quiz-intro loading-forge" aria-busy="true">
-        <LoadingForge label="Forging your quiz…" />
-        <p className="kicker">{forgeLabel}</p>
-        <p role="status">Selecting {expectedCount} unique questions for {path.title}.</p>
-        <div className="quiz-loading-track" aria-hidden="true">
-          <div className="quiz-loading-fill" />
+      <div className="page quiz-flow">
+        <div className="card quiz-intro loading-forge" aria-busy="true">
+          <LoadingForge label="Forging your challenge…" />
+          <p className="kicker">{forgeLabel}</p>
+          <p role="status">Selecting {expectedCount} unique questions for {path.title}.</p>
         </div>
       </div>
     );
@@ -271,7 +270,8 @@ function Quiz({
 
   if (phase === "intro") {
     return (
-      <div className="card quiz-intro">
+      <div className="page quiz-flow">
+        <div className="card quiz-intro">
         <Button variant="secondary" onClick={onBack}>Back</Button>
         <p className="kicker">{forgeLabel}</p>
         <h2>{path.title}</h2>
@@ -288,7 +288,7 @@ function Quiz({
             variant="error"
             title={ERROR_STATES.quiz.title}
             body={startError || bank.error || ERROR_STATES.quiz.body}
-            actionLabel={bank.ok ? "Retry quiz" : "Back to paths"}
+            actionLabel={bank.ok ? "Retry challenge" : "Back to paths"}
             onAction={bank.ok ? startQuiz : onBack}
           />
         )}
@@ -296,6 +296,7 @@ function Quiz({
           Start challenge
           <AnimatedDoodle type="arrow" animation="draw" trigger="immediate" size={14} variant="ink" />
         </Button>
+        </div>
       </div>
     );
   }
@@ -315,7 +316,7 @@ function Quiz({
     return (
       <div className="page quiz-results">
         <header className="page-header">
-          <p className="kicker">Assessment complete · {forgeLabel}</p>
+          <p className="kicker">Challenge complete · {forgeLabel}</p>
           <h1>{path.title}</h1>
           <p className="lede">
             {summary.correct} / {summary.total} · {summary.percent}%
@@ -365,8 +366,8 @@ function Quiz({
             ))}
           </ol>
         </section>
-        <div className="quiz-nav quiz-nav-end">
-          <Button variant="secondary" onClick={startQuiz}>Retry quiz</Button>
+        <div className="quiz-nav quiz-nav-end page-actions">
+          <Button variant="secondary" onClick={startQuiz}>Retry challenge</Button>
           {onGoToPuzzle ? (
             <Button onClick={onGoToPuzzle}>
               Continue to puzzle
@@ -397,6 +398,7 @@ function Quiz({
   const challengeN = String(current + 1).padStart(2, "0");
 
   return (
+    <div className="page quiz-flow">
     <div className="card quiz-active challenge-sheet">
       <div className="challenge-sheet-inner">
       <div className="quiz-header-row">
@@ -520,7 +522,7 @@ function Quiz({
           )}
         </div>
       )}
-      <div className="quiz-nav">
+      <div className="quiz-nav page-actions">
         <Button variant="secondary" onClick={onBack}>Exit</Button>
         {!answered && (
           <Button onClick={handleSubmit} disabled={!canSubmit}>
@@ -534,6 +536,7 @@ function Quiz({
         )}
       </div>
       </div>
+    </div>
     </div>
   );
 }

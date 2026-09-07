@@ -526,7 +526,7 @@ function Certificate({
               <EmptyState
                 doodle="hammer"
                 title="Skills appear as you prove them"
-                body="Assessments and tracks unlock skill ladders and mastery lines here."
+                body="Challenges and tracks unlock skill ladders and mastery lines here."
                 actionLabel="Explore learning"
                 onAction={onLearn}
               />

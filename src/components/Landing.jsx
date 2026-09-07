@@ -158,7 +158,7 @@ const JOURNEY = [
   },
 ];
 
-const FORGE_STEPS = ["Points", "Pieces", "Puzzle", "Certificate"];
+const FORGE_STEPS = ["XP", "Pieces", "Puzzle", "Credential"];
 const PREVIEW_PIECES = [0, 1, 2, 4, 5, 8];
 
 const LEVEL_BODY = {
@@ -369,7 +369,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
       <section id="credential" className="landing-section landing-credential">
         <DoodleField items={CREDENTIAL_FIELD} animate trigger="viewport" />
         <div>
-          <h2 className="landing-heading">Your certificate</h2>
+          <h2 className="landing-heading">Your credential</h2>
           <dl className="credential-distinction">
             <div className="credential-path-claimed">
               <dt>Forjora claimed</dt>
