@@ -368,19 +368,6 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
           </Button>
         </div>
       </section>
-
-      <section className="landing-finale">
-        <div className="landing-finale-inner">
-          <AnimatedDoodle type="hammer" animation="tap" trigger="viewport" size={36} variant="accent" />
-          <h2>
-            <DoodleText trigger="viewport">Ready to forge?</DoodleText>
-          </h2>
-          <Button className="btn-solid-inverse" onClick={onStart}>
-            <AnimatedDoodle type="book" animation="draw" trigger="viewport" size={16} variant="ink" />
-            {signedIn ? "Continue" : "Start"}
-          </Button>
-        </div>
-      </section>
     </div>
   );
 }
