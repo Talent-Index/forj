@@ -40,9 +40,10 @@ function ConnectedNotice({ address }) {
 function ZoomToggle({ zoom = 100, onCycleZoom }) {
   return (
     <button
-      className="btn btn-ghost btn-icon zoom-toggle nav-extra"
+      type="button"
+      className="nav-tool zoom-toggle nav-extra"
       onClick={onCycleZoom}
-      aria-label={`Browser-style page zoom ${zoom} percent. Click to cycle 100, 125, 150, 175.`}
+      aria-label={`Zoom ${zoom} percent. Click to cycle.`}
       title={`Zoom ${zoom}%`}
     >
       <svg viewBox="0 0 24 24" className="zoom-icon" aria-hidden="true">
@@ -55,7 +56,7 @@ function ZoomToggle({ zoom = 100, onCycleZoom }) {
           strokeLinecap="round"
         />
       </svg>
-      <span className="zoom-label">{zoom}%</span>
+      <span className="visually-hidden">{zoom}%</span>
     </button>
   );
 }
@@ -64,7 +65,8 @@ function ThemeToggle({ theme, onToggleTheme }) {
   const isDark = theme === "dark";
   return (
     <button
-      className="btn btn-ghost btn-icon theme-toggle"
+      type="button"
+      className="nav-tool theme-toggle"
       onClick={onToggleTheme}
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       title={isDark ? "Light theme" : "Dark theme"}
@@ -124,33 +126,58 @@ function Navbar({
           {links.map((item) => (
             <button
               key={item.id}
-              className={`nav-link ${page === item.id ? "is-active" : ""}`}
+              type="button"
+              className={`nav-link nav-link-icon ${page === item.id ? "is-active" : ""}`}
               onClick={() => onNavigate(item.id)}
+              aria-label={item.label}
+              title={item.label}
             >
-              <Icon name={item.icon} size={16} />
-              {item.label}
+              <Icon name={item.icon} size={18} />
+              <span className="visually-hidden">{item.label}</span>
             </button>
           ))}
         </nav>
         <div className="nav-actions">
-          <ZoomToggle zoom={zoom} onCycleZoom={onCycleZoom} />
-          <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
+          <div className="nav-tools" role="group" aria-label="Display">
+            <ZoomToggle zoom={zoom} onCycleZoom={onCycleZoom} />
+            <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
+          </div>
           {!isAuthenticated ? (
-            <>
-              <button className="btn btn-ghost nav-extra" onClick={() => onOpenAuth("signin")}>
-                Sign in
+            <div className="nav-auth">
+              <button
+                type="button"
+                className="nav-tool nav-extra"
+                onClick={() => onOpenAuth("signin")}
+                aria-label="Sign in"
+                title="Sign in"
+              >
+                <Icon name="profile" size={18} />
+                <span className="visually-hidden">Sign in</span>
               </button>
-              <button className="btn btn-solid" onClick={() => onOpenAuth("signup")}>
-                Start
-                <Doodle type="arrow" size={14} variant="ink" />
+              <button
+                type="button"
+                className="nav-cta nav-cta-icon"
+                onClick={() => onOpenAuth("signup")}
+                aria-label="Start"
+                title="Start"
+              >
+                <Doodle type="arrow" size={16} variant="accent" />
+                <span className="visually-hidden">Start</span>
               </button>
-            </>
+            </div>
           ) : (
             <>
               <ConnectedNotice address={wallet.address} />
               {!wallet.address ? (
-                <button className="btn btn-ghost nav-extra" onClick={walletModal.openModal}>
-                  Connect
+                <button
+                  type="button"
+                  className="nav-tool nav-extra"
+                  onClick={walletModal.openModal}
+                  aria-label="Connect wallet"
+                  title="Connect wallet"
+                >
+                  <Icon name="wallet" size={18} />
+                  <span className="visually-hidden">Connect</span>
                 </button>
               ) : null}
               <ProfileMenu

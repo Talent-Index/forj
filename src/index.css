@@ -163,6 +163,24 @@ img {
   gap: 8px;
 }
 
+.nav-link-icon {
+  justify-content: center;
+  min-width: 44px;
+  padding: 8px;
+}
+
+.nav-cta-icon {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-bottom: 0;
+  color: var(--accent-ink);
+}
+
+.nav-cta-icon:hover {
+  color: var(--text);
+}
+
 .ui-icon {
   flex-shrink: 0;
   display: block;
@@ -187,8 +205,103 @@ img {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
   position: relative;
+}
+
+.nav-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nav-auth {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding-left: 14px;
+  border-left: 1px solid var(--border);
+}
+
+.nav-tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 40px;
+  min-width: 40px;
+  margin: 0;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+}
+
+.nav-tool:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.zoom-toggle {
+  width: auto;
+  padding: 0 10px;
+}
+
+.zoom-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.theme-icon,
+.zoom-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.nav-text-link {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.nav-text-link:hover {
+  color: var(--text);
+}
+
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0 0 3px;
+  border: 0;
+  border-bottom: 1px solid var(--accent-ink);
+  border-radius: 0;
+  background: none;
+  color: var(--accent-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.nav-cta:hover {
+  color: var(--text);
+  border-bottom-color: var(--text);
 }
 
 .wallet-connected-toast {
@@ -248,14 +361,15 @@ img {
   width: 100%;
   max-width: var(--layout-max);
   margin-inline: auto;
-  padding: 16px 24px 24px;
+  padding: 32px 24px 48px;
   color: var(--muted);
   font-size: 9.39px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px 24px;
-  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
 }
 
 .footer-sep {
@@ -530,27 +644,6 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-
-.zoom-toggle {
-  width: auto;
-  min-width: 44px;
-  gap: 4px;
-  padding: 0 10px;
-}
-
-.zoom-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-}
-
-.theme-icon,
-.zoom-icon {
-  width: 20px;
-  height: 20px;
-  display: block;
 }
 
 .btn-block,
@@ -1473,13 +1566,11 @@ img {
   .mobile-nav-item {
     flex-direction: column;
     justify-content: center;
-    gap: 2px;
-    padding: 6px 4px;
+    align-items: center;
+    gap: 0;
+    padding: 8px 4px;
     min-height: 56px;
-    font-size: 9px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    font-weight: 600;
+    font-size: 0;
   }
 
   .shell-main {
@@ -1491,8 +1582,9 @@ img {
   }
 
   .site-footer {
-    padding: 16px 16px calc(20px + var(--mobile-nav-h) + env(safe-area-inset-bottom, 0px));
-    align-items: flex-start;
+    padding: 24px 16px calc(28px + var(--mobile-nav-h) + env(safe-area-inset-bottom, 0px));
+    align-items: center;
+    text-align: center;
   }
 
   .path-continue {
@@ -2185,6 +2277,7 @@ img {
 .landing-cta-quiet {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   margin: 0;
   padding: 0;
@@ -2195,6 +2288,8 @@ img {
   font-size: 15px;
   letter-spacing: 0.04em;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .landing-cta-primary {
@@ -2473,10 +2568,19 @@ img {
   max-width: var(--layout-max);
   margin-inline: auto;
   padding: 32px 24px 48px;
-  display: grid;
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   gap: 16px;
+}
+
+.site-footer .brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
 }
 
 .footer-links {
@@ -2484,6 +2588,14 @@ img {
   flex-wrap: wrap;
   gap: 12px 20px;
   justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-note {
+  margin: 0;
+  text-align: center;
+  width: 100%;
 }
 
 .footer-links button,

@@ -201,17 +201,36 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
             </DoodleText>
           </h1>
           <div className="landing-hero-actions">
-            <button type="button" className="landing-cta-primary" onClick={onStart}>
-              <AnimatedDoodle type="arrow" animation="draw" trigger="immediate" size={14} variant="accent" delay={doodleTiming.draw} />
-              <span>{signedIn ? "Continue" : "Start"}</span>
+            <button
+              type="button"
+              className="landing-cta-primary"
+              onClick={onStart}
+              aria-label={signedIn ? "Continue" : "Start"}
+              title={signedIn ? "Continue" : "Start"}
+            >
+              <AnimatedDoodle type="arrow" animation="draw" trigger="immediate" size={18} variant="accent" delay={doodleTiming.draw} />
+              <span className="visually-hidden">{signedIn ? "Continue" : "Start"}</span>
             </button>
-            <button type="button" className="landing-cta-quiet" onClick={onExploreCredentials}>
-              <AnimatedDoodle type="certificate" animation="draw" trigger="immediate" size={14} variant="muted" delay={doodleTiming.draw + 120} />
-              <span>Credentials</span>
+            <button
+              type="button"
+              className="landing-cta-quiet"
+              onClick={onExploreCredentials}
+              aria-label="Credentials"
+              title="Credentials"
+            >
+              <AnimatedDoodle type="certificate" animation="draw" trigger="immediate" size={18} variant="muted" delay={doodleTiming.draw + 120} />
+              <span className="visually-hidden">Credentials</span>
             </button>
             {!signedIn && (
-              <button type="button" className="landing-cta-quiet" onClick={onSignIn}>
-                Sign in
+              <button
+                type="button"
+                className="landing-cta-quiet"
+                onClick={onSignIn}
+                aria-label="Sign in"
+                title="Sign in"
+              >
+                <AnimatedDoodle type="wallet" animation="draw" trigger="immediate" size={16} variant="muted" delay={doodleTiming.draw + 200} />
+                <span className="visually-hidden">Sign in</span>
               </button>
             )}
           </div>
