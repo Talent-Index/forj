@@ -3144,6 +3144,32 @@ img {
   text-align: center;
 }
 
+.forge-journey-doodles {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+}
+
+.landing-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-finale-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-solid .doodle,
+.btn-secondary .doodle {
+  margin-inline: 2px;
+}
+
+
 .forge-journey-step {
   display: flex;
   flex-direction: column;

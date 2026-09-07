@@ -11,10 +11,11 @@ import {
   summarizeAttempt,
 } from "../utils/quiz";
 import { playCorrectSound, playWrongSound, playSectionCompleteSound } from "../utils/sounds";
-import { ERROR_STATES, PATH_COPY } from "../utils/onboarding";
+import { ERROR_STATES, PATH_COPY, FORGE_LEVEL_LABELS } from "../utils/onboarding";
 import { safeExternalHref } from "../utils/frontendSecurity";
 import { Button, ProgressBar } from "./ui/primitives";
 import EmptyState from "./EmptyState";
+import { Doodle } from "./doodles";
 
 const OPTIONS_LETTERS = ["A", "B", "C", "D"];
 
@@ -39,6 +40,7 @@ function Quiz({ sectionId, onComplete, onBack }) {
   const timePerQ = section?.timePerQuestion ?? 0;
   const bank = getQuestionBankStatus(section, QUESTIONS_PER_QUIZ);
   const path = PATH_COPY[sectionId] || { kicker: section?.name, title: section?.name };
+  const forgeLabel = FORGE_LEVEL_LABELS[sectionId] || path.kicker;
 
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [startError, setStartError] = useState(bank.error);
@@ -228,9 +230,10 @@ function Quiz({ sectionId, onComplete, onBack }) {
 
   if (phase === "loading") {
     return (
-      <div className="card quiz-intro" aria-busy="true">
-        <p className="kicker">{path.kicker}</p>
-        <h2>Preparing quiz</h2>
+      <div className="card quiz-intro loading-forge" aria-busy="true">
+        <Doodle type="hammer" size={36} variant="accent" animated />
+        <p className="kicker">{forgeLabel}</p>
+        <h2>Forging your quiz…</h2>
         <p role="status">Selecting {QUESTIONS_PER_QUIZ} unique questions for {path.title}.</p>
         <div className="quiz-loading-track" aria-hidden="true">
           <div className="quiz-loading-fill" />
@@ -253,7 +256,7 @@ function Quiz({ sectionId, onComplete, onBack }) {
     return (
       <div className="card quiz-intro">
         <Button variant="secondary" onClick={onBack}>Back</Button>
-        <p className="kicker">{path.kicker}</p>
+        <p className="kicker">{forgeLabel}</p>
         <h2>{path.title}</h2>
         <p>{section.description}</p>
         <ul className="quiz-rules">
@@ -273,7 +276,8 @@ function Quiz({ sectionId, onComplete, onBack }) {
           />
         )}
         <Button onClick={startQuiz} disabled={!bank.ok}>
-          Start quiz
+          Start challenge
+          <Doodle type="arrow" size={14} variant="ink" />
         </Button>
       </div>
     );
@@ -341,17 +345,19 @@ function Quiz({ sectionId, onComplete, onBack }) {
 
   const timerPct = timePerQ ? (timeLeft / timePerQ) * 100 : 0;
   const timerUrgent = timeLeft <= 5;
-  const resultTitle = feedback?.timedOut ? "Time's up" : feedback?.isCorrect ? "Correct" : "Incorrect";
+  const resultTitle = feedback?.timedOut ? "Time's up" : feedback?.isCorrect ? "Nice" : "Not yet";
   const canSubmit = canAcceptSubmit({ answered, locked: false, selected });
+  const challengeN = String(current + 1).padStart(2, "0");
 
   return (
-    <div className="card quiz-active">
+    <div className="card quiz-active challenge-sheet">
+      <div className="challenge-sheet-inner">
       <div className="quiz-header-row">
         <div>
-          <p className="kicker">{path.title}</p>
-          <h2>{progress.label}</h2>
+          <p className="kicker">Challenge {challengeN}</p>
+          <h2>{path.title}</h2>
         </div>
-        <span className="badge">{path.kicker}</span>
+        <span className="badge">{forgeLabel}</span>
       </div>
       <ol className="quiz-stepper" aria-label="Question counter">
         {quizQuestions.map((item, index) => {
@@ -384,7 +390,12 @@ function Quiz({ sectionId, onComplete, onBack }) {
       <div className="timer-bar" role="timer" aria-label={`${timeLeft} seconds remaining`}>
         <div className={`timer-fill ${timerUrgent ? "timer-fill-urgent" : ""}`} style={{ width: `${timerPct}%` }} />
       </div>
-      <h3 className="question-text">{q.question}</h3>
+      <h3 className="question-text">
+        {q.question}
+        <span className="forge-stat-doodle" aria-hidden="true" style={{ position: "relative", display: "inline-block", marginLeft: 8, verticalAlign: "middle" }}>
+          <Doodle type="question" size={20} variant="muted" />
+        </span>
+      </h3>
       {q.hint && !answered && (
         <div className="hint-row">
           <Button variant="secondary" className="btn-hint" onClick={() => setShowHint((s) => !s)}>
@@ -421,14 +432,24 @@ function Quiz({ sectionId, onComplete, onBack }) {
       </p>
       {answered && feedback && (
         <div className={`quiz-feedback ${feedback.isCorrect ? "" : "quiz-feedback-wrong"}`} role="status">
-          <h3>{resultTitle}</h3>
+          <p className={feedback.isCorrect ? "feedback-nice" : "feedback-not-yet"}>
+            <Doodle type={feedback.isCorrect ? "check" : "pencil"} size={18} variant={feedback.isCorrect ? "accent" : "earth"} animated />
+            {resultTitle}
+          </p>
+          {feedback.isCorrect ? (
+            <p className="xp-callout">
+              <Doodle type="arrow" size={14} variant="accent" />
+              +{pointsPerQ} pts
+            </p>
+          ) : (
+            <p>Read the explanation, then continue. Retries replace this section’s score.</p>
+          )}
           {!feedback.isCorrect && (
             <p>
               {feedback.timedOut ? "No answer was submitted." : `You chose: ${feedback.selected}`}
               {" "}Correct answer: {feedback.answer}
             </p>
           )}
-          {feedback.isCorrect && <p className="meta-line">+{pointsPerQ} points</p>}
           <p>{feedback.explanation}</p>
           {feedback.funFact && <p className="quiz-fun-fact">{feedback.funFact}</p>}
           {feedback.reference && safeExternalHref(feedback.reference.url) && (
@@ -452,6 +473,7 @@ function Quiz({ sectionId, onComplete, onBack }) {
             {current < qCount - 1 ? "Next question" : "See results"}
           </Button>
         )}
+      </div>
       </div>
     </div>
   );

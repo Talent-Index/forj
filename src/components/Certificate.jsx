@@ -38,7 +38,7 @@ function headerFor(phase, { minted, onChain }) {
   if (phase === "forge") {
     return {
       title: "Certificates",
-      lede: "Each track has its own certificate. Quiz points seat that track’s pieces. Lesson tracks complete with the track. The Fuji mint is still one claimed path snapshot.",
+      lede: "Each track has its own learning record. Quiz points seat that track’s pieces. Lesson tracks complete with the track. The Fuji mint is still one claimed path snapshot — not an attested exam.",
     };
   }
   if (phase === "name") {
@@ -55,7 +55,7 @@ function headerFor(phase, { minted, onChain }) {
   }
   if (minted || onChain) {
     return {
-      title: "On-chain credential",
+      title: "Credential forged",
       lede: CREDENTIAL_EXPLAINER.body,
     };
   }

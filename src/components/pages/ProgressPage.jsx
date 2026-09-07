@@ -1,10 +1,11 @@
-import { EMPTY_STATES, PATH_COPY } from "../../utils/onboarding";
+import { EMPTY_STATES, PATH_COPY, FORGE_LEVEL_LABELS } from "../../utils/onboarding";
 import { computeLearnerDashboard, shortAddress, walletExplorerUrl } from "../../utils/learnerStats";
 import { useOnChainCredential } from "../../hooks/useOnChainCredential";
 import { getFujiPublicClient } from "../../utils/fujiClient";
 import { safeExternalHref } from "../../utils/frontendSecurity";
 import { Button, Card, ProgressBar } from "../ui/primitives";
 import { Icon } from "../ui/Icon";
+import { Doodle } from "../doodles";
 import EmptyState from "../EmptyState";
 import ExistingCertificate from "../ExistingCertificate";
 import Achievements from "../Achievements";
@@ -46,14 +47,17 @@ function ProgressPage({
   return (
     <div className="page">
       <header className="page-header">
-        <h1>Progress</h1>
+        <p className="kicker">Your forge</p>
+        <h1>Your Forge</h1>
+        <p className="lede">Level, streak, path, and quiz standing — community learning records, not attestation.</p>
       </header>
 
       {stats.isNewLearner && (
         <EmptyState
+          doodle={EMPTY_STATES.noAttempts.doodle}
           title={EMPTY_STATES.noAttempts.title}
-          body="Take Easy to fill this page."
-          actionLabel="Start Easy"
+          body={EMPTY_STATES.noAttempts.body}
+          actionLabel="Start Spark →"
           onAction={() => onContinue("easy")}
         />
       )}
@@ -61,18 +65,21 @@ function ProgressPage({
       <section className="section-block">
         <h2>Standing</h2>
         <div className="stat-row">
-          <Card className="stat-compact">
-            <p className="kicker"><Icon name="progress" size={14} /> Level</p>
+          <Card className="stat-compact forge-stat-wrap">
+            <span className="forge-stat-doodle" aria-hidden="true"><Doodle type="hammer" size={18} variant="muted" /></span>
+            <p className="kicker">Level</p>
             <p className="stat-value">{progression?.level?.level ?? 1}</p>
             <p className="meta-line">{progression?.summary?.xp ?? 0} XP</p>
           </Card>
-          <Card className="stat-compact">
-            <p className="kicker"><Icon name="flame" size={14} /> Streak</p>
+          <Card className="stat-compact forge-stat-wrap">
+            <span className="forge-stat-doodle" aria-hidden="true"><Doodle type="fire" size={18} variant="muted" /></span>
+            <p className="kicker">Streak</p>
             <p className="stat-value">{progression?.streakCurrent ?? 0}</p>
             <p className="meta-line">Best {progression?.streakLongest ?? 0}</p>
           </Card>
-          <Card className="stat-compact">
-            <p className="kicker"><Icon name="path" size={14} /> Path</p>
+          <Card className="stat-compact forge-stat-wrap">
+            <span className="forge-stat-doodle" aria-hidden="true"><Doodle type="arrow" size={18} variant="muted" /></span>
+            <p className="kicker">Path</p>
             <p className="stat-value">{progression?.path?.percent ?? 0}%</p>
             <p className="meta-line">{progression?.nextItem?.title || "Fundamentals"}</p>
           </Card>
@@ -98,7 +105,7 @@ function ProgressPage({
           const copy = PATH_COPY[row.id] || { kicker: row.name, title: row.name };
           return (
             <Card key={row.id} className={`difficulty-card difficulty-card-${row.id}`}>
-              <p className="kicker">{copy.kicker}</p>
+              <p className="kicker">{FORGE_LEVEL_LABELS[row.id] || copy.kicker}</p>
               <h3>{copy.title}</h3>
               <p className="stat-value">{row.percent}%</p>
               <p>
@@ -214,7 +221,7 @@ function ProgressPage({
         <div className="quiz-nav quiz-nav-end">
           <Button variant="secondary" onClick={onLearn}>Learn</Button>
           <Button onClick={() => onContinue(next.id)}>
-            Continue {PATH_COPY[next?.id]?.kicker || next?.name}
+            Continue {FORGE_LEVEL_LABELS[next?.id] || PATH_COPY[next?.id]?.kicker || next?.name}
           </Button>
         </div>
       )}

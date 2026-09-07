@@ -12,12 +12,20 @@ import {
 } from "../../utils/onboarding";
 import CredentialStatusBadge from "../CredentialStatusBadge";
 import { Button, Card } from "../ui/primitives";
-import { Icon } from "../ui/Icon";
+import { Doodle, DoodleDivider } from "../doodles";
 import { safeExternalHref } from "../../utils/frontendSecurity";
 
 const CONTRACT_EXPLORER = CONTRACT_ADDRESS
   ? `https://testnet.snowtrace.io/address/${CONTRACT_ADDRESS}`
   : "";
+
+const SKETCH_FLOW = [
+  { label: "Learn", doodle: "book" },
+  { label: "Practice", doodle: "quiz" },
+  { label: "Achieve", doodle: "trophy" },
+  { label: "Forge", doodle: "hammer" },
+  { label: "Prove", doodle: "certificate" },
+];
 
 const ACCOUNT_POINTS = [
   {
@@ -32,13 +40,14 @@ const ACCOUNT_POINTS = [
 
 function AboutPage({ onNavigate, isAuthenticated = false }) {
   return (
-    <div className="page about-page">
+    <div className="page about-page about-sketch">
       <header className="page-header">
         <h1>{INTRODUCTION.title}</h1>
         <p className="lede">{INTRODUCTION.body}</p>
         <div className="about-header-actions">
           <Button onClick={() => onNavigate?.("learn")}>
             {isAuthenticated ? "Continue" : "Start"}
+            <Doodle type="arrow" size={14} variant="ink" />
           </Button>
         </div>
       </header>
@@ -46,11 +55,27 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
       <section className="section-block">
         <h2>The loop</h2>
         <p>{PRODUCT_TAGLINE} A claimed mint is not an independently assessed exam.</p>
+        <ol className="about-sketch-flow">
+          {SKETCH_FLOW.map((step, index) => (
+            <li key={step.label}>
+              <Doodle type={step.doodle} size={28} variant="accent" animated />
+              <span>{step.label}</span>
+              {index < SKETCH_FLOW.length - 1 ? (
+                <Doodle type="arrowDown" size={16} variant="muted" />
+              ) : null}
+            </li>
+          ))}
+        </ol>
+        <DoodleDivider />
         <ol className="about-loop">
           {LEARNING_PROGRESSION.map((step) => (
             <li key={step.step}>
               <span className="about-loop-n" aria-hidden="true">
-                <Icon name={["learn", "progress", "board", "puzzle", "badge"][step.step - 1] || "info"} size={18} />
+                <Doodle
+                  type={["book", "quiz", "spark", "puzzle", "certificate"][step.step - 1] || "circle"}
+                  size={20}
+                  variant="accent"
+                />
               </span>
               <div>
                 <h3>{step.title}</h3>

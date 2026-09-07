@@ -44,14 +44,22 @@ export const LEARNING_PROGRESSION = [
 ];
 
 export const PATH_COPY = {
-  easy: { kicker: "Easy", title: "Avalanche Fundamentals" },
-  medium: { kicker: "Medium", title: "Ecosystem & Architecture" },
-  hard: { kicker: "Hard", title: "Advanced Avalanche Concepts" },
+  easy: { kicker: "Spark", title: "Avalanche Fundamentals" },
+  medium: { kicker: "Build", title: "Ecosystem & Architecture" },
+  hard: { kicker: "Forge", title: "Advanced Avalanche Concepts" },
 };
+
+/** Visual forge labels; quiz IDs remain easy / medium / hard. */
+export const FORGE_LEVEL_LABELS = Object.freeze({
+  easy: "Spark",
+  medium: "Build",
+  hard: "Forge",
+});
 
 export const DIFFICULTY_LEVELS = sections.map((section) => ({
   id: section.id,
   name: section.name,
+  forgeLabel: FORGE_LEVEL_LABELS[section.id] || section.name,
   icon: section.icon,
   pointsPerQuestion: section.pointsPerQuestion,
   timePerQuestion: section.timePerQuestion,
@@ -105,32 +113,39 @@ export const WALLET_GUIDANCE = {
 
 export const EMPTY_STATES = {
   restoring: {
-    title: "Restoring your session",
+    title: "Drawing your learning path…",
     body: "Checking for a Forjora account and loading any saved progress.",
+    doodle: "pencil",
   },
   noQuizzes: {
-    title: "No quizzes yet",
-    body: "Start with Easy to earn your first points. Progress is saved in this browser for your account.",
+    title: "The fire hasn't started yet.",
+    body: "Start with Spark (Easy) to earn your first points. Progress follows your account.",
+    doodle: "fire",
   },
   noPoints: {
-    title: "No points to spend",
+    title: "Nothing to spend yet.",
     body: `Quiz points unlock that quiz’s certificate pieces at ${PIECE_COST} points each. Complete a section, then return here.`,
+    doodle: "spark",
   },
   noPieces: {
-    title: "No puzzle pieces yet",
+    title: "Nothing forged yet.",
     body: "Unlock at least one piece to preview it on your certificate artwork.",
+    doodle: "puzzle",
   },
   noCredential: {
-    title: "No on-chain credential yet",
+    title: "Your forge is waiting.",
     body: "Mint when you want a Fuji record of your claimed scores. You can keep learning first.",
+    doodle: "certificate",
   },
   noLookup: {
     title: "No credential found",
     body: "That token ID or wallet has no current Forjora credential on Fuji. Burned remints are not kept.",
+    doodle: "question",
   },
   noAttempts: {
-    title: "No attempts logged",
-    body: "Your dashboard fills in after the first quiz for this account.",
+    title: "The fire hasn't started yet.",
+    body: "Your forge fills in after the first quiz for this account.",
+    doodle: "fire",
   },
 };
 

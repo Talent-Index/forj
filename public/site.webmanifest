@@ -4,8 +4,8 @@
   "description": "Learn. Forge. Prove. Avalanche learning with claimed and issuer-attested credentials on Fuji.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#e9e4d8",
-  "theme_color": "#161412",
+  "background_color": "#ebe4d6",
+  "theme_color": "#121110",
   "icons": [
     {
       "src": "/favicon.svg",

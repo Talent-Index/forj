@@ -60,7 +60,13 @@ function PuzzleBoard({
   return (
     <div className="page puzzle-board">
       <header className="page-header">
-        <h1>{complete ? "Path assembled" : certificate.title}</h1>
+        <p className="kicker">Forge your credential</p>
+        <h1>{complete ? "Credential forged" : certificate.title}</h1>
+        <p className="lede">
+          {complete
+            ? "All sixteen pieces are seated. Name and mint a claimed Fuji record from Credentials."
+            : "Complete challenges to seat this track’s pieces."}
+        </p>
       </header>
 
       <div className="quiz-nav">

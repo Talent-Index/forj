@@ -3,6 +3,7 @@ import { BrandMark } from "../brand/ForjoraMark";
 import { WalletModal } from "../wallet/WalletControls";
 import ProfileMenu from "../auth/ProfileMenu";
 import { Icon } from "../ui/Icon";
+import { Doodle } from "../doodles";
 
 const LOGGED_OUT_LINKS = [
   { id: "learn", label: "Learn", icon: "learn" },
@@ -117,7 +118,7 @@ function Navbar({
           className="wordmark"
           onClick={() => onNavigate(isAuthenticated ? "learn" : "landing")}
         >
-          <BrandMark />
+          <BrandMark showDiamond />
         </button>
         <nav className="nav-links" aria-label="Primary">
           {links.map((item) => (
@@ -141,6 +142,7 @@ function Navbar({
               </button>
               <button className="btn btn-solid" onClick={() => onOpenAuth("signup")}>
                 Start
+                <Doodle type="arrow" size={14} variant="ink" />
               </button>
             </>
           ) : (

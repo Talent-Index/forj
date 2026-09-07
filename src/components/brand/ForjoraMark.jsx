@@ -42,9 +42,16 @@ export function ForjoraIcon({ className = "", title = "" } = {}) {
   );
 }
 
-export function BrandMark({ className = "", showWordmark = true } = {}) {
+export function BrandMark({ className = "", showWordmark = true, showDiamond = false } = {}) {
   return (
     <span className={`brand ${className}`.trim()}>
+      {showDiamond ? (
+        <span className="brand-diamond" aria-hidden="true">
+          <svg viewBox="0 0 16 16" width="10" height="10" fill="none">
+            <path d="M8 1.5 L14 8 L8 14.5 L2 8 Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+          </svg>
+        </span>
+      ) : null}
       <ForjoraIcon />
       {showWordmark ? <span className="brand-wordmark">{PRODUCT_NAME}</span> : null}
     </span>

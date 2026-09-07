@@ -4,6 +4,7 @@ import EmptyState from "../EmptyState";
 import CredentialDetails from "../CredentialDetails";
 import CredentialQr from "../CredentialQr";
 import CredentialStatusBadge from "../CredentialStatusBadge";
+import { Doodle } from "../doodles";
 import { EMPTY_STATES } from "../../utils/onboarding";
 import { CONTRACT_ADDRESS } from "../../utils/contract";
 import { getFujiPublicClient } from "../../utils/fujiClient";
@@ -233,8 +234,19 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
         <section className="section-block">
           {verification && (
             <div className={`verification-state verification-state-${verification.statusId} verification-ownership-${verification.ownership}`}>
-              <p className="kicker">Forjora</p>
-              <h2>Credential verification</h2>
+              <p className="kicker">Forjora on-chain record</p>
+              <h2>
+                {verification.statusId === "attested" ? "Issuer-attested credential" : "Claimed credential"}
+              </h2>
+              {verification.statusId === "attested" ? (
+                <span className="lookup-seal" aria-hidden="true">
+                  <Doodle type="seal" size={48} variant="accent" animated />
+                </span>
+              ) : (
+                <span className="lookup-seal" aria-hidden="true">
+                  <Doodle type="certificate" size={40} variant="muted" />
+                </span>
+              )}
               {verification.checks?.length ? (
                 <ul className="verification-checks">
                   {verification.checks.map((check) => (
@@ -250,6 +262,9 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
                 </p>
               )}
               <p className="meta-line">{verification.summary}</p>
+              <p className="note">
+                Finding a record proves the token exists on Fuji. It does not turn a claimed score into an issuer assessment.
+              </p>
             </div>
           )}
           <CredentialDetails view={view} />
