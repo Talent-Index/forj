@@ -1268,7 +1268,7 @@ img {
 
 .quiz-score-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -4739,6 +4739,133 @@ img {
     grid-template-columns: 1fr 1fr;
     gap: 16px;
   }
+
+  .landing-hero .doodle-field-item {
+    opacity: 0.4;
+  }
+
+  .landing-steps {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .achievements-grid,
+  .badge-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .credentials-mastery-list li {
+    grid-template-columns: auto 1fr;
+    gap: 6px 8px;
+  }
+
+  .credentials-mastery-list li > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .track-grid,
+  .track-cert-grid,
+  .leaderboard-list,
+  .learn-skills-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .stat-row,
+  .dashboard-difficulties {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz-score-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz-nav .btn,
+  .page-actions .btn {
+    flex: 1 1 100%;
+  }
+
+  .credentials-journey-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .forge-journey {
+    grid-template-columns: 1fr;
+  }
+
+  .navbar-inner {
+    gap: 8px;
+  }
+
+  .wordmark {
+    min-width: 0;
+  }
+
+  .nav-actions {
+    gap: 8px;
+  }
+
+  .page-header h1,
+  .section-block h2 {
+    font-size: clamp(18px, 6vw, 24px);
+  }
+
+  .hero-actions,
+  .certificate-actions,
+  .first-run-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn,
+  .certificate-actions .btn,
+  .first-run-actions .btn {
+    width: 100%;
+  }
+
+  .modal {
+    width: min(420px, calc(100vw - 24px));
+  }
+}
+
+@media (min-width: 861px) and (max-width: 1100px) {
+  .navbar-inner {
+    gap: 12px;
+  }
+
+  .nav-link-labeled {
+    padding: 8px 6px;
+    gap: 5px;
+  }
+
+  .nav-link-label {
+    font-size: 10px;
+  }
+
+  .lesson-workspace {
+    grid-template-columns: minmax(10rem, 13rem) minmax(0, 1fr);
+  }
+
+  .lesson-rail {
+    grid-column: 1 / -1;
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .quiz-score-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat-row,
+  .dashboard-difficulties {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
 
   .landing-hero .doodle-field-item {
     opacity: 0.35;
