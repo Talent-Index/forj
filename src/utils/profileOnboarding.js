@@ -27,9 +27,9 @@ export const LEARNER_PROFILE_REQUIRED_KEYS = Object.freeze([
 ]);
 
 export const AUTH_FLOW_BUTTONS = Object.freeze({
-  landingStart: { label: "Start Learning →" },
+  landingStart: { label: "Start" },
   landingSignIn: { label: "Sign in" },
-  landingCredentials: { label: "Explore Credentials →" },
+  landingCredentials: { label: "Credentials" },
   google: { label: "Continue with Google" },
   createAccount: { label: "Create account" },
   signIn: { label: "Sign in" },

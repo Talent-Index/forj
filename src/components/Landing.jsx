@@ -7,17 +7,38 @@ import JigsawBoard from "./JigsawBoard";
 import forgeCertificate from "../assets/forge-certificate.jpg";
 
 const HERO_DOODLES = [
-  { type: "book", top: "8%", left: "6%", size: 36, rotate: -8, decorative: false },
-  { type: "pencil", top: "18%", right: "10%", size: 28, rotate: 12 },
-  { type: "question", top: "42%", left: "4%", size: 24, rotate: -4 },
-  { type: "diamond", bottom: "22%", right: "8%", size: 30, variant: "accent", accent: true, decorative: false },
-  { type: "hammer", bottom: "12%", left: "12%", size: 32, rotate: -6 },
-  { type: "puzzle", top: "12%", left: "42%", size: 22, rotate: 8 },
-  { type: "certificate", bottom: "28%", left: "8%", size: 26 },
-  { type: "blockchain", top: "55%", right: "6%", size: 28, rotate: 4 },
-  { type: "check", bottom: "8%", right: "18%", size: 22, variant: "accent" },
-  { type: "code", top: "30%", right: "22%", size: 24 },
-  { type: "arrow", bottom: "40%", right: "28%", size: 20, rotate: 20 },
+  { type: "book", top: "6%", left: "5%", size: 38, rotate: -8, decorative: false },
+  { type: "pencil", top: "14%", right: "8%", size: 28, rotate: 12 },
+  { type: "spark", top: "4%", left: "28%", size: 18, rotate: -14, variant: "accent" },
+  { type: "notes", top: "9%", right: "28%", size: 22, rotate: 6 },
+  { type: "question", top: "38%", left: "3%", size: 24, rotate: -4 },
+  { type: "lightbulb", top: "22%", left: "14%", size: 20, rotate: 10 },
+  { type: "diamond", bottom: "20%", right: "7%", size: 32, variant: "accent", accent: true, decorative: false },
+  { type: "hammer", bottom: "10%", left: "10%", size: 34, rotate: -6, decorative: false },
+  { type: "anvil", bottom: "6%", left: "28%", size: 26, rotate: 4 },
+  { type: "puzzle", top: "11%", left: "44%", size: 20, rotate: 8 },
+  { type: "certificate", bottom: "26%", left: "5%", size: 26, rotate: -3 },
+  { type: "seal", bottom: "18%", left: "22%", size: 20, rotate: 8, variant: "accent" },
+  { type: "blockchain", top: "52%", right: "4%", size: 28, rotate: 4 },
+  { type: "nodes", top: "68%", right: "14%", size: 24, rotate: -6 },
+  { type: "check", bottom: "7%", right: "20%", size: 20, variant: "accent" },
+  { type: "code", top: "28%", right: "18%", size: 22, rotate: -8 },
+  { type: "gear", top: "44%", right: "24%", size: 18, rotate: 16 },
+  { type: "arrow", bottom: "38%", right: "30%", size: 18, rotate: 22 },
+  { type: "wallet", top: "62%", left: "6%", size: 22, rotate: -10 },
+  { type: "contract", bottom: "32%", right: "5%", size: 24, rotate: 5 },
+  { type: "star", top: "34%", left: "24%", size: 16, rotate: -18, variant: "accent" },
+  { type: "trophy", bottom: "14%", right: "36%", size: 22, rotate: 7 },
+  { type: "fire", top: "72%", left: "18%", size: 20, rotate: -12 },
+  { type: "blocks", top: "58%", left: "32%", size: 18, rotate: 9 },
+  { type: "blueprint", bottom: "42%", left: "8%", size: 24, rotate: -5 },
+  { type: "badge", top: "48%", right: "38%", size: 18, rotate: 14 },
+  { type: "mountain", bottom: "8%", left: "42%", size: 22, rotate: 3 },
+  { type: "chain", top: "18%", left: "62%", size: 20, rotate: -7 },
+  { type: "cap", bottom: "48%", right: "12%", size: 22, rotate: 11 },
+  { type: "tools", top: "78%", right: "26%", size: 20, rotate: -9 },
+  { type: "circle", top: "8%", right: "42%", size: 14, rotate: 0 },
+  { type: "underline", bottom: "55%", left: "40%", size: 28, rotate: -2 },
 ];
 
 const JOURNEY = [
@@ -83,21 +104,21 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
             <br />
             PROVE.
           </h1>
-          <p className="landing-lede">
-            Build skills. Turn progress into achievement. Optionally record a claimed Fuji credential —
-            or wait for an issuer-attested record.
-          </p>
           <div className="landing-hero-actions">
             <Button className="btn-solid" onClick={onStart}>
-              <Doodle type="arrow" size={16} variant="ink" />
-              {signedIn ? "Continue Learning" : "Start Learning"}
+              <Doodle type="book" size={16} variant="ink" />
+              {signedIn ? "Continue" : "Start"}
             </Button>
             <Button variant="secondary" onClick={onExploreCredentials}>
-              Explore Credentials
+              <Doodle type="certificate" size={16} variant="muted" />
+              Credentials
             </Button>
             {!signedIn && (
               <p className="landing-secondary">
-                <button type="button" className="text-link" onClick={onSignIn}>Sign in</button>
+                <button type="button" className="text-link landing-signin-link" onClick={onSignIn}>
+                  <Doodle type="arrow" size={12} variant="muted" />
+                  Sign in
+                </button>
               </p>
             )}
           </div>
@@ -196,8 +217,8 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
             </div>
           </dl>
           <Button variant="secondary" onClick={onExploreCredentials}>
-            Explore Credentials
-            <Doodle type="arrow" size={14} variant="muted" />
+            <Doodle type="certificate" size={14} variant="muted" />
+            Credentials
           </Button>
         </div>
       </section>
@@ -207,7 +228,8 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
           <Doodle type="hammer" size={36} variant="accent" animated />
           <h2>Ready to forge?</h2>
           <Button className="btn-solid-inverse" onClick={onStart}>
-            {signedIn ? "Continue Learning →" : "Start Learning →"}
+            <Doodle type="book" size={16} variant="ink" />
+            {signedIn ? "Continue" : "Start"}
           </Button>
         </div>
       </section>
