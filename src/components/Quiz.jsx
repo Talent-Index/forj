@@ -231,9 +231,8 @@ function Quiz({ sectionId, onComplete, onBack }) {
   if (phase === "loading") {
     return (
       <div className="card quiz-intro loading-forge" aria-busy="true">
-        <Doodle type="hammer" size={36} variant="accent" animated />
+        <LoadingForge label="Forging your quiz…" />
         <p className="kicker">{forgeLabel}</p>
-        <h2>Forging your quiz…</h2>
         <p role="status">Selecting {QUESTIONS_PER_QUIZ} unique questions for {path.title}.</p>
         <div className="quiz-loading-track" aria-hidden="true">
           <div className="quiz-loading-fill" />
@@ -277,7 +276,7 @@ function Quiz({ sectionId, onComplete, onBack }) {
         )}
         <Button onClick={startQuiz} disabled={!bank.ok}>
           Start challenge
-          <Doodle type="arrow" size={14} variant="ink" />
+          <AnimatedDoodle type="arrow" animation="draw" trigger="immediate" size={14} variant="ink" />
         </Button>
       </div>
     );
@@ -391,10 +390,17 @@ function Quiz({ sectionId, onComplete, onBack }) {
         <div className={`timer-fill ${timerUrgent ? "timer-fill-urgent" : ""}`} style={{ width: `${timerPct}%` }} />
       </div>
       <h3 className="question-text">
-        {q.question}
-        <span className="forge-stat-doodle" aria-hidden="true" style={{ position: "relative", display: "inline-block", marginLeft: 8, verticalAlign: "middle" }}>
-          <Doodle type="question" size={20} variant="muted" />
+        <span className="quiz-question-doodle" aria-hidden="true">
+          <AnimatedDoodle
+            key={`q-${q.id}`}
+            type="question"
+            animation="draw"
+            trigger="immediate"
+            size={22}
+            variant="muted"
+          />
         </span>
+        {q.question}
       </h3>
       {q.hint && !answered && (
         <div className="hint-row">
@@ -433,14 +439,19 @@ function Quiz({ sectionId, onComplete, onBack }) {
       {answered && feedback && (
         <div className={`quiz-feedback ${feedback.isCorrect ? "" : "quiz-feedback-wrong"}`} role="status">
           <p className={feedback.isCorrect ? "feedback-nice" : "feedback-not-yet"}>
-            <Doodle type={feedback.isCorrect ? "check" : "pencil"} size={18} variant={feedback.isCorrect ? "accent" : "earth"} animated />
+            <AnimatedDoodle
+              type={feedback.isCorrect ? "check" : "question"}
+              animation={feedback.isCorrect ? "draw" : "wiggle"}
+              trigger="success"
+              active
+              size={18}
+              variant={feedback.isCorrect ? "accent" : "earth"}
+            />
             {resultTitle}
+            {!feedback.isCorrect ? <span className="meta-line"> · Try again</span> : null}
           </p>
           {feedback.isCorrect ? (
-            <p className="xp-callout">
-              <Doodle type="arrow" size={14} variant="accent" />
-              +{pointsPerQ} pts
-            </p>
+            <XpHandwrite amount={pointsPerQ} active className="xp-callout" />
           ) : (
             <p>Read the explanation, then continue. Retries replace this section’s score.</p>
           )}

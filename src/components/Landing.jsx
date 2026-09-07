@@ -2,17 +2,96 @@ import { useState } from "react";
 import { DIFFICULTY_LEVELS, PATH_COPY, FORGE_LEVEL_LABELS } from "../utils/onboarding";
 import { BrandMark } from "./brand/ForjoraMark";
 import { Button } from "./ui/primitives";
-import { Doodle, DoodleField, DoodleDivider } from "./doodles";
+import {
+  AnimatedDoodle,
+  BlockchainConnect,
+  Doodle,
+  DoodleArrow,
+  DoodleField,
+  DoodleDivider,
+  DoodleText,
+  doodleTiming,
+} from "./doodles";
 import JigsawBoard from "./JigsawBoard";
 import forgeCertificate from "../assets/forge-certificate.jpg";
 
 const HERO_DOODLES = [
-  { type: "book", top: "10%", left: "8%", size: 28, rotate: -6, decorative: false },
-  { type: "spark", top: "12%", right: "10%", size: 18, rotate: 8, variant: "accent", accent: true },
-  { type: "hammer", bottom: "14%", left: "9%", size: 26, rotate: -4 },
-  { type: "diamond", bottom: "16%", right: "9%", size: 24, variant: "accent", accent: true, decorative: false },
-  { type: "pencil", top: "48%", left: "5%", size: 18, rotate: 10 },
-  { type: "certificate", top: "46%", right: "5%", size: 20, rotate: -8 },
+  {
+    type: "pencil",
+    top: "10%",
+    left: "8%",
+    size: 26,
+    rotate: -6,
+    decorative: false,
+    animation: "slide",
+    delay: doodleTiming.stagger,
+  },
+  {
+    type: "underline",
+    top: "16%",
+    left: "14%",
+    size: 36,
+    animation: "underline",
+    delay: doodleTiming.stagger * 2,
+  },
+  {
+    type: "book",
+    top: "12%",
+    right: "10%",
+    size: 28,
+    rotate: 6,
+    decorative: false,
+    animation: "open",
+    delay: doodleTiming.stagger * 3,
+  },
+  {
+    type: "question",
+    top: "48%",
+    left: "5%",
+    size: 22,
+    rotate: -4,
+    animation: "wiggle",
+    delay: doodleTiming.stagger * 5,
+  },
+  {
+    type: "diamond",
+    bottom: "16%",
+    right: "9%",
+    size: 26,
+    variant: "accent",
+    accent: true,
+    decorative: false,
+    animation: "draw",
+    delay: doodleTiming.stagger * 7,
+  },
+  {
+    type: "certificate",
+    top: "46%",
+    right: "5%",
+    size: 22,
+    rotate: -8,
+    animation: "stamp",
+    delay: doodleTiming.stagger * 9,
+  },
+  {
+    type: "check",
+    bottom: "22%",
+    right: "16%",
+    size: 18,
+    variant: "accent",
+    accent: true,
+    animation: "draw",
+    delay: doodleTiming.stagger * 11,
+  },
+  {
+    type: "hammer",
+    bottom: "12%",
+    left: "9%",
+    size: 24,
+    rotate: -4,
+    animation: "tap",
+    delay: doodleTiming.stagger * 8,
+  },
 ];
 
 const JOURNEY = [
@@ -20,25 +99,29 @@ const JOURNEY = [
     n: "01",
     title: "Learn",
     body: "Build your knowledge through structured Avalanche lessons.",
-    doodles: ["book", "pencil", "code"],
+    type: "book",
+    animation: "open",
   },
   {
     n: "02",
     title: "Practice",
     body: "Test your understanding through challenges.",
-    doodles: ["quiz", "question", "check"],
+    type: "question",
+    animation: "wiggle",
   },
   {
     n: "03",
     title: "Forge",
     body: "Turn your progress into track certificates and puzzle pieces.",
-    doodles: ["hammer", "anvil", "diamond"],
+    type: "hammer",
+    animation: "tap",
   },
   {
     n: "04",
     title: "Prove",
     body: "Optionally record a claimed Fuji credential — not an attested exam.",
-    doodles: ["certificate", "seal", "blockchain"],
+    type: "certificate",
+    animation: "stamp",
   },
 ];
 
@@ -66,25 +149,31 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
   return (
     <div className="landing-page">
       <section className="landing-hero">
-        <DoodleField items={HERO_DOODLES} />
+        <DoodleField items={HERO_DOODLES} animate trigger="immediate" />
         <div className="landing-hero-copy">
           <div className="landing-brand">
             <BrandMark className="landing-brand-lockup" showDiamond />
           </div>
           <h1 className="landing-display">
-            LEARN.
+            <DoodleText mark="underline" trigger="immediate" delay={doodleTiming.stagger * 2}>
+              LEARN.
+            </DoodleText>
             <br />
-            FORGE.
+            <DoodleText mark="underline" trigger="immediate" delay={doodleTiming.stagger * 4}>
+              FORGE.
+            </DoodleText>
             <br />
-            PROVE.
+            <DoodleText mark="underline" trigger="immediate" delay={doodleTiming.stagger * 6}>
+              PROVE.
+            </DoodleText>
           </h1>
           <div className="landing-hero-actions">
             <button type="button" className="landing-cta-primary" onClick={onStart}>
-              <Doodle type="arrow" size={14} variant="accent" />
+              <AnimatedDoodle type="arrow" animation="draw" trigger="immediate" size={14} variant="accent" delay={doodleTiming.draw} />
               <span>{signedIn ? "Continue" : "Start"}</span>
             </button>
             <button type="button" className="landing-cta-quiet" onClick={onExploreCredentials}>
-              <Doodle type="certificate" size={14} variant="muted" />
+              <AnimatedDoodle type="certificate" animation="draw" trigger="immediate" size={14} variant="muted" delay={doodleTiming.draw + 120} />
               <span>Credentials</span>
             </button>
             {!signedIn && (
@@ -99,16 +188,32 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
       <section id="how-it-works" className="landing-section">
         <p className="landing-kicker">How Forjora works</p>
         <div className="forge-journey">
-          {JOURNEY.map((step) => (
+          {JOURNEY.map((step, index) => (
             <article key={step.n} className="forge-journey-step">
               <span className="forge-journey-n">{step.n}</span>
               <div className="forge-journey-doodles" aria-hidden="true">
-                {step.doodles.map((type) => (
-                  <Doodle key={type} type={type} size={28} variant="accent" animated />
-                ))}
+                <AnimatedDoodle
+                  type={step.type}
+                  animation={step.animation}
+                  trigger="viewport"
+                  size={32}
+                  variant="accent"
+                  delay={index * doodleTiming.stagger}
+                />
               </div>
-              <h3>{step.title}</h3>
+              <h3>
+                <DoodleText trigger="viewport" delay={index * doodleTiming.stagger}>
+                  {step.title}
+                </DoodleText>
+              </h3>
               <p>{step.body}</p>
+              {index < JOURNEY.length - 1 ? (
+                <DoodleArrow
+                  className="forge-journey-arrow"
+                  trigger="viewport"
+                  delay={(index + 1) * doodleTiming.stagger}
+                />
+              ) : null}
             </article>
           ))}
         </div>
@@ -130,7 +235,14 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
                 onClick={() => setLevelId(item.id)}
               >
                 <span className="difficulty-forge-label">
-                  <Doodle type={LEVEL_DOODLE[item.id]} size={16} variant="accent" />
+                  <AnimatedDoodle
+                    type={LEVEL_DOODLE[item.id]}
+                    animation="draw"
+                    trigger="hover"
+                    once={false}
+                    size={16}
+                    variant="accent"
+                  />
                   {label}
                 </span>
                 <span className="visually-hidden"> ({item.name})</span>
@@ -158,7 +270,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
                 <span>{step}</span>
                 {index < FORGE_STEPS.length - 1 && (
                   <span className="forge-arrow" aria-hidden="true">
-                    <Doodle type="arrowDown" size={18} variant="muted" />
+                    <AnimatedDoodle type="arrowDown" animation="draw" trigger="viewport" size={18} variant="muted" />
                   </span>
                 )}
               </li>
@@ -187,8 +299,9 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
               <dd>An issuer authorized that record with a signature.</dd>
             </div>
           </dl>
+          <BlockchainConnect trigger="viewport" label="On-chain record" showCheck />
           <Button variant="secondary" onClick={onExploreCredentials}>
-            <Doodle type="certificate" size={14} variant="muted" />
+            <AnimatedDoodle type="certificate" animation="draw" trigger="viewport" size={14} variant="muted" />
             Credentials
           </Button>
         </div>
@@ -196,10 +309,12 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
 
       <section className="landing-finale">
         <div className="landing-finale-inner">
-          <Doodle type="hammer" size={36} variant="accent" animated />
-          <h2>Ready to forge?</h2>
+          <AnimatedDoodle type="hammer" animation="tap" trigger="viewport" size={36} variant="accent" />
+          <h2>
+            <DoodleText trigger="viewport">Ready to forge?</DoodleText>
+          </h2>
           <Button className="btn-solid-inverse" onClick={onStart}>
-            <Doodle type="book" size={16} variant="ink" />
+            <AnimatedDoodle type="book" animation="draw" trigger="viewport" size={16} variant="ink" />
             {signedIn ? "Continue" : "Start"}
           </Button>
         </div>

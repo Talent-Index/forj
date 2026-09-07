@@ -3406,6 +3406,373 @@ img {
   color: var(--accent-ink);
 }
 
+/* --- Animated doodle system --- */
+
+.animated-doodle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  --doodle-delay: 0ms;
+  --doodle-duration: 1000ms;
+}
+
+.animated-doodle.is-idle .doodle-motion,
+.animated-doodle.is-idle .doodle-draw path {
+  opacity: 0.35;
+}
+
+.animated-doodle.is-playing {
+  animation-delay: var(--doodle-delay);
+}
+
+.animated-doodle.is-draw .doodle path,
+.animated-doodle.is-draw .doodle circle,
+.animated-doodle.is-draw .doodle line,
+.animated-doodle.is-draw .doodle polyline,
+.animated-doodle.is-write .doodle path,
+.animated-doodle.is-reveal .doodle path,
+.animated-doodle.is-connect .doodle path,
+.animated-doodle.is-stamp .doodle path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: doodle-draw var(--doodle-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--doodle-delay) forwards;
+}
+
+.animated-doodle.is-wiggle {
+  animation: doodle-wiggle 420ms cubic-bezier(0.45, 0, 0.55, 1) var(--doodle-delay) both;
+}
+
+.animated-doodle.is-tap {
+  animation: doodle-tap 700ms cubic-bezier(0.45, 0, 0.55, 1) var(--doodle-delay) both;
+}
+
+.animated-doodle.is-bounce {
+  animation: doodle-bounce 320ms ease-out var(--doodle-delay) both;
+}
+
+.animated-doodle.is-assemble {
+  animation: doodle-assemble 900ms cubic-bezier(0.22, 1, 0.36, 1) var(--doodle-delay) both;
+}
+
+.animated-doodle.is-spark .doodle {
+  animation: doodle-spark 700ms ease-out var(--doodle-delay) both;
+}
+
+.animated-doodle.is-pulse {
+  animation: doodle-pulse 900ms ease-in-out var(--doodle-delay) both;
+}
+
+.animated-doodle.is-open {
+  animation: doodle-open 700ms cubic-bezier(0.22, 1, 0.36, 1) var(--doodle-delay) both;
+  transform-origin: left center;
+}
+
+.animated-doodle.is-slide {
+  animation: doodle-slide 700ms cubic-bezier(0.22, 1, 0.36, 1) var(--doodle-delay) both;
+}
+
+.animated-doodle.is-forge {
+  animation: doodle-tap 700ms ease-in-out var(--doodle-delay) both;
+}
+
+.animated-doodle.is-underline .doodle path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: doodle-draw 700ms ease-out var(--doodle-delay) forwards;
+}
+
+@keyframes doodle-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(5deg); }
+}
+
+@keyframes doodle-tap {
+  0% { transform: translateY(0) rotate(0deg); }
+  35% { transform: translateY(-6px) rotate(-8deg); }
+  55% { transform: translateY(2px) rotate(4deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes doodle-bounce {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes doodle-assemble {
+  0% { transform: translate(10px, -8px) scale(0.92); opacity: 0.4; }
+  70% { transform: translate(0, 1px) scale(1.02); opacity: 1; }
+  100% { transform: translate(0, 0) scale(1); opacity: 1; }
+}
+
+@keyframes doodle-spark {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  50% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes doodle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+@keyframes doodle-open {
+  0% { transform: perspective(120px) rotateY(0deg); }
+  60% { transform: perspective(120px) rotateY(-12deg); }
+  100% { transform: perspective(120px) rotateY(-6deg); }
+}
+
+@keyframes doodle-slide {
+  0% { transform: translateX(-10px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+/* Arrow draw */
+.doodle-arrow {
+  display: inline-flex;
+  color: var(--accent-ink);
+  --doodle-delay: 0ms;
+  --doodle-duration: 1000ms;
+}
+
+.doodle-arrow-line,
+.doodle-arrow-head {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.doodle-arrow.is-playing .doodle-arrow-line,
+.doodle-arrow.is-reduced .doodle-arrow-line {
+  animation: doodle-draw var(--doodle-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--doodle-delay) forwards;
+}
+
+.doodle-arrow.is-playing .doodle-arrow-head,
+.doodle-arrow.is-reduced .doodle-arrow-head {
+  animation: doodle-draw 420ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--doodle-delay) + 620ms) forwards;
+}
+
+.doodle-arrow.is-playing {
+  animation: doodle-arrow-nudge 500ms ease-out calc(var(--doodle-delay) + 900ms) both;
+}
+
+@keyframes doodle-arrow-nudge {
+  0% { transform: translateX(0); }
+  60% { transform: translateX(3px); }
+  100% { transform: translateX(2px); }
+}
+
+/* Text underline / circle */
+.doodle-text {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  color: inherit;
+}
+
+.doodle-text-mark {
+  width: 100%;
+  height: 10px;
+  margin-top: -2px;
+  color: var(--accent-ink);
+  overflow: visible;
+}
+
+.doodle-text-mark path,
+.doodle-text-mark ellipse {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.doodle-text.is-playing .doodle-text-mark path,
+.doodle-text.is-playing .doodle-text-mark ellipse,
+.doodle-text.is-reduced .doodle-text-mark path,
+.doodle-text.is-reduced .doodle-text-mark ellipse {
+  animation: doodle-draw var(--doodle-duration) ease-out var(--doodle-delay) forwards;
+}
+
+/* Forge sequence */
+.forge-sequence {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.forge-sequence-impact {
+  display: inline-flex;
+  gap: 3px;
+  opacity: 0;
+}
+
+.forge-sequence.is-active .forge-sequence-impact,
+.forge-sequence:has(.animated-doodle.is-playing) .forge-sequence-impact {
+  opacity: 1;
+  animation: doodle-impact 500ms ease-out 380ms both;
+}
+
+.forge-sequence-impact span {
+  display: block;
+  width: 10px;
+  height: 1.5px;
+  background: currentColor;
+  color: var(--accent-ink);
+  transform-origin: left center;
+}
+
+.forge-sequence-impact span:nth-child(1) { transform: rotate(-28deg); }
+.forge-sequence-impact span:nth-child(2) { transform: rotate(0deg); width: 12px; }
+.forge-sequence-impact span:nth-child(3) { transform: rotate(28deg); }
+
+@keyframes doodle-impact {
+  0% { opacity: 0; transform: scaleX(0.4); }
+  40% { opacity: 1; transform: scaleX(1); }
+  100% { opacity: 0.35; transform: scaleX(0.85); }
+}
+
+.forge-sequence-label {
+  width: 100%;
+  margin: 8px 0 0;
+  font-family: "Source Serif 4", Georgia, serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: var(--accent-ink);
+}
+
+/* Loading forge */
+.loading-forge-doodle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.loading-forge-underline {
+  display: block;
+  width: 7rem;
+  height: 2px;
+  border-bottom: 2px solid var(--accent-ink);
+  border-radius: 40% 60%;
+  transform: rotate(-1deg);
+  transform-origin: left center;
+  animation: doodle-loading-line 1.4s ease-in-out infinite;
+}
+
+@keyframes doodle-loading-line {
+  0% { transform: scaleX(0.25) rotate(-1deg); opacity: 0.4; }
+  50% { transform: scaleX(1) rotate(-1deg); opacity: 1; }
+  100% { transform: scaleX(0.35) rotate(-1deg); opacity: 0.5; }
+}
+
+/* Blockchain connect */
+.blockchain-connect {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent-ink);
+}
+
+.blockchain-connect-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.blockchain-connect .bc-node,
+.blockchain-connect .bc-link,
+.blockchain-connect .bc-check {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.blockchain-connect.is-playing .bc-node-1,
+.blockchain-connect.is-reduced .bc-node-1 { animation: doodle-draw 400ms ease-out var(--doodle-delay) forwards; }
+.blockchain-connect.is-playing .bc-link-1,
+.blockchain-connect.is-reduced .bc-link-1 { animation: doodle-draw 400ms ease-out calc(var(--doodle-delay) + 280ms) forwards; }
+.blockchain-connect.is-playing .bc-node-2,
+.blockchain-connect.is-reduced .bc-node-2 { animation: doodle-draw 400ms ease-out calc(var(--doodle-delay) + 520ms) forwards; }
+.blockchain-connect.is-playing .bc-link-2,
+.blockchain-connect.is-reduced .bc-link-2 { animation: doodle-draw 400ms ease-out calc(var(--doodle-delay) + 760ms) forwards; }
+.blockchain-connect.is-playing .bc-node-3,
+.blockchain-connect.is-reduced .bc-node-3 { animation: doodle-draw 400ms ease-out calc(var(--doodle-delay) + 980ms) forwards; }
+.blockchain-connect.is-playing .bc-link-3,
+.blockchain-connect.is-reduced .bc-link-3 { animation: doodle-draw 360ms ease-out calc(var(--doodle-delay) + 1180ms) forwards; }
+.blockchain-connect.is-playing .bc-node-4,
+.blockchain-connect.is-reduced .bc-node-4 { animation: doodle-draw 360ms ease-out calc(var(--doodle-delay) + 1380ms) forwards; }
+.blockchain-connect.is-playing .bc-check,
+.blockchain-connect.is-reduced .bc-check { animation: doodle-draw 500ms ease-out calc(var(--doodle-delay) + 1500ms) forwards; }
+
+/* XP handwrite */
+.xp-handwrite {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-family: "Source Serif 4", Georgia, serif;
+  opacity: 0;
+}
+
+.xp-handwrite.is-active {
+  animation: doodle-slide 700ms ease-out both;
+}
+
+.xp-handwrite-gain {
+  color: var(--accent-ink);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.xp-handwrite-total {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.xp-handwrite-arrow {
+  color: var(--muted);
+}
+
+.xp-handwrite-arrow .doodle-arrow-svg {
+  width: 56px;
+  height: 16px;
+}
+
+/* Journey / quiz helpers */
+.forge-journey-step .animated-doodle {
+  margin-inline: 2px;
+}
+
+.quiz-question-doodle {
+  display: inline-flex;
+  margin-bottom: 8px;
+}
+
+.feedback-nice .animated-doodle,
+.feedback-not-yet .animated-doodle {
+  margin-right: 4px;
+}
+
+.puzzle-piece-snap.is-snapping {
+  animation: doodle-assemble 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.achievement-item.is-unlocked .animated-doodle {
+  display: inline-flex;
+}
+
+.level-up-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
 @media (max-width: 860px) {
   .doodle-field-item.is-decorative {
     display: none;
@@ -3426,10 +3793,22 @@ img {
   .doodle-draw circle,
   .doodle-draw line,
   .doodle-draw polyline,
-  .doodle-draw polygon {
+  .doodle-draw polygon,
+  .animated-doodle,
+  .doodle-arrow,
+  .doodle-text-mark path,
+  .doodle-text-mark ellipse,
+  .blockchain-connect .bc-node,
+  .blockchain-connect .bc-link,
+  .blockchain-connect .bc-check,
+  .loading-forge-underline,
+  .xp-handwrite,
+  .puzzle-piece-snap.is-snapping {
     animation: none !important;
-    stroke-dasharray: none;
-    stroke-dashoffset: 0;
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
@@ -3437,10 +3816,22 @@ img {
 [data-reduced-motion="true"] .doodle-draw circle,
 [data-reduced-motion="true"] .doodle-draw line,
 [data-reduced-motion="true"] .doodle-draw polyline,
-[data-reduced-motion="true"] .doodle-draw polygon {
+[data-reduced-motion="true"] .doodle-draw polygon,
+[data-reduced-motion="true"] .animated-doodle,
+[data-reduced-motion="true"] .doodle-arrow,
+[data-reduced-motion="true"] .doodle-text-mark path,
+[data-reduced-motion="true"] .doodle-text-mark ellipse,
+[data-reduced-motion="true"] .blockchain-connect .bc-node,
+[data-reduced-motion="true"] .blockchain-connect .bc-link,
+[data-reduced-motion="true"] .blockchain-connect .bc-check,
+[data-reduced-motion="true"] .loading-forge-underline,
+[data-reduced-motion="true"] .xp-handwrite,
+[data-reduced-motion="true"] .puzzle-piece-snap.is-snapping {
   animation: none !important;
-  stroke-dasharray: none;
-  stroke-dashoffset: 0;
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 
