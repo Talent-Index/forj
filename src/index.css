@@ -3719,22 +3719,45 @@ img {
   margin: 8px 0 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .credentials-journey-steps li {
+  position: relative;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 6px 10px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--muted);
   background: var(--surface-2);
-  font-size: 0.85rem;
 }
 
 .credentials-journey-steps li.is-done {
   color: var(--text);
   border-color: var(--text);
   background: var(--surface);
+}
+
+.credentials-journey-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.credentials-journey-steps .nav-alert-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--surface);
 }
 
 .credentials-puzzle-complete {
@@ -3761,12 +3784,6 @@ img {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 8px 10px;
-}
-
-@media (max-width: 860px) {
-  .credentials-journey-steps {
-    flex-direction: column;
-  }
 }
 
 @media (max-width: 860px) {

@@ -16,6 +16,9 @@ const ICONS = {
   info: "M12 12.5V16 M12 8.2h.01 M12 4.5a7.5 7.5 0 1 1 0 15 7.5 7.5 0 0 1 0-15z",
   arrow: "M5 12h14 M13 6l6 6-6 6",
   door: "M6 20V5.5h10.5V20 M9.2 12.2h.01 M6 20h13.5",
+  shield: "M12 3.5 19 7v6.2c0 4-3 6.3-7 8.3-4-2-7-4.3-7-8.3V7z",
+  spark: "M12 3.5v3.2M12 17.3v3.2M3.5 12h3.2M17.3 12h3.2M6.2 6.2l2.2 2.2M15.6 15.6l2.2 2.2M6.2 17.8l2.2-2.2M15.6 8.4l2.2-2.2",
+  certificate: "M6 5h12v11H6z M9 19l3-2 3 2v-3.5H9z M9 9h6 M9 12h4",
 };
 
 export function Icon({ name = "info", className = "", size = 18 }) {

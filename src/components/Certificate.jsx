@@ -30,6 +30,7 @@ import {
 import JigsawBoard from "./JigsawBoard";
 import TrackCertificateGallery from "./TrackCertificateGallery";
 import { Button } from "./ui/primitives";
+import { Icon } from "./ui/Icon";
 import { AnimatedDoodle, Doodle, DoodleText } from "./doodles";
 import {
   PuzzleProgress,
@@ -336,20 +337,59 @@ function Certificate({
       <section className="section-block credentials-journey" aria-label="Credential journey">
         <p className="kicker">Journey</p>
         <ol className="credentials-journey-steps">
-          <li className={acquiredPieces.length > 0 || earnedLearningCerts.length ? "is-done" : ""}>
-            Learn & assess
-          </li>
-          <li className={fragments.fragments > 0 || acquiredPieces.length > 0 ? "is-done" : ""}>
-            XP & fragments
-          </li>
-          <li className={acquiredPieces.length > 0 ? "is-done" : ""}>
-            Puzzle pieces
-          </li>
-          <li className={earnedLearningCerts.length > 0 ? "is-done" : ""}>
-            Learning certificates
-          </li>
-          <li className={puzzleComplete ? "is-done" : ""}>Path snapshot</li>
-          <li className={onChainCredential || mintTx ? "is-done" : ""}>Fuji mint</li>
+          {[
+            {
+              id: "learn",
+              label: "Learn & assess",
+              icon: "learn",
+              done: acquiredPieces.length > 0 || earnedLearningCerts.length > 0,
+            },
+            {
+              id: "fragments",
+              label: "XP & fragments",
+              icon: "spark",
+              done: fragments.fragments > 0 || acquiredPieces.length > 0,
+            },
+            {
+              id: "puzzle",
+              label: "Puzzle pieces",
+              icon: "puzzle",
+              done: acquiredPieces.length > 0,
+            },
+            {
+              id: "learning-certs",
+              label: "Learning certificates",
+              icon: "certificate",
+              done: earnedLearningCerts.length > 0,
+            },
+            {
+              id: "path",
+              label: "Path snapshot",
+              icon: "path",
+              done: puzzleComplete,
+            },
+            {
+              id: "fuji",
+              label: "Fuji mint",
+              icon: "shield",
+              done: Boolean(onChainCredential || mintTx),
+              alert: puzzleComplete && !onChainCredential && !mintTx,
+            },
+          ].map((step) => (
+            <li
+              key={step.id}
+              className={[step.done ? "is-done" : "", step.alert ? "has-alert" : ""]
+                .filter(Boolean)
+                .join(" ")}
+              title={step.label}
+            >
+              <span className="credentials-journey-icon" aria-hidden="true">
+                <Icon name={step.icon} size={18} />
+                {step.alert ? <span className="nav-alert-dot" /> : null}
+              </span>
+              <span className="visually-hidden">{step.label}{step.done ? " — complete" : ""}</span>
+            </li>
+          ))}
         </ol>
         <p className="meta-line">
           The puzzle is the journey. Learning certificates are path proof. The Fuji mint is an optional claimed on-chain snapshot.
