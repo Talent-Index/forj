@@ -1,5 +1,6 @@
 import { TOTAL_PIECES, MAX_POINTS, getSectionById } from "../data/questions.js";
 import { quizLengthFor } from "./quiz.js";
+import { CREDENTIAL_SCORE_MAX, CREDENTIAL_SCORE_SECTIONS } from "./quizConfig.js";
 import { QUIZ_SECTIONS, SCORE_SECTIONS, sanitizeProgress, normalizeAddress } from "./progress.js";
 import { overallMastery, buildMasteryMap } from "./mastery.js";
 import { fragmentProgress } from "./fragments.js";
@@ -19,23 +20,42 @@ export function walletExplorerUrl(address) {
 export function sectionCompletion(sectionScores, sectionId) {
   const section = getSectionById(sectionId);
   const score = sectionScores?.[sectionId];
-  const total = Number(score?.total) || quizLengthFor(sectionId);
-  const correct = Math.min(Number(score?.correct) || 0, total);
-  const pointsEarned = Number(score?.pointsEarned) || 0;
-  const maxPoints = Number(score?.pointsEarned) != null && score
-    ? pointsEarned
-    : (section?.pointsPerQuestion || 0) * Math.min(total, 5);
-  const attempted = Boolean(score);
+  const expected = quizLengthFor(sectionId);
+  const credentialDefault = CREDENTIAL_SCORE_SECTIONS.includes(sectionId)
+    ? CREDENTIAL_SCORE_MAX
+    : expected;
+  if (!score) {
+    return {
+      id: sectionId,
+      name: section?.name || sectionId,
+      correct: 0,
+      total: credentialDefault,
+      pointsEarned: 0,
+      maxPoints: (section?.pointsPerQuestion || 0) * credentialDefault,
+      percent: 0,
+      attempted: false,
+      complete: false,
+    };
+  }
+  const reported = Number(score.total);
+  const total =
+    Number.isFinite(reported) && reported > 0
+      ? Math.min(reported, expected)
+      : credentialDefault;
+  const correct = Math.min(Number(score.correct) || 0, total);
+  const pointsEarned = Number(score.pointsEarned) || 0;
+  const seatingCap = sectionId === "master" ? total : Math.min(total, CREDENTIAL_SCORE_MAX);
+  const maxPoints = (section?.pointsPerQuestion || 0) * seatingCap;
   return {
     id: sectionId,
     name: section?.name || sectionId,
     correct,
     total,
     pointsEarned,
-    maxPoints: (section?.pointsPerQuestion || 0) * Math.min(quizLengthFor(sectionId), sectionId === "master" ? quizLengthFor(sectionId) : 5),
+    maxPoints,
     percent: Math.round((correct / Math.max(1, total)) * 100),
-    attempted,
-    complete: attempted && correct === total,
+    attempted: true,
+    complete: correct === total,
   };
 }
 

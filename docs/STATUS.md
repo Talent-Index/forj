@@ -34,21 +34,23 @@ Existing browser progress is moved onto the account once, so a returning learner
 - **Learn on Forjora** hub: continue learning, category filters, track cards (modules · lessons · challenges · skills · progress), and knowledge-check challenges.
 - Track pages use a vertical **learning path** (completed / current / locked) ending in a credential milestone.
 - Lesson workspace: track nav · lesson body · progress/skills rail (stacks on mobile).
-- Easy, Medium, and Hard quizzes remain the practical challenges (Spark / Build / Forge). Retries replace that section’s points.
+- Easy, Medium, Hard, and Master quizzes are Foundation / Builder / Advanced / Mastery assessments (5 / 7 / 10 / 12 questions). Knowledge checks appear after a short stretch of learning, not on a fixed lesson count.
+- Quizzes award XP and puzzle fragments on first completion (retries do not farm rewards). Five fragments convert into one puzzle piece. Fuji seating/mint still uses the frozen Easy / Medium / Hard five-correct scale (80 points).
 - Structured path with six tracks: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer.
-- Lessons unlock in order. Each lesson has a deeper body and an official Avalanche reference. Quizzes sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone).
+- Lessons unlock in order. Each lesson has a deeper body and an official Avalanche reference. Quizzes sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone; Mastery is assessment-only).
 
 ## Progression
 
 - One event stream drives XP, levels, achievements, streaks, path completion, puzzle events, and credentials.
-- Quiz retries do not farm XP.
+- Quiz retries do not farm XP or puzzle fragments.
+- Mastery (accuracy by difficulty) sits beside XP (activity). Puzzle progress shows pieces seated and fragments toward the next piece.
 - Streaks use UTC calendar days. Duplicate activity on the same UTC day does not inflate the streak.
-- Achievements unlock from events (first quiz, perfect score, difficulties, streak, puzzle, credential, track certificates, path).
+- Achievements unlock from events (first quiz, perfect score, difficulties, streak, puzzle milestones, credential, track certificates, path).
 - Dashboard shows level, XP, streak, puzzle count, path progress, and the next recommended activity.
 
 ## Puzzle and certificate
 
-- Sixteen interlocking pieces, reserved by quiz: Easy 3, Medium 5, Hard 8. Points from a quiz only seat that quiz’s pieces.
+- Sixteen interlocking pieces, reserved by quiz: Easy 3, Medium 5, Hard 8. Points from a quiz only seat that quiz’s pieces. Puzzle fragments from assessments convert into additional pieces (5 fragments = 1 piece).
 - Each of the six tracks has a certificate. Quiz tracks are achieved when their pieces are seated. Lesson tracks (L1s, C-Chain, ICM) are achieved when the track is complete.
 - Credentials separates **track certificates** (off-chain learning records, in progress or achieved) from the **path snapshot** (sixteen pieces → name → optional claimed Fuji mint). Achieved track cards do not pretend to be on-chain tokens.
 - Artwork: Forjora forge certificate image — blacksmith in a workshop presenting a crafted diamond; banners say Forjora and Learn · Forge · Prove, not “certified” or “verified”.

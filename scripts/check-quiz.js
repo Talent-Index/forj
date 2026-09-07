@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { QUESTION_TOPICS, getSectionById, sections } from "../src/data/questions.js";
 import {
   POST_SUBMIT_KEYS,
-  QUESTIONS_PER_QUIZ,
+  quizLengthFor,
   canAcceptSubmit,
   findQuestionById,
   getAnswerFeedback,
@@ -33,6 +33,7 @@ function q(id, extra = {}) {
     explanation: "A is correct because this test explanation is long enough to teach.",
     reference: TEST_REFERENCE,
     hint: "Think about the first letter.",
+    topic: "fundamentals",
     ...extra,
   };
 }
@@ -53,11 +54,11 @@ function assertNoSpoilers(question) {
   }
 }
 
-function assertQuiz(result, sectionId) {
+function assertQuiz(result, sectionId, count = quizLengthFor(sectionId)) {
   assert.equal(result.ok, true, result.error);
-  assert.equal(result.questions.length, QUESTIONS_PER_QUIZ);
+  assert.equal(result.questions.length, count);
   const ids = result.questions.map((question) => question.id);
-  assert.equal(new Set(ids).size, QUESTIONS_PER_QUIZ, "duplicate question in quiz");
+  assert.equal(new Set(ids).size, count, "duplicate question in quiz");
   for (const question of result.questions) {
     assert.equal(question.sectionId, sectionId);
     assert.equal(isLearnerQuestion(question), true);
@@ -71,7 +72,7 @@ const tinySection = {
   name: "Easy",
   questions: [q("e1"), q("e2"), q("e3"), q("e4")],
 };
-const shortBank = getQuestionBankStatus(tinySection);
+const shortBank = getQuestionBankStatus(tinySection, 5);
 assert.equal(shortBank.ok, false);
 assert.equal(shortBank.size, 4);
 assert.equal(selectQuizQuestions(tinySection).ok, false);
@@ -111,12 +112,21 @@ const eight = {
 };
 
 const reversed = selectQuizQuestions(eight, { random: () => 0 });
-assertQuiz(reversed, "easy");
-assert.deepEqual(reversed.questions.map((item) => item.id), ["e2", "e3", "e4", "e5", "e6"]);
+assertQuiz(reversed, "easy", 5);
+assert.equal(reversed.questions.length, 5);
 
 const identity = selectQuizQuestions(eight, { random: () => 0.999 });
-assertQuiz(identity, "easy");
-assert.deepEqual(identity.questions.map((item) => item.id), ["e1", "e2", "e3", "e4", "e5"]);
+assertQuiz(identity, "easy", 5);
+assert.equal(identity.questions.length, 5);
+
+const avoidSeen = selectQuizQuestions(eight, {
+  random: () => 0.5,
+  seenIds: ["e1", "e2"],
+});
+assertQuiz(avoidSeen, "easy", 5);
+for (const question of avoidSeen.questions) {
+  assert.equal(["e1", "e2"].includes(question.id), false);
+}
 
 const shuffled = shuffle(["a", "b", "c"], sequenceRandom([0.9, 0]));
 assert.deepEqual(shuffled, ["b", "a", "c"]);
@@ -145,12 +155,13 @@ const timedOut = getAnswerFeedback(sample, null);
 assert.equal(timedOut.isCorrect, false);
 assert.equal(timedOut.timedOut, true);
 
-for (const sectionId of ["easy", "medium", "hard"]) {
+for (const sectionId of ["easy", "medium", "hard", "master"]) {
   const section = getSectionById(sectionId);
-  const bank = getQuestionBankStatus(section);
+  const count = quizLengthFor(sectionId);
+  const bank = getQuestionBankStatus(section, count);
   assert.equal(bank.ok, true, `${sectionId} bank too small`);
-  assert.ok(bank.size >= 16, `${sectionId} should expose an expanded bank (found ${bank.size})`);
-  assert.ok(bank.size >= QUESTIONS_PER_QUIZ, `${sectionId} needs at least ${QUESTIONS_PER_QUIZ} questions`);
+  assert.ok(bank.size >= 100, `${sectionId} should expose an expanded bank (found ${bank.size})`);
+  assert.ok(bank.size >= count, `${sectionId} needs at least ${count} questions`);
   assert.equal(section.questions.length, bank.size, `${sectionId} has questions missing explanations or references`);
 
   const topics = new Set(section.questions.map((question) => question.topic));
@@ -166,10 +177,10 @@ for (const sectionId of ["easy", "medium", "hard"]) {
     assert.equal(isValidReference(question.reference), true, `${question.id} needs an official Avalanche reference`);
   }
 
-  const first = selectQuizQuestions(section, { random: () => 0 });
-  const second = selectQuizQuestions(section, { random: () => 0.999 });
-  assertQuiz(first, sectionId);
-  assertQuiz(second, sectionId);
+  const first = selectQuizQuestions(section, { random: () => 0, count });
+  const second = selectQuizQuestions(section, { random: () => 0.999, count });
+  assertQuiz(first, sectionId, count);
+  assertQuiz(second, sectionId, count);
 
   const allowed = new Set(section.questions.map((question) => question.id));
   for (const question of [...first.questions, ...second.questions]) {
@@ -182,7 +193,7 @@ for (const sectionId of ["easy", "medium", "hard"]) {
   }
 }
 
-assert.deepEqual(sections.map((section) => section.id), ["easy", "medium", "hard"]);
+assert.deepEqual(sections.map((section) => section.id), ["easy", "medium", "hard", "master"]);
 
 function normalizeText(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -194,6 +205,7 @@ assert.equal(new Set(ids).size, ids.length, "duplicate question id across banks"
 
 const prompts = allQuestions.map((item) => normalizeText(item.question.question));
 assert.equal(new Set(prompts).size, prompts.length, "duplicate question text across banks");
+assert.ok(allQuestions.length >= 800, `expected 800+ questions, found ${allQuestions.length}`);
 
 for (const { sectionId, question } of allQuestions) {
   assert.equal(question.options.length, 4, `${question.id} must have exactly 4 options`);

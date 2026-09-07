@@ -3,7 +3,7 @@
  * across machines. Browser-local midnight is not used for unlocks.
  */
 export const STREAK_TIMEZONE = "UTC";
-export const STREAK_MILESTONES = Object.freeze([3, 7, 14, 30, 100]);
+export const STREAK_MILESTONES = Object.freeze([3, 7, 14, 30, 60, 100, 180, 365]);
 
 export function utcDateKey(timestamp = Date.now()) {
   const ts = Number(timestamp);

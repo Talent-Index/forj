@@ -137,6 +137,21 @@ export const EMPTY_STATES = {
     body: "Start with Foundation (Easy) to earn your first points and fragments. Progress follows your account.",
     doodle: "fire",
   },
+  noBadges: {
+    title: "Your badges",
+    body: "Your achievements will appear here as you learn, build, and prove your skills.",
+    doodle: "badge",
+  },
+  noStreak: {
+    title: "No streak yet",
+    body: "Complete a lesson, quiz, or challenge to start a learning streak. Opening Forjora alone does not count.",
+    doodle: "fire",
+  },
+  noCertificates: {
+    title: "No learning certificates yet",
+    body: "Finish the required tracks and assessments to earn Foundation through Master path certificates.",
+    doodle: "certificate",
+  },
   noPoints: {
     title: "Nothing to spend yet.",
     body: `Quiz points unlock that quiz’s certificate pieces at ${PIECE_COST} points each. Complete a section, then return here.`,

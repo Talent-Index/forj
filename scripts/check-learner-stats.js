@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { MAX_POINTS, TOTAL_PIECES } from "../src/data/questions.js";
 import { evaluateAchievements } from "../src/utils/achievements.js";
+import { ACHIEVEMENTS } from "../src/utils/achievements.js";
 import { mapOnChainCredential } from "../src/utils/credential.js";
 import {
   computeLearnerDashboard,
@@ -187,19 +188,21 @@ assert.equal(attested.easyCorrect, 5);
 // Achievements reflect actual learner activity.
 const locked = evaluateAchievements(emptyProgress());
 assert.equal(locked.every((item) => item.earned === false), true);
-assert.equal(locked.length, 14);
+assert.equal(locked.length, ACHIEVEMENTS.length);
 
 const unlocked = evaluateAchievements({
   sectionScores: {
     easy: { correct: 5, total: 5, pointsEarned: 15 },
     medium: { correct: 5, total: 5, pointsEarned: 25 },
     hard: { correct: 5, total: 5, pointsEarned: 40 },
+    master: { correct: 12, total: 12, pointsEarned: 0 },
   },
   acquiredPieces: Array.from({ length: TOTAL_PIECES }, (_, index) => index),
   attempts: [
     { sectionId: "easy", correct: 5, total: 5 },
     { sectionId: "medium", correct: 5, total: 5 },
     { sectionId: "hard", correct: 5, total: 5 },
+    { sectionId: "master", correct: 12, total: 12 },
   ],
   hasCredential: true,
   completedTracks: { l1s: true, "c-chain": true, icm: true },

@@ -3,6 +3,8 @@ import { PIECE_COST, TOTAL_PIECES, MAX_POINTS } from "../data/questions";
 import { TRACK_CERTIFICATES } from "../data/learning";
 import { availablePoints, availablePointsForPiece, redeemPiece } from "../utils/puzzle";
 import { certificateById } from "../utils/trackCertificates";
+import { fragmentProgress } from "../utils/fragments";
+import { FRAGMENTS_PER_PIECE } from "../utils/quizConfig";
 import { playCorrectSound } from "../utils/sounds";
 import { EMPTY_STATES, ERROR_STATES, PUZZLE_EXPLAINER } from "../utils/onboarding";
 import EmptyState from "./EmptyState";
@@ -17,6 +19,7 @@ function PuzzleBoard({
   spentPoints,
   acquiredPieces,
   sectionScores = {},
+  puzzleFragments = 0,
   trackId = "fundamentals",
   onAcquirePiece,
   onContinue,
@@ -36,6 +39,7 @@ function PuzzleBoard({
   const spent = spentPoints ?? acquiredPieces.length * PIECE_COST;
   const complete = acquiredPieces.length === TOTAL_PIECES;
   const forgeCost = TOTAL_PIECES * PIECE_COST;
+  const fragments = fragmentProgress(puzzleFragments);
   const affordableIndexes = certificate.pieceIndexes.filter(
     (index) => availablePointsForPiece({ totalPoints, acquiredPieces, sectionScores }, index) >= PIECE_COST
   );
@@ -104,6 +108,9 @@ function PuzzleBoard({
         <p className="stat-value">{acquiredPieces.length} / {TOTAL_PIECES}</p>
         <p className="meta-line">
           {spent} / {forgeCost} seated · {available} leftover
+        </p>
+        <p className="meta-line">
+          Fragments {fragments.fragments} · {fragments.towardNext}/{FRAGMENTS_PER_PIECE} toward next piece
         </p>
         <p className="meta-line">{PUZZLE_EXPLAINER.body}</p>
       </section>

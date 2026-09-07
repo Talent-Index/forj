@@ -109,7 +109,9 @@ export function normalizeSectionResult(result) {
   const section = getSectionById(sectionId);
   if (!section) return null;
 
-  const total = quizLengthFor(sectionId);
+  const expected = quizLengthFor(sectionId);
+  const reportedTotal = toNonNegativeInt(result.total);
+  const total = reportedTotal > 0 ? Math.min(reportedTotal, expected) : expected;
   const correct = Math.min(toNonNegativeInt(result.correct), total);
   return {
     sectionId,

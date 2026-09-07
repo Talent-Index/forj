@@ -31,14 +31,14 @@ export function recordLearningActivity(state = {}, random = Math.random) {
   };
 }
 
-export function clearPendingKnowledgeCheck(state = {}) {
+export function clearPendingKnowledgeCheck() {
   return {
-    ...state,
     pendingKnowledgeCheck: false,
   };
 }
 
-export function acknowledgeQuizStarted(state = {}, random = Math.random) {
+export function acknowledgeQuizStarted(_previous = {}, random = Math.random) {
+  void _previous;
   return {
     activitiesSinceQuiz: 0,
     quizThreshold: rollQuizThreshold(random),

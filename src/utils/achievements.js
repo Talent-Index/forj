@@ -1,5 +1,21 @@
 import { TOTAL_PIECES } from "../data/questions.js";
 import { normalizePieces } from "./puzzle.js";
+import { quizLengthFor } from "./quizConfig.js";
+import {
+  enrichAchievement,
+  skillLadderEntries,
+  streakRegistryEntries,
+  LEARNING_CERTIFICATES,
+  learningCredentialId,
+  formatIssuedMonth,
+} from "./achievementCatalog.js";
+
+function isPerfectSection(scores, sectionId) {
+  const row = scores?.[sectionId];
+  if (!row) return false;
+  const total = Number(row.total) || quizLengthFor(sectionId);
+  return Number(row.correct) >= total && total > 0;
+}
 
 export const ACHIEVEMENTS = [
   {
@@ -12,35 +28,63 @@ export const ACHIEVEMENTS = [
   {
     id: "easy_master",
     icon: "learn",
-    name: "Easy Master",
-    desc: "Score 5/5 on Easy mode",
-    check: (data) => data.sectionScores.easy?.correct === 5,
+    name: "Foundation Explorer",
+    desc: "Perfect a Foundation assessment",
+    check: (data) => isPerfectSection(data.sectionScores, "easy"),
   },
   {
     id: "medium_master",
     icon: "progress",
-    name: "Subnet Scholar",
-    desc: "Score 5/5 on Medium mode",
-    check: (data) => data.sectionScores.medium?.correct === 5,
+    name: "Builder",
+    desc: "Perfect a Builder assessment",
+    check: (data) => isPerfectSection(data.sectionScores, "medium"),
   },
   {
     id: "hard_master",
     icon: "flame",
-    name: "Avalanche Expert",
-    desc: "Score 5/5 on Hard mode",
-    check: (data) => data.sectionScores.hard?.correct === 5,
+    name: "Advanced Practitioner",
+    desc: "Perfect an Advanced assessment",
+    check: (data) => isPerfectSection(data.sectionScores, "hard"),
+  },
+  {
+    id: "master_master",
+    icon: "badge",
+    name: "Mastermind",
+    desc: "Perfect a Mastery assessment",
+    check: (data) => isPerfectSection(data.sectionScores, "master"),
+  },
+  {
+    id: "first_piece",
+    icon: "puzzle",
+    name: "First Piece",
+    desc: "Collect your first puzzle piece",
+    check: (data) => data.acquiredPieces.length >= 1,
   },
   {
     id: "puzzle_starter",
     icon: "puzzle",
-    name: "Puzzle Starter",
+    name: "Piece Collector",
     desc: "Acquire at least 4 puzzle pieces",
     check: (data) => data.acquiredPieces.length >= 4,
   },
   {
+    id: "puzzle_builder",
+    icon: "puzzle",
+    name: "Puzzle Builder",
+    desc: "Acquire at least 8 puzzle pieces",
+    check: (data) => data.acquiredPieces.length >= 8,
+  },
+  {
+    id: "near_completion",
+    icon: "puzzle",
+    name: "Near Completion",
+    desc: "Acquire at least 12 puzzle pieces",
+    check: (data) => data.acquiredPieces.length >= 12,
+  },
+  {
     id: "full_puzzle",
     icon: "badge",
-    name: "Complete Puzzle",
+    name: "Puzzle Master",
     desc: "Acquire all 16 puzzle pieces",
     check: (data) => data.acquiredPieces.length >= TOTAL_PIECES,
   },
@@ -140,7 +184,7 @@ export const ACHIEVEMENT_REGISTRY = [
   {
     id: "perfect_score",
     name: "Perfect Score",
-    description: "Score 5/5 on any difficulty",
+    description: "Score a perfect result on any difficulty",
     category: "quiz",
     hidden: false,
     badge: "perfect",
@@ -149,8 +193,8 @@ export const ACHIEVEMENT_REGISTRY = [
   },
   {
     id: "easy_complete",
-    name: "Easy Completion",
-    description: "Finish the Easy quiz",
+    name: "Foundation Completion",
+    description: "Finish a Foundation assessment",
     category: "quiz",
     hidden: false,
     badge: "easy",
@@ -159,8 +203,8 @@ export const ACHIEVEMENT_REGISTRY = [
   },
   {
     id: "easy_master",
-    name: "Easy Master",
-    description: "Score 5/5 on Easy mode",
+    name: "Foundation Explorer",
+    description: "Perfect a Foundation assessment",
     category: "quiz",
     hidden: false,
     badge: "easy-master",
@@ -169,8 +213,8 @@ export const ACHIEVEMENT_REGISTRY = [
   },
   {
     id: "medium_complete",
-    name: "Medium Completion",
-    description: "Finish the Medium quiz",
+    name: "Builder Completion",
+    description: "Finish a Builder assessment",
     category: "quiz",
     hidden: false,
     badge: "medium",
@@ -179,8 +223,8 @@ export const ACHIEVEMENT_REGISTRY = [
   },
   {
     id: "medium_master",
-    name: "Subnet Scholar",
-    description: "Score 5/5 on Medium mode",
+    name: "Builder",
+    description: "Perfect a Builder assessment",
     category: "quiz",
     hidden: false,
     badge: "medium-master",
@@ -189,8 +233,8 @@ export const ACHIEVEMENT_REGISTRY = [
   },
   {
     id: "hard_complete",
-    name: "Hard Completion",
-    description: "Finish the Hard quiz",
+    name: "Advanced Completion",
+    description: "Finish an Advanced assessment",
     category: "quiz",
     hidden: false,
     badge: "hard",
@@ -199,13 +243,33 @@ export const ACHIEVEMENT_REGISTRY = [
   },
   {
     id: "hard_master",
-    name: "Avalanche Expert",
-    description: "Score 5/5 on Hard mode",
+    name: "Advanced Practitioner",
+    description: "Perfect an Advanced assessment",
     category: "quiz",
     hidden: false,
     badge: "hard-master",
     reward: { xp: 20 },
     requirement: { type: "perfectSection", sectionId: "hard" },
+  },
+  {
+    id: "master_complete",
+    name: "Mastery Completion",
+    description: "Finish a Mastery assessment",
+    category: "quiz",
+    hidden: false,
+    badge: "master",
+    reward: { xp: 20 },
+    requirement: { type: "quizCompleted", quizId: "master" },
+  },
+  {
+    id: "master_master",
+    name: "Mastermind",
+    description: "Perfect a Mastery assessment",
+    category: "quiz",
+    hidden: false,
+    badge: "master-master",
+    reward: { xp: 30 },
+    requirement: { type: "perfectSection", sectionId: "master" },
   },
   {
     id: "avalanche_explorer",
@@ -268,8 +332,18 @@ export const ACHIEVEMENT_REGISTRY = [
     requirement: { type: "trackComplete", trackId: "developer" },
   },
   {
+    id: "first_piece",
+    name: "First Piece",
+    description: "Collect your first puzzle piece",
+    category: "puzzle",
+    hidden: false,
+    badge: "first-piece",
+    reward: { xp: 8 },
+    requirement: { type: "puzzleCount", min: 1 },
+  },
+  {
     id: "puzzle_starter",
-    name: "Puzzle Starter",
+    name: "Piece Collector",
     description: "Unlock at least 4 puzzle pieces",
     category: "puzzle",
     hidden: false,
@@ -278,8 +352,28 @@ export const ACHIEVEMENT_REGISTRY = [
     requirement: { type: "puzzleCount", min: 4 },
   },
   {
+    id: "puzzle_builder",
+    name: "Puzzle Builder",
+    description: "Unlock at least 8 puzzle pieces",
+    category: "puzzle",
+    hidden: false,
+    badge: "puzzle-builder",
+    reward: { xp: 15 },
+    requirement: { type: "puzzleCount", min: 8 },
+  },
+  {
+    id: "near_completion",
+    name: "Near Completion",
+    description: "Unlock at least 12 puzzle pieces",
+    category: "puzzle",
+    hidden: false,
+    badge: "near-completion",
+    reward: { xp: 20 },
+    requirement: { type: "puzzleCount", min: 12 },
+  },
+  {
     id: "full_puzzle",
-    name: "Complete Puzzle",
+    name: "Puzzle Master",
     description: "Unlock all 16 certificate pieces",
     category: "puzzle",
     hidden: false,
@@ -347,7 +441,87 @@ export const ACHIEVEMENT_REGISTRY = [
     reward: { xp: 40 },
     requirement: { type: "pathComplete" },
   },
+  {
+    id: "halfway_hero",
+    name: "Halfway Hero",
+    description: "Collect 8 of 16 puzzle pieces",
+    category: "puzzle",
+    hidden: false,
+    badge: "halfway",
+    reward: { xp: 12 },
+    requirement: { type: "puzzleCount", min: 8 },
+  },
+  {
+    id: "sharp_mind",
+    name: "Sharp Mind",
+    description: "Perfect Foundation and Builder assessments",
+    category: "quiz",
+    hidden: false,
+    badge: "sharp",
+    reward: { xp: 25 },
+    requirement: {
+      type: "allOf",
+      all: [
+        { type: "perfectSection", sectionId: "easy" },
+        { type: "perfectSection", sectionId: "medium" },
+      ],
+    },
+  },
+  {
+    id: "unshaken",
+    name: "Unshaken",
+    description: "Finish an Advanced assessment",
+    category: "quiz",
+    hidden: false,
+    badge: "unshaken",
+    reward: { xp: 20 },
+    requirement: { type: "quizCompleted", quizId: "hard" },
+  },
+  {
+    id: "quiz_master",
+    name: "Quiz Master",
+    description: "Complete Foundation, Builder, and Advanced assessments",
+    category: "quiz",
+    hidden: false,
+    badge: "quiz-master",
+    reward: { xp: 30 },
+    requirement: {
+      type: "allOf",
+      all: [
+        { type: "quizCompleted", quizId: "easy" },
+        { type: "quizCompleted", quizId: "medium" },
+        { type: "quizCompleted", quizId: "hard" },
+      ],
+    },
+  },
 ];
+
+const EXISTING_IDS = new Set(ACHIEVEMENT_REGISTRY.map((item) => item.id));
+for (const entry of streakRegistryEntries()) {
+  if (!EXISTING_IDS.has(entry.id)) {
+    ACHIEVEMENT_REGISTRY.push(entry);
+    EXISTING_IDS.add(entry.id);
+  } else {
+    const index = ACHIEVEMENT_REGISTRY.findIndex((item) => item.id === entry.id);
+    if (index >= 0) {
+      ACHIEVEMENT_REGISTRY[index] = {
+        ...ACHIEVEMENT_REGISTRY[index],
+        ...entry,
+        reward: entry.reward,
+        requirement: entry.requirement,
+        name: entry.name,
+        description: entry.description,
+        hidden: entry.hidden,
+      };
+    }
+  }
+}
+for (const entry of skillLadderEntries()) {
+  if (!EXISTING_IDS.has(entry.id)) {
+    ACHIEVEMENT_REGISTRY.push(entry);
+    EXISTING_IDS.add(entry.id);
+  }
+}
 
 export function requirementMet(requirement, ctx) {
   if (!requirement || !ctx) return false;
@@ -358,12 +532,18 @@ export function requirementMet(requirement, ctx) {
       return Object.keys(quizzes).length >= (requirement.min || 1);
     case "perfectQuiz":
       return Object.values(quizzes).some((row) => row?.perfect) ||
-        Object.values(scores).some((row) => row?.correct === 5);
+        Object.entries(scores).some(([id, row]) => {
+          const total = Number(row?.total) || quizLengthFor(id);
+          return Number(row?.correct) >= total && total > 0;
+        });
     case "quizCompleted":
       return Boolean(quizzes[requirement.quizId] || scores[requirement.quizId]);
-    case "perfectSection":
-      return scores[requirement.sectionId]?.correct === 5 ||
+    case "perfectSection": {
+      const row = scores[requirement.sectionId];
+      const total = Number(row?.total) || quizLengthFor(requirement.sectionId);
+      return (row && Number(row.correct) >= total && total > 0) ||
         Boolean(quizzes[requirement.sectionId]?.perfect);
+    }
     case "puzzleCount":
       return (ctx.puzzleCount || 0) >= (requirement.min || 1);
     case "puzzleComplete":
@@ -380,6 +560,10 @@ export function requirementMet(requirement, ctx) {
       return Object.keys(ctx.completedTracks || {}).length >= 1;
     case "pathComplete":
       return Object.keys(ctx.completedPaths || {}).length >= 1;
+    case "allOf":
+      return (requirement.all || []).every((part) => requirementMet(part, ctx));
+    case "anyOf":
+      return (requirement.any || []).some((part) => requirementMet(part, ctx));
     default:
       return false;
   }
@@ -398,8 +582,10 @@ export function requirementProgress(requirement, ctx) {
     case "streak":
       return { current: Math.max(ctx.currentStreak || 0, ctx.longestStreak || 0), target: requirement.min || 1 };
     case "perfectSection": {
-      const correct = scores[requirement.sectionId]?.correct || 0;
-      return { current: Math.min(correct, 5), target: 5 };
+      const row = scores[requirement.sectionId];
+      const total = Number(row?.total) || quizLengthFor(requirement.sectionId);
+      const correct = Number(row?.correct) || 0;
+      return { current: Math.min(correct, total), target: total };
     }
     default:
       return { current: requirementMet(requirement, ctx) ? 1 : 0, target: 1 };
@@ -415,11 +601,36 @@ export function achievementsToUnlock(ctx, already = {}) {
 export function evaluateAchievementRegistry(ctx = {}, unlocked = {}) {
   return ACHIEVEMENT_REGISTRY.map((item) => {
     const earned = Boolean(unlocked[item.id]) || requirementMet(item.requirement, ctx);
-    return {
+    return enrichAchievement({
       ...item,
       earned,
       unlockedAt: unlocked[item.id]?.unlockedAt || null,
       progress: requirementProgress(item.requirement, ctx),
+    });
+  });
+}
+
+export function evaluateLearningCertificates(ctx = {}, options = {}) {
+  return LEARNING_CERTIFICATES.map((cert) => {
+    const earned = requirementMet(cert.requirement, ctx);
+    return {
+      ...cert,
+      earned,
+      issuedLabel: earned ? formatIssuedMonth(options.now) : null,
+      credentialId: earned
+        ? learningCredentialId(cert.level, options.learnerKey || options.recipientName || "LOCAL")
+        : null,
     };
   });
+}
+
+export function highestSkillTiers(achievements = []) {
+  const best = {};
+  for (const item of achievements) {
+    if (!item.earned || !item.skillId || !item.tier) continue;
+    if (!best[item.skillId] || item.tier > best[item.skillId].tier) {
+      best[item.skillId] = item;
+    }
+  }
+  return Object.values(best).sort((a, b) => a.displayName.localeCompare(b.displayName));
 }

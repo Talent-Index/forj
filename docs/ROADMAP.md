@@ -30,7 +30,7 @@ Wallet and Fuji network, quiz banks, retry-safe scoring, durable local progress,
 
 ## Phase 2 — Learning 🟡
 
-Shipped: landing loop for guests, explanations after submit, official Avalanche references, persistent progress. After sign-in, learners go to **Learn on Forjora** — track discovery/filters, vertical track journeys, lesson workspace (nav · content · progress), and quiz challenges on the path. Six tracks — Fundamentals, Architecture, L1s, C-Chain, ICM, Developer — with deeper lesson bodies, stronger Builder Hub references, mapped quizzes, and polished track vs path certificates on Credentials (track certificates stay off-chain learning records).
+Shipped: landing loop for guests, explanations after submit, official Avalanche references, persistent progress. After sign-in, learners go to **Learn on Forjora** — track discovery/filters, vertical track journeys, lesson workspace (nav · content · progress), and knowledge-check challenges (Foundation / Builder / Advanced / Mastery) on the path. Quizzes award XP and puzzle fragments; five fragments convert into a puzzle piece. Six tracks — Fundamentals, Architecture, L1s, C-Chain, ICM, Developer — with deeper lesson bodies, stronger Builder Hub references, mapped quizzes, and polished track vs path certificates on Credentials (track certificates stay off-chain learning records).
 
 Remaining: path content beyond the first six tracks (additional lesson tracks or banks); richer project/capstone workspaces beyond the developer track milestone.
 

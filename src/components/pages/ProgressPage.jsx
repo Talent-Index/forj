@@ -58,7 +58,7 @@ function ProgressPage({
           doodle={EMPTY_STATES.noAttempts.doodle}
           title={EMPTY_STATES.noAttempts.title}
           body={EMPTY_STATES.noAttempts.body}
-          actionLabel="Start Spark →"
+          actionLabel="Start Foundation →"
           onAction={() => onContinue("easy")}
         />
       )}
@@ -145,31 +145,38 @@ function ProgressPage({
       <section className="section-block">
         <h2>Levels</h2>
         <div className="dashboard-difficulties">
-        {stats.difficulties.map((row) => {
-          const copy = PATH_COPY[row.id] || { kicker: row.name, title: row.name };
+        {(stats.mastery?.length ? stats.mastery : stats.difficulties).map((row) => {
+          const id = row.sectionId || row.id;
+          const copy = PATH_COPY[id] || { kicker: id, title: id };
+          const attempted = row.attempted ?? false;
+          const percent = row.percent || 0;
+          const complete = attempted && percent >= 100;
           return (
-            <Card key={row.id} className={`difficulty-card difficulty-card-${row.id}`}>
-              <p className="kicker">{FORGE_LEVEL_LABELS[row.id] || copy.kicker}</p>
+            <Card key={id} className={`difficulty-card difficulty-card-${id}`}>
+              <p className="kicker">{FORGE_LEVEL_LABELS[id] || copy.kicker}</p>
               <h3>{copy.title}</h3>
-              <p className="stat-value">{row.percent}%</p>
+              <p className="stat-value">{percent}%</p>
               <p>
-                {row.attempted
-                  ? `${row.correct}/${row.total} correct · ${row.pointsEarned} pts`
+                {attempted
+                  ? `${row.correct}/${row.total} correct${row.pointsEarned != null ? ` · ${row.pointsEarned} pts` : ""}`
                   : "Not started"}
               </p>
               <p className="meta-line">
-                {row.complete ? "Done" : row.attempted ? "Open" : "New"}
+                {complete ? "Mastered" : attempted ? "Open" : "New"}
               </p>
               <Button
-                variant={row.attempted ? "secondary" : "primary"}
-                onClick={() => onContinue(row.id)}
+                variant={attempted ? "secondary" : "primary"}
+                onClick={() => onContinue(id)}
               >
-                {row.attempted ? "Retry" : "Start"}
+                {attempted ? "Retry" : "Start"}
               </Button>
             </Card>
           );
         })}
         </div>
+        {typeof stats.masteryOverall === "number" ? (
+          <p className="meta-line">Overall mastery (Easy–Hard): {stats.masteryOverall}%</p>
+        ) : null}
       </section>
 
       <section className="section-block">
@@ -199,7 +206,7 @@ function ProgressPage({
         <p>
           {stats.puzzleComplete
             ? "Complete. Mint from Credentials."
-            : "5 pts per piece. Retries replace scores."}
+            : `5 pts per piece · fragments ${stats.fragments?.towardNext ?? 0}/${stats.fragments?.neededForNext ?? 5} toward next piece.`}
         </p>
         <Button variant="secondary" onClick={onPuzzle}>Puzzle</Button>
       </section>
@@ -253,11 +260,15 @@ function ProgressPage({
 
       <section className="section-block">
         <Achievements
+          progression={progression}
           sectionScores={sectionScores}
           acquiredPieces={acquiredPieces}
           attempts={attempts}
           hasCredential={Boolean(credential)}
-          completedTracks={progression?.state?.completedTracks}
+          recipientName={progression?.state?.displayName || displayAddress || "Learner"}
+          onLearn={onLearn}
+          onPuzzle={onPuzzle}
+          onCredentials={onCredentials}
         />
       </section>
 

@@ -1,4 +1,3 @@
-import { quizLengthFor } from "./quiz.js";
 import { CREDENTIAL_SCORE_MAX, CREDENTIAL_SCORE_SECTIONS } from "./quizConfig.js";
 import { SCORE_SECTIONS } from "./progress.js";
 import { CREDENTIAL_STATES } from "./credentialStatus.js";
@@ -35,8 +34,10 @@ export function sectionScoresFromCredential(credential) {
 export function highestDifficulty(sectionScores = {}) {
   for (const id of [...CREDENTIAL_SCORE_SECTIONS].reverse()) {
     const row = sectionScores[id];
-    const total = Number(row?.total) || quizLengthFor(id);
-    if (row && Number(row.correct) >= total) {
+    if (!row) continue;
+    const total = Number(row.total) > 0 ? Number(row.total) : CREDENTIAL_SCORE_MAX;
+    const need = Math.min(total, CREDENTIAL_SCORE_MAX);
+    if (Number(row.correct) >= need) {
       if (id === "hard") return "Hard";
       if (id === "medium") return "Medium";
       return "Easy";

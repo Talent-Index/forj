@@ -7,7 +7,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Avalanche is best described as?",
+      "question": "(foundation #1) Which statement best matches: Avalanche is best described as?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -32,7 +32,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: AVAX is primarily used for?",
+      "question": "(foundation #2) Which statement best matches: AVAX is primarily used for?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -57,7 +57,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: The Primary Network includes?",
+      "question": "(foundation #3) Which statement best matches: The Primary Network includes?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -82,7 +82,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: The C-Chain is?",
+      "question": "(foundation #4) Which statement best matches: The C-Chain is?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -107,7 +107,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "(foundation #5) Which statement best matches: Gas on the C-Chain is paid in?",
       "options": [
         "AVAX",
         "Option 1",
@@ -132,7 +132,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Fuji refers to?",
+      "question": "(foundation #6) Which statement best matches: Fuji refers to?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -157,7 +157,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Coreth is?",
+      "question": "(foundation #7) Which statement best matches: Coreth is?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -182,7 +182,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "(foundation #8) Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -207,7 +207,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: An EVM address on C-Chain is?",
+      "question": "(foundation #9) Which statement best matches: An EVM address on C-Chain is?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -232,7 +232,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: An Avalanche L1 is?",
+      "question": "(foundation #10) Which statement best matches: An Avalanche L1 is?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -257,7 +257,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "(foundation #11) Which statement best matches: Compared with a single C-Chain app, an L1 can?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -282,7 +282,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Validator Manager contracts help?",
+      "question": "(foundation #12) Which statement best matches: Validator Manager contracts help?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -307,7 +307,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: ICM / Warp messaging enables?",
+      "question": "(foundation #13) Which statement best matches: ICM / Warp messaging enables?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -332,7 +332,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Teleporter is associated with?",
+      "question": "(foundation #14) Which statement best matches: Teleporter is associated with?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -357,7 +357,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: A cross-chain message should be treated as?",
+      "question": "(foundation #15) Which statement best matches: A cross-chain message should be treated as?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -382,7 +382,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Validators on Avalanche?",
+      "question": "(foundation #16) Which statement best matches: Validators on Avalanche?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -407,7 +407,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Node software is used to?",
+      "question": "(foundation #17) Which statement best matches: Node software is used to?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -432,7 +432,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Snowman consensus is?",
+      "question": "(foundation #18) Which statement best matches: Snowman consensus is?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -457,7 +457,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "(foundation #19) Which statement best matches: Finality on Avalanche aims to be?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -482,7 +482,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "(foundation #20) Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -507,7 +507,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "(foundation #21) Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -532,7 +532,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "(foundation #22) Which statement best matches: Builder Hub documentation is the place to?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -557,7 +557,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: A soulbound credential means?",
+      "question": "(foundation #23) Which statement best matches: A soulbound credential means?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -582,7 +582,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(foundation #24) A learner asks: \"Avalanche is best described as?\" The best answer is",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -607,7 +607,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(foundation #25) A learner asks: \"AVAX is primarily used for?\" The best answer is",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -632,7 +632,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(foundation #26) A learner asks: \"The Primary Network includes?\" The best answer is",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -657,7 +657,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(foundation #27) A learner asks: \"The C-Chain is?\" The best answer is",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -682,7 +682,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(foundation #28) A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
       "options": [
         "AVAX",
         "Option 1",
@@ -707,7 +707,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "(foundation #29) A learner asks: \"Fuji refers to?\" The best answer is",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -732,7 +732,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Coreth is?\" The best answer is",
+      "question": "(foundation #30) A learner asks: \"Coreth is?\" The best answer is",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -757,7 +757,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "(foundation #31) A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -782,7 +782,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "(foundation #32) A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -807,7 +807,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "(foundation #33) A learner asks: \"An Avalanche L1 is?\" The best answer is",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -832,7 +832,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "(foundation #34) A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -857,7 +857,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "(foundation #35) A learner asks: \"Validator Manager contracts help?\" The best answer is",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -882,7 +882,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "(foundation #36) A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -907,7 +907,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "(foundation #37) A learner asks: \"Teleporter is associated with?\" The best answer is",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -932,7 +932,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "(foundation #38) A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -957,7 +957,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "(foundation #39) A learner asks: \"Validators on Avalanche?\" The best answer is",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -982,7 +982,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "(foundation #40) A learner asks: \"Node software is used to?\" The best answer is",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -1007,7 +1007,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "(foundation #41) A learner asks: \"Snowman consensus is?\" The best answer is",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -1032,7 +1032,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "(foundation #42) A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -1057,7 +1057,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "(foundation #43) A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -1082,7 +1082,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "(foundation #44) A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -1107,7 +1107,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
+      "question": "(foundation #45) A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -1132,7 +1132,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"A soulbound credential means?\" The best answer is",
+      "question": "(foundation #46) A learner asks: \"A soulbound credential means?\" The best answer is",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -1157,7 +1157,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — avalanche is best described as.",
+      "question": "(foundation #47) Select the accurate description for this idea — avalanche is best described as.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -1182,7 +1182,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — avax is primarily used for.",
+      "question": "(foundation #48) Select the accurate description for this idea — avax is primarily used for.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -1207,7 +1207,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — the primary network includes.",
+      "question": "(foundation #49) Select the accurate description for this idea — the primary network includes.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -1232,7 +1232,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — the c-chain is.",
+      "question": "(foundation #50) Select the accurate description for this idea — the c-chain is.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -1257,7 +1257,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — gas on the c-chain is paid in.",
+      "question": "(foundation #51) Select the accurate description for this idea — gas on the c-chain is paid in.",
       "options": [
         "AVAX",
         "Option 1",
@@ -1282,7 +1282,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — fuji refers to.",
+      "question": "(foundation #52) Select the accurate description for this idea — fuji refers to.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -1307,7 +1307,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — coreth is.",
+      "question": "(foundation #53) Select the accurate description for this idea — coreth is.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -1332,7 +1332,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
+      "question": "(foundation #54) Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -1357,7 +1357,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — an evm address on c-chain is.",
+      "question": "(foundation #55) Select the accurate description for this idea — an evm address on c-chain is.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -1382,7 +1382,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — an avalanche l1 is.",
+      "question": "(foundation #56) Select the accurate description for this idea — an avalanche l1 is.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -1407,7 +1407,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
+      "question": "(foundation #57) Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -1432,7 +1432,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — validator manager contracts help.",
+      "question": "(foundation #58) Select the accurate description for this idea — validator manager contracts help.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -1457,7 +1457,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — icm / warp messaging enables.",
+      "question": "(foundation #59) Select the accurate description for this idea — icm / warp messaging enables.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -1482,7 +1482,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — teleporter is associated with.",
+      "question": "(foundation #60) Select the accurate description for this idea — teleporter is associated with.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -1507,7 +1507,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — a cross-chain message should be treated as.",
+      "question": "(foundation #61) Select the accurate description for this idea — a cross-chain message should be treated as.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -1532,7 +1532,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — validators on avalanche.",
+      "question": "(foundation #62) Select the accurate description for this idea — validators on avalanche.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -1557,7 +1557,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — node software is used to.",
+      "question": "(foundation #63) Select the accurate description for this idea — node software is used to.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -1582,7 +1582,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — snowman consensus is.",
+      "question": "(foundation #64) Select the accurate description for this idea — snowman consensus is.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -1607,7 +1607,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — finality on avalanche aims to be.",
+      "question": "(foundation #65) Select the accurate description for this idea — finality on avalanche aims to be.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -1632,7 +1632,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
+      "question": "(foundation #66) Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -1657,7 +1657,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
+      "question": "(foundation #67) Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -1682,7 +1682,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — builder hub documentation is the place to.",
+      "question": "(foundation #68) Select the accurate description for this idea — builder hub documentation is the place to.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -1707,7 +1707,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — a soulbound credential means.",
+      "question": "(foundation #69) Select the accurate description for this idea — a soulbound credential means.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -1732,7 +1732,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, avalanche is best described as",
+      "question": "(foundation #70) In Avalanche practice, avalanche is best described as",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -1757,7 +1757,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, avax is primarily used for",
+      "question": "(foundation #71) In Avalanche practice, avax is primarily used for",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -1782,7 +1782,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, the primary network includes",
+      "question": "(foundation #72) In Avalanche practice, the primary network includes",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -1807,7 +1807,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, the c-chain is",
+      "question": "(foundation #73) In Avalanche practice, the c-chain is",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -1832,7 +1832,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, gas on the c-chain is paid in",
+      "question": "(foundation #74) In Avalanche practice, gas on the c-chain is paid in",
       "options": [
         "AVAX",
         "Option 1",
@@ -1857,7 +1857,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, fuji refers to",
+      "question": "(foundation #75) In Avalanche practice, fuji refers to",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -1882,7 +1882,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, coreth is",
+      "question": "(foundation #76) In Avalanche practice, coreth is",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -1907,7 +1907,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, solidity contracts on avalanche c-chain generally",
+      "question": "(foundation #77) In Avalanche practice, solidity contracts on avalanche c-chain generally",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -1932,7 +1932,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, an evm address on c-chain is",
+      "question": "(foundation #78) In Avalanche practice, an evm address on c-chain is",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -1957,7 +1957,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, an avalanche l1 is",
+      "question": "(foundation #79) In Avalanche practice, an avalanche l1 is",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -1982,7 +1982,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, compared with a single c-chain app, an l1 can",
+      "question": "(foundation #80) In Avalanche practice, compared with a single c-chain app, an l1 can",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -2007,7 +2007,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, validator manager contracts help",
+      "question": "(foundation #81) In Avalanche practice, validator manager contracts help",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -2032,7 +2032,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, icm / warp messaging enables",
+      "question": "(foundation #82) In Avalanche practice, icm / warp messaging enables",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -2057,7 +2057,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, teleporter is associated with",
+      "question": "(foundation #83) In Avalanche practice, teleporter is associated with",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -2082,7 +2082,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, a cross-chain message should be treated as",
+      "question": "(foundation #84) In Avalanche practice, a cross-chain message should be treated as",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -2107,7 +2107,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, validators on avalanche",
+      "question": "(foundation #85) In Avalanche practice, validators on avalanche",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -2132,7 +2132,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, node software is used to",
+      "question": "(foundation #86) In Avalanche practice, node software is used to",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -2157,7 +2157,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, snowman consensus is",
+      "question": "(foundation #87) In Avalanche practice, snowman consensus is",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -2182,7 +2182,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, finality on avalanche aims to be",
+      "question": "(foundation #88) In Avalanche practice, finality on avalanche aims to be",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -2207,7 +2207,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, avalanche cli / platform cli helps builders",
+      "question": "(foundation #89) In Avalanche practice, avalanche cli / platform cli helps builders",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -2232,7 +2232,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, hardhat or foundry on fuji is useful for",
+      "question": "(foundation #90) In Avalanche practice, hardhat or foundry on fuji is useful for",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -2257,7 +2257,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, builder hub documentation is the place to",
+      "question": "(foundation #91) In Avalanche practice, builder hub documentation is the place to",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -2282,7 +2282,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, a soulbound credential means",
+      "question": "(foundation #92) In Avalanche practice, a soulbound credential means",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -2307,7 +2307,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Avalanche is best described as?",
+      "question": "(foundation #93) Given Avalanche docs, what is true about: Avalanche is best described as?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -2332,7 +2332,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: AVAX is primarily used for?",
+      "question": "(foundation #94) Given Avalanche docs, what is true about: AVAX is primarily used for?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -2357,7 +2357,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: The Primary Network includes?",
+      "question": "(foundation #95) Given Avalanche docs, what is true about: The Primary Network includes?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -2382,7 +2382,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: The C-Chain is?",
+      "question": "(foundation #96) Given Avalanche docs, what is true about: The C-Chain is?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -2407,7 +2407,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "(foundation #97) Given Avalanche docs, what is true about: Gas on the C-Chain is paid in?",
       "options": [
         "AVAX",
         "Option 1",
@@ -2432,7 +2432,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Fuji refers to?",
+      "question": "(foundation #98) Given Avalanche docs, what is true about: Fuji refers to?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -2457,7 +2457,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Coreth is?",
+      "question": "(foundation #99) Given Avalanche docs, what is true about: Coreth is?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -2482,7 +2482,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "(foundation #100) Given Avalanche docs, what is true about: Solidity contracts on Avalanche C-Chain generally?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -2507,7 +2507,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: An EVM address on C-Chain is?",
+      "question": "(foundation #101) Given Avalanche docs, what is true about: An EVM address on C-Chain is?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -2532,7 +2532,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: An Avalanche L1 is?",
+      "question": "(foundation #102) Given Avalanche docs, what is true about: An Avalanche L1 is?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -2557,7 +2557,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "(foundation #103) Given Avalanche docs, what is true about: Compared with a single C-Chain app, an L1 can?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -2582,7 +2582,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Validator Manager contracts help?",
+      "question": "(foundation #104) Given Avalanche docs, what is true about: Validator Manager contracts help?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -2607,7 +2607,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: ICM / Warp messaging enables?",
+      "question": "(foundation #105) Given Avalanche docs, what is true about: ICM / Warp messaging enables?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -2632,7 +2632,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Teleporter is associated with?",
+      "question": "(foundation #106) Given Avalanche docs, what is true about: Teleporter is associated with?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -2657,7 +2657,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: A cross-chain message should be treated as?",
+      "question": "(foundation #107) Given Avalanche docs, what is true about: A cross-chain message should be treated as?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -2682,7 +2682,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Validators on Avalanche?",
+      "question": "(foundation #108) Given Avalanche docs, what is true about: Validators on Avalanche?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -2707,7 +2707,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Node software is used to?",
+      "question": "(foundation #109) Given Avalanche docs, what is true about: Node software is used to?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -2732,7 +2732,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Snowman consensus is?",
+      "question": "(foundation #110) Given Avalanche docs, what is true about: Snowman consensus is?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -2757,7 +2757,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "(foundation #111) Given Avalanche docs, what is true about: Finality on Avalanche aims to be?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -2782,7 +2782,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "(foundation #112) Given Avalanche docs, what is true about: Avalanche CLI / Platform CLI helps builders?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -2807,7 +2807,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "(foundation #113) Given Avalanche docs, what is true about: Hardhat or Foundry on Fuji is useful for?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -2832,7 +2832,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "(foundation #114) Given Avalanche docs, what is true about: Builder Hub documentation is the place to?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -2857,7 +2857,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: A soulbound credential means?",
+      "question": "(foundation #115) Given Avalanche docs, what is true about: A soulbound credential means?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -2882,7 +2882,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(foundation #116) Choose the option that correctly completes: Avalanche is best described as…",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -2907,7 +2907,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(foundation #117) Choose the option that correctly completes: AVAX is primarily used for…",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -2932,7 +2932,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(foundation #118) Choose the option that correctly completes: The Primary Network includes…",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -2957,7 +2957,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(foundation #119) Choose the option that correctly completes: The C-Chain is…",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -2982,7 +2982,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(foundation #120) Choose the option that correctly completes: Gas on the C-Chain is paid in…",
       "options": [
         "AVAX",
         "Option 1",
@@ -3007,7 +3007,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "(foundation #121) Choose the option that correctly completes: Fuji refers to…",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -3032,7 +3032,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Coreth is?\" The best answer is",
+      "question": "(foundation #122) Choose the option that correctly completes: Coreth is…",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -3057,7 +3057,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "(foundation #123) Choose the option that correctly completes: Solidity contracts on Avalanche C-Chain generally…",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -3082,7 +3082,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "(foundation #124) Choose the option that correctly completes: An EVM address on C-Chain is…",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -3107,7 +3107,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "(foundation #125) Choose the option that correctly completes: An Avalanche L1 is…",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -3132,7 +3132,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "(foundation #126) Choose the option that correctly completes: Compared with a single C-Chain app, an L1 can…",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -3157,7 +3157,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "(foundation #127) Choose the option that correctly completes: Validator Manager contracts help…",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -3182,7 +3182,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "(foundation #128) Choose the option that correctly completes: ICM / Warp messaging enables…",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -3207,7 +3207,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "(foundation #129) Choose the option that correctly completes: Teleporter is associated with…",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -3232,7 +3232,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "(foundation #130) Choose the option that correctly completes: A cross-chain message should be treated as…",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -3257,7 +3257,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "(foundation #131) Choose the option that correctly completes: Validators on Avalanche…",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -3282,7 +3282,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "(foundation #132) Choose the option that correctly completes: Node software is used to…",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -3307,7 +3307,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "(foundation #133) Choose the option that correctly completes: Snowman consensus is…",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -3332,7 +3332,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "(foundation #134) Choose the option that correctly completes: Finality on Avalanche aims to be…",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -3357,7 +3357,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "(foundation #135) Choose the option that correctly completes: Avalanche CLI / Platform CLI helps builders…",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -3382,7 +3382,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "(foundation #136) Choose the option that correctly completes: Hardhat or Foundry on Fuji is useful for…",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -3407,7 +3407,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
+      "question": "(foundation #137) Choose the option that correctly completes: Builder Hub documentation is the place to…",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -3432,7 +3432,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"A soulbound credential means?\" The best answer is",
+      "question": "(foundation #138) Choose the option that correctly completes: A soulbound credential means…",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -3457,7 +3457,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — avalanche is best described as.",
+      "question": "(foundation #139) Which statement best matches: Avalanche is best described as?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -3482,7 +3482,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — avax is primarily used for.",
+      "question": "(foundation #140) Which statement best matches: AVAX is primarily used for?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -3507,7 +3507,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — the primary network includes.",
+      "question": "(foundation #141) Which statement best matches: The Primary Network includes?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -3532,7 +3532,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — the c-chain is.",
+      "question": "(foundation #142) Which statement best matches: The C-Chain is?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -3557,7 +3557,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — gas on the c-chain is paid in.",
+      "question": "(foundation #143) Which statement best matches: Gas on the C-Chain is paid in?",
       "options": [
         "AVAX",
         "Option 1",
@@ -3582,7 +3582,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — fuji refers to.",
+      "question": "(foundation #144) Which statement best matches: Fuji refers to?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -3607,7 +3607,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — coreth is.",
+      "question": "(foundation #145) Which statement best matches: Coreth is?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -3632,7 +3632,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
+      "question": "(foundation #146) Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -3657,7 +3657,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — an evm address on c-chain is.",
+      "question": "(foundation #147) Which statement best matches: An EVM address on C-Chain is?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -3682,7 +3682,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — an avalanche l1 is.",
+      "question": "(foundation #148) Which statement best matches: An Avalanche L1 is?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -3707,7 +3707,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
+      "question": "(foundation #149) Which statement best matches: Compared with a single C-Chain app, an L1 can?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -3732,7 +3732,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — validator manager contracts help.",
+      "question": "(foundation #150) Which statement best matches: Validator Manager contracts help?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -3757,7 +3757,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — icm / warp messaging enables.",
+      "question": "(foundation #151) Which statement best matches: ICM / Warp messaging enables?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -3782,7 +3782,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — teleporter is associated with.",
+      "question": "(foundation #152) Which statement best matches: Teleporter is associated with?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -3807,7 +3807,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — a cross-chain message should be treated as.",
+      "question": "(foundation #153) Which statement best matches: A cross-chain message should be treated as?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -3832,7 +3832,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — validators on avalanche.",
+      "question": "(foundation #154) Which statement best matches: Validators on Avalanche?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -3857,7 +3857,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — node software is used to.",
+      "question": "(foundation #155) Which statement best matches: Node software is used to?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -3882,7 +3882,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — snowman consensus is.",
+      "question": "(foundation #156) Which statement best matches: Snowman consensus is?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -3907,7 +3907,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — finality on avalanche aims to be.",
+      "question": "(foundation #157) Which statement best matches: Finality on Avalanche aims to be?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -3932,7 +3932,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
+      "question": "(foundation #158) Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -3957,7 +3957,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
+      "question": "(foundation #159) Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -3982,7 +3982,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — builder hub documentation is the place to.",
+      "question": "(foundation #160) Which statement best matches: Builder Hub documentation is the place to?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -4007,7 +4007,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — a soulbound credential means.",
+      "question": "(foundation #161) Which statement best matches: A soulbound credential means?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -4032,7 +4032,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, avalanche is best described as",
+      "question": "(foundation #162) A learner asks: \"Avalanche is best described as?\" The best answer is",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -4057,7 +4057,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, avax is primarily used for",
+      "question": "(foundation #163) A learner asks: \"AVAX is primarily used for?\" The best answer is",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -4082,7 +4082,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, the primary network includes",
+      "question": "(foundation #164) A learner asks: \"The Primary Network includes?\" The best answer is",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -4107,7 +4107,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, the c-chain is",
+      "question": "(foundation #165) A learner asks: \"The C-Chain is?\" The best answer is",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -4132,7 +4132,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, gas on the c-chain is paid in",
+      "question": "(foundation #166) A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
       "options": [
         "AVAX",
         "Option 1",
@@ -4157,7 +4157,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, fuji refers to",
+      "question": "(foundation #167) A learner asks: \"Fuji refers to?\" The best answer is",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -4182,7 +4182,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, coreth is",
+      "question": "(foundation #168) A learner asks: \"Coreth is?\" The best answer is",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -4207,7 +4207,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, solidity contracts on avalanche c-chain generally",
+      "question": "(foundation #169) A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -4232,7 +4232,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, an evm address on c-chain is",
+      "question": "(foundation #170) A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -4257,7 +4257,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, an avalanche l1 is",
+      "question": "(foundation #171) A learner asks: \"An Avalanche L1 is?\" The best answer is",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -4282,7 +4282,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, compared with a single c-chain app, an l1 can",
+      "question": "(foundation #172) A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -4307,7 +4307,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, validator manager contracts help",
+      "question": "(foundation #173) A learner asks: \"Validator Manager contracts help?\" The best answer is",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -4332,7 +4332,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, icm / warp messaging enables",
+      "question": "(foundation #174) A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -4357,7 +4357,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, teleporter is associated with",
+      "question": "(foundation #175) A learner asks: \"Teleporter is associated with?\" The best answer is",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -4382,7 +4382,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, a cross-chain message should be treated as",
+      "question": "(foundation #176) A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -4407,7 +4407,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, validators on avalanche",
+      "question": "(foundation #177) A learner asks: \"Validators on Avalanche?\" The best answer is",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -4432,7 +4432,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, node software is used to",
+      "question": "(foundation #178) A learner asks: \"Node software is used to?\" The best answer is",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -4457,7 +4457,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, snowman consensus is",
+      "question": "(foundation #179) A learner asks: \"Snowman consensus is?\" The best answer is",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -4482,7 +4482,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, finality on avalanche aims to be",
+      "question": "(foundation #180) A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -4507,7 +4507,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, avalanche cli / platform cli helps builders",
+      "question": "(foundation #181) A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -4532,7 +4532,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, hardhat or foundry on fuji is useful for",
+      "question": "(foundation #182) A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -4557,7 +4557,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, builder hub documentation is the place to",
+      "question": "(foundation #183) A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -4582,7 +4582,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, a soulbound credential means",
+      "question": "(foundation #184) A learner asks: \"A soulbound credential means?\" The best answer is",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -4607,7 +4607,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Avalanche is best described as?",
+      "question": "(foundation #185) Select the accurate description for this idea — avalanche is best described as.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -4632,7 +4632,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: AVAX is primarily used for?",
+      "question": "(foundation #186) Select the accurate description for this idea — avax is primarily used for.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -4657,7 +4657,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: The Primary Network includes?",
+      "question": "(foundation #187) Select the accurate description for this idea — the primary network includes.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -4682,7 +4682,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: The C-Chain is?",
+      "question": "(foundation #188) Select the accurate description for this idea — the c-chain is.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -4707,7 +4707,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "(foundation #189) Select the accurate description for this idea — gas on the c-chain is paid in.",
       "options": [
         "AVAX",
         "Option 1",
@@ -4732,7 +4732,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Fuji refers to?",
+      "question": "(foundation #190) Select the accurate description for this idea — fuji refers to.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -4757,7 +4757,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Coreth is?",
+      "question": "(foundation #191) Select the accurate description for this idea — coreth is.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -4782,7 +4782,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "(foundation #192) Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -4807,7 +4807,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: An EVM address on C-Chain is?",
+      "question": "(foundation #193) Select the accurate description for this idea — an evm address on c-chain is.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -4832,7 +4832,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: An Avalanche L1 is?",
+      "question": "(foundation #194) Select the accurate description for this idea — an avalanche l1 is.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -4857,7 +4857,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "(foundation #195) Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -4882,7 +4882,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Validator Manager contracts help?",
+      "question": "(foundation #196) Select the accurate description for this idea — validator manager contracts help.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -4907,7 +4907,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: ICM / Warp messaging enables?",
+      "question": "(foundation #197) Select the accurate description for this idea — icm / warp messaging enables.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -4932,7 +4932,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Teleporter is associated with?",
+      "question": "(foundation #198) Select the accurate description for this idea — teleporter is associated with.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -4957,7 +4957,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: A cross-chain message should be treated as?",
+      "question": "(foundation #199) Select the accurate description for this idea — a cross-chain message should be treated as.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -4982,7 +4982,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Validators on Avalanche?",
+      "question": "(foundation #200) Select the accurate description for this idea — validators on avalanche.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -5007,7 +5007,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Node software is used to?",
+      "question": "(foundation #201) Select the accurate description for this idea — node software is used to.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -5032,7 +5032,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Snowman consensus is?",
+      "question": "(foundation #202) Select the accurate description for this idea — snowman consensus is.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -5057,7 +5057,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "(foundation #203) Select the accurate description for this idea — finality on avalanche aims to be.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -5082,7 +5082,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "(foundation #204) Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -5107,7 +5107,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "(foundation #205) Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -5132,7 +5132,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "(foundation #206) Select the accurate description for this idea — builder hub documentation is the place to.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -5157,7 +5157,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: A soulbound credential means?",
+      "question": "(foundation #207) Select the accurate description for this idea — a soulbound credential means.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -5182,7 +5182,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(foundation #208) In Avalanche practice, avalanche is best described as",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -5207,7 +5207,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(foundation #209) In Avalanche practice, avax is primarily used for",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -5232,7 +5232,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(foundation #210) In Avalanche practice, the primary network includes",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -5257,7 +5257,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(foundation #211) In Avalanche practice, the c-chain is",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -5282,7 +5282,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(foundation #212) In Avalanche practice, gas on the c-chain is paid in",
       "options": [
         "AVAX",
         "Option 1",
@@ -5307,7 +5307,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "(foundation #213) In Avalanche practice, fuji refers to",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -5332,7 +5332,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Coreth is?\" The best answer is",
+      "question": "(foundation #214) In Avalanche practice, coreth is",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -5357,7 +5357,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "(foundation #215) In Avalanche practice, solidity contracts on avalanche c-chain generally",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -5382,7 +5382,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "(foundation #216) In Avalanche practice, an evm address on c-chain is",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -5407,7 +5407,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "(foundation #217) In Avalanche practice, an avalanche l1 is",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -5432,7 +5432,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "(foundation #218) In Avalanche practice, compared with a single c-chain app, an l1 can",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -5457,7 +5457,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "(foundation #219) In Avalanche practice, validator manager contracts help",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -5482,7 +5482,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "(foundation #220) In Avalanche practice, icm / warp messaging enables",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -5507,7 +5507,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "(foundation #221) In Avalanche practice, teleporter is associated with",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -5532,7 +5532,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "(foundation #222) In Avalanche practice, a cross-chain message should be treated as",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -5557,7 +5557,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "(foundation #223) In Avalanche practice, validators on avalanche",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -5582,7 +5582,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "(foundation #224) In Avalanche practice, node software is used to",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -5607,7 +5607,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "(foundation #225) In Avalanche practice, snowman consensus is",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -5632,7 +5632,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "(foundation #226) In Avalanche practice, finality on avalanche aims to be",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -5657,7 +5657,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "(foundation #227) In Avalanche practice, avalanche cli / platform cli helps builders",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -5682,7 +5682,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "(foundation #228) In Avalanche practice, hardhat or foundry on fuji is useful for",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -5707,7 +5707,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
+      "question": "(foundation #229) In Avalanche practice, builder hub documentation is the place to",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -5732,7 +5732,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"A soulbound credential means?\" The best answer is",
+      "question": "(foundation #230) In Avalanche practice, a soulbound credential means",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -5757,7 +5757,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — avalanche is best described as.",
+      "question": "(foundation #231) Given Avalanche docs, what is true about: Avalanche is best described as?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -5782,7 +5782,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — avax is primarily used for.",
+      "question": "(foundation #232) Given Avalanche docs, what is true about: AVAX is primarily used for?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -5807,7 +5807,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — the primary network includes.",
+      "question": "(foundation #233) Given Avalanche docs, what is true about: The Primary Network includes?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -5832,7 +5832,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — the c-chain is.",
+      "question": "(foundation #234) Given Avalanche docs, what is true about: The C-Chain is?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -5857,7 +5857,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — gas on the c-chain is paid in.",
+      "question": "(foundation #235) Given Avalanche docs, what is true about: Gas on the C-Chain is paid in?",
       "options": [
         "AVAX",
         "Option 1",
@@ -5882,7 +5882,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — fuji refers to.",
+      "question": "(foundation #236) Given Avalanche docs, what is true about: Fuji refers to?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -5907,7 +5907,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — coreth is.",
+      "question": "(foundation #237) Given Avalanche docs, what is true about: Coreth is?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -5932,7 +5932,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
+      "question": "(foundation #238) Given Avalanche docs, what is true about: Solidity contracts on Avalanche C-Chain generally?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -5957,7 +5957,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — an evm address on c-chain is.",
+      "question": "(foundation #239) Given Avalanche docs, what is true about: An EVM address on C-Chain is?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -5982,7 +5982,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — an avalanche l1 is.",
+      "question": "(foundation #240) Given Avalanche docs, what is true about: An Avalanche L1 is?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -6007,7 +6007,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
+      "question": "(foundation #241) Given Avalanche docs, what is true about: Compared with a single C-Chain app, an L1 can?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -6032,7 +6032,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — validator manager contracts help.",
+      "question": "(foundation #242) Given Avalanche docs, what is true about: Validator Manager contracts help?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -6057,7 +6057,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — icm / warp messaging enables.",
+      "question": "(foundation #243) Given Avalanche docs, what is true about: ICM / Warp messaging enables?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -6082,7 +6082,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — teleporter is associated with.",
+      "question": "(foundation #244) Given Avalanche docs, what is true about: Teleporter is associated with?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -6107,7 +6107,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — a cross-chain message should be treated as.",
+      "question": "(foundation #245) Given Avalanche docs, what is true about: A cross-chain message should be treated as?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -6132,7 +6132,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — validators on avalanche.",
+      "question": "(foundation #246) Given Avalanche docs, what is true about: Validators on Avalanche?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -6157,7 +6157,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — node software is used to.",
+      "question": "(foundation #247) Given Avalanche docs, what is true about: Node software is used to?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -6182,7 +6182,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — snowman consensus is.",
+      "question": "(foundation #248) Given Avalanche docs, what is true about: Snowman consensus is?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -6207,7 +6207,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — finality on avalanche aims to be.",
+      "question": "(foundation #249) Given Avalanche docs, what is true about: Finality on Avalanche aims to be?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -6232,7 +6232,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
+      "question": "(foundation #250) Given Avalanche docs, what is true about: Avalanche CLI / Platform CLI helps builders?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -6257,7 +6257,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
+      "question": "(foundation #251) Given Avalanche docs, what is true about: Hardhat or Foundry on Fuji is useful for?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -6282,7 +6282,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — builder hub documentation is the place to.",
+      "question": "(foundation #252) Given Avalanche docs, what is true about: Builder Hub documentation is the place to?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -6307,7 +6307,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Select the accurate description for this idea — a soulbound credential means.",
+      "question": "(foundation #253) Given Avalanche docs, what is true about: A soulbound credential means?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -6332,7 +6332,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, avalanche is best described as",
+      "question": "(foundation #254) Choose the option that correctly completes: Avalanche is best described as…",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -6357,7 +6357,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, avax is primarily used for",
+      "question": "(foundation #255) Choose the option that correctly completes: AVAX is primarily used for…",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -6382,7 +6382,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, the primary network includes",
+      "question": "(foundation #256) Choose the option that correctly completes: The Primary Network includes…",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -6407,7 +6407,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, the c-chain is",
+      "question": "(foundation #257) Choose the option that correctly completes: The C-Chain is…",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -6432,7 +6432,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, gas on the c-chain is paid in",
+      "question": "(foundation #258) Choose the option that correctly completes: Gas on the C-Chain is paid in…",
       "options": [
         "AVAX",
         "Option 1",
@@ -6457,7 +6457,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, fuji refers to",
+      "question": "(foundation #259) Choose the option that correctly completes: Fuji refers to…",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -6482,7 +6482,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, coreth is",
+      "question": "(foundation #260) Choose the option that correctly completes: Coreth is…",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -6507,7 +6507,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, solidity contracts on avalanche c-chain generally",
+      "question": "(foundation #261) Choose the option that correctly completes: Solidity contracts on Avalanche C-Chain generally…",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -6532,7 +6532,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, an evm address on c-chain is",
+      "question": "(foundation #262) Choose the option that correctly completes: An EVM address on C-Chain is…",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -6557,7 +6557,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, an avalanche l1 is",
+      "question": "(foundation #263) Choose the option that correctly completes: An Avalanche L1 is…",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -6582,7 +6582,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, compared with a single c-chain app, an l1 can",
+      "question": "(foundation #264) Choose the option that correctly completes: Compared with a single C-Chain app, an L1 can…",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -6607,7 +6607,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, validator manager contracts help",
+      "question": "(foundation #265) Choose the option that correctly completes: Validator Manager contracts help…",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -6632,7 +6632,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, icm / warp messaging enables",
+      "question": "(foundation #266) Choose the option that correctly completes: ICM / Warp messaging enables…",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -6657,7 +6657,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, teleporter is associated with",
+      "question": "(foundation #267) Choose the option that correctly completes: Teleporter is associated with…",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -6682,7 +6682,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, a cross-chain message should be treated as",
+      "question": "(foundation #268) Choose the option that correctly completes: A cross-chain message should be treated as…",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -6707,7 +6707,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, validators on avalanche",
+      "question": "(foundation #269) Choose the option that correctly completes: Validators on Avalanche…",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -6732,7 +6732,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, node software is used to",
+      "question": "(foundation #270) Choose the option that correctly completes: Node software is used to…",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -6757,7 +6757,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, snowman consensus is",
+      "question": "(foundation #271) Choose the option that correctly completes: Snowman consensus is…",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -6782,7 +6782,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, finality on avalanche aims to be",
+      "question": "(foundation #272) Choose the option that correctly completes: Finality on Avalanche aims to be…",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -6807,7 +6807,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, avalanche cli / platform cli helps builders",
+      "question": "(foundation #273) Choose the option that correctly completes: Avalanche CLI / Platform CLI helps builders…",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -6832,7 +6832,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, hardhat or foundry on fuji is useful for",
+      "question": "(foundation #274) Choose the option that correctly completes: Hardhat or Foundry on Fuji is useful for…",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -6857,7 +6857,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, builder hub documentation is the place to",
+      "question": "(foundation #275) Choose the option that correctly completes: Builder Hub documentation is the place to…",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -6882,7 +6882,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "In Avalanche practice, a soulbound credential means",
+      "question": "(foundation #276) Choose the option that correctly completes: A soulbound credential means…",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -6907,7 +6907,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Avalanche is best described as?",
+      "question": "(foundation #277) Which statement best matches: Avalanche is best described as?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -6932,7 +6932,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: AVAX is primarily used for?",
+      "question": "(foundation #278) Which statement best matches: AVAX is primarily used for?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -6957,7 +6957,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: The Primary Network includes?",
+      "question": "(foundation #279) Which statement best matches: The Primary Network includes?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -6982,7 +6982,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: The C-Chain is?",
+      "question": "(foundation #280) Which statement best matches: The C-Chain is?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -7007,7 +7007,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "(foundation #281) Which statement best matches: Gas on the C-Chain is paid in?",
       "options": [
         "AVAX",
         "Option 1",
@@ -7032,7 +7032,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Fuji refers to?",
+      "question": "(foundation #282) Which statement best matches: Fuji refers to?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -7057,7 +7057,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Coreth is?",
+      "question": "(foundation #283) Which statement best matches: Coreth is?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -7082,7 +7082,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "(foundation #284) Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -7107,7 +7107,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: An EVM address on C-Chain is?",
+      "question": "(foundation #285) Which statement best matches: An EVM address on C-Chain is?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -7132,7 +7132,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: An Avalanche L1 is?",
+      "question": "(foundation #286) Which statement best matches: An Avalanche L1 is?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -7157,7 +7157,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "(foundation #287) Which statement best matches: Compared with a single C-Chain app, an L1 can?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -7182,7 +7182,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Validator Manager contracts help?",
+      "question": "(foundation #288) Which statement best matches: Validator Manager contracts help?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -7207,7 +7207,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: ICM / Warp messaging enables?",
+      "question": "(foundation #289) Which statement best matches: ICM / Warp messaging enables?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -7232,7 +7232,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Teleporter is associated with?",
+      "question": "(foundation #290) Which statement best matches: Teleporter is associated with?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -7257,7 +7257,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: A cross-chain message should be treated as?",
+      "question": "(foundation #291) Which statement best matches: A cross-chain message should be treated as?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -7282,7 +7282,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Validators on Avalanche?",
+      "question": "(foundation #292) Which statement best matches: Validators on Avalanche?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -7307,7 +7307,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Node software is used to?",
+      "question": "(foundation #293) Which statement best matches: Node software is used to?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -7332,7 +7332,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Snowman consensus is?",
+      "question": "(foundation #294) Which statement best matches: Snowman consensus is?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -7357,7 +7357,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "(foundation #295) Which statement best matches: Finality on Avalanche aims to be?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -7382,7 +7382,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "(foundation #296) Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -7407,7 +7407,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "(foundation #297) Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -7432,7 +7432,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "(foundation #298) Which statement best matches: Builder Hub documentation is the place to?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -7457,7 +7457,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "Which statement best matches: A soulbound credential means?",
+      "question": "(foundation #299) Which statement best matches: A soulbound credential means?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -7482,7 +7482,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(foundation #300) A learner asks: \"Avalanche is best described as?\" The best answer is",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -7507,7 +7507,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(foundation #301) A learner asks: \"AVAX is primarily used for?\" The best answer is",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -7532,7 +7532,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(foundation #302) A learner asks: \"The Primary Network includes?\" The best answer is",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -7557,7 +7557,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(foundation #303) A learner asks: \"The C-Chain is?\" The best answer is",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -7582,7 +7582,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(foundation #304) A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
       "options": [
         "AVAX",
         "Option 1",
@@ -7607,7 +7607,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "(foundation #305) A learner asks: \"Fuji refers to?\" The best answer is",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -7632,7 +7632,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Coreth is?\" The best answer is",
+      "question": "(foundation #306) A learner asks: \"Coreth is?\" The best answer is",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -7657,7 +7657,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "(foundation #307) A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -7682,7 +7682,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "(foundation #308) A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -7707,7 +7707,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "(foundation #309) A learner asks: \"An Avalanche L1 is?\" The best answer is",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -7732,7 +7732,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "(foundation #310) A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -7757,7 +7757,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "(foundation #311) A learner asks: \"Validator Manager contracts help?\" The best answer is",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -7782,7 +7782,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "(foundation #312) A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -7807,7 +7807,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "(foundation #313) A learner asks: \"Teleporter is associated with?\" The best answer is",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -7832,7 +7832,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "(foundation #314) A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -7857,7 +7857,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "(foundation #315) A learner asks: \"Validators on Avalanche?\" The best answer is",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -7882,7 +7882,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "(foundation #316) A learner asks: \"Node software is used to?\" The best answer is",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -7907,7 +7907,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "(foundation #317) A learner asks: \"Snowman consensus is?\" The best answer is",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -7932,7 +7932,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "(foundation #318) A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -7957,7 +7957,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "(foundation #319) A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -7982,7 +7982,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "easy",
       "module": "foundation",
-      "question": "A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "(foundation #320) A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -8009,7 +8009,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Avalanche is best described as?",
+      "question": "(builder #1) Which statement best matches: Avalanche is best described as? Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -8034,7 +8034,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: AVAX is primarily used for?",
+      "question": "(builder #2) Which statement best matches: AVAX is primarily used for? Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -8059,7 +8059,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: The Primary Network includes?",
+      "question": "(builder #3) Which statement best matches: The Primary Network includes? Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -8084,7 +8084,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: The C-Chain is?",
+      "question": "(builder #4) Which statement best matches: The C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -8109,7 +8109,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "(builder #5) Which statement best matches: Gas on the C-Chain is paid in? Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -8134,7 +8134,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Fuji refers to?",
+      "question": "(builder #6) Which statement best matches: Fuji refers to? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -8159,7 +8159,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Coreth is?",
+      "question": "(builder #7) Which statement best matches: Coreth is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -8184,7 +8184,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "(builder #8) Which statement best matches: Solidity contracts on Avalanche C-Chain generally? Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -8209,7 +8209,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: An EVM address on C-Chain is?",
+      "question": "(builder #9) Which statement best matches: An EVM address on C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -8234,7 +8234,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: An Avalanche L1 is?",
+      "question": "(builder #10) Which statement best matches: An Avalanche L1 is? Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -8259,7 +8259,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "(builder #11) Which statement best matches: Compared with a single C-Chain app, an L1 can? Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -8284,7 +8284,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Validator Manager contracts help?",
+      "question": "(builder #12) Which statement best matches: Validator Manager contracts help? Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -8309,7 +8309,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: ICM / Warp messaging enables?",
+      "question": "(builder #13) Which statement best matches: ICM / Warp messaging enables? Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -8334,7 +8334,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Teleporter is associated with?",
+      "question": "(builder #14) Which statement best matches: Teleporter is associated with? Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -8359,7 +8359,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: A cross-chain message should be treated as?",
+      "question": "(builder #15) Which statement best matches: A cross-chain message should be treated as? Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -8384,7 +8384,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Validators on Avalanche?",
+      "question": "(builder #16) Which statement best matches: Validators on Avalanche? Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -8409,7 +8409,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Node software is used to?",
+      "question": "(builder #17) Which statement best matches: Node software is used to? Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -8434,7 +8434,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Snowman consensus is?",
+      "question": "(builder #18) Which statement best matches: Snowman consensus is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -8459,7 +8459,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "(builder #19) Which statement best matches: Finality on Avalanche aims to be? Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -8484,7 +8484,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "(builder #20) Which statement best matches: Avalanche CLI / Platform CLI helps builders? Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -8509,7 +8509,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "(builder #21) Which statement best matches: Hardhat or Foundry on Fuji is useful for? Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -8534,7 +8534,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "(builder #22) Which statement best matches: Builder Hub documentation is the place to? Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -8559,7 +8559,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: A soulbound credential means?",
+      "question": "(builder #23) Which statement best matches: A soulbound credential means? Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -8584,7 +8584,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(builder #24) A learner asks: \"Avalanche is best described as?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -8609,7 +8609,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(builder #25) A learner asks: \"AVAX is primarily used for?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -8634,7 +8634,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(builder #26) A learner asks: \"The Primary Network includes?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -8659,7 +8659,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(builder #27) A learner asks: \"The C-Chain is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -8684,7 +8684,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(builder #28) A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -8709,7 +8709,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "(builder #29) A learner asks: \"Fuji refers to?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -8734,7 +8734,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Coreth is?\" The best answer is",
+      "question": "(builder #30) A learner asks: \"Coreth is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -8759,7 +8759,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "(builder #31) A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -8784,7 +8784,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "(builder #32) A learner asks: \"An EVM address on C-Chain is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -8809,7 +8809,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "(builder #33) A learner asks: \"An Avalanche L1 is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -8834,7 +8834,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "(builder #34) A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -8859,7 +8859,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "(builder #35) A learner asks: \"Validator Manager contracts help?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -8884,7 +8884,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "(builder #36) A learner asks: \"ICM / Warp messaging enables?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -8909,7 +8909,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "(builder #37) A learner asks: \"Teleporter is associated with?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -8934,7 +8934,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "(builder #38) A learner asks: \"A cross-chain message should be treated as?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -8959,7 +8959,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "(builder #39) A learner asks: \"Validators on Avalanche?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -8984,7 +8984,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "(builder #40) A learner asks: \"Node software is used to?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -9009,7 +9009,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "(builder #41) A learner asks: \"Snowman consensus is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -9034,7 +9034,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "(builder #42) A learner asks: \"Finality on Avalanche aims to be?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -9059,7 +9059,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "(builder #43) A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -9084,7 +9084,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "(builder #44) A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -9109,7 +9109,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
+      "question": "(builder #45) A learner asks: \"Builder Hub documentation is the place to?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -9134,7 +9134,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"A soulbound credential means?\" The best answer is",
+      "question": "(builder #46) A learner asks: \"A soulbound credential means?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -9159,7 +9159,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — avalanche is best described as.",
+      "question": "(builder #47) Select the accurate description for this idea — avalanche is best described as. Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -9184,7 +9184,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — avax is primarily used for.",
+      "question": "(builder #48) Select the accurate description for this idea — avax is primarily used for. Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -9209,7 +9209,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — the primary network includes.",
+      "question": "(builder #49) Select the accurate description for this idea — the primary network includes. Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -9234,7 +9234,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — the c-chain is.",
+      "question": "(builder #50) Select the accurate description for this idea — the c-chain is. Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -9259,7 +9259,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — gas on the c-chain is paid in.",
+      "question": "(builder #51) Select the accurate description for this idea — gas on the c-chain is paid in. Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -9284,7 +9284,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — fuji refers to.",
+      "question": "(builder #52) Select the accurate description for this idea — fuji refers to. Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -9309,7 +9309,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — coreth is.",
+      "question": "(builder #53) Select the accurate description for this idea — coreth is. Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -9334,7 +9334,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
+      "question": "(builder #54) Select the accurate description for this idea — solidity contracts on avalanche c-chain generally. Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -9359,7 +9359,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — an evm address on c-chain is.",
+      "question": "(builder #55) Select the accurate description for this idea — an evm address on c-chain is. Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -9384,7 +9384,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — an avalanche l1 is.",
+      "question": "(builder #56) Select the accurate description for this idea — an avalanche l1 is. Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -9409,7 +9409,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
+      "question": "(builder #57) Select the accurate description for this idea — compared with a single c-chain app, an l1 can. Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -9434,7 +9434,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — validator manager contracts help.",
+      "question": "(builder #58) Select the accurate description for this idea — validator manager contracts help. Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -9459,7 +9459,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — icm / warp messaging enables.",
+      "question": "(builder #59) Select the accurate description for this idea — icm / warp messaging enables. Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -9484,7 +9484,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — teleporter is associated with.",
+      "question": "(builder #60) Select the accurate description for this idea — teleporter is associated with. Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -9509,7 +9509,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — a cross-chain message should be treated as.",
+      "question": "(builder #61) Select the accurate description for this idea — a cross-chain message should be treated as. Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -9534,7 +9534,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — validators on avalanche.",
+      "question": "(builder #62) Select the accurate description for this idea — validators on avalanche. Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -9559,7 +9559,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — node software is used to.",
+      "question": "(builder #63) Select the accurate description for this idea — node software is used to. Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -9584,7 +9584,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — snowman consensus is.",
+      "question": "(builder #64) Select the accurate description for this idea — snowman consensus is. Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -9609,7 +9609,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — finality on avalanche aims to be.",
+      "question": "(builder #65) Select the accurate description for this idea — finality on avalanche aims to be. Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -9634,7 +9634,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
+      "question": "(builder #66) Select the accurate description for this idea — avalanche cli / platform cli helps builders. Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -9659,7 +9659,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
+      "question": "(builder #67) Select the accurate description for this idea — hardhat or foundry on fuji is useful for. Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -9684,7 +9684,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — builder hub documentation is the place to.",
+      "question": "(builder #68) Select the accurate description for this idea — builder hub documentation is the place to. Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -9709,7 +9709,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — a soulbound credential means.",
+      "question": "(builder #69) Select the accurate description for this idea — a soulbound credential means. Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -9734,7 +9734,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, avalanche is best described as",
+      "question": "(builder #70) In Avalanche practice, avalanche is best described as Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -9759,7 +9759,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, avax is primarily used for",
+      "question": "(builder #71) In Avalanche practice, avax is primarily used for Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -9784,7 +9784,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, the primary network includes",
+      "question": "(builder #72) In Avalanche practice, the primary network includes Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -9809,7 +9809,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, the c-chain is",
+      "question": "(builder #73) In Avalanche practice, the c-chain is Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -9834,7 +9834,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, gas on the c-chain is paid in",
+      "question": "(builder #74) In Avalanche practice, gas on the c-chain is paid in Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -9859,7 +9859,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, fuji refers to",
+      "question": "(builder #75) In Avalanche practice, fuji refers to Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -9884,7 +9884,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, coreth is",
+      "question": "(builder #76) In Avalanche practice, coreth is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -9909,7 +9909,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, solidity contracts on avalanche c-chain generally",
+      "question": "(builder #77) In Avalanche practice, solidity contracts on avalanche c-chain generally Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -9934,7 +9934,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, an evm address on c-chain is",
+      "question": "(builder #78) In Avalanche practice, an evm address on c-chain is Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -9959,7 +9959,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, an avalanche l1 is",
+      "question": "(builder #79) In Avalanche practice, an avalanche l1 is Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -9984,7 +9984,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, compared with a single c-chain app, an l1 can",
+      "question": "(builder #80) In Avalanche practice, compared with a single c-chain app, an l1 can Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -10009,7 +10009,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, validator manager contracts help",
+      "question": "(builder #81) In Avalanche practice, validator manager contracts help Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -10034,7 +10034,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, icm / warp messaging enables",
+      "question": "(builder #82) In Avalanche practice, icm / warp messaging enables Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -10059,7 +10059,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, teleporter is associated with",
+      "question": "(builder #83) In Avalanche practice, teleporter is associated with Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -10084,7 +10084,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, a cross-chain message should be treated as",
+      "question": "(builder #84) In Avalanche practice, a cross-chain message should be treated as Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -10109,7 +10109,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, validators on avalanche",
+      "question": "(builder #85) In Avalanche practice, validators on avalanche Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -10134,7 +10134,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, node software is used to",
+      "question": "(builder #86) In Avalanche practice, node software is used to Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -10159,7 +10159,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, snowman consensus is",
+      "question": "(builder #87) In Avalanche practice, snowman consensus is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -10184,7 +10184,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, finality on avalanche aims to be",
+      "question": "(builder #88) In Avalanche practice, finality on avalanche aims to be Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -10209,7 +10209,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, avalanche cli / platform cli helps builders",
+      "question": "(builder #89) In Avalanche practice, avalanche cli / platform cli helps builders Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -10234,7 +10234,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, hardhat or foundry on fuji is useful for",
+      "question": "(builder #90) In Avalanche practice, hardhat or foundry on fuji is useful for Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -10259,7 +10259,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, builder hub documentation is the place to",
+      "question": "(builder #91) In Avalanche practice, builder hub documentation is the place to Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -10284,7 +10284,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, a soulbound credential means",
+      "question": "(builder #92) In Avalanche practice, a soulbound credential means Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -10309,7 +10309,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Avalanche is best described as?",
+      "question": "(builder #93) Given Avalanche docs, what is true about: Avalanche is best described as? Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -10334,7 +10334,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: AVAX is primarily used for?",
+      "question": "(builder #94) Given Avalanche docs, what is true about: AVAX is primarily used for? Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -10359,7 +10359,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: The Primary Network includes?",
+      "question": "(builder #95) Given Avalanche docs, what is true about: The Primary Network includes? Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -10384,7 +10384,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: The C-Chain is?",
+      "question": "(builder #96) Given Avalanche docs, what is true about: The C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -10409,7 +10409,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "(builder #97) Given Avalanche docs, what is true about: Gas on the C-Chain is paid in? Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -10434,7 +10434,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Fuji refers to?",
+      "question": "(builder #98) Given Avalanche docs, what is true about: Fuji refers to? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -10459,7 +10459,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Coreth is?",
+      "question": "(builder #99) Given Avalanche docs, what is true about: Coreth is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -10484,7 +10484,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "(builder #100) Given Avalanche docs, what is true about: Solidity contracts on Avalanche C-Chain generally? Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -10509,7 +10509,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: An EVM address on C-Chain is?",
+      "question": "(builder #101) Given Avalanche docs, what is true about: An EVM address on C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -10534,7 +10534,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: An Avalanche L1 is?",
+      "question": "(builder #102) Given Avalanche docs, what is true about: An Avalanche L1 is? Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -10559,7 +10559,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "(builder #103) Given Avalanche docs, what is true about: Compared with a single C-Chain app, an L1 can? Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -10584,7 +10584,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Validator Manager contracts help?",
+      "question": "(builder #104) Given Avalanche docs, what is true about: Validator Manager contracts help? Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -10609,7 +10609,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: ICM / Warp messaging enables?",
+      "question": "(builder #105) Given Avalanche docs, what is true about: ICM / Warp messaging enables? Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -10634,7 +10634,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Teleporter is associated with?",
+      "question": "(builder #106) Given Avalanche docs, what is true about: Teleporter is associated with? Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -10659,7 +10659,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: A cross-chain message should be treated as?",
+      "question": "(builder #107) Given Avalanche docs, what is true about: A cross-chain message should be treated as? Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -10684,7 +10684,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Validators on Avalanche?",
+      "question": "(builder #108) Given Avalanche docs, what is true about: Validators on Avalanche? Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -10709,7 +10709,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Node software is used to?",
+      "question": "(builder #109) Given Avalanche docs, what is true about: Node software is used to? Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -10734,7 +10734,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Snowman consensus is?",
+      "question": "(builder #110) Given Avalanche docs, what is true about: Snowman consensus is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -10759,7 +10759,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "(builder #111) Given Avalanche docs, what is true about: Finality on Avalanche aims to be? Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -10784,7 +10784,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "(builder #112) Given Avalanche docs, what is true about: Avalanche CLI / Platform CLI helps builders? Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -10809,7 +10809,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "(builder #113) Given Avalanche docs, what is true about: Hardhat or Foundry on Fuji is useful for? Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -10834,7 +10834,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "(builder #114) Given Avalanche docs, what is true about: Builder Hub documentation is the place to? Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -10859,7 +10859,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: A soulbound credential means?",
+      "question": "(builder #115) Given Avalanche docs, what is true about: A soulbound credential means? Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -10884,7 +10884,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(builder #116) Choose the option that correctly completes: Avalanche is best described as… Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -10909,7 +10909,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(builder #117) Choose the option that correctly completes: AVAX is primarily used for… Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -10934,7 +10934,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(builder #118) Choose the option that correctly completes: The Primary Network includes… Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -10959,7 +10959,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(builder #119) Choose the option that correctly completes: The C-Chain is… Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -10984,7 +10984,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(builder #120) Choose the option that correctly completes: Gas on the C-Chain is paid in… Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -11009,7 +11009,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "(builder #121) Choose the option that correctly completes: Fuji refers to… Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -11034,7 +11034,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Coreth is?\" The best answer is",
+      "question": "(builder #122) Choose the option that correctly completes: Coreth is… Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -11059,7 +11059,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "(builder #123) Choose the option that correctly completes: Solidity contracts on Avalanche C-Chain generally… Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -11084,7 +11084,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "(builder #124) Choose the option that correctly completes: An EVM address on C-Chain is… Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -11109,7 +11109,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "(builder #125) Choose the option that correctly completes: An Avalanche L1 is… Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -11134,7 +11134,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "(builder #126) Choose the option that correctly completes: Compared with a single C-Chain app, an L1 can… Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -11159,7 +11159,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "(builder #127) Choose the option that correctly completes: Validator Manager contracts help… Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -11184,7 +11184,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "(builder #128) Choose the option that correctly completes: ICM / Warp messaging enables… Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -11209,7 +11209,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "(builder #129) Choose the option that correctly completes: Teleporter is associated with… Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -11234,7 +11234,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "(builder #130) Choose the option that correctly completes: A cross-chain message should be treated as… Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -11259,7 +11259,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "(builder #131) Choose the option that correctly completes: Validators on Avalanche… Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -11284,7 +11284,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "(builder #132) Choose the option that correctly completes: Node software is used to… Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -11309,7 +11309,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "(builder #133) Choose the option that correctly completes: Snowman consensus is… Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -11334,7 +11334,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "(builder #134) Choose the option that correctly completes: Finality on Avalanche aims to be… Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -11359,7 +11359,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "(builder #135) Choose the option that correctly completes: Avalanche CLI / Platform CLI helps builders… Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -11384,7 +11384,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "(builder #136) Choose the option that correctly completes: Hardhat or Foundry on Fuji is useful for… Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -11409,7 +11409,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
+      "question": "(builder #137) Choose the option that correctly completes: Builder Hub documentation is the place to… Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -11434,7 +11434,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"A soulbound credential means?\" The best answer is",
+      "question": "(builder #138) Choose the option that correctly completes: A soulbound credential means… Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -11459,7 +11459,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — avalanche is best described as.",
+      "question": "(builder #139) Which statement best matches: Avalanche is best described as? Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -11484,7 +11484,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — avax is primarily used for.",
+      "question": "(builder #140) Which statement best matches: AVAX is primarily used for? Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -11509,7 +11509,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — the primary network includes.",
+      "question": "(builder #141) Which statement best matches: The Primary Network includes? Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -11534,7 +11534,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — the c-chain is.",
+      "question": "(builder #142) Which statement best matches: The C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -11559,7 +11559,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — gas on the c-chain is paid in.",
+      "question": "(builder #143) Which statement best matches: Gas on the C-Chain is paid in? Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -11584,7 +11584,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — fuji refers to.",
+      "question": "(builder #144) Which statement best matches: Fuji refers to? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -11609,7 +11609,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — coreth is.",
+      "question": "(builder #145) Which statement best matches: Coreth is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -11634,7 +11634,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
+      "question": "(builder #146) Which statement best matches: Solidity contracts on Avalanche C-Chain generally? Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -11659,7 +11659,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — an evm address on c-chain is.",
+      "question": "(builder #147) Which statement best matches: An EVM address on C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -11684,7 +11684,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — an avalanche l1 is.",
+      "question": "(builder #148) Which statement best matches: An Avalanche L1 is? Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -11709,7 +11709,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
+      "question": "(builder #149) Which statement best matches: Compared with a single C-Chain app, an L1 can? Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -11734,7 +11734,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — validator manager contracts help.",
+      "question": "(builder #150) Which statement best matches: Validator Manager contracts help? Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -11759,7 +11759,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — icm / warp messaging enables.",
+      "question": "(builder #151) Which statement best matches: ICM / Warp messaging enables? Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -11784,7 +11784,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — teleporter is associated with.",
+      "question": "(builder #152) Which statement best matches: Teleporter is associated with? Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -11809,7 +11809,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — a cross-chain message should be treated as.",
+      "question": "(builder #153) Which statement best matches: A cross-chain message should be treated as? Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -11834,7 +11834,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — validators on avalanche.",
+      "question": "(builder #154) Which statement best matches: Validators on Avalanche? Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -11859,7 +11859,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — node software is used to.",
+      "question": "(builder #155) Which statement best matches: Node software is used to? Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -11884,7 +11884,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — snowman consensus is.",
+      "question": "(builder #156) Which statement best matches: Snowman consensus is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -11909,7 +11909,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — finality on avalanche aims to be.",
+      "question": "(builder #157) Which statement best matches: Finality on Avalanche aims to be? Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -11934,7 +11934,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
+      "question": "(builder #158) Which statement best matches: Avalanche CLI / Platform CLI helps builders? Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -11959,7 +11959,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
+      "question": "(builder #159) Which statement best matches: Hardhat or Foundry on Fuji is useful for? Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -11984,7 +11984,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — builder hub documentation is the place to.",
+      "question": "(builder #160) Which statement best matches: Builder Hub documentation is the place to? Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -12009,7 +12009,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — a soulbound credential means.",
+      "question": "(builder #161) Which statement best matches: A soulbound credential means? Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -12034,7 +12034,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, avalanche is best described as",
+      "question": "(builder #162) A learner asks: \"Avalanche is best described as?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -12059,7 +12059,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, avax is primarily used for",
+      "question": "(builder #163) A learner asks: \"AVAX is primarily used for?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -12084,7 +12084,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, the primary network includes",
+      "question": "(builder #164) A learner asks: \"The Primary Network includes?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -12109,7 +12109,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, the c-chain is",
+      "question": "(builder #165) A learner asks: \"The C-Chain is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -12134,7 +12134,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, gas on the c-chain is paid in",
+      "question": "(builder #166) A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -12159,7 +12159,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, fuji refers to",
+      "question": "(builder #167) A learner asks: \"Fuji refers to?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -12184,7 +12184,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, coreth is",
+      "question": "(builder #168) A learner asks: \"Coreth is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -12209,7 +12209,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, solidity contracts on avalanche c-chain generally",
+      "question": "(builder #169) A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -12234,7 +12234,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, an evm address on c-chain is",
+      "question": "(builder #170) A learner asks: \"An EVM address on C-Chain is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -12259,7 +12259,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, an avalanche l1 is",
+      "question": "(builder #171) A learner asks: \"An Avalanche L1 is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -12284,7 +12284,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, compared with a single c-chain app, an l1 can",
+      "question": "(builder #172) A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -12309,7 +12309,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, validator manager contracts help",
+      "question": "(builder #173) A learner asks: \"Validator Manager contracts help?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -12334,7 +12334,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, icm / warp messaging enables",
+      "question": "(builder #174) A learner asks: \"ICM / Warp messaging enables?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -12359,7 +12359,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, teleporter is associated with",
+      "question": "(builder #175) A learner asks: \"Teleporter is associated with?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -12384,7 +12384,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, a cross-chain message should be treated as",
+      "question": "(builder #176) A learner asks: \"A cross-chain message should be treated as?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -12409,7 +12409,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, validators on avalanche",
+      "question": "(builder #177) A learner asks: \"Validators on Avalanche?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -12434,7 +12434,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, node software is used to",
+      "question": "(builder #178) A learner asks: \"Node software is used to?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -12459,7 +12459,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, snowman consensus is",
+      "question": "(builder #179) A learner asks: \"Snowman consensus is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -12484,7 +12484,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, finality on avalanche aims to be",
+      "question": "(builder #180) A learner asks: \"Finality on Avalanche aims to be?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -12509,7 +12509,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, avalanche cli / platform cli helps builders",
+      "question": "(builder #181) A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -12534,7 +12534,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, hardhat or foundry on fuji is useful for",
+      "question": "(builder #182) A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -12559,7 +12559,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, builder hub documentation is the place to",
+      "question": "(builder #183) A learner asks: \"Builder Hub documentation is the place to?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -12584,7 +12584,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, a soulbound credential means",
+      "question": "(builder #184) A learner asks: \"A soulbound credential means?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -12609,7 +12609,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Avalanche is best described as?",
+      "question": "(builder #185) Select the accurate description for this idea — avalanche is best described as. Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -12634,7 +12634,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: AVAX is primarily used for?",
+      "question": "(builder #186) Select the accurate description for this idea — avax is primarily used for. Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -12659,7 +12659,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: The Primary Network includes?",
+      "question": "(builder #187) Select the accurate description for this idea — the primary network includes. Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -12684,7 +12684,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: The C-Chain is?",
+      "question": "(builder #188) Select the accurate description for this idea — the c-chain is. Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -12709,7 +12709,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "(builder #189) Select the accurate description for this idea — gas on the c-chain is paid in. Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -12734,7 +12734,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Fuji refers to?",
+      "question": "(builder #190) Select the accurate description for this idea — fuji refers to. Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -12759,7 +12759,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Coreth is?",
+      "question": "(builder #191) Select the accurate description for this idea — coreth is. Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -12784,7 +12784,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "(builder #192) Select the accurate description for this idea — solidity contracts on avalanche c-chain generally. Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -12809,7 +12809,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: An EVM address on C-Chain is?",
+      "question": "(builder #193) Select the accurate description for this idea — an evm address on c-chain is. Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -12834,7 +12834,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: An Avalanche L1 is?",
+      "question": "(builder #194) Select the accurate description for this idea — an avalanche l1 is. Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -12859,7 +12859,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "(builder #195) Select the accurate description for this idea — compared with a single c-chain app, an l1 can. Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -12884,7 +12884,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Validator Manager contracts help?",
+      "question": "(builder #196) Select the accurate description for this idea — validator manager contracts help. Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -12909,7 +12909,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: ICM / Warp messaging enables?",
+      "question": "(builder #197) Select the accurate description for this idea — icm / warp messaging enables. Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -12934,7 +12934,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Teleporter is associated with?",
+      "question": "(builder #198) Select the accurate description for this idea — teleporter is associated with. Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -12959,7 +12959,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: A cross-chain message should be treated as?",
+      "question": "(builder #199) Select the accurate description for this idea — a cross-chain message should be treated as. Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -12984,7 +12984,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Validators on Avalanche?",
+      "question": "(builder #200) Select the accurate description for this idea — validators on avalanche. Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -13009,7 +13009,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Node software is used to?",
+      "question": "(builder #201) Select the accurate description for this idea — node software is used to. Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -13034,7 +13034,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Snowman consensus is?",
+      "question": "(builder #202) Select the accurate description for this idea — snowman consensus is. Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -13059,7 +13059,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "(builder #203) Select the accurate description for this idea — finality on avalanche aims to be. Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -13084,7 +13084,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "(builder #204) Select the accurate description for this idea — avalanche cli / platform cli helps builders. Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -13109,7 +13109,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "(builder #205) Select the accurate description for this idea — hardhat or foundry on fuji is useful for. Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -13134,7 +13134,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "(builder #206) Select the accurate description for this idea — builder hub documentation is the place to. Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -13159,7 +13159,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: A soulbound credential means?",
+      "question": "(builder #207) Select the accurate description for this idea — a soulbound credential means. Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -13184,7 +13184,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(builder #208) In Avalanche practice, avalanche is best described as Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -13209,7 +13209,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(builder #209) In Avalanche practice, avax is primarily used for Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -13234,7 +13234,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(builder #210) In Avalanche practice, the primary network includes Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -13259,7 +13259,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(builder #211) In Avalanche practice, the c-chain is Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -13284,7 +13284,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(builder #212) In Avalanche practice, gas on the c-chain is paid in Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -13309,7 +13309,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "(builder #213) In Avalanche practice, fuji refers to Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -13334,7 +13334,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Coreth is?\" The best answer is",
+      "question": "(builder #214) In Avalanche practice, coreth is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -13359,7 +13359,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "(builder #215) In Avalanche practice, solidity contracts on avalanche c-chain generally Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -13384,7 +13384,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "(builder #216) In Avalanche practice, an evm address on c-chain is Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -13409,7 +13409,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "(builder #217) In Avalanche practice, an avalanche l1 is Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -13434,7 +13434,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "(builder #218) In Avalanche practice, compared with a single c-chain app, an l1 can Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -13459,7 +13459,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "(builder #219) In Avalanche practice, validator manager contracts help Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -13484,7 +13484,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "(builder #220) In Avalanche practice, icm / warp messaging enables Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -13509,7 +13509,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "(builder #221) In Avalanche practice, teleporter is associated with Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -13534,7 +13534,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "(builder #222) In Avalanche practice, a cross-chain message should be treated as Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -13559,7 +13559,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "(builder #223) In Avalanche practice, validators on avalanche Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -13584,7 +13584,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "(builder #224) In Avalanche practice, node software is used to Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -13609,7 +13609,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "(builder #225) In Avalanche practice, snowman consensus is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -13634,7 +13634,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "(builder #226) In Avalanche practice, finality on avalanche aims to be Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -13659,7 +13659,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "(builder #227) In Avalanche practice, avalanche cli / platform cli helps builders Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -13684,7 +13684,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "(builder #228) In Avalanche practice, hardhat or foundry on fuji is useful for Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -13709,7 +13709,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
+      "question": "(builder #229) In Avalanche practice, builder hub documentation is the place to Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -13734,7 +13734,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"A soulbound credential means?\" The best answer is",
+      "question": "(builder #230) In Avalanche practice, a soulbound credential means Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -13759,7 +13759,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — avalanche is best described as.",
+      "question": "(builder #231) Given Avalanche docs, what is true about: Avalanche is best described as? Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -13784,7 +13784,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — avax is primarily used for.",
+      "question": "(builder #232) Given Avalanche docs, what is true about: AVAX is primarily used for? Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -13809,7 +13809,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — the primary network includes.",
+      "question": "(builder #233) Given Avalanche docs, what is true about: The Primary Network includes? Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -13834,7 +13834,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — the c-chain is.",
+      "question": "(builder #234) Given Avalanche docs, what is true about: The C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -13859,7 +13859,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — gas on the c-chain is paid in.",
+      "question": "(builder #235) Given Avalanche docs, what is true about: Gas on the C-Chain is paid in? Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -13884,7 +13884,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — fuji refers to.",
+      "question": "(builder #236) Given Avalanche docs, what is true about: Fuji refers to? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -13909,7 +13909,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — coreth is.",
+      "question": "(builder #237) Given Avalanche docs, what is true about: Coreth is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -13934,7 +13934,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
+      "question": "(builder #238) Given Avalanche docs, what is true about: Solidity contracts on Avalanche C-Chain generally? Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -13959,7 +13959,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — an evm address on c-chain is.",
+      "question": "(builder #239) Given Avalanche docs, what is true about: An EVM address on C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -13984,7 +13984,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — an avalanche l1 is.",
+      "question": "(builder #240) Given Avalanche docs, what is true about: An Avalanche L1 is? Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -14009,7 +14009,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
+      "question": "(builder #241) Given Avalanche docs, what is true about: Compared with a single C-Chain app, an L1 can? Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -14034,7 +14034,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — validator manager contracts help.",
+      "question": "(builder #242) Given Avalanche docs, what is true about: Validator Manager contracts help? Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -14059,7 +14059,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — icm / warp messaging enables.",
+      "question": "(builder #243) Given Avalanche docs, what is true about: ICM / Warp messaging enables? Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -14084,7 +14084,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — teleporter is associated with.",
+      "question": "(builder #244) Given Avalanche docs, what is true about: Teleporter is associated with? Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -14109,7 +14109,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — a cross-chain message should be treated as.",
+      "question": "(builder #245) Given Avalanche docs, what is true about: A cross-chain message should be treated as? Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -14134,7 +14134,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — validators on avalanche.",
+      "question": "(builder #246) Given Avalanche docs, what is true about: Validators on Avalanche? Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -14159,7 +14159,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — node software is used to.",
+      "question": "(builder #247) Given Avalanche docs, what is true about: Node software is used to? Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -14184,7 +14184,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — snowman consensus is.",
+      "question": "(builder #248) Given Avalanche docs, what is true about: Snowman consensus is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -14209,7 +14209,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — finality on avalanche aims to be.",
+      "question": "(builder #249) Given Avalanche docs, what is true about: Finality on Avalanche aims to be? Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -14234,7 +14234,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
+      "question": "(builder #250) Given Avalanche docs, what is true about: Avalanche CLI / Platform CLI helps builders? Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -14259,7 +14259,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
+      "question": "(builder #251) Given Avalanche docs, what is true about: Hardhat or Foundry on Fuji is useful for? Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -14284,7 +14284,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — builder hub documentation is the place to.",
+      "question": "(builder #252) Given Avalanche docs, what is true about: Builder Hub documentation is the place to? Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -14309,7 +14309,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Select the accurate description for this idea — a soulbound credential means.",
+      "question": "(builder #253) Given Avalanche docs, what is true about: A soulbound credential means? Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -14334,7 +14334,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, avalanche is best described as",
+      "question": "(builder #254) Choose the option that correctly completes: Avalanche is best described as… Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -14359,7 +14359,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, avax is primarily used for",
+      "question": "(builder #255) Choose the option that correctly completes: AVAX is primarily used for… Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -14384,7 +14384,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, the primary network includes",
+      "question": "(builder #256) Choose the option that correctly completes: The Primary Network includes… Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -14409,7 +14409,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, the c-chain is",
+      "question": "(builder #257) Choose the option that correctly completes: The C-Chain is… Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -14434,7 +14434,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, gas on the c-chain is paid in",
+      "question": "(builder #258) Choose the option that correctly completes: Gas on the C-Chain is paid in… Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -14459,7 +14459,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, fuji refers to",
+      "question": "(builder #259) Choose the option that correctly completes: Fuji refers to… Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -14484,7 +14484,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, coreth is",
+      "question": "(builder #260) Choose the option that correctly completes: Coreth is… Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -14509,7 +14509,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, solidity contracts on avalanche c-chain generally",
+      "question": "(builder #261) Choose the option that correctly completes: Solidity contracts on Avalanche C-Chain generally… Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -14534,7 +14534,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, an evm address on c-chain is",
+      "question": "(builder #262) Choose the option that correctly completes: An EVM address on C-Chain is… Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -14559,7 +14559,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, an avalanche l1 is",
+      "question": "(builder #263) Choose the option that correctly completes: An Avalanche L1 is… Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -14584,7 +14584,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, compared with a single c-chain app, an l1 can",
+      "question": "(builder #264) Choose the option that correctly completes: Compared with a single C-Chain app, an L1 can… Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -14609,7 +14609,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, validator manager contracts help",
+      "question": "(builder #265) Choose the option that correctly completes: Validator Manager contracts help… Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -14634,7 +14634,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, icm / warp messaging enables",
+      "question": "(builder #266) Choose the option that correctly completes: ICM / Warp messaging enables… Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -14659,7 +14659,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, teleporter is associated with",
+      "question": "(builder #267) Choose the option that correctly completes: Teleporter is associated with… Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -14684,7 +14684,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, a cross-chain message should be treated as",
+      "question": "(builder #268) Choose the option that correctly completes: A cross-chain message should be treated as… Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -14709,7 +14709,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, validators on avalanche",
+      "question": "(builder #269) Choose the option that correctly completes: Validators on Avalanche… Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -14734,7 +14734,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, node software is used to",
+      "question": "(builder #270) Choose the option that correctly completes: Node software is used to… Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -14759,7 +14759,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, snowman consensus is",
+      "question": "(builder #271) Choose the option that correctly completes: Snowman consensus is… Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -14784,7 +14784,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, finality on avalanche aims to be",
+      "question": "(builder #272) Choose the option that correctly completes: Finality on Avalanche aims to be… Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -14809,7 +14809,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, avalanche cli / platform cli helps builders",
+      "question": "(builder #273) Choose the option that correctly completes: Avalanche CLI / Platform CLI helps builders… Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -14834,7 +14834,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, hardhat or foundry on fuji is useful for",
+      "question": "(builder #274) Choose the option that correctly completes: Hardhat or Foundry on Fuji is useful for… Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -14859,7 +14859,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, builder hub documentation is the place to",
+      "question": "(builder #275) Choose the option that correctly completes: Builder Hub documentation is the place to… Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -14884,7 +14884,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "In Avalanche practice, a soulbound credential means",
+      "question": "(builder #276) Choose the option that correctly completes: A soulbound credential means… Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -14909,7 +14909,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Avalanche is best described as?",
+      "question": "(builder #277) Which statement best matches: Avalanche is best described as? Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -14934,7 +14934,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: AVAX is primarily used for?",
+      "question": "(builder #278) Which statement best matches: AVAX is primarily used for? Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -14959,7 +14959,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: The Primary Network includes?",
+      "question": "(builder #279) Which statement best matches: The Primary Network includes? Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -14984,7 +14984,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: The C-Chain is?",
+      "question": "(builder #280) Which statement best matches: The C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -15009,7 +15009,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "(builder #281) Which statement best matches: Gas on the C-Chain is paid in? Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -15034,7 +15034,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Fuji refers to?",
+      "question": "(builder #282) Which statement best matches: Fuji refers to? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -15059,7 +15059,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Coreth is?",
+      "question": "(builder #283) Which statement best matches: Coreth is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -15084,7 +15084,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "(builder #284) Which statement best matches: Solidity contracts on Avalanche C-Chain generally? Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -15109,7 +15109,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: An EVM address on C-Chain is?",
+      "question": "(builder #285) Which statement best matches: An EVM address on C-Chain is? Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -15134,7 +15134,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: An Avalanche L1 is?",
+      "question": "(builder #286) Which statement best matches: An Avalanche L1 is? Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -15159,7 +15159,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "(builder #287) Which statement best matches: Compared with a single C-Chain app, an L1 can? Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -15184,7 +15184,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Validator Manager contracts help?",
+      "question": "(builder #288) Which statement best matches: Validator Manager contracts help? Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -15209,7 +15209,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: ICM / Warp messaging enables?",
+      "question": "(builder #289) Which statement best matches: ICM / Warp messaging enables? Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -15234,7 +15234,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Teleporter is associated with?",
+      "question": "(builder #290) Which statement best matches: Teleporter is associated with? Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -15259,7 +15259,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: A cross-chain message should be treated as?",
+      "question": "(builder #291) Which statement best matches: A cross-chain message should be treated as? Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -15284,7 +15284,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Validators on Avalanche?",
+      "question": "(builder #292) Which statement best matches: Validators on Avalanche? Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -15309,7 +15309,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Node software is used to?",
+      "question": "(builder #293) Which statement best matches: Node software is used to? Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -15334,7 +15334,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Snowman consensus is?",
+      "question": "(builder #294) Which statement best matches: Snowman consensus is? Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -15359,7 +15359,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "(builder #295) Which statement best matches: Finality on Avalanche aims to be? Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -15384,7 +15384,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "(builder #296) Which statement best matches: Avalanche CLI / Platform CLI helps builders? Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -15409,7 +15409,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "(builder #297) Which statement best matches: Hardhat or Foundry on Fuji is useful for? Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -15434,7 +15434,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "(builder #298) Which statement best matches: Builder Hub documentation is the place to? Apply it to a practical builder situation.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -15459,7 +15459,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "medium",
       "module": "builder",
-      "question": "Which statement best matches: A soulbound credential means?",
+      "question": "(builder #299) Which statement best matches: A soulbound credential means? Apply it to a practical builder situation.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -15484,7 +15484,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(builder #300) A learner asks: \"Avalanche is best described as?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -15509,7 +15509,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(builder #301) A learner asks: \"AVAX is primarily used for?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -15534,7 +15534,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(builder #302) A learner asks: \"The Primary Network includes?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -15559,7 +15559,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(builder #303) A learner asks: \"The C-Chain is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -15584,7 +15584,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(builder #304) A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "AVAX",
         "Option 1",
@@ -15609,7 +15609,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "(builder #305) A learner asks: \"Fuji refers to?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -15634,7 +15634,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Coreth is?\" The best answer is",
+      "question": "(builder #306) A learner asks: \"Coreth is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -15659,7 +15659,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "(builder #307) A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -15684,7 +15684,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "(builder #308) A learner asks: \"An EVM address on C-Chain is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -15709,7 +15709,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "(builder #309) A learner asks: \"An Avalanche L1 is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -15734,7 +15734,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "(builder #310) A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -15759,7 +15759,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "(builder #311) A learner asks: \"Validator Manager contracts help?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -15784,7 +15784,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "(builder #312) A learner asks: \"ICM / Warp messaging enables?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -15809,7 +15809,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "(builder #313) A learner asks: \"Teleporter is associated with?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -15834,7 +15834,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "(builder #314) A learner asks: \"A cross-chain message should be treated as?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -15859,7 +15859,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "(builder #315) A learner asks: \"Validators on Avalanche?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -15884,7 +15884,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "(builder #316) A learner asks: \"Node software is used to?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -15909,7 +15909,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "(builder #317) A learner asks: \"Snowman consensus is?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -15934,7 +15934,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "(builder #318) A learner asks: \"Finality on Avalanche aims to be?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -15959,7 +15959,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "(builder #319) A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -15984,7 +15984,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "medium",
       "module": "builder",
-      "question": "A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "(builder #320) A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is Apply it to a practical builder situation.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -16011,7 +16011,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Avalanche is best described as in a production-minded scenario?",
+      "question": "(advanced #1) Which statement best matches: Avalanche is best described as in a production-minded scenario?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -16036,7 +16036,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: AVAX is primarily used for in a production-minded scenario?",
+      "question": "(advanced #2) Which statement best matches: AVAX is primarily used for in a production-minded scenario?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -16061,7 +16061,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: The Primary Network includes in a production-minded scenario?",
+      "question": "(advanced #3) Which statement best matches: The Primary Network includes in a production-minded scenario?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -16086,7 +16086,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: The C-Chain is in a production-minded scenario?",
+      "question": "(advanced #4) Which statement best matches: The C-Chain is in a production-minded scenario?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -16111,7 +16111,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in in a production-minded scenario?",
+      "question": "(advanced #5) Which statement best matches: Gas on the C-Chain is paid in in a production-minded scenario?",
       "options": [
         "AVAX",
         "Option 1",
@@ -16136,7 +16136,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Fuji refers to in a production-minded scenario?",
+      "question": "(advanced #6) Which statement best matches: Fuji refers to in a production-minded scenario?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -16161,7 +16161,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Coreth is in a production-minded scenario?",
+      "question": "(advanced #7) Which statement best matches: Coreth is in a production-minded scenario?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -16186,7 +16186,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally in a production-minded scenario?",
+      "question": "(advanced #8) Which statement best matches: Solidity contracts on Avalanche C-Chain generally in a production-minded scenario?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -16211,7 +16211,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: An EVM address on C-Chain is in a production-minded scenario?",
+      "question": "(advanced #9) Which statement best matches: An EVM address on C-Chain is in a production-minded scenario?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -16236,7 +16236,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: An Avalanche L1 is in a production-minded scenario?",
+      "question": "(advanced #10) Which statement best matches: An Avalanche L1 is in a production-minded scenario?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -16261,7 +16261,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can in a production-minded scenario?",
+      "question": "(advanced #11) Which statement best matches: Compared with a single C-Chain app, an L1 can in a production-minded scenario?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -16286,7 +16286,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Validator Manager contracts help in a production-minded scenario?",
+      "question": "(advanced #12) Which statement best matches: Validator Manager contracts help in a production-minded scenario?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -16311,7 +16311,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: ICM / Warp messaging enables in a production-minded scenario?",
+      "question": "(advanced #13) Which statement best matches: ICM / Warp messaging enables in a production-minded scenario?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -16336,7 +16336,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Teleporter is associated with in a production-minded scenario?",
+      "question": "(advanced #14) Which statement best matches: Teleporter is associated with in a production-minded scenario?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -16361,7 +16361,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: A cross-chain message should be treated as in a production-minded scenario?",
+      "question": "(advanced #15) Which statement best matches: A cross-chain message should be treated as in a production-minded scenario?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -16386,7 +16386,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Validators on Avalanche in a production-minded scenario?",
+      "question": "(advanced #16) Which statement best matches: Validators on Avalanche in a production-minded scenario?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -16411,7 +16411,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Node software is used to in a production-minded scenario?",
+      "question": "(advanced #17) Which statement best matches: Node software is used to in a production-minded scenario?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -16436,7 +16436,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Snowman consensus is in a production-minded scenario?",
+      "question": "(advanced #18) Which statement best matches: Snowman consensus is in a production-minded scenario?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -16461,7 +16461,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Finality on Avalanche aims to be in a production-minded scenario?",
+      "question": "(advanced #19) Which statement best matches: Finality on Avalanche aims to be in a production-minded scenario?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -16486,7 +16486,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders in a production-minded scenario?",
+      "question": "(advanced #20) Which statement best matches: Avalanche CLI / Platform CLI helps builders in a production-minded scenario?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -16511,7 +16511,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for in a production-minded scenario?",
+      "question": "(advanced #21) Which statement best matches: Hardhat or Foundry on Fuji is useful for in a production-minded scenario?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -16536,7 +16536,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Builder Hub documentation is the place to in a production-minded scenario?",
+      "question": "(advanced #22) Which statement best matches: Builder Hub documentation is the place to in a production-minded scenario?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -16561,7 +16561,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: A soulbound credential means in a production-minded scenario?",
+      "question": "(advanced #23) Which statement best matches: A soulbound credential means in a production-minded scenario?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -16586,7 +16586,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(advanced #24) A learner asks: \"Avalanche is best described as?\" The best answer is in a production-minded scenario?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -16611,7 +16611,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(advanced #25) A learner asks: \"AVAX is primarily used for?\" The best answer is in a production-minded scenario?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -16636,7 +16636,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(advanced #26) A learner asks: \"The Primary Network includes?\" The best answer is in a production-minded scenario?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -16661,7 +16661,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(advanced #27) A learner asks: \"The C-Chain is?\" The best answer is in a production-minded scenario?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -16686,7 +16686,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(advanced #28) A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is in a production-minded scenario?",
       "options": [
         "AVAX",
         "Option 1",
@@ -16711,7 +16711,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "(advanced #29) A learner asks: \"Fuji refers to?\" The best answer is in a production-minded scenario?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -16736,7 +16736,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Coreth is?\" The best answer is",
+      "question": "(advanced #30) A learner asks: \"Coreth is?\" The best answer is in a production-minded scenario?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -16761,7 +16761,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "(advanced #31) A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is in a production-minded scenario?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -16786,7 +16786,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "(advanced #32) A learner asks: \"An EVM address on C-Chain is?\" The best answer is in a production-minded scenario?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -16811,7 +16811,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "(advanced #33) A learner asks: \"An Avalanche L1 is?\" The best answer is in a production-minded scenario?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -16836,7 +16836,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "(advanced #34) A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is in a production-minded scenario?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -16861,7 +16861,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "(advanced #35) A learner asks: \"Validator Manager contracts help?\" The best answer is in a production-minded scenario?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -16886,7 +16886,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "(advanced #36) A learner asks: \"ICM / Warp messaging enables?\" The best answer is in a production-minded scenario?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -16911,7 +16911,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "(advanced #37) A learner asks: \"Teleporter is associated with?\" The best answer is in a production-minded scenario?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -16936,7 +16936,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "(advanced #38) A learner asks: \"A cross-chain message should be treated as?\" The best answer is in a production-minded scenario?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -16961,7 +16961,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "(advanced #39) A learner asks: \"Validators on Avalanche?\" The best answer is in a production-minded scenario?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -16986,7 +16986,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "(advanced #40) A learner asks: \"Node software is used to?\" The best answer is in a production-minded scenario?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -17011,7 +17011,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "(advanced #41) A learner asks: \"Snowman consensus is?\" The best answer is in a production-minded scenario?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -17036,7 +17036,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "(advanced #42) A learner asks: \"Finality on Avalanche aims to be?\" The best answer is in a production-minded scenario?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -17061,7 +17061,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "(advanced #43) A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is in a production-minded scenario?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -17086,7 +17086,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "(advanced #44) A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is in a production-minded scenario?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -17111,7 +17111,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
+      "question": "(advanced #45) A learner asks: \"Builder Hub documentation is the place to?\" The best answer is in a production-minded scenario?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -17136,7 +17136,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"A soulbound credential means?\" The best answer is",
+      "question": "(advanced #46) A learner asks: \"A soulbound credential means?\" The best answer is in a production-minded scenario?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -17161,7 +17161,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — avalanche is best described as.",
+      "question": "(advanced #47) Select the accurate description for this idea — avalanche is best described as. in a production-minded scenario?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -17186,7 +17186,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — avax is primarily used for.",
+      "question": "(advanced #48) Select the accurate description for this idea — avax is primarily used for. in a production-minded scenario?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -17211,7 +17211,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — the primary network includes.",
+      "question": "(advanced #49) Select the accurate description for this idea — the primary network includes. in a production-minded scenario?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -17236,7 +17236,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — the c-chain is.",
+      "question": "(advanced #50) Select the accurate description for this idea — the c-chain is. in a production-minded scenario?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -17261,7 +17261,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — gas on the c-chain is paid in.",
+      "question": "(advanced #51) Select the accurate description for this idea — gas on the c-chain is paid in. in a production-minded scenario?",
       "options": [
         "AVAX",
         "Option 1",
@@ -17286,7 +17286,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — fuji refers to.",
+      "question": "(advanced #52) Select the accurate description for this idea — fuji refers to. in a production-minded scenario?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -17311,7 +17311,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — coreth is.",
+      "question": "(advanced #53) Select the accurate description for this idea — coreth is. in a production-minded scenario?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -17336,7 +17336,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
+      "question": "(advanced #54) Select the accurate description for this idea — solidity contracts on avalanche c-chain generally. in a production-minded scenario?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -17361,7 +17361,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — an evm address on c-chain is.",
+      "question": "(advanced #55) Select the accurate description for this idea — an evm address on c-chain is. in a production-minded scenario?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -17386,7 +17386,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — an avalanche l1 is.",
+      "question": "(advanced #56) Select the accurate description for this idea — an avalanche l1 is. in a production-minded scenario?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -17411,7 +17411,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
+      "question": "(advanced #57) Select the accurate description for this idea — compared with a single c-chain app, an l1 can. in a production-minded scenario?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -17436,7 +17436,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — validator manager contracts help.",
+      "question": "(advanced #58) Select the accurate description for this idea — validator manager contracts help. in a production-minded scenario?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -17461,7 +17461,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — icm / warp messaging enables.",
+      "question": "(advanced #59) Select the accurate description for this idea — icm / warp messaging enables. in a production-minded scenario?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -17486,7 +17486,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — teleporter is associated with.",
+      "question": "(advanced #60) Select the accurate description for this idea — teleporter is associated with. in a production-minded scenario?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -17511,7 +17511,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — a cross-chain message should be treated as.",
+      "question": "(advanced #61) Select the accurate description for this idea — a cross-chain message should be treated as. in a production-minded scenario?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -17536,7 +17536,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — validators on avalanche.",
+      "question": "(advanced #62) Select the accurate description for this idea — validators on avalanche. in a production-minded scenario?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -17561,7 +17561,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — node software is used to.",
+      "question": "(advanced #63) Select the accurate description for this idea — node software is used to. in a production-minded scenario?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -17586,7 +17586,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — snowman consensus is.",
+      "question": "(advanced #64) Select the accurate description for this idea — snowman consensus is. in a production-minded scenario?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -17611,7 +17611,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — finality on avalanche aims to be.",
+      "question": "(advanced #65) Select the accurate description for this idea — finality on avalanche aims to be. in a production-minded scenario?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -17636,7 +17636,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
+      "question": "(advanced #66) Select the accurate description for this idea — avalanche cli / platform cli helps builders. in a production-minded scenario?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -17661,7 +17661,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
+      "question": "(advanced #67) Select the accurate description for this idea — hardhat or foundry on fuji is useful for. in a production-minded scenario?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -17686,7 +17686,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — builder hub documentation is the place to.",
+      "question": "(advanced #68) Select the accurate description for this idea — builder hub documentation is the place to. in a production-minded scenario?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -17711,7 +17711,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Select the accurate description for this idea — a soulbound credential means.",
+      "question": "(advanced #69) Select the accurate description for this idea — a soulbound credential means. in a production-minded scenario?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -17736,7 +17736,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, avalanche is best described as",
+      "question": "(advanced #70) In Avalanche practice, avalanche is best described as in a production-minded scenario?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -17761,7 +17761,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, avax is primarily used for",
+      "question": "(advanced #71) In Avalanche practice, avax is primarily used for in a production-minded scenario?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -17786,7 +17786,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, the primary network includes",
+      "question": "(advanced #72) In Avalanche practice, the primary network includes in a production-minded scenario?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -17811,7 +17811,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, the c-chain is",
+      "question": "(advanced #73) In Avalanche practice, the c-chain is in a production-minded scenario?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -17836,7 +17836,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, gas on the c-chain is paid in",
+      "question": "(advanced #74) In Avalanche practice, gas on the c-chain is paid in in a production-minded scenario?",
       "options": [
         "AVAX",
         "Option 1",
@@ -17861,7 +17861,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, fuji refers to",
+      "question": "(advanced #75) In Avalanche practice, fuji refers to in a production-minded scenario?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -17886,7 +17886,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, coreth is",
+      "question": "(advanced #76) In Avalanche practice, coreth is in a production-minded scenario?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -17911,7 +17911,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, solidity contracts on avalanche c-chain generally",
+      "question": "(advanced #77) In Avalanche practice, solidity contracts on avalanche c-chain generally in a production-minded scenario?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -17936,7 +17936,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, an evm address on c-chain is",
+      "question": "(advanced #78) In Avalanche practice, an evm address on c-chain is in a production-minded scenario?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -17961,7 +17961,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, an avalanche l1 is",
+      "question": "(advanced #79) In Avalanche practice, an avalanche l1 is in a production-minded scenario?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -17986,7 +17986,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, compared with a single c-chain app, an l1 can",
+      "question": "(advanced #80) In Avalanche practice, compared with a single c-chain app, an l1 can in a production-minded scenario?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -18011,7 +18011,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, validator manager contracts help",
+      "question": "(advanced #81) In Avalanche practice, validator manager contracts help in a production-minded scenario?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -18036,7 +18036,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, icm / warp messaging enables",
+      "question": "(advanced #82) In Avalanche practice, icm / warp messaging enables in a production-minded scenario?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -18061,7 +18061,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, teleporter is associated with",
+      "question": "(advanced #83) In Avalanche practice, teleporter is associated with in a production-minded scenario?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -18086,7 +18086,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, a cross-chain message should be treated as",
+      "question": "(advanced #84) In Avalanche practice, a cross-chain message should be treated as in a production-minded scenario?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -18111,7 +18111,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, validators on avalanche",
+      "question": "(advanced #85) In Avalanche practice, validators on avalanche in a production-minded scenario?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -18136,7 +18136,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, node software is used to",
+      "question": "(advanced #86) In Avalanche practice, node software is used to in a production-minded scenario?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -18161,7 +18161,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, snowman consensus is",
+      "question": "(advanced #87) In Avalanche practice, snowman consensus is in a production-minded scenario?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -18186,7 +18186,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, finality on avalanche aims to be",
+      "question": "(advanced #88) In Avalanche practice, finality on avalanche aims to be in a production-minded scenario?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -18211,7 +18211,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, avalanche cli / platform cli helps builders",
+      "question": "(advanced #89) In Avalanche practice, avalanche cli / platform cli helps builders in a production-minded scenario?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -18236,7 +18236,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, hardhat or foundry on fuji is useful for",
+      "question": "(advanced #90) In Avalanche practice, hardhat or foundry on fuji is useful for in a production-minded scenario?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -18261,7 +18261,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, builder hub documentation is the place to",
+      "question": "(advanced #91) In Avalanche practice, builder hub documentation is the place to in a production-minded scenario?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -18286,7 +18286,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "In Avalanche practice, a soulbound credential means",
+      "question": "(advanced #92) In Avalanche practice, a soulbound credential means in a production-minded scenario?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -18311,7 +18311,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Avalanche is best described as in a production-minded scenario?",
+      "question": "(advanced #93) Given Avalanche docs, what is true about: Avalanche is best described as in a production-minded scenario?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -18336,7 +18336,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: AVAX is primarily used for in a production-minded scenario?",
+      "question": "(advanced #94) Given Avalanche docs, what is true about: AVAX is primarily used for in a production-minded scenario?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -18361,7 +18361,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: The Primary Network includes in a production-minded scenario?",
+      "question": "(advanced #95) Given Avalanche docs, what is true about: The Primary Network includes in a production-minded scenario?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -18386,7 +18386,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: The C-Chain is in a production-minded scenario?",
+      "question": "(advanced #96) Given Avalanche docs, what is true about: The C-Chain is in a production-minded scenario?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -18411,7 +18411,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Gas on the C-Chain is paid in in a production-minded scenario?",
+      "question": "(advanced #97) Given Avalanche docs, what is true about: Gas on the C-Chain is paid in in a production-minded scenario?",
       "options": [
         "AVAX",
         "Option 1",
@@ -18436,7 +18436,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Fuji refers to in a production-minded scenario?",
+      "question": "(advanced #98) Given Avalanche docs, what is true about: Fuji refers to in a production-minded scenario?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -18461,7 +18461,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Coreth is in a production-minded scenario?",
+      "question": "(advanced #99) Given Avalanche docs, what is true about: Coreth is in a production-minded scenario?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -18486,7 +18486,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Solidity contracts on Avalanche C-Chain generally in a production-minded scenario?",
+      "question": "(advanced #100) Given Avalanche docs, what is true about: Solidity contracts on Avalanche C-Chain generally in a production-minded scenario?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -18511,7 +18511,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: An EVM address on C-Chain is in a production-minded scenario?",
+      "question": "(advanced #101) Given Avalanche docs, what is true about: An EVM address on C-Chain is in a production-minded scenario?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -18536,7 +18536,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: An Avalanche L1 is in a production-minded scenario?",
+      "question": "(advanced #102) Given Avalanche docs, what is true about: An Avalanche L1 is in a production-minded scenario?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -18561,7 +18561,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Compared with a single C-Chain app, an L1 can in a production-minded scenario?",
+      "question": "(advanced #103) Given Avalanche docs, what is true about: Compared with a single C-Chain app, an L1 can in a production-minded scenario?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -18586,7 +18586,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Validator Manager contracts help in a production-minded scenario?",
+      "question": "(advanced #104) Given Avalanche docs, what is true about: Validator Manager contracts help in a production-minded scenario?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -18611,7 +18611,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: ICM / Warp messaging enables in a production-minded scenario?",
+      "question": "(advanced #105) Given Avalanche docs, what is true about: ICM / Warp messaging enables in a production-minded scenario?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -18636,7 +18636,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Teleporter is associated with in a production-minded scenario?",
+      "question": "(advanced #106) Given Avalanche docs, what is true about: Teleporter is associated with in a production-minded scenario?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -18661,7 +18661,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: A cross-chain message should be treated as in a production-minded scenario?",
+      "question": "(advanced #107) Given Avalanche docs, what is true about: A cross-chain message should be treated as in a production-minded scenario?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -18686,7 +18686,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Validators on Avalanche in a production-minded scenario?",
+      "question": "(advanced #108) Given Avalanche docs, what is true about: Validators on Avalanche in a production-minded scenario?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -18711,7 +18711,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Node software is used to in a production-minded scenario?",
+      "question": "(advanced #109) Given Avalanche docs, what is true about: Node software is used to in a production-minded scenario?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -18736,7 +18736,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Snowman consensus is in a production-minded scenario?",
+      "question": "(advanced #110) Given Avalanche docs, what is true about: Snowman consensus is in a production-minded scenario?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -18761,7 +18761,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Finality on Avalanche aims to be in a production-minded scenario?",
+      "question": "(advanced #111) Given Avalanche docs, what is true about: Finality on Avalanche aims to be in a production-minded scenario?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -18786,7 +18786,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Avalanche CLI / Platform CLI helps builders in a production-minded scenario?",
+      "question": "(advanced #112) Given Avalanche docs, what is true about: Avalanche CLI / Platform CLI helps builders in a production-minded scenario?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -18811,7 +18811,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Hardhat or Foundry on Fuji is useful for in a production-minded scenario?",
+      "question": "(advanced #113) Given Avalanche docs, what is true about: Hardhat or Foundry on Fuji is useful for in a production-minded scenario?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -18836,7 +18836,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: Builder Hub documentation is the place to in a production-minded scenario?",
+      "question": "(advanced #114) Given Avalanche docs, what is true about: Builder Hub documentation is the place to in a production-minded scenario?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -18861,7 +18861,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "Which statement best matches: A soulbound credential means in a production-minded scenario?",
+      "question": "(advanced #115) Given Avalanche docs, what is true about: A soulbound credential means in a production-minded scenario?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -18886,7 +18886,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "(advanced #116) Choose the option that correctly completes: Avalanche is best described as… in a production-minded scenario?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -18911,7 +18911,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "(advanced #117) Choose the option that correctly completes: AVAX is primarily used for… in a production-minded scenario?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -18936,7 +18936,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "(advanced #118) Choose the option that correctly completes: The Primary Network includes… in a production-minded scenario?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -18961,7 +18961,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "(advanced #119) Choose the option that correctly completes: The C-Chain is… in a production-minded scenario?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -18986,7 +18986,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "hard",
       "module": "advanced",
-      "question": "A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "(advanced #120) Choose the option that correctly completes: Gas on the C-Chain is paid in… in a production-minded scenario?",
       "options": [
         "AVAX",
         "Option 1",
@@ -19013,7 +19013,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Avalanche is best described as?",
+      "question": "Mastery check — reason carefully: (mastery #1) Which statement best matches: Avalanche is best described as?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -19038,7 +19038,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: AVAX is primarily used for?",
+      "question": "Mastery check — reason carefully: (mastery #2) Which statement best matches: AVAX is primarily used for?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -19063,7 +19063,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: The Primary Network includes?",
+      "question": "Mastery check — reason carefully: (mastery #3) Which statement best matches: The Primary Network includes?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -19088,7 +19088,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: The C-Chain is?",
+      "question": "Mastery check — reason carefully: (mastery #4) Which statement best matches: The C-Chain is?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -19113,7 +19113,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "Mastery check — reason carefully: (mastery #5) Which statement best matches: Gas on the C-Chain is paid in?",
       "options": [
         "AVAX",
         "Option 1",
@@ -19138,7 +19138,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Fuji refers to?",
+      "question": "Mastery check — reason carefully: (mastery #6) Which statement best matches: Fuji refers to?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -19163,7 +19163,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Coreth is?",
+      "question": "Mastery check — reason carefully: (mastery #7) Which statement best matches: Coreth is?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -19188,7 +19188,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "Mastery check — reason carefully: (mastery #8) Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -19213,7 +19213,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: An EVM address on C-Chain is?",
+      "question": "Mastery check — reason carefully: (mastery #9) Which statement best matches: An EVM address on C-Chain is?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -19238,7 +19238,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: An Avalanche L1 is?",
+      "question": "Mastery check — reason carefully: (mastery #10) Which statement best matches: An Avalanche L1 is?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -19263,7 +19263,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "Mastery check — reason carefully: (mastery #11) Which statement best matches: Compared with a single C-Chain app, an L1 can?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -19288,7 +19288,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Validator Manager contracts help?",
+      "question": "Mastery check — reason carefully: (mastery #12) Which statement best matches: Validator Manager contracts help?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -19313,7 +19313,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: ICM / Warp messaging enables?",
+      "question": "Mastery check — reason carefully: (mastery #13) Which statement best matches: ICM / Warp messaging enables?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -19338,7 +19338,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Teleporter is associated with?",
+      "question": "Mastery check — reason carefully: (mastery #14) Which statement best matches: Teleporter is associated with?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -19363,7 +19363,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: A cross-chain message should be treated as?",
+      "question": "Mastery check — reason carefully: (mastery #15) Which statement best matches: A cross-chain message should be treated as?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -19388,7 +19388,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Validators on Avalanche?",
+      "question": "Mastery check — reason carefully: (mastery #16) Which statement best matches: Validators on Avalanche?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -19413,7 +19413,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Node software is used to?",
+      "question": "Mastery check — reason carefully: (mastery #17) Which statement best matches: Node software is used to?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -19438,7 +19438,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Snowman consensus is?",
+      "question": "Mastery check — reason carefully: (mastery #18) Which statement best matches: Snowman consensus is?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -19463,7 +19463,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "Mastery check — reason carefully: (mastery #19) Which statement best matches: Finality on Avalanche aims to be?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -19488,7 +19488,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "Mastery check — reason carefully: (mastery #20) Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -19513,7 +19513,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "Mastery check — reason carefully: (mastery #21) Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -19538,7 +19538,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "Mastery check — reason carefully: (mastery #22) Which statement best matches: Builder Hub documentation is the place to?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -19563,7 +19563,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: A soulbound credential means?",
+      "question": "Mastery check — reason carefully: (mastery #23) Which statement best matches: A soulbound credential means?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -19588,7 +19588,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #24) A learner asks: \"Avalanche is best described as?\" The best answer is",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -19613,7 +19613,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #25) A learner asks: \"AVAX is primarily used for?\" The best answer is",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -19638,7 +19638,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #26) A learner asks: \"The Primary Network includes?\" The best answer is",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -19663,7 +19663,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #27) A learner asks: \"The C-Chain is?\" The best answer is",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -19688,7 +19688,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #28) A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
       "options": [
         "AVAX",
         "Option 1",
@@ -19713,7 +19713,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Fuji refers to?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #29) A learner asks: \"Fuji refers to?\" The best answer is",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -19738,7 +19738,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Coreth is?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #30) A learner asks: \"Coreth is?\" The best answer is",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -19763,7 +19763,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #31) A learner asks: \"Solidity contracts on Avalanche C-Chain generally?\" The best answer is",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -19788,7 +19788,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #32) A learner asks: \"An EVM address on C-Chain is?\" The best answer is",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -19813,7 +19813,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"An Avalanche L1 is?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #33) A learner asks: \"An Avalanche L1 is?\" The best answer is",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -19838,7 +19838,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #34) A learner asks: \"Compared with a single C-Chain app, an L1 can?\" The best answer is",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -19863,7 +19863,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Validator Manager contracts help?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #35) A learner asks: \"Validator Manager contracts help?\" The best answer is",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -19888,7 +19888,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #36) A learner asks: \"ICM / Warp messaging enables?\" The best answer is",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -19913,7 +19913,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Teleporter is associated with?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #37) A learner asks: \"Teleporter is associated with?\" The best answer is",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -19938,7 +19938,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #38) A learner asks: \"A cross-chain message should be treated as?\" The best answer is",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -19963,7 +19963,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Validators on Avalanche?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #39) A learner asks: \"Validators on Avalanche?\" The best answer is",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -19988,7 +19988,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Node software is used to?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #40) A learner asks: \"Node software is used to?\" The best answer is",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -20013,7 +20013,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Snowman consensus is?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #41) A learner asks: \"Snowman consensus is?\" The best answer is",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -20038,7 +20038,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #42) A learner asks: \"Finality on Avalanche aims to be?\" The best answer is",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -20063,7 +20063,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #43) A learner asks: \"Avalanche CLI / Platform CLI helps builders?\" The best answer is",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -20088,7 +20088,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #44) A learner asks: \"Hardhat or Foundry on Fuji is useful for?\" The best answer is",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -20113,7 +20113,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #45) A learner asks: \"Builder Hub documentation is the place to?\" The best answer is",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -20138,7 +20138,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"A soulbound credential means?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #46) A learner asks: \"A soulbound credential means?\" The best answer is",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -20163,7 +20163,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — avalanche is best described as.",
+      "question": "Mastery check — reason carefully: (mastery #47) Select the accurate description for this idea — avalanche is best described as.",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -20188,7 +20188,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — avax is primarily used for.",
+      "question": "Mastery check — reason carefully: (mastery #48) Select the accurate description for this idea — avax is primarily used for.",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -20213,7 +20213,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — the primary network includes.",
+      "question": "Mastery check — reason carefully: (mastery #49) Select the accurate description for this idea — the primary network includes.",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -20238,7 +20238,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — the c-chain is.",
+      "question": "Mastery check — reason carefully: (mastery #50) Select the accurate description for this idea — the c-chain is.",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -20263,7 +20263,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — gas on the c-chain is paid in.",
+      "question": "Mastery check — reason carefully: (mastery #51) Select the accurate description for this idea — gas on the c-chain is paid in.",
       "options": [
         "AVAX",
         "Option 1",
@@ -20288,7 +20288,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — fuji refers to.",
+      "question": "Mastery check — reason carefully: (mastery #52) Select the accurate description for this idea — fuji refers to.",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -20313,7 +20313,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — coreth is.",
+      "question": "Mastery check — reason carefully: (mastery #53) Select the accurate description for this idea — coreth is.",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -20338,7 +20338,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
+      "question": "Mastery check — reason carefully: (mastery #54) Select the accurate description for this idea — solidity contracts on avalanche c-chain generally.",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -20363,7 +20363,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — an evm address on c-chain is.",
+      "question": "Mastery check — reason carefully: (mastery #55) Select the accurate description for this idea — an evm address on c-chain is.",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -20388,7 +20388,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — an avalanche l1 is.",
+      "question": "Mastery check — reason carefully: (mastery #56) Select the accurate description for this idea — an avalanche l1 is.",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -20413,7 +20413,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
+      "question": "Mastery check — reason carefully: (mastery #57) Select the accurate description for this idea — compared with a single c-chain app, an l1 can.",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -20438,7 +20438,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — validator manager contracts help.",
+      "question": "Mastery check — reason carefully: (mastery #58) Select the accurate description for this idea — validator manager contracts help.",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -20463,7 +20463,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — icm / warp messaging enables.",
+      "question": "Mastery check — reason carefully: (mastery #59) Select the accurate description for this idea — icm / warp messaging enables.",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -20488,7 +20488,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — teleporter is associated with.",
+      "question": "Mastery check — reason carefully: (mastery #60) Select the accurate description for this idea — teleporter is associated with.",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -20513,7 +20513,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — a cross-chain message should be treated as.",
+      "question": "Mastery check — reason carefully: (mastery #61) Select the accurate description for this idea — a cross-chain message should be treated as.",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -20538,7 +20538,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — validators on avalanche.",
+      "question": "Mastery check — reason carefully: (mastery #62) Select the accurate description for this idea — validators on avalanche.",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -20563,7 +20563,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — node software is used to.",
+      "question": "Mastery check — reason carefully: (mastery #63) Select the accurate description for this idea — node software is used to.",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -20588,7 +20588,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — snowman consensus is.",
+      "question": "Mastery check — reason carefully: (mastery #64) Select the accurate description for this idea — snowman consensus is.",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -20613,7 +20613,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — finality on avalanche aims to be.",
+      "question": "Mastery check — reason carefully: (mastery #65) Select the accurate description for this idea — finality on avalanche aims to be.",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -20638,7 +20638,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
+      "question": "Mastery check — reason carefully: (mastery #66) Select the accurate description for this idea — avalanche cli / platform cli helps builders.",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -20663,7 +20663,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
+      "question": "Mastery check — reason carefully: (mastery #67) Select the accurate description for this idea — hardhat or foundry on fuji is useful for.",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -20688,7 +20688,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — builder hub documentation is the place to.",
+      "question": "Mastery check — reason carefully: (mastery #68) Select the accurate description for this idea — builder hub documentation is the place to.",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -20713,7 +20713,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Select the accurate description for this idea — a soulbound credential means.",
+      "question": "Mastery check — reason carefully: (mastery #69) Select the accurate description for this idea — a soulbound credential means.",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -20738,7 +20738,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, avalanche is best described as",
+      "question": "Mastery check — reason carefully: (mastery #70) In Avalanche practice, avalanche is best described as",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -20763,7 +20763,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, avax is primarily used for",
+      "question": "Mastery check — reason carefully: (mastery #71) In Avalanche practice, avax is primarily used for",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -20788,7 +20788,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, the primary network includes",
+      "question": "Mastery check — reason carefully: (mastery #72) In Avalanche practice, the primary network includes",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -20813,7 +20813,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, the c-chain is",
+      "question": "Mastery check — reason carefully: (mastery #73) In Avalanche practice, the c-chain is",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -20838,7 +20838,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, gas on the c-chain is paid in",
+      "question": "Mastery check — reason carefully: (mastery #74) In Avalanche practice, gas on the c-chain is paid in",
       "options": [
         "AVAX",
         "Option 1",
@@ -20863,7 +20863,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, fuji refers to",
+      "question": "Mastery check — reason carefully: (mastery #75) In Avalanche practice, fuji refers to",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -20888,7 +20888,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, coreth is",
+      "question": "Mastery check — reason carefully: (mastery #76) In Avalanche practice, coreth is",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -20913,7 +20913,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, solidity contracts on avalanche c-chain generally",
+      "question": "Mastery check — reason carefully: (mastery #77) In Avalanche practice, solidity contracts on avalanche c-chain generally",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -20938,7 +20938,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, an evm address on c-chain is",
+      "question": "Mastery check — reason carefully: (mastery #78) In Avalanche practice, an evm address on c-chain is",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -20963,7 +20963,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, an avalanche l1 is",
+      "question": "Mastery check — reason carefully: (mastery #79) In Avalanche practice, an avalanche l1 is",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -20988,7 +20988,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, compared with a single c-chain app, an l1 can",
+      "question": "Mastery check — reason carefully: (mastery #80) In Avalanche practice, compared with a single c-chain app, an l1 can",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -21013,7 +21013,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, validator manager contracts help",
+      "question": "Mastery check — reason carefully: (mastery #81) In Avalanche practice, validator manager contracts help",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -21038,7 +21038,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, icm / warp messaging enables",
+      "question": "Mastery check — reason carefully: (mastery #82) In Avalanche practice, icm / warp messaging enables",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -21063,7 +21063,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, teleporter is associated with",
+      "question": "Mastery check — reason carefully: (mastery #83) In Avalanche practice, teleporter is associated with",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -21088,7 +21088,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, a cross-chain message should be treated as",
+      "question": "Mastery check — reason carefully: (mastery #84) In Avalanche practice, a cross-chain message should be treated as",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -21113,7 +21113,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, validators on avalanche",
+      "question": "Mastery check — reason carefully: (mastery #85) In Avalanche practice, validators on avalanche",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -21138,7 +21138,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, node software is used to",
+      "question": "Mastery check — reason carefully: (mastery #86) In Avalanche practice, node software is used to",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -21163,7 +21163,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, snowman consensus is",
+      "question": "Mastery check — reason carefully: (mastery #87) In Avalanche practice, snowman consensus is",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -21188,7 +21188,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, finality on avalanche aims to be",
+      "question": "Mastery check — reason carefully: (mastery #88) In Avalanche practice, finality on avalanche aims to be",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -21213,7 +21213,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, avalanche cli / platform cli helps builders",
+      "question": "Mastery check — reason carefully: (mastery #89) In Avalanche practice, avalanche cli / platform cli helps builders",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -21238,7 +21238,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, hardhat or foundry on fuji is useful for",
+      "question": "Mastery check — reason carefully: (mastery #90) In Avalanche practice, hardhat or foundry on fuji is useful for",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -21263,7 +21263,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, builder hub documentation is the place to",
+      "question": "Mastery check — reason carefully: (mastery #91) In Avalanche practice, builder hub documentation is the place to",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -21288,7 +21288,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — In Avalanche practice, a soulbound credential means",
+      "question": "Mastery check — reason carefully: (mastery #92) In Avalanche practice, a soulbound credential means",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -21313,7 +21313,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Avalanche is best described as?",
+      "question": "Mastery check — reason carefully: (mastery #93) Given Avalanche docs, what is true about: Avalanche is best described as?",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -21338,7 +21338,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: AVAX is primarily used for?",
+      "question": "Mastery check — reason carefully: (mastery #94) Given Avalanche docs, what is true about: AVAX is primarily used for?",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -21363,7 +21363,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: The Primary Network includes?",
+      "question": "Mastery check — reason carefully: (mastery #95) Given Avalanche docs, what is true about: The Primary Network includes?",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -21388,7 +21388,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: The C-Chain is?",
+      "question": "Mastery check — reason carefully: (mastery #96) Given Avalanche docs, what is true about: The C-Chain is?",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -21413,7 +21413,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Gas on the C-Chain is paid in?",
+      "question": "Mastery check — reason carefully: (mastery #97) Given Avalanche docs, what is true about: Gas on the C-Chain is paid in?",
       "options": [
         "AVAX",
         "Option 1",
@@ -21438,7 +21438,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Fuji refers to?",
+      "question": "Mastery check — reason carefully: (mastery #98) Given Avalanche docs, what is true about: Fuji refers to?",
       "options": [
         "Avalanche’s public test network",
         "Option 1",
@@ -21463,7 +21463,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Coreth is?",
+      "question": "Mastery check — reason carefully: (mastery #99) Given Avalanche docs, what is true about: Coreth is?",
       "options": [
         "Avalanche’s EVM implementation for the C-Chain",
         "Option 1",
@@ -21488,7 +21488,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Solidity contracts on Avalanche C-Chain generally?",
+      "question": "Mastery check — reason carefully: (mastery #100) Given Avalanche docs, what is true about: Solidity contracts on Avalanche C-Chain generally?",
       "options": [
         "Deploy with familiar EVM tooling",
         "Option 1",
@@ -21513,7 +21513,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "EVM / Coreth",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: An EVM address on C-Chain is?",
+      "question": "Mastery check — reason carefully: (mastery #101) Given Avalanche docs, what is true about: An EVM address on C-Chain is?",
       "options": [
         "A 20-byte account identifier",
         "Option 1",
@@ -21538,7 +21538,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: An Avalanche L1 is?",
+      "question": "Mastery check — reason carefully: (mastery #102) Given Avalanche docs, what is true about: An Avalanche L1 is?",
       "options": [
         "An independent blockchain with its own validator set rules",
         "Option 1",
@@ -21563,7 +21563,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Compared with a single C-Chain app, an L1 can?",
+      "question": "Mastery check — reason carefully: (mastery #103) Given Avalanche docs, what is true about: Compared with a single C-Chain app, an L1 can?",
       "options": [
         "Specialize fees, membership, and execution",
         "Option 1",
@@ -21588,7 +21588,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche L1s",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Validator Manager contracts help?",
+      "question": "Mastery check — reason carefully: (mastery #104) Given Avalanche docs, what is true about: Validator Manager contracts help?",
       "options": [
         "Manage L1 validator set updates",
         "Option 1",
@@ -21613,7 +21613,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: ICM / Warp messaging enables?",
+      "question": "Mastery check — reason carefully: (mastery #105) Given Avalanche docs, what is true about: ICM / Warp messaging enables?",
       "options": [
         "Authenticated messages between Avalanche chains",
         "Option 1",
@@ -21638,7 +21638,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Teleporter is associated with?",
+      "question": "Mastery check — reason carefully: (mastery #106) Given Avalanche docs, what is true about: Teleporter is associated with?",
       "options": [
         "ICM application messaging contracts",
         "Option 1",
@@ -21663,7 +21663,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Interchain messaging",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: A cross-chain message should be treated as?",
+      "question": "Mastery check — reason carefully: (mastery #107) Given Avalanche docs, what is true about: A cross-chain message should be treated as?",
       "options": [
         "Data that must be verified on the destination",
         "Option 1",
@@ -21688,7 +21688,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Validators on Avalanche?",
+      "question": "Mastery check — reason carefully: (mastery #108) Given Avalanche docs, what is true about: Validators on Avalanche?",
       "options": [
         "Stake AVAX and participate in consensus",
         "Option 1",
@@ -21713,7 +21713,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Validators",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Node software is used to?",
+      "question": "Mastery check — reason carefully: (mastery #109) Given Avalanche docs, what is true about: Node software is used to?",
       "options": [
         "Participate in validating and serving the network",
         "Option 1",
@@ -21738,7 +21738,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Snowman consensus is?",
+      "question": "Mastery check — reason carefully: (mastery #110) Given Avalanche docs, what is true about: Snowman consensus is?",
       "options": [
         "Avalanche’s chain-optimized consensus family",
         "Option 1",
@@ -21763,7 +21763,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Consensus",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Finality on Avalanche aims to be?",
+      "question": "Mastery check — reason carefully: (mastery #111) Given Avalanche docs, what is true about: Finality on Avalanche aims to be?",
       "options": [
         "Fast compared with probabilistic PoW waits",
         "Option 1",
@@ -21788,7 +21788,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Avalanche CLI / Platform CLI helps builders?",
+      "question": "Mastery check — reason carefully: (mastery #112) Given Avalanche docs, what is true about: Avalanche CLI / Platform CLI helps builders?",
       "options": [
         "Create and manage local and cloud chain workflows",
         "Option 1",
@@ -21813,7 +21813,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Developer tooling",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Hardhat or Foundry on Fuji is useful for?",
+      "question": "Mastery check — reason carefully: (mastery #113) Given Avalanche docs, what is true about: Hardhat or Foundry on Fuji is useful for?",
       "options": [
         "Deploying and testing Solidity contracts",
         "Option 1",
@@ -21838,7 +21838,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: Builder Hub documentation is the place to?",
+      "question": "Mastery check — reason carefully: (mastery #114) Given Avalanche docs, what is true about: Builder Hub documentation is the place to?",
       "options": [
         "Read official Avalanche developer references",
         "Option 1",
@@ -21863,7 +21863,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Ecosystem",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — Which statement best matches: A soulbound credential means?",
+      "question": "Mastery check — reason carefully: (mastery #115) Given Avalanche docs, what is true about: A soulbound credential means?",
       "options": [
         "It cannot be transferred to another wallet",
         "Option 1",
@@ -21888,7 +21888,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Avalanche is best described as?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #116) Choose the option that correctly completes: Avalanche is best described as…",
       "options": [
         "A blockchain platform with multiple specialized chains",
         "Option 1",
@@ -21913,7 +21913,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"AVAX is primarily used for?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #117) Choose the option that correctly completes: AVAX is primarily used for…",
       "options": [
         "Fees, staking, and securing the network",
         "Option 1",
@@ -21938,7 +21938,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "Avalanche basics",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"The Primary Network includes?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #118) Choose the option that correctly completes: The Primary Network includes…",
       "options": [
         "The X-Chain, P-Chain, and C-Chain",
         "Option 1",
@@ -21963,7 +21963,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"The C-Chain is?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #119) Choose the option that correctly completes: The C-Chain is…",
       "options": [
         "An EVM-compatible contract chain",
         "Option 1",
@@ -21988,7 +21988,7 @@ export const GENERATED_QUESTION_BANK = {
       "skill": "C-Chain",
       "difficulty": "master",
       "module": "mastery",
-      "question": "Mastery check — A learner asks: \"Gas on the C-Chain is paid in?\" The best answer is",
+      "question": "Mastery check — reason carefully: (mastery #120) Choose the option that correctly completes: Gas on the C-Chain is paid in…",
       "options": [
         "AVAX",
         "Option 1",

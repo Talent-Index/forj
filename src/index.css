@@ -772,6 +772,11 @@ img {
   border-left: 4px solid var(--text);
 }
 
+.difficulty-card-master {
+  border-left: 4px solid var(--accent);
+  background: var(--surface-2);
+}
+
 .credential-paths .card:first-child,
 .credential-path-claimed {
   border-top: 3px solid var(--muted);

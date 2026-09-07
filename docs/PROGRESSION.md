@@ -3,10 +3,11 @@
 Every completed activity should move the learner toward a finished certificate and, if they choose, an on-chain record.
 
 ```text
-LEARN → PATH → TRACK → MODULE → LESSON / CHALLENGE (QUIZ)
-  → XP, LEVEL, ACHIEVEMENT, STREAK, SKILLS
-  → PUZZLE → CERTIFICATE → CREDENTIAL → LEADERBOARD
+LEARN → PRACTICE → QUIZ → XP + PUZZLE FRAGMENTS → PUZZLE PIECES
+  → MASTERY → CAPSTONE → CREDENTIAL
 ```
+
+Quizzes are knowledge checks inside that loop, not standalone exams. Lengths: Foundation 5, Builder 7, Advanced 10, Mastery 12. First completions award XP and fragments; retries replace scores without farming rewards.
 
 The Learn UI presents this as a structured journey (hub → track path → lesson workspace → challenge → credential), without changing the underlying event model.
 
@@ -35,7 +36,9 @@ Streaks use **UTC dates**. One qualifying activity per UTC day. Missing a UTC da
 
 XP comes from first-time completions (quiz, lesson, module, track, path, puzzle piece, puzzle complete, selected achievements, streak milestones, claimed credential).
 
-A quiz retry still updates **points** (the spendable score used for pieces). It does not pay XP again for that quiz.
+Quiz XP by difficulty: Foundation 100, Builder 175, Advanced 300, Mastery 500 (plus a small perfect-score bonus). A quiz retry still updates **points** (the spendable Easy / Medium / Hard score used for pieces). It does not pay XP or fragments again for that quiz.
+
+**Mastery** is accuracy by assessment level — separate from XP activity — so learners can see Foundation / Builder / Advanced / Mastery understanding beside their level.
 
 Level is a function of total XP. The dashboard shows current level, XP, and XP remaining to the next level.
 
@@ -50,7 +53,7 @@ The **Avalanche Developer Path** contains six tracks in order of dependency:
 5. Avalanche ICM  
 6. Avalanche Developer Track  
 
-Earlier required work unlocks later work. Optional lessons do not block a module. Easy / Medium / Hard quizzes are the assessments for Fundamentals, Architecture, and the Developer capstone. Lessons carry deeper Avalanche explanations and official Builder Hub references.
+Earlier required work unlocks later work. Optional lessons do not block a module. Easy / Medium / Hard quizzes are the credential-seating assessments for Fundamentals, Architecture, and the Developer capstone. Mastery assessments deepen knowledge without changing the frozen Fuji score scale (five counted corrects per Easy / Medium / Hard). Lessons carry deeper Avalanche explanations and official Builder Hub references.
 
 The dashboard’s “next” item is the first unlocked incomplete lesson or quiz on that path.
 
@@ -60,7 +63,7 @@ Badges unlock from the same events: first quiz, perfect score, difficulty comple
 
 ## Puzzle
 
-Sixteen interlocking pieces. Easy seats 3, Medium 5, Hard 8. Each piece has a stable identity, a seat on the board, and a point cost. Quiz points only spend on that quiz’s pieces.
+Sixteen interlocking pieces. Easy seats 3, Medium 5, Hard 8. Each piece has a stable identity, a seat on the board, and a point cost. Quiz points only spend on that quiz’s pieces. Assessments also award **puzzle fragments**; five fragments convert into one seated piece.
 
 Each track also has a **track certificate**. Quiz tracks are achieved when those pieces are seated. Lesson tracks are achieved when the track is complete. Credentials shows track certificates as learning records (in progress or achieved) separately from the path snapshot. Completing all sixteen pieces still reveals the path certificate and continues to naming and the optional claimed mint. Track certificates are not extra on-chain tokens.
 

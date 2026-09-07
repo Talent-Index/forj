@@ -5,7 +5,7 @@ import { useZoom } from "./hooks/useZoom";
 import { useWalletModal } from "./hooks/useWalletModal";
 import { useAuth } from "./hooks/useAuth";
 import { useProgression } from "./hooks/useProgression";
-import AppShell from "./components/layout/AppShell";
+import { AchievementFeedback } from "./components/achievements/AchievementFeedback";
 import Quiz from "./components/Quiz";
 import PuzzleBoard from "./components/PuzzleBoard";
 import Certificate from "./components/Certificate";
@@ -717,6 +717,7 @@ function App() {
           spentPoints={spentPoints}
           acquiredPieces={acquiredPieces}
           sectionScores={sectionScores}
+          puzzleFragments={puzzleFragments}
           trackId={forgeTrackId}
           onAcquirePiece={handleAcquirePiece}
           onContinue={() => {
@@ -781,18 +782,28 @@ function App() {
           </div>
         ) : null}
         {progression.feedback?.length > 0 && (
-          <div className="feedback-banner" role="status">
-            {progression.feedback.slice(0, 3).map((item, index) => (
-              <p key={`${item.kind}-${index}`}>
-                {item.kind === "xp" && `+${item.amount} XP`}
-                {item.kind === "level-up" && `Level ${item.level}`}
-                {item.kind === "achievement" && `Achievement: ${item.name}`}
-                {item.kind === "unlock" && `Unlocked ${item.scope}`}
-                {item.kind === "streak-milestone" && `${item.days}-day streak`}
-                {item.kind === "puzzle-complete" && "Puzzle complete"}
-              </p>
-            ))}
-            <button type="button" className="btn btn-ghost" onClick={progression.clearFeedback}>Dismiss</button>
+          <div className="achievement-feedback-stack">
+            <AchievementFeedback
+              feedback={progression.feedback}
+              onDismiss={progression.clearFeedback}
+              onView={() => {
+                setPage("progress");
+                progression.clearFeedback();
+              }}
+            />
+            <div className="feedback-banner" role="status">
+              {progression.feedback.slice(0, 3).map((item, index) => (
+                <p key={`${item.kind}-${index}`}>
+                  {item.kind === "xp" && `+${item.amount} XP`}
+                  {item.kind === "level-up" && `Level ${item.level}`}
+                  {item.kind === "achievement" && `Achievement: ${item.name}`}
+                  {item.kind === "unlock" && `Unlocked ${item.scope}`}
+                  {item.kind === "streak-milestone" && `${item.days}-day streak`}
+                  {item.kind === "puzzle-complete" && "Puzzle complete"}
+                </p>
+              ))}
+              <button type="button" className="btn btn-ghost" onClick={progression.clearFeedback}>Dismiss</button>
+            </div>
           </div>
         )}
         {renderAppContent()}

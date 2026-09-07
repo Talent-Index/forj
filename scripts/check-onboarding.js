@@ -12,6 +12,7 @@ import {
   ERROR_STATES,
   requiredOnboardingTopics,
 } from "../src/utils/onboarding.js";
+import { quizLengthFor } from "../src/utils/quizConfig.js";
 
 const topics = requiredOnboardingTopics();
 assert.deepEqual(topics, [
@@ -32,17 +33,17 @@ assert.equal(INTRODUCTION.title, "Forjora");
 assert.equal(LEARNING_PROGRESSION.length, 5);
 assert.deepEqual(
   LEARNING_PROGRESSION.map((step) => step.title),
-  ["Learn", "Quiz", "Earn points", "Unlock puzzle pieces", "Mint a credential"]
+  ["Learn", "Quiz", "Earn XP and fragments", "Unlock puzzle pieces", "Mint a credential"]
 );
 
-assert.equal(DIFFICULTY_LEVELS.length, 3);
+assert.equal(DIFFICULTY_LEVELS.length, 4);
 assert.deepEqual(
   DIFFICULTY_LEVELS.map((level) => level.id),
-  ["easy", "medium", "hard"]
+  ["easy", "medium", "hard", "master"]
 );
 for (const level of DIFFICULTY_LEVELS) {
   assert.ok(level.pointsPerQuestion > 0);
-  assert.equal(level.questionsPerQuiz, 5);
+  assert.equal(level.questionsPerQuiz, quizLengthFor(level.id));
 }
 
 assert.match(POINTS_EXPLAINER.body, /replace|stack/i);

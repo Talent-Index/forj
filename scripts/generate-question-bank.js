@@ -8,18 +8,6 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-const TOPICS = [
-  "fundamentals",
-  "c-chain",
-  "evm",
-  "l1s",
-  "icm",
-  "validators",
-  "consensus",
-  "tooling",
-  "ecosystem",
-];
-
 const REFS = {
   fundamentals: { title: "Avalanche Builder Hub docs", url: "https://build.avax.network/docs" },
   "c-chain": {
@@ -97,20 +85,28 @@ function normalizeFacts() {
 }
 
 const ANGLES = [
-  (stem, correct) => ({
-    question: `Which statement best matches: ${stem}?`,
+  (stem, correct, label, n) => ({
+    question: `(${label} #${n}) Which statement best matches: ${stem}?`,
     answer: correct,
   }),
-  (stem, correct) => ({
-    question: `A learner asks: "${stem}?" The best answer is`,
+  (stem, correct, label, n) => ({
+    question: `(${label} #${n}) A learner asks: "${stem}?" The best answer is`,
     answer: correct,
   }),
-  (stem, correct) => ({
-    question: `Select the accurate description for this idea — ${stem.toLowerCase()}.`,
+  (stem, correct, label, n) => ({
+    question: `(${label} #${n}) Select the accurate description for this idea — ${stem.toLowerCase()}.`,
     answer: correct,
   }),
-  (stem, correct) => ({
-    question: `In Avalanche practice, ${stem.toLowerCase()}`,
+  (stem, correct, label, n) => ({
+    question: `(${label} #${n}) In Avalanche practice, ${stem.toLowerCase()}`,
+    answer: correct,
+  }),
+  (stem, correct, label, n) => ({
+    question: `(${label} #${n}) Given Avalanche docs, what is true about: ${stem}?`,
+    answer: correct,
+  }),
+  (stem, correct, label, n) => ({
+    question: `(${label} #${n}) Choose the option that correctly completes: ${stem}…`,
     answer: correct,
   }),
 ];
@@ -124,7 +120,15 @@ const DIFFICULTY_TARGETS = {
 
 function buildQuestion(sectionId, index, fact, angleIndex) {
   const [topic, stem, correct, wrongs, explanation] = fact;
-  const angled = ANGLES[angleIndex % ANGLES.length](stem, correct);
+  const moduleHint =
+    sectionId === "easy"
+      ? "foundation"
+      : sectionId === "medium"
+        ? "builder"
+        : sectionId === "hard"
+          ? "advanced"
+          : "mastery";
+  const angled = ANGLES[angleIndex % ANGLES.length](stem, correct, moduleHint, index);
   const options = [angled.answer, ...wrongs];
   // deterministic shuffle by index
   const order = [0, 1, 2, 3].map((i) => (i * 7 + index * 3 + angleIndex) % 4);
@@ -140,14 +144,14 @@ function buildQuestion(sectionId, index, fact, angleIndex) {
   while (shuffled.length < 4) shuffled.push(`Option ${shuffled.length}`);
   if (!shuffled.includes(angled.answer)) shuffled[0] = angled.answer;
 
-  const moduleHint =
-    sectionId === "easy"
-      ? "foundation"
-      : sectionId === "medium"
-        ? "builder"
-        : sectionId === "hard"
-          ? "advanced"
-          : "mastery";
+  let question = angled.question;
+  if (sectionId === "master") {
+    question = `Mastery check — reason carefully: ${angled.question}`;
+  } else if (sectionId === "hard") {
+    question = `${angled.question.replace(/\?$/, "")} in a production-minded scenario?`;
+  } else if (sectionId === "medium") {
+    question = `${angled.question} Apply it to a practical builder situation.`;
+  }
 
   return {
     id: `${sectionId}-gen-${String(index).padStart(4, "0")}`,
@@ -155,11 +159,14 @@ function buildQuestion(sectionId, index, fact, angleIndex) {
     skill: SKILL[topic] || topic,
     difficulty: sectionId,
     module: moduleHint,
-    question: angled.question,
+    question,
     options: shuffled.slice(0, 4),
     answer: angled.answer,
     hint: `Focus on ${SKILL[topic] || topic}.`,
-    explanation: `${explanation} This ${moduleHint}-level item checks whether you can apply that idea correctly under Avalanche’s documented model.`,
+    explanation:
+      sectionId === "master"
+        ? `${explanation} This mastery-level item checks whether you can apply that idea correctly under Avalanche’s documented model. Prefer the option that survives adversarial edge cases and protocol constraints.`
+        : `${explanation} This ${moduleHint}-level item checks whether you can apply that idea correctly under Avalanche’s documented model.`,
     reference: REFS[topic] || REFS.fundamentals,
     funFact: `Topic tag: ${topic}. Skill: ${SKILL[topic]}.`,
     timesAttempted: 0,
@@ -175,15 +182,7 @@ function generateSection(sectionId, target) {
   while (out.length < target) {
     const fact = facts[i % facts.length];
     const angle = Math.floor(i / facts.length);
-    const q = buildQuestion(sectionId, out.length + 1, fact, angle);
-    // Master prompts lean on reasoning wording
-    if (sectionId === "master") {
-      q.question = `Mastery check — ${q.question}`;
-      q.explanation = `${q.explanation} Prefer the option that survives adversarial edge cases and protocol constraints.`;
-    } else if (sectionId === "hard") {
-      q.question = q.question.replace(/\?$/, " in a production-minded scenario?");
-    }
-    out.push(q);
+    out.push(buildQuestion(sectionId, out.length + 1, fact, angle));
     i += 1;
   }
   return out;
