@@ -26,9 +26,13 @@ import {
   clearProgress,
   emptyProgress,
   loadProgress,
+  mergeSeenQuestionIds,
   saveProgress,
 } from "./utils/progress";
 import { redeemPiece } from "./utils/puzzle";
+import { awardQuizFragments, convertFragmentsToPieces } from "./utils/fragments";
+import { acknowledgeQuizStarted, recordLearningActivity } from "./utils/quizTrigger";
+import { xpAmountFor } from "./utils/progression/xp";
 import { EMPTY_STATES } from "./utils/onboarding";
 import { legalPageFromPath } from "./utils/legal";
 import {
@@ -76,6 +80,14 @@ function App() {
   const [completedSections, setCompletedSections] = useState([]);
   const [attempts, setAttempts] = useState([]);
   const [recipientName, setRecipientName] = useState("");
+  const [puzzleFragments, setPuzzleFragments] = useState(0);
+  const [fragmentKeys, setFragmentKeys] = useState({});
+  const [fragmentPieceCredits, setFragmentPieceCredits] = useState(0);
+  const [seenQuestionIds, setSeenQuestionIds] = useState([]);
+  const [activitiesSinceQuiz, setActivitiesSinceQuiz] = useState(0);
+  const [quizThreshold, setQuizThreshold] = useState(0);
+  const [pendingKnowledgeCheck, setPendingKnowledgeCheck] = useState(false);
+  const [lastQuizRewards, setLastQuizRewards] = useState(null);
   const [hydratedOwner, setHydratedOwner] = useState(null);
   const [authOpen, setAuthOpen] = useState(false);
   const [authView, setAuthView] = useState("signup");
@@ -113,6 +125,13 @@ function App() {
     setCompletedSections(next.completedSections);
     setAttempts(next.attempts);
     setRecipientName(next.recipientName || "");
+    setPuzzleFragments(next.puzzleFragments || 0);
+    setFragmentKeys(next.fragmentKeys || {});
+    setFragmentPieceCredits(next.fragmentPieceCredits || 0);
+    setSeenQuestionIds(next.seenQuestionIds || []);
+    setActivitiesSinceQuiz(next.activitiesSinceQuiz || 0);
+    setQuizThreshold(next.quizThreshold || 0);
+    setPendingKnowledgeCheck(Boolean(next.pendingKnowledgeCheck));
   }, []);
 
   useEffect(() => {
@@ -159,18 +178,32 @@ function App() {
       completedSections,
       attempts,
       recipientName,
+      puzzleFragments,
+      fragmentKeys,
+      fragmentPieceCredits,
+      seenQuestionIds,
+      activitiesSinceQuiz,
+      quizThreshold,
+      pendingKnowledgeCheck,
     };
     saveProgress(ownerId, snapshot);
     writeQuizProgress(ownerId, snapshot).catch(() => {});
   }, [
     activeSection,
     acquiredPieces,
+    activitiesSinceQuiz,
     attempts,
     completedSections,
+    fragmentKeys,
+    fragmentPieceCredits,
     ownerId,
+    pendingKnowledgeCheck,
     progressReady,
+    puzzleFragments,
+    quizThreshold,
     recipientName,
     sectionScores,
+    seenQuestionIds,
     spentPoints,
     totalPoints,
     view,
@@ -276,8 +309,29 @@ function App() {
     setActiveSection(id);
     setView(VIEWS.QUIZ);
     setPage("learn");
+    setLastQuizRewards(null);
+    const cadence = acknowledgeQuizStarted({
+      activitiesSinceQuiz,
+      quizThreshold,
+      pendingKnowledgeCheck,
+    });
+    setActivitiesSinceQuiz(cadence.activitiesSinceQuiz);
+    setQuizThreshold(cadence.quizThreshold);
+    setPendingKnowledgeCheck(cadence.pendingKnowledgeCheck);
     progression.startQuiz(id);
-  }, [progression]);
+  }, [activitiesSinceQuiz, pendingKnowledgeCheck, progression, quizThreshold]);
+
+  const handleLessonComplete = useCallback((lessonId) => {
+    progression.completeLesson(lessonId);
+    const cadence = recordLearningActivity({
+      activitiesSinceQuiz,
+      quizThreshold,
+      pendingKnowledgeCheck,
+    });
+    setActivitiesSinceQuiz(cadence.activitiesSinceQuiz);
+    setQuizThreshold(cadence.quizThreshold);
+    setPendingKnowledgeCheck(cadence.pendingKnowledgeCheck);
+  }, [activitiesSinceQuiz, pendingKnowledgeCheck, progression, quizThreshold]);
 
   const handleQuizComplete = useCallback((result) => {
     setSectionScores((prev) => {
@@ -289,8 +343,56 @@ function App() {
       prev.includes(result.sectionId) ? prev : [...prev, result.sectionId]
     );
     setAttempts((prev) => [...prev, result]);
+    if (Array.isArray(result.questionIds) && result.questionIds.length) {
+      setSeenQuestionIds((prev) => mergeSeenQuestionIds(prev, result.questionIds));
+    }
+
+    let fragmentsAwarded = 0;
+    let piecesUnlocked = [];
+    setPuzzleFragments((prevFragments) => {
+      const awarded = awardQuizFragments(
+        { puzzleFragments: prevFragments, fragmentKeys },
+        result
+      );
+      fragmentsAwarded = awarded.awarded;
+      setFragmentKeys(awarded.state.fragmentKeys);
+      const converted = convertFragmentsToPieces({
+        puzzleFragments: awarded.state.puzzleFragments,
+        fragmentKeys: awarded.state.fragmentKeys,
+        fragmentPieceCredits,
+        acquiredPieces,
+      });
+      piecesUnlocked = converted.unlocked;
+      setFragmentPieceCredits(converted.state.fragmentPieceCredits || 0);
+      if (converted.unlocked.length) {
+        setAcquiredPieces(converted.state.acquiredPieces);
+        setSpentPoints(converted.state.spentPoints);
+        for (const index of converted.unlocked) {
+          progression.unlockPiece(index);
+        }
+      }
+      setLastQuizRewards({
+        sectionId: result.sectionId,
+        fragmentsAwarded,
+        puzzleFragments: converted.state.puzzleFragments,
+        piecesUnlocked,
+        puzzlePieceCount: converted.state.acquiredPieces?.length ?? acquiredPieces.length,
+        xpAwarded:
+          xpAmountFor("QUIZ_COMPLETED", { difficulty: result.sectionId }) +
+          (result.perfect ? xpAmountFor("QUIZ_PERFECT") : 0),
+        firstCompletion: awarded.firstCompletion,
+        perfect: awarded.perfect,
+      });
+      return converted.state.puzzleFragments;
+    });
+
     progression.completeQuiz(result);
-  }, [progression]);
+  }, [acquiredPieces, fragmentKeys, fragmentPieceCredits, progression]);
+
+  const goToPuzzle = useCallback(() => {
+    setView(VIEWS.PUZZLE);
+    setPage("credentials");
+  }, []);
 
   const handleAcquirePiece = useCallback((index) => {
     setAcquiredPieces((prev) => {
@@ -601,6 +703,10 @@ function App() {
           sectionId={activeSection}
           onComplete={handleQuizComplete}
           onBack={goLearnHome}
+          seenQuestionIds={seenQuestionIds}
+          rewardSummary={lastQuizRewards}
+          puzzlePieceCount={acquiredPieces.length}
+          onGoToPuzzle={goToPuzzle}
         />
       );
     }
@@ -633,8 +739,9 @@ function App() {
           setForgeTrackId("fundamentals");
           setView(VIEWS.PUZZLE);
         }}
-        onCompleteLesson={progression.completeLesson}
+        onCompleteLesson={handleLessonComplete}
         onCredentials={() => setPage("credentials")}
+        pendingKnowledgeCheck={pendingKnowledgeCheck}
       />
     );
   }

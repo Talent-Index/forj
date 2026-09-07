@@ -1,5 +1,6 @@
 import { PIECE_COST, TOTAL_PIECES, sections } from "../data/questions.js";
-import { QUESTIONS_PER_QUIZ } from "./quiz.js";
+import { quizLengthFor } from "./quiz.js";
+import { FORGE_LEVEL_META, FRAGMENTS_PER_PIECE } from "./quizConfig.js";
 import { CREDENTIAL_STATES } from "./credentialStatus.js";
 
 export const FUJI_CHAIN_ID = 43113;
@@ -10,7 +11,7 @@ export const INTRODUCTION = {
   tagline: "Learn Avalanche. Forge your skills. Earn your credential.",
   body: [
     "Forjora is a guided Avalanche learning quest.",
-    "Create an account, take short quizzes, earn points, unlock puzzle pieces, then mint a soulbound on-chain record of your claimed scores when you connect a wallet.",
+    "Create an account, learn on the path, take knowledge checks, earn XP and puzzle fragments, unlock pieces, then mint a soulbound on-chain record of your claimed scores when you connect a wallet.",
     "Learning does not require a wallet. Fuji test AVAX is only needed if you mint.",
   ].join(" "),
 };
@@ -19,22 +20,22 @@ export const LEARNING_PROGRESSION = [
   {
     step: 1,
     title: "Learn",
-    body: "Pick Easy, Medium, or Hard. Each session is five unique questions from that difficulty only.",
+    body: "Work through lessons and challenges on your track. Knowledge checks appear after a short stretch of learning — not on a fixed lesson count.",
   },
   {
     step: 2,
     title: "Quiz",
-    body: "Answer under a timer. Hints are optional. Retries replace your previous score for that section — they do not stack extra points.",
+    body: "Foundation, Builder, Advanced, and Mastery assessments grow longer as difficulty rises. Hints are optional. Retries replace that section’s score; they do not farm XP or fragments.",
   },
   {
     step: 3,
-    title: "Earn points",
-    body: "Correct answers award points by difficulty. Your total is the sum of your current Easy, Medium, and Hard scores.",
+    title: "Earn XP and fragments",
+    body: "First completions award XP and puzzle fragments by difficulty. Perfect scores can grant a bonus fragment. Five fragments convert into one puzzle piece.",
   },
   {
     step: 4,
     title: "Unlock puzzle pieces",
-    body: `Spend ${PIECE_COST} points per piece. Easy seats 3, Medium 5, Hard 8. Completing a track’s pieces forges that track’s certificate.`,
+    body: `Seat pieces with quiz points (${PIECE_COST} each; Easy 3, Medium 5, Hard 8) and with fragment conversion. Completing a track’s pieces forges that track’s certificate.`,
   },
   {
     step: 5,
@@ -44,16 +45,30 @@ export const LEARNING_PROGRESSION = [
 ];
 
 export const PATH_COPY = {
-  easy: { kicker: "Spark", title: "Avalanche Fundamentals" },
-  medium: { kicker: "Build", title: "Ecosystem & Architecture" },
-  hard: { kicker: "Forge", title: "Advanced Avalanche Concepts" },
+  easy: {
+    kicker: FORGE_LEVEL_META.easy.forgeLabel,
+    title: FORGE_LEVEL_META.easy.title,
+  },
+  medium: {
+    kicker: FORGE_LEVEL_META.medium.forgeLabel,
+    title: FORGE_LEVEL_META.medium.title,
+  },
+  hard: {
+    kicker: FORGE_LEVEL_META.hard.forgeLabel,
+    title: FORGE_LEVEL_META.hard.title,
+  },
+  master: {
+    kicker: FORGE_LEVEL_META.master.forgeLabel,
+    title: FORGE_LEVEL_META.master.title,
+  },
 };
 
-/** Visual forge labels; quiz IDs remain easy / medium / hard. */
+/** Visual forge labels; quiz IDs remain easy / medium / hard / master. */
 export const FORGE_LEVEL_LABELS = Object.freeze({
-  easy: "Spark",
-  medium: "Build",
-  hard: "Forge",
+  easy: FORGE_LEVEL_META.easy.forgeLabel,
+  medium: FORGE_LEVEL_META.medium.forgeLabel,
+  hard: FORGE_LEVEL_META.hard.forgeLabel,
+  master: FORGE_LEVEL_META.master.forgeLabel,
 });
 
 export const DIFFICULTY_LEVELS = sections.map((section) => ({
@@ -63,23 +78,23 @@ export const DIFFICULTY_LEVELS = sections.map((section) => ({
   icon: section.icon,
   pointsPerQuestion: section.pointsPerQuestion,
   timePerQuestion: section.timePerQuestion,
-  questionsPerQuiz: QUESTIONS_PER_QUIZ,
-  maxPoints: section.pointsPerQuestion * QUESTIONS_PER_QUIZ,
-  description: section.description,
+  questionsPerQuiz: quizLengthFor(section.id),
+  maxPoints: section.pointsPerQuestion * quizLengthFor(section.id),
+  description: section.description || FORGE_LEVEL_META[section.id]?.blurb || "",
 }));
 
 export const POINTS_EXPLAINER = {
   title: "Points",
-  body: "Points measure your current best score per difficulty, not a lifetime stack. Retry a section to replace that section's points. Spend leftover points on puzzle pieces; spent points are deducted from what you can still redeem.",
-  byDifficulty: DIFFICULTY_LEVELS.map((level) => ({
+  body: "Points measure your current best Easy / Medium / Hard score for seating certificate pieces, not a lifetime stack. Longer quizzes still cap seating credit at five counted correct answers per difficulty (Fuji credential scale). Retry a section to replace that section's points.",
+  byDifficulty: DIFFICULTY_LEVELS.filter((level) => level.id !== "master").map((level) => ({
     id: level.id,
-    label: `${level.name}: ${level.pointsPerQuestion} pts per correct answer (up to ${level.maxPoints} pts)`,
+    label: `${FORGE_LEVEL_LABELS[level.id] || level.name}: ${level.pointsPerQuestion} pts per counted correct answer (up to ${level.pointsPerQuestion * 5} seating pts)`,
   })),
 };
 
 export const PUZZLE_EXPLAINER = {
   title: "Puzzle pieces",
-  body: `Quiz points seat that quiz’s certificate pieces (${PIECE_COST} each). Easy 3, Medium 5, Hard 8. You cannot buy the same piece twice or spend another quiz’s points.`,
+  body: `Quiz points seat that quiz’s certificate pieces (${PIECE_COST} each). Easy 3, Medium 5, Hard 8. Puzzle fragments from quizzes convert at ${FRAGMENTS_PER_PIECE} fragments per piece. You cannot buy the same piece twice.`,
   pieceCost: PIECE_COST,
   totalPieces: TOTAL_PIECES,
 };
@@ -119,7 +134,7 @@ export const EMPTY_STATES = {
   },
   noQuizzes: {
     title: "The fire hasn't started yet.",
-    body: "Start with Spark (Easy) to earn your first points. Progress follows your account.",
+    body: "Start with Foundation (Easy) to earn your first points and fragments. Progress follows your account.",
     doodle: "fire",
   },
   noPoints: {

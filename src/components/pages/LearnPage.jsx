@@ -27,6 +27,7 @@ function LearnPage({
   onGoToPuzzle,
   onCompleteLesson,
   onCredentials,
+  pendingKnowledgeCheck = false,
 }) {
   const [trackId, setTrackId] = useState(null);
   const [lessonId, setLessonId] = useState(null);
@@ -164,14 +165,29 @@ function LearnPage({
         setTrackId(id);
         setLessonId(null);
       }}
+      knowledgeCheck={
+        pendingKnowledgeCheck
+          ? {
+              title: "Knowledge check ready",
+              body: "You have completed enough learning activities. Take an assessment to earn XP and puzzle fragments.",
+              cta: "Open assessments",
+              onClick: () => {
+                const el = document.getElementById("forge-assessments");
+                el?.scrollIntoView({ behavior: "smooth", block: "start" });
+              },
+            }
+          : null
+      }
       assessments={
-        <SectionSelect
-          sectionScores={sectionScores}
-          totalPoints={totalPoints}
-          completedSections={completedSections}
-          onSelectSection={onSelectSection}
-          onGoToPuzzle={onGoToPuzzle}
-        />
+        <div id="forge-assessments">
+          <SectionSelect
+            sectionScores={sectionScores}
+            totalPoints={totalPoints}
+            completedSections={completedSections}
+            onSelectSection={onSelectSection}
+            onGoToPuzzle={onGoToPuzzle}
+          />
+        </div>
       }
     />
   );

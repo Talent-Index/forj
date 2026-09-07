@@ -1,4 +1,5 @@
-import { QUESTIONS_PER_QUIZ } from "./quiz.js";
+import { quizLengthFor } from "./quiz.js";
+import { CREDENTIAL_SCORE_MAX, CREDENTIAL_SCORE_SECTIONS } from "./quizConfig.js";
 import { SCORE_SECTIONS } from "./progress.js";
 import { CREDENTIAL_STATES } from "./credentialStatus.js";
 
@@ -14,11 +15,12 @@ export const TRUST_COPY = {
 };
 
 export function quizPercent(sectionScores = {}) {
-  const correct = SCORE_SECTIONS.reduce(
-    (sum, id) => sum + (Number(sectionScores[id]?.correct) || 0),
-    0
-  );
-  return Math.round((correct / (SCORE_SECTIONS.length * QUESTIONS_PER_QUIZ)) * 100);
+  const correct = SCORE_SECTIONS.reduce((sum, id) => {
+    const row = sectionScores[id];
+    const capped = Math.min(Number(row?.correct) || 0, CREDENTIAL_SCORE_MAX);
+    return sum + capped;
+  }, 0);
+  return Math.round((correct / (SCORE_SECTIONS.length * CREDENTIAL_SCORE_MAX)) * 100);
 }
 
 export function sectionScoresFromCredential(credential) {
@@ -31,9 +33,15 @@ export function sectionScoresFromCredential(credential) {
 }
 
 export function highestDifficulty(sectionScores = {}) {
-  if (sectionScores.hard?.correct === QUESTIONS_PER_QUIZ) return "Hard";
-  if (sectionScores.medium?.correct === QUESTIONS_PER_QUIZ) return "Medium";
-  if (sectionScores.easy?.correct === QUESTIONS_PER_QUIZ) return "Easy";
+  for (const id of [...CREDENTIAL_SCORE_SECTIONS].reverse()) {
+    const row = sectionScores[id];
+    const total = Number(row?.total) || quizLengthFor(id);
+    if (row && Number(row.correct) >= total) {
+      if (id === "hard") return "Hard";
+      if (id === "medium") return "Medium";
+      return "Easy";
+    }
+  }
   return "In progress";
 }
 

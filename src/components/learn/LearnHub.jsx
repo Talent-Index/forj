@@ -11,6 +11,7 @@ function LearnHub({
   onContinue,
   onOpenTrack,
   assessments,
+  knowledgeCheck = null,
 }) {
   return (
     <div className="page learn-hub">
@@ -32,6 +33,18 @@ function LearnHub({
         </div>
       </header>
 
+      {knowledgeCheck ? (
+        <section className="section-block path-continue learn-continue">
+          <div>
+            <p className="kicker">Knowledge check</p>
+            <h2>{knowledgeCheck.title}</h2>
+            <p className="meta-line">{knowledgeCheck.body}</p>
+          </div>
+          <div className="learn-continue-actions">
+            <Button onClick={knowledgeCheck.onClick}>{knowledgeCheck.cta}</Button>
+          </div>
+        </section>
+      ) : null}
       {nextItem && nextItem.kind !== "none" && (
         <section className="section-block path-continue learn-continue">
           <div>
@@ -117,7 +130,10 @@ function LearnHub({
       <section className="section-block learn-challenges-block">
         <div className="learn-hub-head">
           <h2>Challenges</h2>
-          <p className="meta-line">Knowledge checks that seat puzzle pieces and unlock forge progress.</p>
+          <p className="meta-line">
+            Knowledge checks award XP and puzzle fragments. Seating still uses Easy / Medium / Hard
+            points on the Fuji credential scale.
+          </p>
         </div>
         {assessments}
       </section>

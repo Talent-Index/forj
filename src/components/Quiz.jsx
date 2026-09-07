@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { getSectionById } from "../data/questions";
+import { getSectionById, TOTAL_PIECES } from "../data/questions";
 import {
-  QUESTIONS_PER_QUIZ,
+  quizLengthFor,
   canAcceptSubmit,
   findQuestionById,
   getAnswerFeedback,
@@ -10,6 +10,9 @@ import {
   selectQuizQuestions,
   summarizeAttempt,
 } from "../utils/quiz";
+import { FORGE_LEVEL_META, FRAGMENTS_PER_PIECE } from "../utils/quizConfig";
+import { masteryForSection } from "../utils/mastery";
+import { fragmentProgress } from "../utils/fragments";
 import { playCorrectSound, playWrongSound, playSectionCompleteSound } from "../utils/sounds";
 import { ERROR_STATES, PATH_COPY, FORGE_LEVEL_LABELS } from "../utils/onboarding";
 import { safeExternalHref } from "../utils/frontendSecurity";
@@ -34,13 +37,23 @@ function QuizError({ body, onBack, onRetry }) {
   );
 }
 
-function Quiz({ sectionId, onComplete, onBack }) {
+function Quiz({
+  sectionId,
+  onComplete,
+  onBack,
+  seenQuestionIds = [],
+  rewardSummary = null,
+  puzzlePieceCount = 0,
+  onGoToPuzzle,
+}) {
   const section = getSectionById(sectionId);
   const pointsPerQ = section?.pointsPerQuestion ?? 0;
   const timePerQ = section?.timePerQuestion ?? 0;
-  const bank = getQuestionBankStatus(section, QUESTIONS_PER_QUIZ);
+  const expectedCount = quizLengthFor(sectionId);
+  const bank = getQuestionBankStatus(section, expectedCount);
   const path = PATH_COPY[sectionId] || { kicker: section?.name, title: section?.name };
   const forgeLabel = FORGE_LEVEL_LABELS[sectionId] || path.kicker;
+  const levelMeta = FORGE_LEVEL_META[sectionId];
 
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [startError, setStartError] = useState(bank.error);
@@ -59,8 +72,8 @@ function Quiz({ sectionId, onComplete, onBack }) {
 
   const qCount = quizQuestions.length;
   const q = quizQuestions[current];
-  const progress = quizProgress({ current, answered, total: qCount || QUESTIONS_PER_QUIZ });
-  const liveSummary = summarizeAttempt(answerLog, pointsPerQ, QUESTIONS_PER_QUIZ);
+  const progress = quizProgress({ current, answered, total: qCount || expectedCount });
+  const liveSummary = summarizeAttempt(answerLog, pointsPerQ, expectedCount);
 
   function lockAnswer(option) {
     if (lockedRef.current || !q) return null;
@@ -130,7 +143,10 @@ function Quiz({ sectionId, onComplete, onBack }) {
     let cancelled = false;
     const timer = window.setTimeout(() => {
       if (cancelled) return;
-      const result = selectQuizQuestions(section, { count: QUESTIONS_PER_QUIZ });
+      const result = selectQuizQuestions(section, {
+        count: expectedCount,
+        seenIds: seenQuestionIds,
+      });
       if (cancelled) return;
       if (!result.ok) {
         setStartError(result.error);
@@ -153,7 +169,7 @@ function Quiz({ sectionId, onComplete, onBack }) {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [phase, section]);
+  }, [phase, section, expectedCount, seenQuestionIds]);
 
   function handleSelect(option) {
     if (answered || lockedRef.current || !q) return;
@@ -185,6 +201,8 @@ function Quiz({ sectionId, onComplete, onBack }) {
       total: summary.total,
       pointsEarned: summary.pointsEarned,
       wrong: summary.wrong,
+      questionIds: answerLog.map((item) => item.id).filter(Boolean),
+      perfect: summary.correct === summary.total && summary.total > 0,
     });
     setPhase("results");
   }
@@ -222,7 +240,7 @@ function Quiz({ sectionId, onComplete, onBack }) {
   if (!section) {
     return (
       <QuizError
-        body="That difficulty is not available. Choose Easy, Medium, or Hard."
+        body="That difficulty is not available. Choose Foundation, Builder, Advanced, or Mastery."
         onBack={onBack}
       />
     );
@@ -233,7 +251,7 @@ function Quiz({ sectionId, onComplete, onBack }) {
       <div className="card quiz-intro loading-forge" aria-busy="true">
         <LoadingForge label="Forging your quiz…" />
         <p className="kicker">{forgeLabel}</p>
-        <p role="status">Selecting {QUESTIONS_PER_QUIZ} unique questions for {path.title}.</p>
+        <p role="status">Selecting {expectedCount} unique questions for {path.title}.</p>
         <div className="quiz-loading-track" aria-hidden="true">
           <div className="quiz-loading-fill" />
         </div>
@@ -257,13 +275,13 @@ function Quiz({ sectionId, onComplete, onBack }) {
         <Button variant="secondary" onClick={onBack}>Back</Button>
         <p className="kicker">{forgeLabel}</p>
         <h2>{path.title}</h2>
-        <p>{section.description}</p>
+        <p>{levelMeta?.blurb || section.description}</p>
         <ul className="quiz-rules">
-          <li>{QUESTIONS_PER_QUIZ} unique questions</li>
+          <li>{expectedCount} unique questions</li>
           <li>{timePerQ} seconds per question</li>
-          <li>{pointsPerQ} points per correct answer</li>
+          <li>{pointsPerQ} points per correct answer (seating credit caps at five counted corrects for Easy / Medium / Hard)</li>
+          <li>First completion awards XP and puzzle fragments · retries do not farm rewards</li>
           <li>Select an answer, then submit. Explanations appear after you submit</li>
-          <li>Retry replaces the previous section score</li>
         </ul>
         {(startError || !bank.ok) && (
           <EmptyState
@@ -283,33 +301,56 @@ function Quiz({ sectionId, onComplete, onBack }) {
   }
 
   if (phase === "results") {
-    const summary = summarizeAttempt(answerLog, pointsPerQ, qCount || QUESTIONS_PER_QUIZ);
+    const summary = summarizeAttempt(answerLog, pointsPerQ, qCount || expectedCount);
+    const mastery = masteryForSection(
+      { [sectionId]: { correct: summary.correct, total: summary.total } },
+      sectionId
+    );
+    const rewards = rewardSummary || {};
+    const fragmentsAwarded = Number(rewards.fragmentsAwarded) || 0;
+    const xpAwarded = Number(rewards.xpAwarded) || 0;
+    const pieces = Number(rewards.puzzlePieceCount ?? puzzlePieceCount) || 0;
+    const fragMeter = fragmentProgress(rewards.puzzleFragments ?? 0);
+    const piecesUnlocked = Array.isArray(rewards.piecesUnlocked) ? rewards.piecesUnlocked : [];
     return (
       <div className="page quiz-results">
         <header className="page-header">
-          <p className="kicker">Quiz complete</p>
+          <p className="kicker">Assessment complete · {forgeLabel}</p>
           <h1>{path.title}</h1>
-          <p className="lede">{summary.correct} of {summary.total} correct · {summary.percent}%</p>
+          <p className="lede">
+            {summary.correct} / {summary.total} · {summary.percent}%
+          </p>
+          {xpAwarded > 0 ? <XpHandwrite amount={xpAwarded} active /> : null}
         </header>
         <div className="quiz-score-grid" aria-label="Score breakdown">
           <div className="quiz-score-card">
-            <p className="kicker">Correct</p>
-            <p className="stat-value">{summary.correct}</p>
+            <p className="kicker">Score</p>
+            <p className="stat-value">{summary.correct}/{summary.total}</p>
           </div>
           <div className="quiz-score-card">
-            <p className="kicker">Incorrect</p>
-            <p className="stat-value">{summary.incorrect}</p>
+            <p className="kicker">Mastery</p>
+            <p className="stat-value">{mastery.percent}%</p>
           </div>
           <div className="quiz-score-card">
-            <p className="kicker">Timed out</p>
-            <p className="stat-value">{summary.timedOut}</p>
+            <p className="kicker">XP</p>
+            <p className="stat-value">+{xpAwarded}</p>
           </div>
           <div className="quiz-score-card quiz-score-card-points">
-            <p className="kicker">Points earned</p>
-            <p className="stat-value">+{summary.pointsEarned}</p>
-            <p className="meta-line">{pointsPerQ} pts each</p>
+            <p className="kicker">Fragments</p>
+            <p className="stat-value">+{fragmentsAwarded}</p>
+            <p className="meta-line">
+              {fragMeter.towardNext}/{FRAGMENTS_PER_PIECE} toward next piece
+            </p>
           </div>
         </div>
+        <section className="section-block">
+          <h2>Puzzle progress</h2>
+          <p className="lede">
+            {pieces} / {TOTAL_PIECES} pieces
+            {piecesUnlocked.length > 0 ? ` · +${piecesUnlocked.length} unlocked from fragments` : ""}
+          </p>
+          <ProgressBar value={(pieces / TOTAL_PIECES) * 100} label={`${pieces} of ${TOTAL_PIECES}`} />
+        </section>
         <section className="section-block">
           <h2>Question breakdown</h2>
           <ol className="results-list">
@@ -326,16 +367,23 @@ function Quiz({ sectionId, onComplete, onBack }) {
         </section>
         <div className="quiz-nav quiz-nav-end">
           <Button variant="secondary" onClick={startQuiz}>Retry quiz</Button>
-          <Button onClick={onBack}>Continue learning</Button>
+          {onGoToPuzzle ? (
+            <Button onClick={onGoToPuzzle}>
+              Continue to puzzle
+              <AnimatedDoodle type="arrow" animation="draw" trigger="immediate" size={14} variant="ink" />
+            </Button>
+          ) : (
+            <Button onClick={onBack}>Continue learning</Button>
+          )}
         </div>
       </div>
     );
   }
 
-  if (!q || qCount !== QUESTIONS_PER_QUIZ) {
+  if (!q || qCount !== expectedCount) {
     return (
       <QuizError
-        body={`This attempt could not load exactly ${QUESTIONS_PER_QUIZ} questions.`}
+        body={`This attempt could not load exactly ${expectedCount} questions.`}
         onBack={onBack}
         onRetry={bank.ok ? startQuiz : undefined}
       />

@@ -1,4 +1,6 @@
 import { FRAGMENTS_PER_PIECE, fragmentRewardFor } from "./quizConfig.js";
+import { TOTAL_PIECES } from "../data/questions.js";
+import { normalizePieces, spentPointsFor } from "./puzzle.js";
 
 export function normalizeFragments(value) {
   const n = Number(value);
@@ -33,6 +35,7 @@ export function awardQuizFragments(state, result = {}) {
       state: {
         puzzleFragments: current,
         fragmentKeys: { ...(state?.fragmentKeys || {}) },
+        fragmentPieceCredits: state?.fragmentPieceCredits || 0,
       },
       awarded: 0,
       firstCompletion,
@@ -46,6 +49,7 @@ export function awardQuizFragments(state, result = {}) {
         ...(state?.fragmentKeys || {}),
         [sectionId]: true,
       },
+      fragmentPieceCredits: state?.fragmentPieceCredits || 0,
     },
     awarded,
     firstCompletion,
@@ -74,5 +78,49 @@ export function spendFragmentsForPiece(state, count = 1) {
       puzzleFragments: current - need,
       fragmentPieceCredits: (state?.fragmentPieceCredits || 0) + Math.floor(count),
     },
+  };
+}
+
+/**
+ * Convert as many fragment bundles as possible into seated puzzle pieces.
+ * Fragment seating does not spend quiz points (points seating remains separate).
+ */
+export function convertFragmentsToPieces(state) {
+  let current = {
+    puzzleFragments: normalizeFragments(state?.puzzleFragments),
+    fragmentKeys: { ...(state?.fragmentKeys || {}) },
+    fragmentPieceCredits: state?.fragmentPieceCredits || 0,
+    acquiredPieces: normalizePieces(state?.acquiredPieces),
+  };
+  const unlocked = [];
+  while (canConvertFragments(current.puzzleFragments)) {
+    const spent = spendFragmentsForPiece(current, 1);
+    if (!spent.ok) break;
+    const acquired = normalizePieces(spent.state.acquiredPieces ?? current.acquiredPieces);
+    let nextIndex = -1;
+    for (let i = 0; i < TOTAL_PIECES; i += 1) {
+      if (!acquired.includes(i)) {
+        nextIndex = i;
+        break;
+      }
+    }
+    if (nextIndex < 0) {
+      current = { ...spent.state, acquiredPieces: acquired };
+      break;
+    }
+    const nextPieces = [...acquired, nextIndex];
+    current = {
+      ...spent.state,
+      acquiredPieces: nextPieces,
+      fragmentPieceCredits: Math.max(0, (spent.state.fragmentPieceCredits || 1) - 1),
+    };
+    unlocked.push(nextIndex);
+  }
+  return {
+    state: {
+      ...current,
+      spentPoints: spentPointsFor(current.acquiredPieces),
+    },
+    unlocked,
   };
 }

@@ -85,10 +85,5 @@ export function redeemPiece(state, index) {
   }
 
   const nextPieces = [...acquiredPieces, pieceIndex];
-  const nextSpent = spentPointsFor(nextPieces);
-  if (nextSpent > totalPoints) {
-    return snapshot(acquiredPieces, totalPoints, "Not enough points to unlock that piece.");
-  }
-
   return snapshot(nextPieces, totalPoints);
 }
