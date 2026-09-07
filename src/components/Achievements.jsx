@@ -1,5 +1,5 @@
 import { evaluateAchievements } from "../utils/achievements";
-import { Doodle } from "./doodles";
+import { AnimatedDoodle, Doodle, DoodleText } from "./doodles";
 
 const ACHIEVEMENT_DOODLE = {
   first: "spark",
@@ -52,16 +52,31 @@ function Achievements(props) {
               title={achievement.desc}
             >
               <span className="ach-icon" aria-hidden="true">
-                <Doodle
-                  type={doodleType}
-                  size={22}
-                  variant={achievement.earned ? "accent" : "muted"}
-                  animated={achievement.earned}
-                />
+                {achievement.earned ? (
+                  <AnimatedDoodle
+                    type={doodleType}
+                    animation="achievement"
+                    stages={["draw", "reveal", "stamp"]}
+                    trigger="viewport"
+                    size={22}
+                    variant="accent"
+                  />
+                ) : (
+                  <Doodle type={doodleType} size={22} variant="muted" />
+                )}
               </span>
               <span className="ach-name">{achievement.name}</span>
               <span className="meta-line">{achievement.desc}</span>
-              <span className="ach-status">{achievement.earned ? "Unlocked" : "Locked"}</span>
+              <span className="ach-status">
+                {achievement.earned ? (
+                  <>
+                    <AnimatedDoodle type="check" animation="draw" trigger="viewport" size={12} variant="accent" />
+                    <DoodleText trigger="viewport" mark="underline">Achieved</DoodleText>
+                  </>
+                ) : (
+                  "Locked"
+                )}
+              </span>
             </div>
           );
         })}

@@ -4,7 +4,7 @@ import EmptyState from "../EmptyState";
 import CredentialDetails from "../CredentialDetails";
 import CredentialQr from "../CredentialQr";
 import CredentialStatusBadge from "../CredentialStatusBadge";
-import { Doodle } from "../doodles";
+import { AnimatedDoodle, BlockchainConnect } from "../doodles";
 import { EMPTY_STATES } from "../../utils/onboarding";
 import { CONTRACT_ADDRESS } from "../../utils/contract";
 import { getFujiPublicClient } from "../../utils/fujiClient";
@@ -240,11 +240,23 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
               </h2>
               {verification.statusId === "attested" ? (
                 <span className="lookup-seal" aria-hidden="true">
-                  <Doodle type="seal" size={48} variant="accent" animated />
+                  <BlockchainConnect
+                    trigger="immediate"
+                    active
+                    label="Attested"
+                    showCheck
+                  />
+                  <AnimatedDoodle type="seal" animation="stamp" trigger="success" active size={48} variant="accent" delay={1200} />
                 </span>
               ) : (
                 <span className="lookup-seal" aria-hidden="true">
-                  <Doodle type="certificate" size={40} variant="muted" />
+                  <BlockchainConnect
+                    trigger="immediate"
+                    active
+                    label="On-chain"
+                    showCheck
+                  />
+                  <AnimatedDoodle type="certificate" animation="draw" trigger="success" active size={40} variant="muted" />
                 </span>
               )}
               {verification.checks?.length ? (

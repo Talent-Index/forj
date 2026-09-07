@@ -5,7 +5,7 @@ import { getFujiPublicClient } from "../../utils/fujiClient";
 import { safeExternalHref } from "../../utils/frontendSecurity";
 import { Button, Card, ProgressBar } from "../ui/primitives";
 import { Icon } from "../ui/Icon";
-import { Doodle } from "../doodles";
+import { AnimatedDoodle, Doodle, ForgeSequence } from "../doodles";
 import EmptyState from "../EmptyState";
 import ExistingCertificate from "../ExistingCertificate";
 import Achievements from "../Achievements";
@@ -66,10 +66,15 @@ function ProgressPage({
         <h2>Standing</h2>
         <div className="stat-row">
           <Card className="stat-compact forge-stat-wrap">
-            <span className="forge-stat-doodle" aria-hidden="true"><Doodle type="hammer" size={18} variant="muted" /></span>
+            <span className="forge-stat-doodle" aria-hidden="true">
+              <AnimatedDoodle type="hammer" animation="tap" trigger="hover" once={false} size={18} variant="muted" />
+            </span>
             <p className="kicker">Level</p>
             <p className="stat-value">{progression?.level?.level ?? 1}</p>
             <p className="meta-line">{progression?.summary?.xp ?? 0} XP</p>
+            {progression?.level?.level > 1 ? (
+              <ForgeSequence trigger="viewport" size={18} className="forge-level-seq" />
+            ) : null}
           </Card>
           <Card className="stat-compact forge-stat-wrap">
             <span className="forge-stat-doodle" aria-hidden="true"><Doodle type="fire" size={18} variant="muted" /></span>

@@ -5,7 +5,6 @@ import { Button } from "./ui/primitives";
 import {
   AnimatedDoodle,
   BlockchainConnect,
-  Doodle,
   DoodleArrow,
   DoodleField,
   DoodleDivider,
@@ -231,7 +230,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
                 type="button"
                 role="tab"
                 aria-selected={item.id === levelId}
-                className={`level-tab ${item.id === levelId ? "is-active sketch-underline" : ""}`}
+                className={`level-tab ${item.id === levelId ? "is-active" : ""}`}
                 onClick={() => setLevelId(item.id)}
               >
                 <span className="difficulty-forge-label">
@@ -241,7 +240,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
                     trigger="hover"
                     once={false}
                     size={16}
-                    variant="accent"
+                    variant={item.id === levelId ? "accent" : "muted"}
                   />
                   {label}
                 </span>
@@ -250,14 +249,39 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
             );
           })}
         </div>
-        <div className="level-panel">
-          <h2>{forgeLabel}</h2>
-          <p className="meta-line">{copy.title} · {level.name}</p>
-          <p>{LEVEL_BODY[level.id]}</p>
-          <p className="meta-line">{level.questionsPerQuiz} questions</p>
-          <Button className="btn-solid" onClick={onStart}>
-            Start {forgeLabel} →
-          </Button>
+        <div key={level.id} className={`level-panel level-panel-${level.id}`}>
+          <div className="level-panel-margin" aria-hidden="true">
+            <AnimatedDoodle
+              type={LEVEL_DOODLE[level.id]}
+              animation={level.id === "easy" ? "spark" : level.id === "hard" ? "tap" : "assemble"}
+              stages={level.id === "easy" ? ["draw", "spark"] : ["draw"]}
+              trigger="immediate"
+              size={48}
+              variant="accent"
+            />
+          </div>
+          <p className="level-panel-kicker">
+            {copy.title}
+            <span aria-hidden="true"> · </span>
+            {level.name}
+          </p>
+          <h2 className="level-panel-title">
+            <DoodleText mark="underline" trigger="immediate" delay={120}>
+              {forgeLabel}
+            </DoodleText>
+          </h2>
+          <p className="level-panel-body">{LEVEL_BODY[level.id]}</p>
+          <p className="level-panel-meta">
+            <AnimatedDoodle type="quiz" animation="draw" trigger="immediate" size={14} variant="muted" delay={280} />
+            {level.questionsPerQuiz} questions
+          </p>
+          <button type="button" className="level-panel-cta" onClick={onStart}>
+            <span>Start {forgeLabel}</span>
+            <AnimatedDoodle type="arrow" animation="draw" trigger="immediate" size={16} variant="accent" delay={400} />
+          </button>
+          <span className="level-panel-note" aria-hidden="true">
+            <AnimatedDoodle type="pencil" animation="slide" trigger="immediate" size={18} variant="muted" delay={520} />
+          </span>
         </div>
       </section>
 

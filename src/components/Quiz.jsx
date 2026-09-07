@@ -15,7 +15,7 @@ import { ERROR_STATES, PATH_COPY, FORGE_LEVEL_LABELS } from "../utils/onboarding
 import { safeExternalHref } from "../utils/frontendSecurity";
 import { Button, ProgressBar } from "./ui/primitives";
 import EmptyState from "./EmptyState";
-import { Doodle } from "./doodles";
+import { AnimatedDoodle, LoadingForge, XpHandwrite } from "./doodles";
 
 const OPTIONS_LETTERS = ["A", "B", "C", "D"];
 

@@ -38,6 +38,8 @@ export function AnimatedDoodle({
   const [stageIndex, setStageIndex] = useState(0);
   const [runKey, setRunKey] = useState(0);
 
+  const stageKey = sequence.join("|");
+
   useEffect(() => {
     if (!playing) {
       setStageIndex(0);
@@ -80,7 +82,9 @@ export function AnimatedDoodle({
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [playing, reduced, sequence.join("|"), delay, loop, onComplete]);
+    // sequence captured via stageKey; onComplete is optional callback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, reduced, stageKey, delay, loop]);
 
   const stageName = playing ? sequence[Math.min(stageIndex, sequence.length - 1)] : null;
   const stageMeta = stageName ? resolveAnimation(stageName) : null;

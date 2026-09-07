@@ -8,6 +8,7 @@ import { EMPTY_STATES, ERROR_STATES, PUZZLE_EXPLAINER } from "../utils/onboardin
 import EmptyState from "./EmptyState";
 import JigsawBoard from "./JigsawBoard";
 import { Button } from "./ui/primitives";
+import { AnimatedDoodle, ForgeSequence, DoodleText } from "./doodles";
 
 const QUIZ_CERTS = TRACK_CERTIFICATES.filter((item) => item.kind === "quiz");
 
@@ -61,12 +62,26 @@ function PuzzleBoard({
     <div className="page puzzle-board">
       <header className="page-header">
         <p className="kicker">Forge your credential</p>
-        <h1>{complete ? "Credential forged" : certificate.title}</h1>
+        <h1>
+          {complete ? (
+            <DoodleText trigger="immediate" mark="underline">
+              Credential forged
+            </DoodleText>
+          ) : (
+            certificate.title
+          )}
+        </h1>
         <p className="lede">
           {complete
             ? "All sixteen pieces are seated. Name and mint a claimed Fuji record from Credentials."
             : "Complete challenges to seat this track’s pieces."}
         </p>
+        {complete ? (
+          <div className="level-up-banner">
+            <ForgeSequence trigger="immediate" active label="Forged" size={26} />
+            <AnimatedDoodle type="seal" animation="stamp" trigger="immediate" size={28} variant="accent" delay={900} />
+          </div>
+        ) : null}
       </header>
 
       <div className="quiz-nav">
