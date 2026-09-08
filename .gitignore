@@ -15,6 +15,9 @@ metadata/packed/
 .env
 artifacts/
 cache/
+.hh-home/
+deployments/*.json
+!deployments/*.example.json
 firebase-debug.log
 firestore-debug.log
 ui-debug.log

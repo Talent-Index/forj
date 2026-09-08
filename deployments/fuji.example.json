@@ -8,5 +8,6 @@
   "address": "0x0000000000000000000000000000000000000000",
   "deployer": "0x0000000000000000000000000000000000000000",
   "txHash": null,
+  "deployBlock": null,
   "deployedAt": "replace-after-deploy"
 }

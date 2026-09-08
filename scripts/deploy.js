@@ -55,6 +55,23 @@ function upsertEnvValue(filePath, key, value) {
   return true;
 }
 
+async function requireFundedDeployer(provider, deployer, networkName) {
+  const balance = await provider.getBalance(deployer);
+  if (balance > 0n) return balance;
+  const hints =
+    networkName === "fuji"
+      ? [
+          "Deployer has 0 AVAX on Fuji.",
+          "Fund this address from a Fuji faucet, then retry: npm run deploy:fuji",
+          `Deployer: ${deployer}`,
+        ]
+      : [
+          "Deployer has 0 native balance on this network.",
+          `Deployer: ${deployer}`,
+        ];
+  throw new Error(hints.join("\n"));
+}
+
 async function main() {
   refuseClosedCChainIssuance(requestedNetworkName());
   const connection = await hre.network.create();
@@ -77,6 +94,10 @@ async function main() {
     throw new Error("Fuji network is not the Fuji chain.");
   }
 
+  if (isRemote) {
+    await requireFundedDeployer(provider, deployer, networkName);
+  }
+
   const nonce = await provider.send("eth_getTransactionCount", [
     deployer,
     "latest",
@@ -89,6 +110,9 @@ async function main() {
     "latest",
   ]);
 
+  console.log(`Deploying SkillForgeCredential (freeze v1) on ${networkName}…`);
+  console.log(`Deployer: ${deployer}`);
+
   const credential = await Credential.deploy({
     nonce,
     gasLimit: (BigInt(estimatedGas) * 12n) / 10n,
@@ -97,6 +121,9 @@ async function main() {
   await credential.waitForDeployment();
 
   const address = await credential.getAddress();
+  const receipt = pending ? await pending.wait() : null;
+  const deployBlock = receipt?.blockNumber != null ? Number(receipt.blockNumber) : null;
+
   const record = {
     contract: "SkillForgeCredential",
     freezeId: "v1",
@@ -107,24 +134,41 @@ async function main() {
     address,
     deployer,
     txHash: pending?.hash || null,
+    deployBlock,
     deployedAt: new Date().toISOString(),
   };
 
   const outFile = deploymentsPath(networkName);
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
   fs.writeFileSync(outFile, `${JSON.stringify(record, null, 2)}\n`);
+
+  const envPath = path.join(process.cwd(), ".env");
   if (isRemote) {
-    upsertEnvValue(path.join(process.cwd(), ".env"), "VITE_CREDENTIAL_CONTRACT", address);
+    upsertEnvValue(envPath, "VITE_CREDENTIAL_CONTRACT", address);
+    if (deployBlock != null) {
+      upsertEnvValue(envPath, "VITE_CREDENTIAL_DEPLOY_BLOCK", String(deployBlock));
+    }
   }
 
   console.log("SkillForgeCredential deployed to:", address);
   console.log("Deployment record:", outFile);
-  if (isRemote) {
-    console.log("VITE_CREDENTIAL_CONTRACT updated in .env when that file exists.");
+  if (deployBlock != null) {
+    console.log("Deploy block:", deployBlock);
   }
-  console.log("Set VITE_CREDENTIAL_IMAGE_URI to a stable IPFS or HTTPS artwork URL before minting.");
+  if (isRemote) {
+    console.log("Updated .env:");
+    console.log("  VITE_CREDENTIAL_CONTRACT");
+    if (deployBlock != null) console.log("  VITE_CREDENTIAL_DEPLOY_BLOCK");
+  }
+  console.log("Next:");
+  console.log("  1. Set VITE_CREDENTIAL_IMAGE_URI to a stable IPFS or HTTPS artwork URL before minting.");
+  console.log("  2. Restart the Vite app so it picks up the new contract address.");
+  console.log("  3. Connect a Fuji wallet and mint a claimed credential from Credentials.");
   if (networkName === "fuji") {
     console.log(`Snowtrace: https://testnet.snowtrace.io/address/${address}`);
+    if (pending?.hash) {
+      console.log(`Tx: https://testnet.snowtrace.io/tx/${pending.hash}`);
+    }
   }
 }
 
