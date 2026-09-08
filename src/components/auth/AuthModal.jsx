@@ -3,10 +3,18 @@ import { emailPasswordFormIssue, MIN_PASSWORD_LENGTH, passwordIssue } from "../.
 import { PRODUCT_NAME } from "../../utils/brand";
 import { validateRecipientName } from "../../utils/recipient";
 import { BrandMark } from "../brand/ForjoraMark";
+import { AnimatedDoodle } from "../doodles";
 import { Button, Modal } from "../ui/primitives";
 
 const EMPTY_SIGNUP = { name: "", email: "", password: "", confirmPassword: "" };
 const EMPTY_SIGNIN = { email: "", password: "" };
+
+const AUTH_POP_DOODLES = [
+  { type: "spark", animation: "spark", delay: 80, size: 22, className: "auth-doodle-tl" },
+  { type: "hammer", animation: "tap", delay: 220, size: 24, className: "auth-doodle-tr" },
+  { type: "certificate", animation: "stamp", delay: 360, size: 26, className: "auth-doodle-bl" },
+  { type: "star", animation: "bounce", delay: 480, size: 20, className: "auth-doodle-br" },
+];
 
 function GoogleMark() {
   return (
@@ -283,6 +291,23 @@ function AuthModal({
 
   return (
     <Modal open={open} title={PRODUCT_NAME} onClose={onClose} className="auth-modal">
+      {(view === "signup" || view === "signin") ? (
+        <div className="auth-doodles" aria-hidden="true">
+          {AUTH_POP_DOODLES.map((item) => (
+            <span key={`${view}-${item.type}`} className={`auth-doodle ${item.className}`}>
+              <AnimatedDoodle
+                type={item.type}
+                size={item.size}
+                variant="accent"
+                animation={item.animation}
+                trigger="immediate"
+                delay={item.delay}
+                once
+              />
+            </span>
+          ))}
+        </div>
+      ) : null}
       <div className="auth-brand">
         <BrandMark />
       </div>

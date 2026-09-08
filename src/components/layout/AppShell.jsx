@@ -36,7 +36,14 @@ function AppShell({
         profile={profile}
       />
       <main className={`shell-main ${isLanding ? "is-landing" : ""}`}>
-        {!isLanding ? <PageDoodles page={page} count={100} animate={false} /> : null}
+        {!isLanding ? (
+          <PageDoodles
+            page={page}
+            count={isAuthenticated ? 72 : 100}
+            animate={isAuthenticated}
+            animateCount={isAuthenticated ? 8 : 0}
+          />
+        ) : null}
         {children}
       </main>
       <Footer onNavigate={onNavigate} />

@@ -28,22 +28,25 @@ export function PageDoodles({
   count = 112,
   className = "",
   animate = false,
+  animateCount = 8,
 } = {}) {
   const [ready, setReady] = useState(false);
   const denseCount = useViewportDoodleCount(count);
   const theme = PAGE_DOODLE_THEME[page] || "default";
+  const popCount = animate ? Math.max(0, Math.min(animateCount, denseCount)) : 0;
   const items = useMemo(() => {
     if (!ready) return [];
     return buildDenseDoodleField({
       seed: `page:${page}`,
       theme,
       count: denseCount,
-      animateCount: animate ? 8 : 0,
+      animateCount: popCount,
     });
-  }, [page, theme, denseCount, animate, ready]);
+  }, [page, theme, denseCount, popCount, ready]);
 
   useEffect(() => {
     let cancelled = false;
+    setReady(false);
     const start = () => {
       if (!cancelled) setReady(true);
     };
@@ -59,12 +62,15 @@ export function PageDoodles({
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [page]);
+  }, [page, popCount]);
 
   if (!ready || !items.length) return null;
 
   return (
-    <div className={`page-doodles ${className}`.trim()} aria-hidden="true">
+    <div
+      className={`page-doodles ${animate ? "is-animated" : ""} ${className}`.trim()}
+      aria-hidden="true"
+    >
       <DoodleField
         items={items}
         dense

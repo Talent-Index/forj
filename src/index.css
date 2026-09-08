@@ -2558,6 +2558,52 @@ img {
   font-size: 12px;
 }
 
+.auth-modal.modal {
+  overflow: visible;
+}
+
+.auth-doodles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.auth-doodle {
+  position: absolute;
+  color: var(--accent-ink);
+  opacity: 0.85;
+}
+
+.auth-doodle-tl {
+  top: -10px;
+  left: -6px;
+}
+
+.auth-doodle-tr {
+  top: -8px;
+  right: -4px;
+}
+
+.auth-doodle-bl {
+  bottom: 12px;
+  left: -8px;
+}
+
+.auth-doodle-br {
+  bottom: 18px;
+  right: -2px;
+}
+
+.auth-modal .auth-brand,
+.auth-modal .auth-title,
+.auth-modal .auth-form,
+.auth-modal .auth-error,
+.auth-modal .auth-info {
+  position: relative;
+  z-index: 1;
+}
+
 .footer-brand .brand-mark {
   width: 22px;
   height: 22px;
@@ -4411,6 +4457,14 @@ img {
 
 .page-doodles .doodle-field.is-dense .doodle-field-item.is-accent {
   opacity: 0.34;
+}
+
+.page-doodles.is-animated .doodle-field.is-dense .doodle-field-item:has(.animated-doodle) {
+  opacity: 0.55;
+}
+
+.page-doodles.is-animated .doodle-field.is-dense .doodle-field-item.is-accent:has(.animated-doodle) {
+  opacity: 0.78;
 }
 
 .doodle-field-item {
