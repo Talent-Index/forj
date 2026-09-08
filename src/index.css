@@ -1283,6 +1283,37 @@ img {
   margin: 0;
 }
 
+.not-found-page {
+  text-align: center;
+}
+
+.not-found-hero {
+  gap: 12px;
+}
+
+.not-found-mark {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 4px;
+}
+
+.not-found-path {
+  margin-top: 8px;
+}
+
+.not-found-actions {
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.not-found-actions .certificate-actions {
+  justify-content: center;
+}
+
+.not-found-actions .note {
+  margin-top: 16px;
+}
+
 .credentials-jigsaw {
   max-width: 420px;
   margin-inline: auto;

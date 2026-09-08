@@ -38,7 +38,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Challenges award XP and puzzle fragments on first completion (retries do not farm rewards). Five fragments convert into one puzzle piece. Fuji seating/mint still uses the frozen Easy / Medium / Hard five-correct scale (80 points).
 - Structured path with six tracks: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer.
 - Lessons unlock in order. Each lesson has a deeper body and an official Avalanche reference. Challenges sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone; Mastery is challenge-only).
-- Shared layout tokens align nav, main, and footer gutters; page chrome (`page` → `page-header` → `section-block`) is consistent across Learn, Progress, Credentials, Board, and Profile.
+- Shared layout tokens align nav, main, and footer gutters; page chrome (`page` → `page-header` → `section-block`) is consistent across Learn, Progress, Credentials, Board, and Profile. Unknown URLs show a custom Forjora 404 (“Path not forged”) with links home and to Lookup.
 
 ## Progression
 

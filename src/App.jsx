@@ -18,6 +18,7 @@ import ProgressPage from "./components/pages/ProgressPage";
 import LearnPage from "./components/pages/LearnPage";
 import LeaderboardPage from "./components/pages/LeaderboardPage";
 import CredentialLookupPage from "./components/pages/CredentialLookupPage";
+import NotFoundPage from "./components/pages/NotFoundPage";
 import AuthModal, { ProfileSetup } from "./components/auth/AuthModal";
 import LegalPage from "./components/pages/LegalPage";
 import forgeCertificate from "./assets/forge-certificate.jpg";
@@ -35,26 +36,22 @@ import { awardQuizFragments, convertFragmentsToPieces } from "./utils/fragments"
 import { acknowledgeQuizStarted, recordLearningActivity } from "./utils/quizTrigger";
 import { xpAmountFor } from "./utils/progression/xp";
 import { EMPTY_STATES } from "./utils/onboarding";
-import { legalPageFromPath } from "./utils/legal";
 import {
   parseCredentialLocation,
   parseLookupQuery,
   publicCredentialPath,
 } from "./utils/credentialLookup";
+import { pageFromPathname } from "./utils/routes";
 import { adoptLinkedWalletProgress, migrateAndHydrate } from "./utils/backend/migrate";
 import { writeQuizProgress } from "./utils/backend/progressSync";
 import { normalizeAddress } from "./utils/progress";
 
 const VIEWS = PROGRESS_VIEWS;
-const PUBLIC_PAGES = new Set(["landing", "about", "lookup", "privacy", "terms"]);
+const PUBLIC_PAGES = new Set(["landing", "about", "lookup", "privacy", "terms", "not-found"]);
 
 function pageFromLocation() {
   if (typeof window === "undefined") return "landing";
-  const legal = legalPageFromPath(window.location.pathname);
-  if (legal) return legal;
-  const location = parseCredentialLocation(window.location.pathname, window.location.search);
-  if (location.isPublicRoute || location.tokenId || location.wallet) return "lookup";
-  return "landing";
+  return pageFromPathname(window.location.pathname, window.location.search);
 }
 
 function scrollToId(id, reducedMotion) {
@@ -474,17 +471,23 @@ function App() {
   useEffect(() => {
     function onPop() {
       setLocationKey(`${window.location.pathname}${window.location.search}`);
-      const legal = legalPageFromPath(window.location.pathname);
-      if (legal) {
-        setPage(legal);
-        return;
-      }
-      const location = parseCredentialLocation(window.location.pathname, window.location.search);
-      if (location.isPublicRoute || location.tokenId || location.wallet) setPage("lookup");
+      setPage(pageFromPathname(window.location.pathname, window.location.search));
     }
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+    const previous = document.title;
+    if (page === "not-found") {
+      document.title = "Forjora — Page not found";
+      return () => {
+        document.title = previous;
+      };
+    }
+    return undefined;
+  }, [page]);
 
   function handleNavigate(nextPage) {
     if (typeof window !== "undefined" && (nextPage === "privacy" || nextPage === "terms")) {
@@ -525,6 +528,10 @@ function App() {
       }
     }
     if (nextPage === "landing") {
+      if (typeof window !== "undefined" && window.location.pathname !== "/") {
+        window.history.pushState({}, "", "/");
+        setLocationKey("/");
+      }
       setPage("landing");
       return;
     }
@@ -554,6 +561,16 @@ function App() {
   function renderAppContent() {
     if (page === "privacy") return <LegalPage topic="privacy" />;
     if (page === "terms") return <LegalPage topic="terms" />;
+    if (page === "not-found") {
+      return (
+        <NotFoundPage
+          path={typeof window !== "undefined" ? window.location.pathname : ""}
+          onHome={() => handleNavigate("landing")}
+          onLookup={() => handleNavigate("lookup")}
+          onAbout={() => handleNavigate("about")}
+        />
+      );
+    }
     if (page === "about") {
       return <AboutPage onNavigate={handleNavigate} isAuthenticated={isAuthenticated} />;
     }

@@ -144,6 +144,7 @@ export const PAGE_DOODLE_THEME = Object.freeze({
   about: "about",
   lookup: "lookup",
   settings: "settings",
+  "not-found": "default",
   privacy: "default",
   terms: "default",
 });
