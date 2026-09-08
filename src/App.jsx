@@ -557,6 +557,7 @@ function App() {
           key={locationKey}
           pathname={typeof window !== "undefined" ? window.location.pathname : "/credential"}
           search={typeof window !== "undefined" ? window.location.search : ""}
+          onHistoryChange={(href) => setLocationKey(href)}
         />
       );
     }

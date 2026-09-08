@@ -20,7 +20,7 @@ import {
   publicCredentialPath,
 } from "../../utils/credentialLookup";
 
-function CredentialLookupPage({ pathname = "", search = "" }) {
+function CredentialLookupPage({ pathname = "", search = "", onHistoryChange }) {
   const location = useMemo(
     () =>
       parseCredentialLocation(
@@ -76,6 +76,8 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
     }
     setLoading(true);
     setError("");
+    setCredential(null);
+    setTransactionHash("");
     loadCredentialLookup(getFujiPublicClient(), query)
       .then((result) => {
         if (cancelled) return;
@@ -86,6 +88,7 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
       .catch(() => {
         if (!cancelled) {
           setCredential(null);
+          setTransactionHash("");
           setError("not-found");
         }
       })
@@ -129,6 +132,7 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
     const href = publicCredentialPath(next);
     if (typeof window !== "undefined") {
       window.history.pushState({}, "", href);
+      onHistoryChange?.(href);
     }
     setQuery(next);
   }
@@ -198,6 +202,13 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
 
       {loading && <p role="status">Reading credential from Fuji…</p>}
 
+      {!loading && error === "no-contract" && (
+        <EmptyState
+          title="Lookup unavailable"
+          body="Credential lookup is not available until the Fuji contract is configured."
+        />
+      )}
+
       {!loading && error === "not-found" && (
         <>
           <div className="verification-state verification-state-none verification-ownership-unknown">
@@ -219,18 +230,21 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
           body="Enter a token ID starting at 1, or a 0x holder wallet address."
         />
       )}
-      {!loading && error === "owner-mismatch" && (
-        <EmptyState
-          variant="error"
-          title="Holder does not match"
-          body="This token exists on Fuji, but the on-chain holder is not the wallet in the URL."
-        />
+      {!loading && error === "owner-mismatch" && view && (
+        <div className="verification-state verification-state-claimed verification-ownership-mismatch" role="status">
+          <p className="kicker">Holder check</p>
+          <h2>Holder does not match</h2>
+          <p className="meta-line">
+            This token exists on Fuji, but the on-chain holder is not the wallet in the URL.
+            The record below is still the live Fuji credential for this token ID.
+          </p>
+        </div>
       )}
-      {!loading && !error && !view && (
+      {!loading && !error && !view && CONTRACT_ADDRESS && (
         <p className="meta-line">Enter a token ID or wallet, then look up the on-chain record.</p>
       )}
 
-      {view && (
+      {view && !loading && (
         <section className="section-block">
           {verification && (
             <div className={`verification-state verification-state-${verification.statusId} verification-ownership-${verification.ownership}`}>
@@ -263,7 +277,7 @@ function CredentialLookupPage({ pathname = "", search = "" }) {
                 <ul className="verification-checks">
                   {verification.checks.map((check) => (
                     <li key={check.id} className={check.ok ? "is-ok" : "is-miss"}>
-                      {check.ok ? "✓" : "–"} {check.label}
+                      {check.ok ? "✓" : "×"} {check.label}
                     </li>
                   ))}
                 </ul>
