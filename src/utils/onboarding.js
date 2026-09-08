@@ -20,12 +20,12 @@ export const LEARNING_PROGRESSION = [
   {
     step: 1,
     title: "Learn",
-    body: "Work through lessons and challenges on your track. Knowledge checks appear after a short stretch of learning — not on a fixed lesson count.",
+    body: "Work through lessons and challenges on your track. Knowledge checks appear after a short stretch of learning, not on a fixed lesson count.",
   },
   {
     step: 2,
     title: "Quiz",
-    body: "Foundation, Builder, Advanced, and Mastery assessments grow longer as difficulty rises. Hints are optional. Retries replace that section’s score; they do not farm XP or fragments.",
+    body: "Foundation, Builder, Advanced, and Mastery assessments grow longer as difficulty rises. Hints are optional. Retries replace that section’s score. They do not farm XP or fragments.",
   },
   {
     step: 3,
@@ -35,7 +35,7 @@ export const LEARNING_PROGRESSION = [
   {
     step: 4,
     title: "Unlock puzzle pieces",
-    body: `Seat pieces with quiz points (${PIECE_COST} each; Easy 3, Medium 5, Hard 8) and with fragment conversion. Completing a track’s pieces forges that track’s certificate.`,
+    body: `Seat pieces with quiz points (${PIECE_COST} each). Easy seats 3 pieces, Medium 5, and Hard 8. Fragment conversion seats pieces too. Completing a track’s pieces forges that track’s certificate.`,
   },
   {
     step: 5,

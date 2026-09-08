@@ -52,16 +52,22 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
         </div>
       </header>
 
-      <section className="section-block">
+      <section className="section-block about-loop-section">
         <h2>The loop</h2>
-        <p>{PRODUCT_TAGLINE} A claimed mint is not an independently assessed exam.</p>
-        <ol className="about-sketch-flow">
+        <p className="about-section-lede">
+          {PRODUCT_TAGLINE} A claimed mint is not an independently assessed exam.
+        </p>
+        <ol className="about-sketch-flow" aria-label="Learning loop">
           {SKETCH_FLOW.map((step, index) => (
             <li key={step.label}>
-              <Doodle type={step.doodle} size={28} variant="accent" animated />
-              <span>{step.label}</span>
+              <div className="about-sketch-step">
+                <Doodle type={step.doodle} size={28} variant="accent" animated />
+                <span>{step.label}</span>
+              </div>
               {index < SKETCH_FLOW.length - 1 ? (
-                <Doodle type="arrowDown" size={16} variant="muted" />
+                <span className="about-sketch-arrow" aria-hidden="true">
+                  <Doodle type="arrow" size={14} variant="muted" />
+                </span>
               ) : null}
             </li>
           ))}
@@ -77,19 +83,21 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
                   variant="accent"
                 />
               </span>
-              <div>
+              <div className="about-loop-copy">
                 <h3>{step.title}</h3>
                 <p>{step.body}</p>
               </div>
             </li>
           ))}
         </ol>
-        <p className="note">{POINTS_EXPLAINER.body}</p>
+        <p className="note about-section-note">{POINTS_EXPLAINER.body}</p>
       </section>
 
-      <section className="section-block">
+      <section className="section-block about-tracks-section">
         <h2>Tracks</h2>
-        <p>Six Avalanche tracks, in order. Quizzes sit on Fundamentals, Architecture, and Developer.</p>
+        <p className="about-section-lede">
+          Six Avalanche tracks, in order. Quizzes sit on Fundamentals, Architecture, and Developer.
+        </p>
         <div className="about-tracks">
           {TRACKS.map((track) => (
             <article key={track.id} className="about-track">
@@ -101,9 +109,9 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
         </div>
       </section>
 
-      <section className="section-block">
+      <section className="section-block about-pair-section">
         <h2>Account</h2>
-        <div className="split">
+        <div className="split about-pair">
           {ACCOUNT_POINTS.map((item) => (
             <Card key={item.title}>
               <h3>{item.title}</h3>
@@ -113,10 +121,10 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
         </div>
       </section>
 
-      <section className="section-block">
+      <section className="section-block about-pair-section">
         <h2>{CREDENTIAL_EXPLAINER.title}</h2>
-        <p>{CREDENTIAL_EXPLAINER.body}</p>
-        <div className="split">
+        <p className="about-section-lede">{CREDENTIAL_EXPLAINER.body}</p>
+        <div className="split about-pair">
           <Card className="credential-path-claimed">
             <CredentialStatusBadge status={CREDENTIAL_STATES.claimed} />
             <h3>{CREDENTIAL_STATES.claimed.title}</h3>
@@ -130,22 +138,22 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
             <p className="note">{CREDENTIAL_STATES.attested.body}</p>
           </Card>
         </div>
-        <p className="note">
+        <p className="note about-section-note">
           {PRODUCT_NAME} does not issue credentials on Avalanche C-Chain today. Issuer-attested mint
           is contract-ready and is not the default learner button.
         </p>
       </section>
 
-      <section className="section-block">
+      <section className="section-block about-closing-section">
         <h2>{FUJI_EXPLAINER.title}</h2>
-        <p>{FUJI_EXPLAINER.body}</p>
-        <p>
+        <p className="about-section-lede">{FUJI_EXPLAINER.body}</p>
+        <p className="about-section-lede">
           <a href={safeExternalHref(FUJI_EXPLAINER.faucetUrl)} target="_blank" rel="noopener noreferrer">Get Fuji test AVAX</a>
           {" — "}
           {FUJI_EXPLAINER.faucetHint}
         </p>
         {CONTRACT_EXPLORER ? (
-          <p className="note">
+          <p className="note about-section-note">
             Live Fuji credential contract:{" "}
             <a href={safeExternalHref(CONTRACT_EXPLORER)} target="_blank" rel="noopener noreferrer">
               View on Snowtrace
@@ -155,9 +163,9 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
         ) : null}
       </section>
 
-      <section className="section-block">
+      <section className="section-block about-closing-section">
         <h2>Board</h2>
-        <p>
+        <p className="about-section-lede">
           Community ranking from first-time learning events. Not on-chain, not issuer-attested,
           not a proctored exam. Hide on the Board page anytime.
         </p>

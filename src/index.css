@@ -429,6 +429,14 @@ img {
   margin: 4px 0 12px;
 }
 
+.about-page {
+  gap: calc(var(--space-page) + 4px);
+}
+
+.about-page .page-header .lede {
+  max-width: 36em;
+}
+
 .about-header-actions {
   display: flex;
   flex-wrap: wrap;
@@ -437,11 +445,36 @@ img {
   margin-top: 16px;
 }
 
+.about-section-lede,
+.about-section-note {
+  max-width: 38em;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.about-loop-section .about-section-lede,
+.about-loop-section .about-section-note {
+  text-align: justify;
+  text-wrap: pretty;
+}
+
+.about-loop-section,
+.about-tracks-section,
+.about-pair-section,
+.about-closing-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-lg);
+}
+
 .about-loop {
   list-style: none;
-  margin-top: 8px;
+  width: 100%;
   max-width: 40em;
-  margin-inline: auto;
+  margin: 4px auto 0;
+  padding: 0;
+  text-align: center;
 }
 
 .about-loop li {
@@ -449,7 +482,7 @@ img {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 16px 0;
+  padding: 18px 0;
   border-bottom: 1px solid var(--border);
   text-align: center;
 }
@@ -459,50 +492,102 @@ img {
   padding-bottom: 0;
 }
 
-.about-track {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px;
-  background: var(--surface-2);
-  text-align: center;
-}
-
 .about-loop-n {
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--accent-ink);
-  padding-top: 0;
+  min-height: 1.6em;
+}
+
+.about-loop-copy {
+  min-width: 0;
+  width: 100%;
+  max-width: 34em;
 }
 
 .about-loop h3 {
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   font-size: 14.45px;
   letter-spacing: -0.03em;
+  justify-content: center;
+  text-align: center;
+}
+
+.about-loop p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+  text-align: justify;
+  text-wrap: pretty;
 }
 
 .about-tracks {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--grid-min), 1fr));
-  gap: var(--gap);
-  margin-top: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-lg);
+  margin-top: 4px;
+  width: 100%;
 }
 
 .about-track {
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 14px;
+  padding: 16px 14px;
   background: var(--surface-2);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 100%;
+}
+
+.about-track .kicker {
+  justify-content: center;
+  margin: 0;
 }
 
 .about-track h3 {
-  margin: 4px 0 8px;
+  margin: 2px 0 6px;
   font-size: 13px;
   letter-spacing: -0.03em;
 }
 
 .about-track p {
   color: var(--muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.about-pair {
+  width: 100%;
+  align-items: stretch;
+  margin-top: 4px;
+}
+
+.about-pair .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  gap: 8px;
+}
+
+.about-pair .card h3 {
+  margin: 0;
+}
+
+.about-pair .card p,
+.about-pair .card .note {
+  margin-inline: auto;
+}
+
+.about-closing-section {
+  max-width: 42em;
+  margin-inline: auto;
+  width: 100%;
 }
 
 .page {
@@ -655,6 +740,26 @@ img {
   line-height: 1.55;
   margin-inline: auto;
   max-width: 42em;
+}
+
+/* Keep long-form reading and choice UI left-aligned inside centered frames */
+.lesson-body,
+.legal-page .section-block,
+.quiz-feedback,
+.results-list,
+.badge-req-list,
+.learning-cert-skills,
+.credential-details-list,
+.certificate-meta,
+.board-visibility,
+.options-grid {
+  text-align: left;
+}
+
+.quiz-active .lede,
+.quiz-intro .lede,
+.quiz-active .question-text {
+  text-align: center;
 }
 
 .kicker,
@@ -987,16 +1092,20 @@ img {
 .stat-compact {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 4px;
+  text-align: center;
 }
 
 .credential-record {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
   border: 1px solid var(--border);
   padding: 16px;
   border-radius: var(--radius);
+  text-align: center;
 }
 
 .credential-record-claimed {
@@ -1011,6 +1120,7 @@ img {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 8px 12px;
 }
 
@@ -1148,7 +1258,25 @@ img {
 .network-gate {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--gap-lg);
+  text-align: center;
+}
+
+.quiz-active .options-grid,
+.quiz-active .quiz-feedback,
+.quiz-results .results-list {
+  width: 100%;
+  max-width: var(--content-narrow);
+  text-align: left;
+}
+
+.question-text {
+  font-size: 17px;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 36em;
+  margin-inline: auto;
 }
 
 .network-gate .empty-state {
@@ -1165,12 +1293,16 @@ img {
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: 20px;
   align-items: start;
+  justify-items: center;
+  text-align: center;
 }
 
 .existing-certificate-record {
   display: grid;
   gap: 12px;
   min-width: 0;
+  justify-items: center;
+  width: 100%;
 }
 
 .mint-success {
@@ -1232,11 +1364,7 @@ img {
   border: 1px solid var(--border);
   padding: 12px 16px;
   font-size: var(--font-body);
-}
-
-.question-text {
-  font-size: 17px;
-  line-height: 1.4;
+  text-align: center;
 }
 
 .options-grid {
@@ -1656,9 +1784,19 @@ img {
 
 .profile-identity {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 20px;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 16px;
   align-items: center;
+  text-align: center;
+}
+
+.profile-identity-copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  text-align: center;
 }
 
 .profile-avatar-edit {
@@ -1682,12 +1820,6 @@ img {
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
-}
-
-.profile-identity-copy {
-  min-width: 0;
-  display: grid;
-  gap: 4px;
 }
 
 .profile-identity-name {
@@ -1809,19 +1941,22 @@ img {
 
   .path-continue {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
+    text-align: center;
     gap: 12px;
   }
 
   .path-continue .btn,
   .learn-continue-actions .btn {
     width: 100%;
+    max-width: 28rem;
   }
 
   .quiz-nav,
   .page-actions {
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   .quiz-nav .btn,
@@ -2515,8 +2650,7 @@ img {
 
 .landing-lede,
 .landing-section p,
-.footer-brand p,
-.footer-note {
+.footer-brand p {
   color: var(--muted);
   max-width: 40em;
   margin-inline: auto;
@@ -2844,8 +2978,14 @@ img {
 
 .footer-note {
   margin: 0;
-  text-align: center;
   width: 100%;
+  max-width: 40em;
+  margin-inline: auto;
+  color: var(--muted);
+  font-size: var(--font-body);
+  line-height: 1.55;
+  text-align: justify;
+  text-wrap: pretty;
 }
 
 .footer-links button,
@@ -3149,11 +3289,11 @@ img {
 @media (max-width: 860px) {
   .profile-identity {
     grid-template-columns: 1fr;
-    justify-items: start;
+    justify-items: center;
   }
 
   .profile-avatar-edit {
-    justify-items: start;
+    justify-items: center;
   }
 
   .settings-row {
@@ -3235,6 +3375,8 @@ img {
   flex-wrap: wrap;
   gap: 8px 16px;
   align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .track-grid,
@@ -3411,18 +3553,21 @@ img {
 
 .learn-journey {
   list-style: none;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
-  border-left: 1px solid var(--border);
+  max-width: 40em;
+  border-left: 0;
 }
 
 .learn-journey-step {
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
-  gap: 12px;
-  margin: 0 0 20px;
-  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding-left: 0;
   position: relative;
+  text-align: center;
 }
 
 .learn-journey-mark {
@@ -3453,6 +3598,10 @@ img {
 
 .learn-journey-actions {
   margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
 }
 
 .learn-challenge-row {
@@ -3552,14 +3701,13 @@ img {
 
   .learn-continue {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
   }
 }
 
 @media (max-width: 640px) {
   .learn-journey-step {
-    grid-template-columns: 1.5rem minmax(0, 1fr);
-    padding-left: 12px;
+    padding-left: 0;
   }
 
   .learn-stage-rail li:not(:last-child)::after {
@@ -3569,6 +3717,7 @@ img {
 
   .learn-stage-rail {
     flex-direction: column;
+    align-items: center;
   }
 }
 
@@ -3666,10 +3815,13 @@ img {
 .track-cert-intro .meta-line {
   margin-top: 6px;
   max-width: 40em;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .path-credential-panel .kicker {
   margin-bottom: 4px;
+  justify-content: center;
 }
 
 .track-cert-grid {
@@ -3682,8 +3834,10 @@ img {
 .track-cert-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
   min-height: 100%;
+  text-align: center;
 }
 
 .track-cert-card.is-locked {
@@ -3806,15 +3960,18 @@ img {
   margin-top: 16px;
 }
 
-.badge-detail-hero {
-  margin: 8px 0 12px;
-}
-
 .badge-tier-row {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  justify-content: center;
   margin: 8px 0 12px;
+}
+
+.badge-detail-hero {
+  margin: 8px 0 12px;
+  display: flex;
+  justify-content: center;
 }
 
 .badge-tier-pip {
@@ -3856,13 +4013,16 @@ img {
 .puzzle-progress-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
+  text-align: center;
 }
 
 .streak-card-head {
   display: flex;
   gap: 12px;
   align-items: center;
+  justify-content: center;
 }
 
 .streak-calendar {
@@ -4470,20 +4630,74 @@ img {
 .about-sketch-flow {
   list-style: none;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  gap: 8px;
-  margin: 24px 0;
+  gap: 8px 4px;
+  margin: 8px 0 4px;
+  padding: 0;
+  width: 100%;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   font-weight: 700;
+  font-size: var(--font-kicker);
 }
 
 .about-sketch-flow li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.about-sketch-step {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  min-width: 4.5rem;
+}
+
+.about-sketch-arrow {
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  opacity: 0.75;
+  padding-bottom: 1.1rem;
+}
+
+@media (max-width: 860px) {
+  .about-tracks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-sketch-flow {
+    gap: 12px 6px;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-tracks {
+    grid-template-columns: 1fr;
+  }
+
+  .about-sketch-flow {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .about-sketch-flow li {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .about-sketch-arrow {
+    padding-bottom: 0;
+    transform: rotate(90deg);
+  }
+
+  .about-loop li {
+    gap: 8px;
+  }
 }
 
 .doodle-divider {

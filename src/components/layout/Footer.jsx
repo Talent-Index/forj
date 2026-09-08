@@ -1,4 +1,5 @@
 import { BrandMark } from "../brand/ForjoraMark";
+import { PRODUCT_DESCRIPTION } from "../../utils/brand";
 
 function Footer({ onNavigate }) {
   return (
@@ -11,7 +12,7 @@ function Footer({ onNavigate }) {
         <button type="button" onClick={() => onNavigate("privacy")}>Privacy</button>
         <button type="button" onClick={() => onNavigate("terms")}>Terms</button>
       </nav>
-      <p className="footer-note">Claimed scores are not exams</p>
+      <p className="footer-note">{PRODUCT_DESCRIPTION}</p>
     </footer>
   );
 }
