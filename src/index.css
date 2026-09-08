@@ -1895,7 +1895,7 @@ img {
 
   .mobile-nav {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
     padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px));
   }
 

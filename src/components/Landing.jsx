@@ -183,11 +183,11 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
               type="button"
               className="landing-cta-quiet"
               onClick={onExploreCredentials}
-              aria-label="Credentials"
-              title="Credentials"
+              aria-label="Look up a credential"
+              title="Look up a credential"
             >
               <AnimatedDoodle type="certificate" animation="draw" trigger="immediate" size={18} variant="muted" delay={doodleTiming.draw + 120} />
-              <span className="visually-hidden">Credentials</span>
+              <span className="visually-hidden">Look up a credential</span>
             </button>
             {!signedIn && (
               <button
@@ -351,7 +351,7 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
           <BlockchainConnect trigger="viewport" label="On-chain record" showCheck />
           <Button variant="secondary" onClick={onExploreCredentials}>
             <AnimatedDoodle type="certificate" animation="draw" trigger="viewport" size={14} variant="muted" />
-            Credentials
+            Look up a credential
           </Button>
         </div>
       </section>

@@ -576,7 +576,7 @@ function App() {
           signedIn={isAuthenticated}
           onStart={() => (isAuthenticated ? goLearnHome() : openAuth("signup"))}
           onSignIn={() => openAuth("signin")}
-          onExploreCredentials={() => handleNavigate("credentials")}
+          onExploreCredentials={() => handleNavigate("lookup")}
         />
       );
     }

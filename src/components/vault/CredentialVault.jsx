@@ -418,8 +418,13 @@ function CredentialVault({
           ) : (
             <Button onClick={() => onPuzzle?.()}>Continue forging</Button>
           )}
+          {onLookup ? (
+            <Button variant="secondary" onClick={() => onLookup()}>
+              Look up a credential
+            </Button>
+          ) : null}
           {onProgress ? (
-            <Button variant="secondary" onClick={onProgress}>
+            <Button variant="ghost" onClick={onProgress}>
               <Doodle type="badge" size={14} variant="ink" /> Achievements
             </Button>
           ) : null}

@@ -3,7 +3,7 @@ import { Icon } from "../ui/Icon";
 const LOGGED_OUT_MOBILE = [
   { id: "landing", label: "Home", icon: "home" },
   { id: "learn", label: "Learn", icon: "learn" },
-  { id: "credentials", label: "Credentials", short: "Creds", icon: "badge" },
+  { id: "lookup", label: "Lookup", icon: "certificate" },
   { id: "about", label: "About", icon: "about" },
 ];
 
@@ -12,6 +12,7 @@ const LOGGED_IN_MOBILE = [
   { id: "progress", label: "Progress", icon: "progress" },
   { id: "leaderboard", label: "Board", icon: "board" },
   { id: "credentials", label: "Credentials", short: "Creds", icon: "badge" },
+  { id: "lookup", label: "Lookup", icon: "certificate" },
 ];
 
 function MobileNav({ page, onNavigate, isAuthenticated }) {
