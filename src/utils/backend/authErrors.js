@@ -29,6 +29,9 @@ function looksLikeBadCredentials(message = "") {
 
 export function mapAuthError(error) {
   const code = error?.code || "";
+  if (code === "timeout" || /timed out/i.test(String(error?.message || ""))) {
+    return "The cloud request timed out. Check your connection and try again.";
+  }
   if (MESSAGES[code]) return MESSAGES[code];
   const message = String(error?.message || "");
   if (looksLikeBadCredentials(message)) {

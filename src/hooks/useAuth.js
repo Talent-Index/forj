@@ -370,6 +370,13 @@ export function useAuth() {
       if (!result.ok) return result;
       return refreshUser();
     } catch (error) {
+      if (error?.code === "timeout" || /timed out/i.test(String(error?.message || ""))) {
+        return {
+          ok: false,
+          error:
+            "Could not link this wallet to your Forjora account. The cloud save timed out after 8 seconds. Your wallet may still be connected in this browser — check your connection, then reconnect the wallet or refresh and try again.",
+        };
+      }
       return { ok: false, error: mapAuthError(error) };
     }
   }, [refreshUser]);

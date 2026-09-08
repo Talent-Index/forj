@@ -254,6 +254,12 @@ function App() {
   ]);
 
   useEffect(() => {
+    if (!walletLinkError) return undefined;
+    const timer = window.setTimeout(() => setWalletLinkError(""), 7000);
+    return () => window.clearTimeout(timer);
+  }, [walletLinkError]);
+
+  useEffect(() => {
     if (wallet.address && open) closeModal();
   }, [closeModal, open, wallet.address]);
 
@@ -779,8 +785,11 @@ function App() {
         }}
       >
         {walletLinkError ? (
-          <div className="feedback-banner" role="alert">
-            <p>{walletLinkError}</p>
+          <div className="feedback-banner feedback-banner-alert" role="alert">
+            <div className="feedback-banner-copy">
+              <p className="kicker">Wallet link</p>
+              <p>{walletLinkError}</p>
+            </div>
             <button type="button" className="btn btn-ghost" onClick={() => setWalletLinkError("")}>
               Dismiss
             </button>

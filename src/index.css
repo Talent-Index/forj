@@ -3425,6 +3425,29 @@ img {
   text-align: center;
 }
 
+.feedback-banner-alert {
+  align-items: flex-start;
+  text-align: left;
+  justify-content: space-between;
+}
+
+.feedback-banner-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.feedback-banner-copy .kicker {
+  margin: 0;
+}
+
+.feedback-banner-copy p {
+  margin: 0;
+  max-width: 42em;
+}
+
 .track-grid,
 .leaderboard-list {
   display: grid;
