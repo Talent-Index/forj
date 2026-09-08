@@ -432,6 +432,7 @@ img {
 .about-header-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
   margin-top: 16px;
 }
@@ -439,14 +440,18 @@ img {
 .about-loop {
   list-style: none;
   margin-top: 8px;
+  max-width: 40em;
+  margin-inline: auto;
 }
 
 .about-loop li {
-  display: grid;
-  grid-template-columns: 2.25rem 1fr;
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   padding: 16px 0;
   border-bottom: 1px solid var(--border);
+  text-align: center;
 }
 
 .about-loop li:last-child {
@@ -454,11 +459,20 @@ img {
   padding-bottom: 0;
 }
 
+.about-track {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  background: var(--surface-2);
+  text-align: center;
+}
+
 .about-loop-n {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   color: var(--accent-ink);
-  padding-top: 2px;
+  padding-top: 0;
 }
 
 .about-loop h3 {
@@ -543,6 +557,10 @@ img {
   border-top: 3px solid var(--accent);
   border-radius: var(--radius);
   padding: var(--space-section);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .page-header h1,
@@ -567,8 +585,10 @@ img {
   font-weight: 700;
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
+  text-align: center;
 }
 
 .card h3,
@@ -609,6 +629,23 @@ img {
   font-size: var(--font-lede);
   line-height: 1.5;
   max-width: 40em;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-block {
+  text-align: center;
+}
+
+.section-block > .kicker,
+.section-block > .meta-line,
+.section-block > .note,
+.page-header > .kicker,
+.page-header > .meta-line,
+.page-header > .note {
+  justify-content: center;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .section-block > p,
@@ -616,6 +653,8 @@ img {
 .empty-state-body {
   font-size: var(--font-body);
   line-height: 1.55;
+  margin-inline: auto;
+  max-width: 42em;
 }
 
 .kicker,
@@ -778,6 +817,8 @@ img {
   display: flex;
   gap: var(--gap);
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero-diagram {
@@ -896,8 +937,9 @@ img {
 .difficulty-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
-  text-align: left;
+  text-align: center;
 }
 
 .preview-grid {
@@ -984,9 +1026,11 @@ img {
 
 .path-continue {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 16px;
+  text-align: center;
+  flex-wrap: wrap;
 }
 
 .progress {
@@ -1071,7 +1115,10 @@ img {
   background: var(--surface-2);
   padding: var(--space-card);
   border-radius: var(--radius);
-  text-align: left;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .empty-state-error {
@@ -1088,6 +1135,7 @@ img {
 
 .empty-state-icon {
   display: flex;
+  justify-content: center;
   color: var(--accent-ink);
   margin-bottom: 8px;
 }
@@ -1109,6 +1157,7 @@ img {
 
 .credentials-jigsaw {
   max-width: 420px;
+  margin-inline: auto;
 }
 
 .existing-certificate-layout {
@@ -1139,9 +1188,9 @@ img {
 .sections-grid .section-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
-  text-align: left;
+  text-align: center;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -1287,8 +1336,8 @@ img {
 .quiz-session-meta,
 .quiz-timer-row {
   display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: center;
+  gap: 16px;
   flex-wrap: wrap;
   color: var(--muted);
   font-size: var(--font-meta);
@@ -1328,6 +1377,7 @@ img {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;
+  text-align: center;
 }
 
 .quiz-score-card-points {
@@ -1352,7 +1402,7 @@ img {
 }
 
 .quiz-nav-end {
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .quiz-feedback {
@@ -1383,10 +1433,11 @@ img {
 .quiz-header-row,
 .score-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  text-align: center;
 }
 
 .fun-fact,
@@ -1490,6 +1541,7 @@ img {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 8px 12px;
   margin-top: 8px;
 }
@@ -1508,6 +1560,10 @@ img {
   border-radius: var(--radius);
   content-visibility: auto;
   contain-intrinsic-size: 120px 140px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .achievement-item.locked {
@@ -1542,6 +1598,13 @@ img {
 
 .settings-page {
   max-width: var(--content-narrow);
+  margin-inline: auto;
+}
+
+.settings-form,
+.recipient-form {
+  margin-inline: auto;
+  text-align: left;
 }
 
 .settings-row {
@@ -1551,6 +1614,7 @@ img {
   gap: 12px;
   padding: 8px 0;
   border-top: 1px solid var(--border);
+  text-align: left;
 }
 
 .settings-row:first-of-type {
@@ -1580,6 +1644,7 @@ img {
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+  justify-content: center;
 }
 
 .settings-wallet-status {
@@ -2528,7 +2593,8 @@ img {
   grid-template-columns: 1fr 1fr;
   gap: 64px;
   align-items: start;
-  text-align: left;
+  text-align: center;
+  justify-items: center;
 }
 
 .landing-steps {
@@ -3212,6 +3278,8 @@ img {
 
 .learn-hub-hero .lede {
   max-width: 36rem;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .learn-hub-doodles {
@@ -3222,27 +3290,35 @@ img {
 }
 
 .learn-continue {
-  align-items: stretch;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
 .learn-continue-actions {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
   min-width: min(100%, 14rem);
+  margin-inline: auto;
 }
 
 .learn-hub-head {
   margin-bottom: 12px;
+  text-align: center;
 }
 
 .learn-hub-head h2 {
   margin-bottom: 4px;
+  justify-content: center;
 }
 
 .learn-filters {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
   margin-bottom: 16px;
 }
@@ -3271,7 +3347,9 @@ img {
 .learn-track-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
+  text-align: center;
 }
 
 .learn-track-card .btn {
@@ -3281,6 +3359,7 @@ img {
 .learn-skill-chips {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 6px;
   margin: 0;
 }
@@ -3298,6 +3377,7 @@ img {
 .learn-track-stats {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 8px 16px;
   color: var(--muted);
   font-size: var(--font-body);
@@ -3307,6 +3387,7 @@ img {
 .learn-stage-rail {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 8px 12px;
   list-style: none;
   margin: 8px 0 0;
@@ -3691,6 +3772,7 @@ img {
 
 .ach-icon {
   display: flex;
+  justify-content: center;
   color: var(--accent-ink);
   margin-bottom: 6px;
 }
@@ -3702,9 +3784,9 @@ img {
 .badge-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 4px;
-  text-align: left;
+  text-align: center;
   width: 100%;
   background: var(--surface);
   cursor: pointer;
@@ -3902,9 +3984,10 @@ img {
 .credentials-journey-steps {
   list-style: none;
   padding: 0;
-  margin: 8px 0 0;
+  margin: 8px auto 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
 }
 
