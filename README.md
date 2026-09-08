@@ -26,7 +26,7 @@ The mark is a geometric **F / upward pathway** in charcoal with a forge-orange a
 - **Six Avalanche tracks:** Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, and Developer.
 - **XP and levels** from real completions, not quiz retries.
 - **Achievements** and **streaks** from the same learning events.
-- **Track certificates** on Credentials: in progress and achieved learning records (not Fuji tokens). Quiz points seat that track’s pieces. The path mint stays one claimed snapshot.
+- **Credential vault** on Credentials: track and learning certificates (off-chain, earned / in progress / locked), puzzle progress, and optional claimed Fuji path mint. Quiz points seat that track’s pieces. The path mint stays one claimed snapshot.
 - A **true interlocking puzzle**, not square tiles pretending to be pieces.
 - An opt-in **live leaderboard**. Verified accounts appear by default, including people who already signed up and including at 0 XP. Standing is derived from an append-only event log. It is not issuer-attested and not on-chain.
 

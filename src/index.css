@@ -3966,6 +3966,241 @@ img {
   padding-top: 4px;
 }
 
+/* Credential vault */
+.credential-vault {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  width: 100%;
+}
+
+.vault-hero .lede {
+  max-width: 42em;
+  margin-inline: auto;
+}
+
+.vault-stat-row {
+  margin-top: 16px;
+}
+
+.vault-stat-level {
+  font-size: clamp(14px, 2.4vw, 18px);
+  letter-spacing: -0.02em;
+}
+
+.vault-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 12px 0 16px;
+}
+
+.vault-filter-bar .learn-filters {
+  flex: 1 1 auto;
+  justify-content: center;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
+}
+
+.vault-sort {
+  flex: 0 0 auto;
+}
+
+.vault-sort-select {
+  min-width: 10.5rem;
+  width: auto;
+}
+
+.vault-grid-section .meta-line {
+  max-width: 40em;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.vault-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+  margin-top: 12px;
+  align-items: stretch;
+}
+
+.credential-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  min-height: 100%;
+  text-align: center;
+  height: 100%;
+}
+
+.credential-card.is-locked {
+  color: var(--muted);
+  opacity: 0.92;
+}
+
+.credential-card.is-in-progress {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+.credential-card.is-earned {
+  border-color: var(--accent-ink);
+}
+
+.credential-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.credential-card-head .kicker {
+  margin: 0;
+}
+
+.credential-card-state {
+  font-size: var(--font-meta);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.credential-card-state.is-earned {
+  color: var(--accent-ink);
+}
+
+.credential-card h3 {
+  margin: 0;
+  font-size: clamp(16px, 2.2vw, 18px);
+  letter-spacing: -0.02em;
+}
+
+.credential-card-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.credential-card-reqs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  font-size: var(--font-meta);
+  color: var(--muted);
+}
+
+.credential-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.skill-evidence {
+  text-align: left;
+  width: 100%;
+}
+
+.skill-evidence .kicker {
+  margin-bottom: 6px;
+}
+
+.skill-evidence-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.skill-evidence-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: start;
+  font-size: var(--font-meta);
+}
+
+.featured-credential-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: var(--gap);
+  align-items: stretch;
+  margin-top: 12px;
+}
+
+.featured-credential-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.featured-credential-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  min-height: 180px;
+  background:
+    radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 55%),
+    var(--surface-2);
+}
+
+.featured-preview-title {
+  margin: 0;
+  font-size: clamp(18px, 2.6vw, 22px);
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.vault-achievement-strip .vault-stat-row {
+  margin-top: 8px;
+}
+
+.vault-skill-chips {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.vault-skill-chips li {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  padding: 4px 10px;
+  font-size: var(--font-meta);
+}
+
+.vault-detail .page-header {
+  gap: 8px;
+}
+
+.path-credential-panel {
+  text-align: center;
+}
+
 .jigsaw-piece.is-dimmed {
   opacity: 0.55;
 }
@@ -5213,9 +5448,33 @@ img {
 
   .track-grid,
   .track-cert-grid,
+  .vault-grid,
   .leaderboard-list,
   .learn-skills-grid {
     grid-template-columns: 1fr;
+  }
+
+  .featured-credential-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-credential-copy {
+    text-align: center;
+    align-items: center;
+  }
+
+  .featured-credential-copy .skill-evidence {
+    text-align: center;
+  }
+
+  .featured-credential-copy .skill-evidence-list li {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 861px) {
+  .vault-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

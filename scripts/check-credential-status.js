@@ -92,7 +92,9 @@ assert.match(certificateSource, /prepareClaimedMint/);
 assert.match(certificateSource, /value: prepared\.value/);
 assert.doesNotMatch(certificateSource, /mintCredentialWithAuthorization/);
 assert.match(certificateSource, /Claim Forjora claimed credential on Fuji/);
-assert.match(certificateSource, /ExistingCertificate/);
+assert.match(certificateSource, /CredentialVault/);
+const vaultShell = readFileSync(join(root, "src/components/vault/CredentialVault.jsx"), "utf8");
+assert.match(vaultShell, /ExistingCertificate/);
 assert.match(readFileSync(join(root, "src/components/ExistingCertificate.jsx"), "utf8"), /Your Fuji certificate/);
 const contractSource = readFileSync(join(root, "src/utils/contract.js"), "utf8");
 assert.match(contractSource, /functionName: "mintCredential"/);
@@ -129,6 +131,8 @@ assert.equal(hasAmbiguousTrustLanguage(CREDENTIAL_EXPLAINER.body), false);
 const uiFiles = [
   "src/components/Landing.jsx",
   "src/components/Certificate.jsx",
+  "src/components/vault/CredentialVault.jsx",
+  "src/components/vault/VaultParts.jsx",
   "src/components/CertificateArtifact.jsx",
   "src/components/CredentialRecord.jsx",
   "src/components/CredentialStatusBadge.jsx",

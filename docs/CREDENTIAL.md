@@ -17,7 +17,7 @@ The record includes:
 - When it was minted  
 - Network and contract  
 
-Track certificates in the app are learning records for each path track. Credentials shows them separately from the path snapshot. They are not extra on-chain tokens. The mint is still one current soulbound snapshot per wallet. The snapshot is what was written at mint. It is not a live feed of later quiz retries.
+The Credentials page is the **Credential vault**: earned, in-progress, and locked path certificates in one place, with filters, a featured proof, and in-page detail. Track and learning certificates stay off-chain learning records. The optional Fuji path mint is still one current soulbound snapshot per wallet. The snapshot is what was written at mint. It is not a live feed of later quiz retries.
 
 ## Frozen credential
 
