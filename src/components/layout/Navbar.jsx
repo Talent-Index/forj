@@ -8,6 +8,7 @@ import { Doodle } from "../doodles";
 const LOGGED_OUT_LINKS = [
   { id: "learn", label: "Learn", icon: "learn" },
   { id: "credentials", label: "Credentials", icon: "badge" },
+  { id: "lookup", label: "Lookup", icon: "certificate" },
   { id: "about", label: "About", icon: "about" },
 ];
 
@@ -16,6 +17,7 @@ const LOGGED_IN_LINKS = [
   { id: "progress", label: "Progress", icon: "progress" },
   { id: "leaderboard", label: "Board", icon: "board" },
   { id: "credentials", label: "Credentials", icon: "badge" },
+  { id: "lookup", label: "Lookup", icon: "certificate" },
 ];
 
 function ConnectedNotice({ address }) {

@@ -36,7 +36,7 @@ Remaining: path content beyond the first six tracks (additional lesson tracks or
 
 ## Phase 3 — Credentials 🟡
 
-Shipped: credential model, soulbound metadata, claimed vs attested, owner-signed attested mint on the contract, shareable credential URL/QR (lookup is not in primary nav).
+Shipped: credential model, soulbound metadata, claimed vs attested, owner-signed attested mint on the contract, shareable credential URL/QR and in-product Lookup.
 
 Remaining: issuer-key operations, attested mint in the learner UI, versioning and revocation.
 
