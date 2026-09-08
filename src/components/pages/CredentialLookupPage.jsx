@@ -1,16 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "../ui/primitives";
 import EmptyState from "../EmptyState";
-import CredentialDetails from "../CredentialDetails";
-import CredentialQr from "../CredentialQr";
-import CredentialStatusBadge from "../CredentialStatusBadge";
-import { AnimatedDoodle, BlockchainConnect } from "../doodles";
-import { EMPTY_STATES } from "../../utils/onboarding";
+import forgeCertificate from "../../assets/forge-certificate.jpg";
 import { CONTRACT_ADDRESS } from "../../utils/contract";
 import { getFujiPublicClient } from "../../utils/fujiClient";
 import { isCredentialId } from "../../utils/credentialModel";
 import { normalizeAddress } from "../../utils/progress";
-import { CREDENTIAL_STATES } from "../../utils/credentialStatus";
 import {
   buildCredentialVerificationView,
   evaluateCredentialVerification,
@@ -19,6 +13,43 @@ import {
   parseCredentialLocation,
   publicCredentialPath,
 } from "../../utils/credentialLookup";
+import {
+  AchievementSummaryStrip,
+  CredentialActions,
+  CredentialInformation,
+  CredentialSearch,
+  CredentialShowcase,
+  LearnerPublicCard,
+  LookupHero,
+  QRCodeCard,
+  SkillEvidencePanel,
+  VerificationDetailsPanel,
+  VerificationStatusBanner,
+} from "../lookup/LookupPortalParts";
+
+function parseScannedValue(raw) {
+  const text = String(raw || "").trim();
+  if (!text) return null;
+  try {
+    const url = new URL(text, typeof window !== "undefined" ? window.location.origin : "https://forjora.local");
+    const pathMatch = url.pathname.match(/\/credential(?:\/([^/]+))?$/i);
+    if (pathMatch || url.pathname.includes("credential")) {
+      const tokenFromPath = pathMatch?.[1] || "";
+      const token = isCredentialId(tokenFromPath)
+        ? tokenFromPath
+        : isCredentialId(url.searchParams.get("token") || "")
+          ? url.searchParams.get("token")
+          : "";
+      const wallet = normalizeAddress(url.searchParams.get("wallet") || "") || "";
+      if (token || wallet) return { tokenId: token, wallet, invalidPathId: Boolean(tokenFromPath && !token) };
+    }
+  } catch {
+    /* fall through */
+  }
+  if (isCredentialId(text)) return { tokenId: text, wallet: "", invalidPathId: false };
+  if (normalizeAddress(text)) return { tokenId: "", wallet: normalizeAddress(text), invalidPathId: false };
+  return null;
+}
 
 function CredentialLookupPage({ pathname = "", search = "", onHistoryChange }) {
   const location = useMemo(
@@ -115,26 +146,49 @@ function CredentialLookupPage({ pathname = "", search = "", onHistoryChange }) {
     [credential]
   );
 
-  function submit(event) {
-    event.preventDefault();
-    const rawToken = tokenInput.trim();
-    const rawWallet = walletInput.trim();
-    if (rawToken && !isCredentialId(rawToken) && !normalizeAddress(rawWallet)) {
-      setQuery({ tokenId: "", wallet: "", invalidPathId: true });
-      setError("invalid");
-      return;
-    }
-    const next = {
-      tokenId: isCredentialId(rawToken) ? rawToken : "",
-      wallet: normalizeAddress(rawWallet) || "",
-      invalidPathId: false,
-    };
+  function pushQuery(next) {
     const href = publicCredentialPath(next);
     if (typeof window !== "undefined") {
       window.history.pushState({}, "", href);
       onHistoryChange?.(href);
     }
     setQuery(next);
+  }
+
+  function submit(event) {
+    event.preventDefault();
+    const rawToken = tokenInput.trim();
+    const rawWallet = walletInput.trim();
+    if (rawToken && !isCredentialId(rawToken) && !normalizeAddress(rawWallet)) {
+      pushQuery({ tokenId: "", wallet: "", invalidPathId: true });
+      setError("invalid");
+      return;
+    }
+    pushQuery({
+      tokenId: isCredentialId(rawToken) ? rawToken : "",
+      wallet: normalizeAddress(rawWallet) || "",
+      invalidPathId: false,
+    });
+  }
+
+  function clearSearch() {
+    setTokenInput("");
+    setWalletInput("");
+    pushQuery({ tokenId: "", wallet: "", invalidPathId: false });
+    setError("");
+    setCredential(null);
+  }
+
+  function handleScanUrl(raw) {
+    const parsed = parseScannedValue(raw);
+    if (!parsed) {
+      setError("invalid");
+      setQuery({ tokenId: "", wallet: "", invalidPathId: true });
+      return;
+    }
+    if (parsed.tokenId) setTokenInput(parsed.tokenId);
+    if (parsed.wallet) setWalletInput(parsed.wallet);
+    pushQuery(parsed);
   }
 
   const shareUrl = view
@@ -152,46 +206,46 @@ function CredentialLookupPage({ pathname = "", search = "", onHistoryChange }) {
     }
   }
 
+  function handlePrint() {
+    if (typeof window !== "undefined") window.print();
+  }
+
   const verification = view?.verification;
-  const metadata = view?.metadata;
+  const queryLabel = query.tokenId
+    ? `#${query.tokenId}`
+    : query.wallet
+      ? query.wallet
+      : "";
+  const hasQuery = Boolean(query.tokenId || query.wallet || query.invalidPathId);
+  const resultState = loading
+    ? "loading"
+    : error === "invalid"
+      ? "invalid"
+      : error === "not-found"
+        ? "not-found"
+        : error === "owner-mismatch"
+          ? "owner-mismatch"
+          : error === "no-contract"
+            ? "no-contract"
+            : view
+              ? "found"
+              : "";
 
   return (
-    <div className="page credential-lookup">
-      <header className="page-header">
-        <p className="kicker">Forjora</p>
-        <h1>Credential verification</h1>
-        <p className="lede">
-          Read a Forjora credential from Avalanche Fuji by token ID or holder wallet.
-          Looking it up does not make a Forjora claimed score issuer-attested.
-        </p>
-        <p className="certificate-status-row">
-          <CredentialStatusBadge status={CREDENTIAL_STATES.claimed} />
-          <CredentialStatusBadge status={CREDENTIAL_STATES.attested} />
-        </p>
-      </header>
+    <div className="page credential-lookup lookup-portal">
+      <LookupHero />
 
-      <form className="section-block recipient-form" onSubmit={submit}>
-        <label className="recipient-label" htmlFor="lookup-token">Token ID</label>
-        <input
-          id="lookup-token"
-          className="recipient-input"
-          value={tokenInput}
-          onChange={(event) => setTokenInput(event.target.value)}
-          placeholder="Example: 1"
-          inputMode="numeric"
-        />
-        <label className="recipient-label" htmlFor="lookup-wallet">Holder wallet</label>
-        <input
-          id="lookup-wallet"
-          className="recipient-input"
-          value={walletInput}
-          onChange={(event) => setWalletInput(event.target.value)}
-          placeholder="0x…"
-          autoComplete="off"
-          spellCheck="false"
-        />
-        <Button type="submit">Look up credential</Button>
-      </form>
+      <CredentialSearch
+        tokenInput={tokenInput}
+        walletInput={walletInput}
+        onTokenChange={setTokenInput}
+        onWalletChange={setWalletInput}
+        onSubmit={submit}
+        onClear={clearSearch}
+        loading={loading}
+        disabled={!CONTRACT_ADDRESS}
+        onScanUrl={handleScanUrl}
+      />
 
       {!CONTRACT_ADDRESS && (
         <EmptyState
@@ -200,137 +254,101 @@ function CredentialLookupPage({ pathname = "", search = "", onHistoryChange }) {
         />
       )}
 
-      {loading && <p role="status">Reading credential from Fuji…</p>}
+      {CONTRACT_ADDRESS && !hasQuery && !loading ? (
+        <p className="meta-line lookup-idle-note">
+          Enter a token ID or wallet, then look up the on-chain record.
+        </p>
+      ) : null}
 
-      {!loading && error === "no-contract" && (
+      {resultState === "no-contract" ? (
         <EmptyState
           title="Lookup unavailable"
           body="Credential lookup is not available until the Fuji contract is configured."
         />
-      )}
+      ) : null}
 
-      {!loading && error === "not-found" && (
-        <>
-          <div className="verification-state verification-state-none verification-ownership-unknown">
-            <p className="kicker">Forjora on-chain record</p>
-            <h2>No record found</h2>
-            <p className="meta-line">{missingVerification?.summary}</p>
-          </div>
-          <EmptyState
-          title={EMPTY_STATES.noLookup.title}
-          body={EMPTY_STATES.noLookup.body}
-          doodle={EMPTY_STATES.noLookup.doodle}
-          />
-        </>
-      )}
-      {!loading && error === "invalid" && (
-        <EmptyState
-          variant="error"
-          title="Invalid credential identifier"
-          body="Enter a token ID starting at 1, or a 0x holder wallet address."
+      {resultState === "owner-mismatch" ? (
+        <VerificationStatusBanner
+          state="owner-mismatch"
+          verification={verification}
+          queryLabel={queryLabel}
+          onRetry={clearSearch}
         />
-      )}
-      {!loading && error === "owner-mismatch" && view && (
-        <div className="verification-state verification-state-claimed verification-ownership-mismatch" role="status">
-          <p className="kicker">Holder check</p>
-          <h2>Holder does not match</h2>
-          <p className="meta-line">
-            This token exists on Fuji, but the on-chain holder is not the wallet in the URL.
-            The record below is still the live Fuji credential for this token ID.
-          </p>
-        </div>
-      )}
-      {!loading && !error && !view && CONTRACT_ADDRESS && (
-        <p className="meta-line">Enter a token ID or wallet, then look up the on-chain record.</p>
-      )}
+      ) : null}
 
-      {view && !loading && (
-        <section className="section-block">
-          {verification && (
-            <div className={`verification-state verification-state-${verification.statusId} verification-ownership-${verification.ownership}`}>
-              <p className="kicker">Forjora on-chain record</p>
-              <h2>
-                {verification.statusId === "attested" ? "Issuer-attested credential" : "Claimed credential"}
-              </h2>
-              {verification.statusId === "attested" ? (
-                <span className="lookup-seal" aria-hidden="true">
-                  <BlockchainConnect
-                    trigger="immediate"
-                    active
-                    label="Attested"
-                    showCheck
-                  />
-                  <AnimatedDoodle type="seal" animation="stamp" trigger="success" active size={48} variant="accent" delay={1200} />
-                </span>
-              ) : (
-                <span className="lookup-seal" aria-hidden="true">
-                  <BlockchainConnect
-                    trigger="immediate"
-                    active
-                    label="On-chain"
-                    showCheck
-                  />
-                  <AnimatedDoodle type="certificate" animation="draw" trigger="success" active size={40} variant="muted" />
-                </span>
-              )}
-              {verification.checks?.length ? (
-                <ul className="verification-checks">
-                  {verification.checks.map((check) => (
-                    <li key={check.id} className={check.ok ? "is-ok" : "is-miss"}>
-                      {check.ok ? "✓" : "×"} {check.label}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>
-                  {verification.onChain ? "On-chain record found" : "Not found"}
-                  {verification.statusLabel ? ` · ${verification.statusLabel}` : ""}
-                </p>
-              )}
-              <p className="meta-line">{verification.summary}</p>
-              <p className="note">
-                Finding a record proves the token exists on Fuji. It does not turn a claimed score into an issuer assessment.
-              </p>
+      {resultState === "loading" ||
+      resultState === "invalid" ||
+      resultState === "not-found" ||
+      resultState === "found" ? (
+        <VerificationStatusBanner
+          state={resultState}
+          verification={
+            resultState === "not-found"
+              ? missingVerification
+              : verification
+          }
+          queryLabel={queryLabel}
+          onRetry={clearSearch}
+        />
+      ) : null}
+
+      {resultState === "owner-mismatch" && verification ? (
+        <VerificationStatusBanner
+          state="found"
+          verification={verification}
+          queryLabel={queryLabel}
+        />
+      ) : null}
+
+      {view && !loading && (resultState === "found" || resultState === "owner-mismatch") ? (
+        <div className="lookup-result lookup-result-enter">
+          <div className="lookup-result-layout">
+            <div className="lookup-result-main">
+              <CredentialShowcase view={view} artwork={forgeCertificate} />
+              <CredentialInformation view={view} />
+              <LearnerPublicCard view={view} />
             </div>
-          )}
-          <CredentialDetails view={view} />
-          {metadata && (metadata.description || metadata.attributes.length > 0 || metadata.image) && (
-            <div className="credential-metadata">
-              <h3>On-chain metadata</h3>
-              {metadata.description && <p>{metadata.description}</p>}
-              {metadata.image ? (
+            <aside className="lookup-result-side">
+              <SkillEvidencePanel view={view} />
+              <AchievementSummaryStrip view={view} />
+              <QRCodeCard shareUrl={shareUrl} />
+              <CredentialActions
+                shareUrl={shareUrl}
+                path={publicCredentialPath({
+                  tokenId: view.tokenId,
+                  wallet: query.wallet,
+                })}
+                copied={copied}
+                onCopy={copyShareUrl}
+                onPrint={handlePrint}
+              />
+            </aside>
+          </div>
+          <VerificationDetailsPanel view={view} />
+          {view.metadata &&
+          (view.metadata.description || view.metadata.attributes.length > 0 || view.metadata.image) ? (
+            <section className="section-block credential-metadata">
+              <h2>On-chain metadata</h2>
+              {view.metadata.description ? <p>{view.metadata.description}</p> : null}
+              {view.metadata.image ? (
                 <p className="meta-line">
-                  Image: <span className="credential-mono">{metadata.image}</span>
+                  Image: <span className="credential-mono">{view.metadata.image}</span>
                 </p>
               ) : null}
-              {metadata.attributes.length > 0 && (
+              {view.metadata.attributes.length > 0 ? (
                 <ul className="credential-traits">
-                  {metadata.attributes.map((trait) => (
+                  {view.metadata.attributes.map((trait) => (
                     <li key={`${trait.trait_type}-${trait.value}`}>
                       <span>{trait.trait_type}</span>
                       <strong>{String(trait.value)}</strong>
                     </li>
                   ))}
                 </ul>
-              )}
-            </div>
-          )}
-          {shareUrl && (
-            <div className="credential-share">
-              <h3>Shareable URL</h3>
-              <p className="credential-share-url">
-                <a href={publicCredentialPath({ tokenId: view.tokenId, wallet: query.wallet })}>
-                  {shareUrl}
-                </a>
-              </p>
-              <Button type="button" variant="secondary" onClick={copyShareUrl}>
-                {copied ? "Copied" : "Copy URL"}
-              </Button>
-              <CredentialQr url={shareUrl} />
-            </div>
-          )}
-        </section>
-      )}
+              ) : null}
+            </section>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

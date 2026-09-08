@@ -139,6 +139,7 @@ const uiFiles = [
   "src/components/pages/AboutPage.jsx",
   "src/components/pages/ProgressPage.jsx",
   "src/components/pages/CredentialLookupPage.jsx",
+  "src/components/lookup/LookupPortalParts.jsx",
   "src/components/CredentialDetails.jsx",
   "src/components/ExistingCertificate.jsx",
 ];
