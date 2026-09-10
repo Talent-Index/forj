@@ -46,7 +46,7 @@ service cloud.firestore {
     // Collection: leaderboardPreferences
     // Document ID: uid
     // Opt-in, display name, hideWallet only. No XP, level, or rank.
-    // Authenticated read when optIn is true. Owner create/update. No delete.
+    // Public read when optIn is true. Owner create/update. No delete.
     //
     // Collection: wallets
     // Document ID: lowercase 0x address
