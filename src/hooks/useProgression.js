@@ -73,11 +73,22 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
         );
         if (!joined.ok) return;
         if (!joined.applied) {
-          if (pref && pref.optIn === false) {
+          const needsSlug = Boolean(joined.preference?.optIn) && !joined.preference?.publicSlug;
+          const needsWalletHint = Boolean(joined.preference?.optIn)
+            && joined.preference?.hideWallet === false
+            && !joined.preference?.walletHint
+            && walletAddress;
+          if (pref && (pref.optIn === false || needsSlug || needsWalletHint)) {
             try {
-              await writeLeaderboardPreference(id, joined.preference);
+              const patched = applyLeaderboardPreference(joined.preference, {
+                optIn: joined.preference.optIn,
+                displayName: joined.preference.displayName,
+                hideWallet: joined.preference.hideWallet,
+              }, { userId: id, walletAddress });
+              await writeLeaderboardPreference(id, patched.preference, { userId: id, walletAddress });
+              joined.preference = patched.preference;
             } catch {
-              // Hide stays local if the listing write fails.
+              // Hide / slug backfill stays local if the listing write fails.
             }
           }
           joinedFor.current = joinKey;

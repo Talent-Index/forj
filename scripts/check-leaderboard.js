@@ -55,11 +55,27 @@ assert.equal(named.ok, true);
 assert.equal(named.preference.optIn, true);
 assert.deepEqual(
   Object.keys(named.preference).sort(),
-  ["displayName", "hideWallet", "optIn"]
+  ["displayName", "hideWallet", "optIn", "publicSlug", "walletHint"]
 );
 assert.equal("xp" in named.preference, false);
 assert.ok(LEADERBOARD_PREFERENCE_KEYS.includes("displayName"));
+assert.ok(LEADERBOARD_PREFERENCE_KEYS.includes("publicSlug"));
+assert.ok(LEADERBOARD_PREFERENCE_KEYS.includes("walletHint"));
 assert.equal(LEADERBOARD_PREFERENCE_KEYS.includes("xp"), false);
+
+const withWallet = applyLeaderboardPreference({}, {
+  optIn: true,
+  displayName: "Dana Learner",
+  hideWallet: false,
+}, {
+  userId: "uid123456",
+  walletAddress: "0x1234567890abcdef1234567890abcdef12345678",
+});
+assert.equal(withWallet.preference.hideWallet, false);
+assert.match(withWallet.preference.walletHint, /^0x1234/i);
+assert.match(withWallet.preference.publicSlug, /dana-learner-uid123/);
+assert.equal(LEADERBOARD_AUTHORITY.xpLedger, "xp-ledger");
+assert.equal(COLLECTIONS.leaderboardStanding, "leaderboardStanding");
 
 const hidden = applyLeaderboardPreference(named.preference, { optIn: false });
 assert.equal(hidden.ok, true);
@@ -208,6 +224,9 @@ const page = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/
 assert.match(page, /role="switch"/);
 assert.match(page, /Visible as \$\{displayName\}/);
 assert.match(page, /Hidden from the board/);
+assert.match(page, /Linked wallet shown on the board/);
+assert.match(page, /onToggleHideWallet/);
+assert.match(page, /Sign in to appear on the live board/);
 assert.doesNotMatch(page, /<h2>Privacy<\/h2>/);
 assert.doesNotMatch(page, /Show me on the live board/);
 
@@ -219,14 +238,35 @@ const sync = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/
 const firebaseInit = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/firebase.js"), "utf8");
 const progressionHook = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/hooks/useProgression.js"), "utf8");
 const learner = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/utils/backend/learner.js"), "utf8");
+const app = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/App.jsx"), "utf8");
+const routes = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/utils/routes.js"), "utf8");
+const profilePage = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/components/pages/PublicProfilePage.jsx"), "utf8");
+const functionsIndex = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../functions/src/index.js"), "utf8");
+const functionsMaterialize = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../functions/src/materializeStanding.js"), "utf8");
+const firebaseJson = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../firebase.json"), "utf8"));
 assert.match(sync, /export async function fetchLiveLeaderboard/);
-assert.match(sync, /getDocs\(collection\(db, COLLECTIONS.users\)\)/);
+assert.match(sync, /optedInStandingQuery/);
+assert.match(sync, /buildStandingLeaderboard/);
+assert.match(sync, /fetchPublicProfileBySlug/);
+assert.doesNotMatch(sync, /getDocs\(collection\(db, COLLECTIONS\.users\)\)/);
 assert.match(sync, /mergeAccountRoster/);
 assert.match(sync, /getDocs\(optedInPreferenceQuery\(\)\)/);
 assert.match(learner, /boardVisible: true/);
 assert.match(firebaseInit, /experimentalAutoDetectLongPolling:\s*true/);
-assert.match(progressionHook, /await writeLeaderboardPreference\(id, joined.preference\)/);
-assert.match(progressionHook, /pref && pref.optIn === false/);
+assert.match(progressionHook, /await writeLeaderboardPreference\(id, joined.preference/);
+assert.match(progressionHook, /pref\.optIn === false/);
+assert.match(progressionHook, /needsSlug/);
 assert.doesNotMatch(progressionHook, /writeLeaderboardPreference\(id, joined.preference\)\.catch\(\(\) => \{\}\)/);
+assert.match(app, /"leaderboard"/);
+assert.match(app, /"public-profile"/);
+assert.match(app, /PublicProfilePage/);
+assert.match(routes, /public-profile/);
+assert.match(routes, /\/u\//);
+assert.match(profilePage, /Community ranking/);
+assert.match(functionsIndex, /onProgressEventWrite/);
+assert.match(functionsMaterialize, /leaderboardStanding/);
+assert.match(functionsMaterialize, /xpTransactions/);
+assert.ok(Array.isArray(firebaseJson.functions));
+assert.equal(firebaseJson.functions[0].source, "functions");
 
 console.log("live leaderboard scoring tests passed");

@@ -94,27 +94,34 @@ export async function materializeUserStanding(userId) {
     authority: AUTHORITY,
   };
 
-  const batch = db.batch();
-  batch.set(standingRef, standing, { merge: true });
-
-  for (const entry of state.xpHistory || []) {
-    const xpKey = `XP:${entry.type}:${String(entry.sourceId ?? "")}`;
-    const txId = `${userId}_${sanitizeXpKey(xpKey)}`;
-    const txRef = db.collection(COLLECTIONS.xpTransactions).doc(txId);
-    batch.set(txRef, {
-      schemaVersion: 1,
-      userId,
-      xpKey,
-      type: entry.type,
-      sourceId: String(entry.sourceId ?? ""),
-      amount: Number(entry.amount) || 0,
-      timestamp: Number(entry.timestamp) || now,
-      createdAt: FieldValue.serverTimestamp(),
-      authority: AUTHORITY,
-    }, { merge: true });
+  const history = state.xpHistory || [];
+  const CHUNK = 400;
+  for (let i = 0; i < history.length; i += CHUNK) {
+    const batch = db.batch();
+    if (i === 0) {
+      batch.set(standingRef, standing, { merge: true });
+    }
+    for (const entry of history.slice(i, i + CHUNK)) {
+      const xpKey = `XP:${entry.type}:${String(entry.sourceId ?? "")}`;
+      const txId = `${userId}_${sanitizeXpKey(xpKey)}`;
+      const txRef = db.collection(COLLECTIONS.xpTransactions).doc(txId);
+      batch.set(txRef, {
+        schemaVersion: 1,
+        userId,
+        xpKey,
+        type: entry.type,
+        sourceId: String(entry.sourceId ?? ""),
+        amount: Number(entry.amount) || 0,
+        timestamp: Number(entry.timestamp) || now,
+        createdAt: FieldValue.serverTimestamp(),
+        authority: AUTHORITY,
+      }, { merge: true });
+    }
+    await batch.commit();
   }
-
-  await batch.commit();
+  if (history.length === 0) {
+    await standingRef.set(standing, { merge: true });
+  }
   return { ok: true, optIn: true, xp: standing.xp };
 }
 

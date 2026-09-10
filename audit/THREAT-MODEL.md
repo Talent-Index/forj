@@ -25,7 +25,7 @@ Review date: **28 August 2026**. Live Fuji contract under review is distinct fro
 │  Auth · Firestore ·       │   │  SkillForgeCredential                   │
 │  Storage (rules ready;    │   │  0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df │
 │  avatar path unused)      │   │  claimed mint · EIP-712 attested mint   │
-│  No Cloud Functions       │   │                                         │
+│  Cloud Functions XP ledger│   │                                         │
 │  App Check optional       │   │                                         │
 └───────────────────────────┘   └─────────────────────────────────────────┘
                 │                             │
@@ -39,7 +39,7 @@ Review date: **28 August 2026**. Live Fuji contract under review is distinct fro
 | --- | --- | --- |
 | Firebase Auth account | Who signed in | Quiz honesty, credential eligibility |
 | Firestore progress / events | What the authenticated client wrote under rules | Issuer-attested skill |
-| Local / replayed XP & leaderboard | Gamification standing from client events | Exam score or on-chain authority |
+| Local / replayed XP & leaderboard | Gamification standing from events / ledger | Exam score or on-chain authority |
 | Claimed NFT | Wallet published a score snapshot within caps | Assessment or attestation |
 | Issuer-attested NFT | Current contract `owner()` signed that snapshot | Degree, proctoring, or C-Chain issuance |
 | Explorer / public lookup | Token exists on Fuji | “Verified credential” for claimed records |
@@ -58,7 +58,7 @@ Review date: **28 August 2026**. Live Fuji contract under review is distinct fro
 | **B6 Public ↔ Chain explorers / RPC / IPFS** | Read-only clients | Third parties | URL allowlists in frontend helpers; public RPC trust |
 | **B7 CI ↔ Repo / deploy** | GitHub Actions `verify` | Maintainers, secrets store | Lint, tests, check scripts, build; Dependabot present; `vite.config.js` must stay small and unobfuscated |
 
-There is **no** application API server and **no** Cloud Functions tier. Authorization for off-chain data is almost entirely **Firestore/Storage rules + client honesty**.
+There is **no** general application API server. Off-chain authorization is primarily **Firestore/Storage rules**. A Cloud Functions tier materializes `xpTransactions` and `leaderboardStanding` from progress events (Admin SDK writes; clients cannot write those collections). Standing is still community ranking, not an exam.
 
 ---
 
@@ -68,7 +68,8 @@ There is **no** application API server and **no** Cloud Functions tier. Authoriz
 | --- | --- | --- |
 | Web SPA (host TBD; Vercel observed in deploy logs) | Public HTTPS | Bundle includes public Firebase web config |
 | Firebase Auth | Public client SDK | Email/password + Google; authorized domains must be ops-managed |
-| Cloud Firestore | Client SDK under rules | Owner docs, authenticated `users` roster, opt-in leaderboard events |
+| Cloud Firestore | Client SDK under rules | Owner docs; public read of opted-in board prefs/events/standing; `users` list remains authenticated |
+| Cloud Functions | Trusted writer for XP ledger | Materializes standing from progress events; deploy required for live ledger |
 | Firebase Storage | Rules for `/avatars/{uid}/*`; app does not upload today | Avatars stored as Firestore data URLs |
 | Fuji JSON-RPC | Public / configured HTTPS host | Must not point at C-Chain for learner mint |
 | Fuji contract | Public chain | Claimed mint is open to any wallet |
@@ -102,7 +103,7 @@ There is **no** application API server and **no** Cloud Functions tier. Authoriz
 
 ### Classification note on XP and points
 
-Locked collections (`xpTransactions`, `achievements`, `streaks`, `credentials`, `issuers`, `roles`, …) are **deny-all** in Firestore. The **live** gamification path still lets authenticated clients create `progressEvents` (and write `quizProgress`) that **become** XP when replayed. Product copy that “clients cannot write XP or rank” means they cannot write XP **total / rank fields** or those deny-all collections — **not** that event-sourced XP is tamper-proof.
+Locked collections (`achievements`, `streaks`, `credentials`, `issuers`, `roles`, …) are **deny-all** for clients. `xpTransactions` stays client deny-all; Admin SDK / Cloud Functions write them. `leaderboardStanding` is public-read when opted in and client write-denied. Authenticated clients still create `progressEvents` that feed the ledger. Product copy that “clients cannot write XP or rank” means they cannot write XP **total / rank fields** — the ledger reduces client forgery of board totals but does not make the board an exam.
 
 ---
 
@@ -285,7 +286,7 @@ It does **not** by itself satisfy the full 23-section execution checklist or the
 | Area | Gap |
 | --- | --- |
 | App Check | Client scaffolding optional via `VITE_FIREBASE_APPCHECK_SITE_KEY`; **console enforcement** still required |
-| Trusted XP / quiz validation | No Cloud Functions / server referee; board copy + lesson allowlist reduce abuse but do not eliminate quiz metadata gaming |
+| Trusted XP / quiz validation | Cloud Functions ledger materializes standing; quiz metadata gaming residual until stronger validation |
 | Firestore `email_verified` | Enforced in rules (deploy rules to production Firebase) |
 | Security headers / CSP | Shipped in `vercel.json` for Vercel hosts (COOP + recaptcha origins) |
 | Rate limiting | Client auth throttle shipped; Firebase Auth quotas; no app-layer IP limits (no API server) |
@@ -300,9 +301,9 @@ It does **not** by itself satisfy the full 23-section execution checklist or the
 
 ## 14. Suggested next execution order
 
-1. **Deploy** updated Firestore/Storage rules (verified email + lesson allowlist + quiz score shape) to the Firebase project.  
-2. **Configure App Check** (reCAPTCHA v3 site key + console enforcement).  
-3. **Trusted XP ledger** (Cloud Functions / Admin SDK) when ready to leave community-ranking mode.  
+1. **Deploy** updated Firestore/Storage rules (verified email + lesson allowlist + public board reads + standing) to the Firebase project.  
+2. **Deploy** Cloud Functions XP ledger so `leaderboardStanding` is live.  
+3. **Configure App Check** (reCAPTCHA v3 site key + console enforcement).  
 4. **Live Fuji walkthroughs** — MetaMask/Core claimed mint and lookup.  
 5. **Continue** issuer-key ops, monitoring, pen test, and regression suite per the program checklist.
 

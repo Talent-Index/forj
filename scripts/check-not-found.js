@@ -16,6 +16,8 @@ assert.equal(pageFromPathname("/", "?token=1"), "lookup");
 assert.equal(pageFromPathname("/about"), "not-found");
 assert.equal(pageFromPathname("/missing-page"), "not-found");
 assert.equal(pageFromPathname("/foo/bar"), "not-found");
+assert.equal(pageFromPathname("/u/dana-abc123"), "public-profile");
+assert.equal(pageFromPathname("/u/"), "not-found");
 
 const page = readFileSync(join(root, "src/components/pages/NotFoundPage.jsx"), "utf8");
 assert.match(page, /Path not forged/);

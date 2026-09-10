@@ -1,6 +1,6 @@
 # Forjora — Status
 
-Last updated: 7 September 2026
+Last updated: 10 September 2026
 
 This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
@@ -12,7 +12,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | Identity | Account sign-in (email or Google) with progress on the learner account |
 | Learning experience | Partial — Learn hub with track discovery, vertical track journeys, lesson workspace; six Avalanche tracks; content beyond these tracks not shipped |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
-| Gamification | Live community ranking of verified accounts from a learner-published event log (not a trusted ledger); XP, levels, achievements, streaks, path engine |
+| Gamification | Live community ranking (public Board browse); server-written XP ledger when Functions are deployed, otherwise event-log replay; XP, levels, achievements, streaks, path engine |
 | Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
 | Security & Launch | Partial — production readiness gate is **closed**; launch validation **not approved** for public launch |
 | Fuji credential | Live |
@@ -67,15 +67,16 @@ Existing browser progress is moved onto the account once, so a returning learner
 
 ## Leaderboard
 
-New verified accounts appear on the live board under their display name, including at 0 XP and including people who signed up before opening Board. They can hide. Standing is derived from an append-only log of first-time learning events that learners publish under rules (lesson ids are allowlisted). Learners cannot write XP totals or rank fields. Quiz retries do not farm standing. The board is **community ranking**, not a tamper-proof exam.
+New verified accounts appear on the live board under their display name, including at 0 XP and including people who signed up before opening Board. Guests can browse the Board without signing in. Learners can hide, and can optionally show a truncated linked wallet. Standing prefers a server-written XP ledger materialized from first-time learning events; when that ledger is not yet available the board falls back to replaying the same event log. Learners cannot write XP totals or rank fields. Quiz retries do not farm standing. The board is **community ranking**, not a tamper-proof exam.
+
+Public learner profiles live at `/u/:slug` for opted-in board names. They show the same community standing honesty: not issuer-attested, not on-chain.
 
 It is not a league with an issuer, not on-chain, and not a verified exam. A claimed credential remains distinct from this board.
 
 ## Not shipped yet
 
-- Server-written XP ledgers (the live board replays the event log; clients still cannot write XP)
 - Question bank managed independently of the app
 - Learning analytics dashboards
-- Public learner profile pages (for example `/dave`) and a Forjora Issuer dashboard
+- Forjora Issuer dashboard
 - Credential revocation and versioning
 - Independent review of freeze v1, issuer operations, production monitoring, and Avalanche C-Chain issuance (the production readiness gate stays closed; launch validation is not public-launch approval; see [Security & Launch](./ROADMAP.md))

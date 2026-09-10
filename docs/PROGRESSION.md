@@ -73,11 +73,11 @@ Each track also has a **track certificate**. Quiz tracks are achieved when those
 
 ## Leaderboard
 
-An opt-in **live board** among signed-in learners. Verified accounts appear by default, including people who already signed up, at 0 XP under their display name (or Learner if that name cannot be shown). They can hide. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
+An opt-in **live board**. Guests can browse without signing in. Verified accounts appear by default, including people who already signed up, at 0 XP under their display name (or Learner if that name cannot be shown). They can hide. They can optionally show a truncated linked wallet. Opted-in learners get a public profile at `/u/:slug`. Order: XP, then path completion, then achievement count, then who unlocked an achievement earlier.
 
-Standing is derived from an append-only learning event log that learners publish under security rules. One completion per allowed source (listed lessons, quiz difficulties, puzzle pieces, credential claim). Quiz retries do not farm XP. Learners cannot write XP totals or rank fields.
+Standing prefers a server-written XP ledger materialized from first-time learning events under security rules. When that ledger is unavailable, the board falls back to replaying the same append-only event log. One completion per allowed source (listed lessons, quiz difficulties including Master, puzzle pieces, credential claim). Quiz retries do not farm XP. Learners cannot write XP totals or rank fields.
 
-It is a **community ranking**, not a tamper-proof exam ledger, not on-chain, and not issuer-attested. A trusted XP service is still on the roadmap.
+It is a **community ranking**, not a tamper-proof exam, not on-chain, and not issuer-attested. The ledger reduces client XP forgery for board totals; it does not make the board an exam or attestation.
 
 ## What progression is not
 

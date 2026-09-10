@@ -9,7 +9,7 @@
 | 1 | Foundation | Complete |
 | 2 | Learning | Partial |
 | 3 | Credentials | Partial — contract live on Fuji |
-| 4 | Gamification | Live ranking from the event log |
+| 4 | Gamification | Live ranking + public Board / profiles + XP ledger |
 | 5 | Platform | Partial — account-backed learner persistence |
 | 6 | Security & Launch | Partial — production gate closed; launch not approved; audit and C-Chain issuance not shipped |
 | 7 | Ecosystem | Planned |
@@ -42,15 +42,15 @@ Remaining: issuer-key operations, attested mint in the learner UI, versioning an
 
 ## Phase 4 — Gamification ✅ *Live ranking*
 
-Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle, per-track certificates, default-on live ranking from the append-only event log (learners can hide). Product copy treats the board as community ranking. Lesson completion events are allowlisted in Firestore rules.
+Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle, per-track certificates, default-on live ranking, public Board browse, optional wallet hint, public `/u/:slug` profiles, and a Cloud Functions XP ledger that materializes `xpTransactions` / `leaderboardStanding` (board prefers standing when present). Product copy treats the board as community ranking. Lesson completion events are allowlisted in Firestore rules; quiz sources include Master.
 
-Remaining: a persisted XP ledger written only by a trusted service. Rank is not issuer-attested, not on-chain, and not tamper-proof until that ledger exists.
+Remaining: keep honesty clear that rank is not issuer-attested and not on-chain. Ledger standing is live only after Functions are deployed to the Firebase project.
 
 ## Phase 5 — Platform 🟡
 
 Shipped: learner accounts persist progress, quiz state, and puzzle state beyond a single browser. Wallets link to the account without becoming the account. A non-empty wallet-local snapshot replaces the account copy on link. Clients cannot write XP or rank.
 
-Remaining: question management, learning analytics, issuer dashboard, and production monitoring. Live rank already replays the append-only event log.
+Remaining: question management, learning analytics, issuer dashboard, and production monitoring.
 
 ## Phase 6 — Security & Launch
 
@@ -75,7 +75,7 @@ Launch validation of the Fuji learner loop (quiz, retry, puzzle, claimed mint, p
 
 ## Phase 7 — Ecosystem
 
-Partners, institutions, partner-issued credentials, collections, third-party verification, public achievement profiles — without pretending a claimed score is attested.
+Partners, institutions, partner-issued credentials, collections, third-party verification — without pretending a claimed score is attested. Public achievement profiles (`/u/:slug`) ship with the Board.
 
 ## Product loop
 
