@@ -11,11 +11,11 @@ export const LEGAL_PAGES = Object.freeze({
       },
       {
         heading: "Leaderboard",
-        body: "Verified accounts appear on the live board under their display name, including accounts that already signed up. Standing is derived from learning events. You can hide yourself on the Board page at any time. Hiding removes your name from the public ranking. Rank is not issuer-attested and not on-chain.",
+        body: "Verified accounts appear on the live board under their display name, including accounts that already signed up. Standing prefers a server-written XP ledger when available, otherwise the learning event log. You can hide yourself on the Board page at any time. Hiding removes your name from the public ranking. Rank is not issuer-attested and not on-chain.",
       },
       {
         heading: "What is public",
-        body: "If you mint a credential on Avalanche Fuji, that on-chain record is public (holder, score, and related fields). Lookup shows an on-chain record, not a verified exam. Leaderboard names are visible to signed-in learners unless you hide.",
+        body: "If you mint a credential on Avalanche Fuji, that on-chain record is public (holder, score, and related fields). Lookup shows an on-chain record, not a verified exam. Leaderboard names and optional wallet hints are visible on the public Board and on /u profile links unless you hide.",
       },
       {
         heading: "What we do not do",

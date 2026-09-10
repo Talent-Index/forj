@@ -3,6 +3,7 @@ import { Icon } from "../ui/Icon";
 const LOGGED_OUT_MOBILE = [
   { id: "landing", label: "Home", icon: "home" },
   { id: "learn", label: "Learn", icon: "learn" },
+  { id: "leaderboard", label: "Board", icon: "board" },
   { id: "lookup", label: "Lookup", icon: "certificate" },
   { id: "about", label: "About", icon: "about" },
 ];

@@ -3,19 +3,23 @@ import { getLevel, getXP } from "./xp.js";
 import { getPathProgress } from "./paths.js";
 import { validateRecipientName } from "../recipient.js";
 import { sanitizePlainText } from "../frontendSecurity.js";
+import { shortAddress } from "../learnerStats.js";
 
 export const LEADERBOARD_AUTHORITY = Object.freeze({
   eventLog: "event-log",
   localPreview: "local-preview",
+  xpLedger: "xp-ledger",
 });
 export const LEADERBOARD_DISCLAIMER =
-  "Standing comes from an append-only log of first-time learning events that signed-in learners publish under security rules. Learners cannot write XP totals or rank fields, but this board is not a tamper-proof exam, not on-chain, and not issuer-attested. Treat it as community ranking, not proof of skill.";
+  "Standing prefers a server-written XP ledger materialized from first-time learning events under security rules. When that ledger is unavailable, the board falls back to replaying the same event log. Learners cannot write XP totals or rank fields. This board is still not a tamper-proof exam, not on-chain, and not issuer-attested. Treat it as community ranking, not proof of skill.";
 export const LEADERBOARD_PREFERENCE_KEYS = Object.freeze([
   "schemaVersion",
   "userId",
   "optIn",
   "displayName",
   "hideWallet",
+  "publicSlug",
+  "walletHint",
   "createdAt",
   "updatedAt",
 ]);
@@ -52,6 +56,25 @@ export function normalizeBoardName(value) {
   return LEADERBOARD_FALLBACK_NAME;
 }
 
+export function buildPublicSlug(displayName, userId) {
+  const base = normalizeBoardName(displayName)
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 32) || "learner";
+  const suffix = String(userId || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "")
+    .slice(0, 6);
+  return suffix ? `${base}-${suffix}` : base;
+}
+
+export function formatWalletHint(address) {
+  return shortAddress(address) || "";
+}
+
 export function applyLeaderboardPreference(current = {}, patch = {}, extras = {}) {
   const hideWallet = patch.hideWallet != null
     ? Boolean(patch.hideWallet)
@@ -60,20 +83,32 @@ export function applyLeaderboardPreference(current = {}, patch = {}, extras = {}
   const rawName = patch.displayName != null
     ? patch.displayName
     : (extras.displayName || current.displayName || "");
-  if (optIn) {
-    return {
-      ok: true,
-      preference: { optIn: true, displayName: normalizeBoardName(rawName), hideWallet },
-    };
-  }
-  const trimmed = sanitizePlainText(rawName, 48);
+  const userId = extras.userId || current.userId || "";
+  const walletAddress = patch.walletAddress != null
+    ? patch.walletAddress
+    : (extras.walletAddress || "");
+  const displayName = optIn ? normalizeBoardName(rawName) : sanitizePlainText(rawName, 48);
+  const publicSlug = optIn
+    ? (patch.publicSlug || current.publicSlug || buildPublicSlug(displayName, userId))
+    : "";
+  const walletHint = hideWallet
+    ? ""
+    : (typeof patch.walletHint === "string" && patch.walletHint
+      ? patch.walletHint
+      : (walletAddress ? formatWalletHint(walletAddress) : (current.walletHint || "")));
   return {
     ok: true,
-    preference: { optIn: false, displayName: trimmed, hideWallet },
+    preference: {
+      optIn,
+      displayName,
+      hideWallet,
+      publicSlug,
+      walletHint,
+    },
   };
 }
 
-export function joinLeaderboardByDefault(existingPreference, displayName) {
+export function joinLeaderboardByDefault(existingPreference, displayName, extras = {}) {
   const boardName = normalizeBoardName(displayName);
   if (existingPreference) {
     const currentName = typeof existingPreference.displayName === "string"
@@ -86,16 +121,16 @@ export function joinLeaderboardByDefault(existingPreference, displayName) {
       return {
         ok: true,
         applied: true,
-        preference: {
+        preference: applyLeaderboardPreference(existingPreference, {
           optIn: true,
           displayName: boardName,
           hideWallet: existingPreference.hideWallet !== false,
-        },
+        }, extras).preference,
       };
     }
     return { ok: true, applied: false, preference: existingPreference };
   }
-  const applied = applyLeaderboardPreference({}, { optIn: true, displayName: boardName });
+  const applied = applyLeaderboardPreference({}, { optIn: true, displayName: boardName }, extras);
   if (!applied.ok) return { ...applied, applied: false };
   return { ok: true, applied: true, preference: applied.preference };
 }
@@ -110,6 +145,8 @@ export function snapshotFromProgression(state, extras = {}) {
     learnerId: state.learnerId,
     displayName: state.leaderboard?.displayName || extras.displayName || "Learner",
     hideWallet: state.leaderboard?.hideWallet !== false,
+    walletHint: extras.walletHint || state.leaderboard?.walletHint || "",
+    publicSlug: extras.publicSlug || state.leaderboard?.publicSlug || "",
     optIn: Boolean(state.leaderboard?.optIn),
     xp: getXP(state),
     weeklyXp: extras.weeklyXp ?? xpSince(state, startOfUtcWeek(extras.now)),
@@ -121,6 +158,31 @@ export function snapshotFromProgression(state, extras = {}) {
     lastActivityAt: extras.lastActivityAt || lastEventTime(state),
     updatedAt: extras.updatedAt || Date.now(),
     authority: extras.authority || LEADERBOARD_AUTHORITY.eventLog,
+  };
+}
+
+export function snapshotFromStanding(row = {}) {
+  const userId = row.userId || row.learnerId || row.id;
+  if (!userId || row.optIn === false) return null;
+  return {
+    learnerId: userId,
+    displayName: normalizeBoardName(row.displayName || ""),
+    hideWallet: row.hideWallet !== false,
+    walletHint: row.hideWallet === false && typeof row.walletHint === "string" ? row.walletHint : "",
+    publicSlug: typeof row.publicSlug === "string" ? row.publicSlug : "",
+    optIn: true,
+    xp: Number(row.xp) || 0,
+    weeklyXp: Number(row.weeklyXp) || 0,
+    level: Number(row.level) || getLevel(Number(row.xp) || 0),
+    achievementCount: Number(row.achievementCount) || 0,
+    completionPercent: Number(row.completionPercent) || 0,
+    completedTracks: row.completedTracks && typeof row.completedTracks === "object"
+      ? { ...row.completedTracks }
+      : {},
+    firstAchievementAt: row.firstAchievementAt == null ? null : Number(row.firstAchievementAt),
+    lastActivityAt: Number(row.lastActivityAt) || 0,
+    updatedAt: Number(row.updatedAt) || Date.now(),
+    authority: row.authority || LEADERBOARD_AUTHORITY.xpLedger,
   };
 }
 
@@ -176,6 +238,10 @@ export function mergeAccountRoster(roster = [], preferences = []) {
       optIn: true,
       displayName: normalizeBoardName(pref?.displayName || member.displayName || member.name || ""),
       hideWallet: pref?.hideWallet !== false && member.hideWallet !== false,
+      publicSlug: pref?.publicSlug || member.publicSlug || "",
+      walletHint: (pref?.hideWallet === false || member.hideWallet === false)
+        ? (pref?.walletHint || member.walletHint || "")
+        : "",
     });
   }
   for (const [userId, pref] of prefs) {
@@ -185,6 +251,8 @@ export function mergeAccountRoster(roster = [], preferences = []) {
       optIn: true,
       displayName: normalizeBoardName(pref.displayName || ""),
       hideWallet: pref.hideWallet !== false,
+      publicSlug: pref.publicSlug || "",
+      walletHint: pref.hideWallet === false ? (pref.walletHint || "") : "",
     });
   }
   return merged;
@@ -214,12 +282,23 @@ export function buildLiveLeaderboard(preferences, events, extras = {}) {
           optIn: true,
           displayName: row.displayName || extras.displayName || "Learner",
           hideWallet: row.hideWallet !== false,
+          walletHint: row.walletHint || "",
+          publicSlug: row.publicSlug || "",
         },
       }, {
         displayName: row.displayName,
+        walletHint: row.hideWallet === false ? (row.walletHint || "") : "",
+        publicSlug: row.publicSlug || "",
         authority: LEADERBOARD_AUTHORITY.eventLog,
         now: extras.now,
       });
     });
+  return rankLearners(snapshots, extras);
+}
+
+export function buildStandingLeaderboard(standingRows = [], extras = {}) {
+  const snapshots = (standingRows || [])
+    .map((row) => snapshotFromStanding(row))
+    .filter(Boolean);
   return rankLearners(snapshots, extras);
 }

@@ -39,17 +39,22 @@ for (const lessonId of LESSON_EVENT_SOURCE_IDS) {
 }
 assert.equal(isAllowedProgressEventSource("LESSON_COMPLETED", "farm-extra-lesson"), false);
 assert.equal(isAllowedProgressEventSource("QUIZ_COMPLETED", "easy"), true);
+assert.equal(isAllowedProgressEventSource("QUIZ_COMPLETED", "master"), true);
 assert.equal(isAllowedProgressEventSource("PUZZLE_PIECE_UNLOCKED", "piece-16"), false);
+assert.match(firestoreRules, /data\.sourceId in \['easy', 'medium', 'hard', 'master'\]/);
 assert.match(firestoreRules, /validSectionScore\(data\.sectionScores\.easy\)/);
 assert.match(firestoreRules, /acquiredPieces\.hasOnly/);
 assert.match(firestoreRules, /!\('email' in data\.metadata\)/);
 assert.match(firestoreRules, /resource\.data\.userId == request\.auth\.uid/);
-assert.match(firestoreRules, /allow list: if isAuthenticated\(\) && resource.data.optIn == true/);
-assert.match(firestoreRules, /allow get: if isAuthenticated\(\) && \(isOwner\(userId\) \|\| resource.data.optIn == true\)/);
+assert.match(firestoreRules, /allow list: if resource\.data\.optIn == true/);
+assert.match(firestoreRules, /match \/leaderboardPreferences\/\{userId\} \{[\s\S]*?allow get: if resource\.data\.optIn == true/);
+assert.match(firestoreRules, /match \/leaderboardStanding\/\{userId\} \{[\s\S]*?allow list: if resource\.data\.optIn == true/);
+assert.match(firestoreRules, /match \/leaderboardStanding\/\{userId\} \{[\s\S]*?allow create, update, delete: if false/);
 assert.match(firestoreRules, /match \/users\/\{userId\} \{[\s\S]*?allow get, list: if isAuthenticated\(\)/);
 assert.match(firestoreRules, /match \/learnerProfiles\/\{userId\} \{[\s\S]*?allow read: if isOwner\(userId\)/);
 assert.doesNotMatch(firestoreRules, /status == 'released'/);
 assert.match(LEADERBOARD_DISCLAIMER, /not a tamper-proof exam/i);
+assert.match(LEADERBOARD_DISCLAIMER, /community ranking/i);
 assert.match(progressionDoc, /community ranking/i);
 
 assert.equal(PUBLIC_ENV_KEYS.includes("VITE_FIREBASE_APPCHECK_SITE_KEY"), true);

@@ -59,7 +59,8 @@ service cloud.firestore {
     // Collection: analyticsEvents
     // Append-only. Owner create. No email/name/wallet in payload.
     //
-    // Backend-only (client deny): xpTransactions, achievements, streaks,
+    // Backend-only client writes (Admin SDK / Cloud Functions): xpTransactions,
+    // leaderboardStanding (public read when opted in), achievements, streaks,
     // learningTracks, learningPaths, questions, questionKeys, questionVersions,
     // issuers, issuerMembers, credentialTemplates, credentials,
     // credentialVersions, credentialEvents, auditLogs, roles
@@ -212,6 +213,7 @@ service cloud.firestore {
         ])
         && hasOnlyAllowedFields([
           'schemaVersion', 'userId', 'optIn', 'displayName', 'hideWallet',
+          'publicSlug', 'walletHint',
           'createdAt', 'updatedAt'
         ])
         && data.schemaVersion is int && data.schemaVersion == 1
@@ -220,6 +222,9 @@ service cloud.firestore {
         && data.displayName is string && data.displayName.size() <= 48
         && (!data.optIn || data.displayName.size() >= 2)
         && data.hideWallet is bool
+        && (!('publicSlug' in data) || (data.publicSlug is string && data.publicSlug.size() <= 48))
+        && (!('walletHint' in data) || (data.walletHint is string && data.walletHint.size() <= 24))
+        && (data.hideWallet || !('walletHint' in data) || data.walletHint.size() > 0)
         && data.createdAt is timestamp
         && data.updatedAt is timestamp
         && !('xp' in data)
@@ -251,7 +256,7 @@ service cloud.firestore {
 
     function validEventSource(data) {
       return (data.type in ['QUIZ_STARTED', 'QUIZ_COMPLETED']
-          && data.sourceId in ['easy', 'medium', 'hard'])
+          && data.sourceId in ['easy', 'medium', 'hard', 'master'])
         || (data.type == 'LESSON_COMPLETED'
           && data.sourceId in allowedLessonSourceIds())
         || (data.type == 'PUZZLE_PIECE_UNLOCKED'
@@ -359,8 +364,9 @@ service cloud.firestore {
     }
 
     match /leaderboardPreferences/{userId} {
-      allow get: if isAuthenticated() && (isOwner(userId) || resource.data.optIn == true);
-      allow list: if isAuthenticated() && resource.data.optIn == true;
+      allow get: if resource.data.optIn == true
+        || (isAuthenticated() && isOwner(userId));
+      allow list: if resource.data.optIn == true;
       allow create: if isOwner(userId) && isValidLeaderboardPreference(request.resource.data) && uidUnchanged(userId);
       allow update: if isOwner(userId)
         && isValidLeaderboardPreference(request.resource.data)
@@ -378,9 +384,9 @@ service cloud.firestore {
     }
 
     match /progressEvents/{eventId} {
-      allow get: if isAuthenticated()
-        && (resource.data.userId == request.auth.uid || resource.data.optIn == true);
-      allow list: if isAuthenticated() && resource.data.optIn == true;
+      allow get: if resource.data.optIn == true
+        || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      allow list: if resource.data.optIn == true;
       allow list: if isAuthenticated() && resource.data.userId == request.auth.uid;
       allow create: if isAuthenticated()
         && isValidProgressEvent(request.resource.data)
@@ -393,6 +399,12 @@ service cloud.firestore {
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['optIn'])
         && (!request.resource.data.optIn || optedIntoLeaderboard());
       allow delete: if false;
+    }
+
+    match /leaderboardStanding/{userId} {
+      allow get: if resource.data.optIn == true;
+      allow list: if resource.data.optIn == true;
+      allow create, update, delete: if false;
     }
 
     match /wallets/{walletId} {

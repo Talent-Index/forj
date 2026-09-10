@@ -47,7 +47,7 @@ export function emptyProgression(learnerId = null) {
     completedQuizzes: {},
     puzzle: { pieces: {}, completedAt: null },
     credential: { claimed: false, attested: false, claimedAt: null, attestedAt: null },
-    leaderboard: { optIn: false, displayName: "", hideWallet: true },
+    leaderboard: { optIn: false, displayName: "", hideWallet: true, publicSlug: "", walletHint: "" },
     migratedFrom: null,
   };
 }
@@ -93,6 +93,8 @@ export function sanitizeProgression(raw, learnerId = null) {
       optIn: Boolean(raw.leaderboard?.optIn),
       displayName: typeof raw.leaderboard?.displayName === "string" ? raw.leaderboard.displayName : "",
       hideWallet: raw.leaderboard?.hideWallet !== false,
+      publicSlug: typeof raw.leaderboard?.publicSlug === "string" ? raw.leaderboard.publicSlug : "",
+      walletHint: typeof raw.leaderboard?.walletHint === "string" ? raw.leaderboard.walletHint : "",
     },
     migratedFrom: raw.migratedFrom || null,
   };

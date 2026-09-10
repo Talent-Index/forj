@@ -23,6 +23,22 @@
         { "fieldPath": "userId", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "leaderboardStanding",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "publicSlug", "order": "ASCENDING" },
+        { "fieldPath": "optIn", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "leaderboardPreferences",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "publicSlug", "order": "ASCENDING" },
+        { "fieldPath": "optIn", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

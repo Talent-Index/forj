@@ -17,5 +17,27 @@ export function pageFromPathname(pathname = "/", search = "") {
 
   const path = String(pathname || "/").replace(/\/+$/, "") || "/";
   if (path === "/") return "landing";
+
+  const profileMatch = path.match(/^\/u\/([^/]+)$/i);
+  if (profileMatch) {
+    return "public-profile";
+  }
+
   return "not-found";
+}
+
+export function publicProfileSlugFromPath(pathname = "/") {
+  const path = String(pathname || "/").replace(/\/+$/, "") || "/";
+  const match = path.match(/^\/u\/([^/]+)$/i);
+  if (!match) return "";
+  try {
+    return decodeURIComponent(match[1]).trim().toLowerCase();
+  } catch {
+    return String(match[1] || "").trim().toLowerCase();
+  }
+}
+
+export function publicProfilePath(slug) {
+  const clean = String(slug || "").trim().toLowerCase();
+  return clean ? `/u/${encodeURIComponent(clean)}` : "/";
 }

@@ -17,6 +17,7 @@ import SettingsPage from "./components/pages/SettingsPage";
 import ProgressPage from "./components/pages/ProgressPage";
 import LearnPage from "./components/pages/LearnPage";
 import LeaderboardPage from "./components/pages/LeaderboardPage";
+import PublicProfilePage from "./components/pages/PublicProfilePage";
 import CredentialLookupPage from "./components/pages/CredentialLookupPage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 import AuthModal, { ProfileSetup } from "./components/auth/AuthModal";
@@ -41,13 +42,22 @@ import {
   parseLookupQuery,
   publicCredentialPath,
 } from "./utils/credentialLookup";
-import { pageFromPathname } from "./utils/routes";
+import { pageFromPathname, publicProfilePath, publicProfileSlugFromPath } from "./utils/routes";
 import { adoptLinkedWalletProgress, migrateAndHydrate } from "./utils/backend/migrate";
 import { writeQuizProgress } from "./utils/backend/progressSync";
 import { normalizeAddress } from "./utils/progress";
 
 const VIEWS = PROGRESS_VIEWS;
-const PUBLIC_PAGES = new Set(["landing", "about", "lookup", "privacy", "terms", "not-found"]);
+const PUBLIC_PAGES = new Set([
+  "landing",
+  "about",
+  "lookup",
+  "privacy",
+  "terms",
+  "not-found",
+  "leaderboard",
+  "public-profile",
+]);
 
 function pageFromLocation() {
   if (typeof window === "undefined") return "landing";
@@ -110,7 +120,12 @@ function App() {
     sectionScores,
     acquiredPieces,
     attempts,
-  }, { ready: progressReady, displayName: account?.name || "", revision: progressRevision });
+  }, {
+    ready: progressReady,
+    displayName: account?.name || "",
+    walletAddress: wallet.address || account?.walletAddress || "",
+    revision: progressRevision,
+  });
 
   const applyProgress = useCallback((snapshot) => {
     const next = snapshot || emptyProgress();
@@ -489,7 +504,7 @@ function App() {
     return undefined;
   }, [page]);
 
-  function handleNavigate(nextPage) {
+  function handleNavigate(nextPage, options = {}) {
     if (typeof window !== "undefined" && (nextPage === "privacy" || nextPage === "terms")) {
       const path = nextPage === "terms" ? "/terms" : "/privacy";
       window.history.pushState({}, "", path);
@@ -503,10 +518,26 @@ function App() {
         window.history.pushState({}, "", href);
       }
       setLocationKey(`${window.location.pathname}${window.location.search}`);
+    } else if (typeof window !== "undefined" && nextPage === "leaderboard") {
+      if (window.location.pathname !== "/" || window.location.search) {
+        // Keep SPA path clean unless already on a public profile URL.
+        if (!window.location.pathname.startsWith("/u/")) {
+          window.history.pushState({}, "", "/");
+          setLocationKey("/");
+        }
+      }
+    } else if (typeof window !== "undefined" && nextPage === "public-profile") {
+      const href = publicProfilePath(options.slug || "");
+      if (href !== "/" && window.location.pathname !== href) {
+        window.history.pushState({}, "", href);
+        setLocationKey(href);
+      }
+      setPage("public-profile");
+      return;
     } else if (typeof window !== "undefined") {
       const location = parseCredentialLocation(window.location.pathname, window.location.search);
       const query = parseLookupQuery(window.location.search);
-      if (location.isPublicRoute || query.tokenId || query.wallet) {
+      if (location.isPublicRoute || query.tokenId || query.wallet || window.location.pathname.startsWith("/u/")) {
         window.history.pushState({}, "", "/");
         setLocationKey("/");
       }
@@ -522,7 +553,7 @@ function App() {
         requestAnimationFrame(() => scrollToId("credential", theme.reducedMotion));
         return;
       }
-      if (nextPage === "progress" || nextPage === "settings" || nextPage === "leaderboard") {
+      if (nextPage === "progress" || nextPage === "settings") {
         openAuth("signin");
         return;
       }
@@ -581,6 +612,38 @@ function App() {
           pathname={typeof window !== "undefined" ? window.location.pathname : "/credential"}
           search={typeof window !== "undefined" ? window.location.search : ""}
           onHistoryChange={(href) => setLocationKey(href)}
+        />
+      );
+    }
+    if (page === "public-profile") {
+      return (
+        <PublicProfilePage
+          slug={publicProfileSlugFromPath(typeof window !== "undefined" ? window.location.pathname : "")}
+          isAuthenticated={isAuthenticated}
+          onBoard={() => handleNavigate("leaderboard")}
+          onHome={() => handleNavigate("landing")}
+          onSignIn={() => openAuth("signin")}
+        />
+      );
+    }
+    if (page === "leaderboard") {
+      return (
+        <LeaderboardPage
+          learnerId={ownerId}
+          progression={progression}
+          isAuthenticated={isAuthenticated}
+          onToggleOptIn={(optIn) => progression.setLeaderboardPreference({
+            optIn,
+            displayName: account?.name || progression.state?.leaderboard?.displayName || "Learner",
+          })}
+          onToggleHideWallet={(nextHide) => progression.setLeaderboardPreference({
+            hideWallet: nextHide,
+            displayName: account?.name || progression.state?.leaderboard?.displayName || "Learner",
+            walletAddress: wallet.address || account?.walletAddress || "",
+          })}
+          onLearn={() => (isAuthenticated ? goLearnHome() : handleNavigate("learn"))}
+          onSignIn={() => openAuth("signin")}
+          onOpenProfile={(slug) => handleNavigate("public-profile", { slug })}
         />
       );
     }
@@ -674,19 +737,6 @@ function App() {
           onCredentials={() => setPage("credentials")}
           onLookup={openLookup}
           progression={progression}
-        />
-      );
-    }
-    if (page === "leaderboard") {
-      return (
-        <LeaderboardPage
-          learnerId={ownerId}
-          progression={progression}
-          onToggleOptIn={(optIn) => progression.setLeaderboardPreference({
-            optIn,
-            displayName: account?.name || progression.state?.leaderboard?.displayName || "Learner",
-          })}
-          onLearn={goLearnHome}
         />
       );
     }

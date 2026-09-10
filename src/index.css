@@ -4177,6 +4177,31 @@ img {
   background: var(--accent-text);
 }
 
+.board-visibility-guest {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: default;
+}
+
+.board-profile-link {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.board-profile-link:hover,
+.board-profile-link:focus-visible {
+  color: var(--accent);
+}
+
 .track-cert-intro .meta-line {
   margin-top: 6px;
   max-width: 40em;

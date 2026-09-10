@@ -83,12 +83,16 @@ export {
   applyLeaderboardPreference,
   joinLeaderboardByDefault,
   normalizeBoardName,
+  buildPublicSlug,
+  formatWalletHint,
   mergeAccountRoster,
   snapshotFromProgression,
+  snapshotFromStanding,
   compareLearners,
   rankLearners,
   groupEventsByUser,
   buildLiveLeaderboard,
+  buildStandingLeaderboard,
   startOfUtcWeek,
 } from "./leaderboard.js";
 

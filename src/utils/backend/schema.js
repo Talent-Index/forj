@@ -3,8 +3,8 @@
  * Client may write only learner-owned profile, quiz cache, primitive events,
  * leaderboard opt-in, analytics (no PII), and a first-time wallet link.
  * XP totals, achievements, credentials, questions, rank fields, and issuer records
- * are not client-writable. Standing is replayed from the event log — that log is
- * still learner-published under rules, not a trusted exam ledger.
+ * are not client-writable. Standing prefers a server-written ledger when present;
+ * otherwise the board replays the learner-published event log under rules.
  */
 import { LESSON_EVENT_SOURCE_IDS } from "../../data/learning.js";
 
@@ -20,6 +20,7 @@ export const COLLECTIONS = Object.freeze({
   quizProgress: "quizProgress",
   progressEvents: "progressEvents",
   leaderboardPreferences: "leaderboardPreferences",
+  leaderboardStanding: "leaderboardStanding",
   xpTransactions: "xpTransactions",
   achievements: "achievements",
   streaks: "streaks",

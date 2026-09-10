@@ -29,7 +29,7 @@ function browserStorage() {
   return createMemoryStorage();
 }
 
-export function useProgression(learnerId, quizSnapshot, { ready = false, displayName = "", revision = 0 } = {}) {
+export function useProgression(learnerId, quizSnapshot, { ready = false, displayName = "", walletAddress = "", revision = 0 } = {}) {
   const store = useMemo(() => createProgressionStore(browserStorage()), []);
   const stateRef = useRef(null);
   const migratedFor = useRef(null);
@@ -68,7 +68,8 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
         if (cancelled || migratedFor.current !== id || !stateRef.current) return;
         const joined = joinLeaderboardByDefault(
           pref,
-          displayName || stateRef.current.leaderboard?.displayName
+          displayName || stateRef.current.leaderboard?.displayName,
+          { userId: id, walletAddress }
         );
         if (!joined.ok) return;
         if (!joined.applied) {
@@ -109,7 +110,7 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
     return () => {
       cancelled = true;
     };
-  }, [displayName, hydrated, learnerId, ready, store]);
+  }, [displayName, hydrated, learnerId, ready, store, walletAddress]);
 
   const persist = useCallback((next) => {
     const id = progressOwnerId(learnerId);
@@ -180,19 +181,27 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
   const setLeaderboardPreference = useCallback(async (patch) => {
     const current = stateRef.current;
     if (!current) return { ok: false, error: "Sign in to continue." };
+    const id = progressOwnerId(learnerId);
     const applied = applyLeaderboardPreference(current.leaderboard, patch, {
       displayName: patch.displayName || current.leaderboard?.displayName,
+      userId: id,
+      walletAddress: patch.walletAddress != null ? patch.walletAddress : walletAddress,
     });
     if (!applied.ok) return applied;
-    const id = progressOwnerId(learnerId);
     try {
       if (applied.preference.optIn) {
-        const written = await writeLeaderboardPreference(id, applied.preference);
+        const written = await writeLeaderboardPreference(id, applied.preference, {
+          userId: id,
+          walletAddress,
+        });
         if (!written.ok) return written;
         await setProgressEventsOptIn(id, true);
       } else {
         await setProgressEventsOptIn(id, false);
-        const written = await writeLeaderboardPreference(id, applied.preference);
+        const written = await writeLeaderboardPreference(id, applied.preference, {
+          userId: id,
+          walletAddress,
+        });
         if (!written.ok) return written;
       }
     } catch (error) {
@@ -206,7 +215,7 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
     setState(next);
     persist(next);
     return { ok: true, preference: applied.preference };
-  }, [learnerId, persist]);
+  }, [learnerId, persist, walletAddress]);
 
   const clear = useCallback(() => {
     const id = progressOwnerId(learnerId);
