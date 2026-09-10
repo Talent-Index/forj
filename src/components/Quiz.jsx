@@ -20,7 +20,7 @@ import { Button, ProgressBar } from "./ui/primitives";
 import EmptyState from "./EmptyState";
 import { AnimatedDoodle, LoadingForge, XpHandwrite } from "./doodles";
 
-const OPTIONS_LETTERS = ["A", "B", "C", "D"];
+const OPTION_HOTKEYS = ["a", "b", "c", "d"];
 
 function QuizError({ body, onBack, onRetry }) {
   return (
@@ -212,7 +212,7 @@ function Quiz({
     function onKey(event) {
       const key = event.key.toLowerCase();
       if (!answered && !lockedRef.current) {
-        const idx = OPTIONS_LETTERS.findIndex((letter) => letter.toLowerCase() === key);
+        const idx = OPTION_HOTKEYS.indexOf(key);
         if (idx >= 0 && q.options[idx]) handleSelect(q.options[idx]);
         if (key === "enter") {
           event.preventDefault();
@@ -460,7 +460,7 @@ function Quiz({
           {showHint && <div className="hint-text">{q.hint}</div>}
         </div>
       )}
-      <div className="options-grid" role="listbox" aria-label="Answer choices">
+      <div className="options-grid" role="listbox" aria-label="Possible answers">
         {q.options.map((option, idx) => {
           const isSelected = !answered && option === selected;
           return (
@@ -472,7 +472,7 @@ function Quiz({
               disabled={answered}
               aria-pressed={isSelected}
             >
-              <span className="option-letter">{OPTIONS_LETTERS[idx]}</span>
+              <span className="option-mark" aria-hidden="true" />
               <span className="option-text">{option}</span>
               {isSelected && <span className="option-selected-label">Selected</span>}
             </button>
@@ -484,7 +484,7 @@ function Quiz({
           ? "Answer locked. Read the explanation, then continue."
           : selected
             ? "Answer selected. Submit to lock it in."
-            : "Select an answer, then submit."}
+            : "Choose one of the possible answers, then submit."}
       </p>
       {answered && feedback && (
         <div className={`quiz-feedback ${feedback.isCorrect ? "" : "quiz-feedback-wrong"}`} role="status">

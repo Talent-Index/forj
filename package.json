@@ -19,6 +19,7 @@
     "test:frontend-security": "node scripts/check-frontend-security.js",
     "test:firebase-security": "node scripts/check-firebase-security.js",
     "test:quiz": "node scripts/check-quiz.js",
+    "questions:generate": "node scripts/generate-question-bank.js",
     "test:progress": "node scripts/check-progress.js",
     "test:learner": "node scripts/check-learner-stats.js",
     "test:credential": "node scripts/check-credential-model.js",

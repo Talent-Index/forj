@@ -272,4 +272,20 @@ assert.equal(summary.wrong, 3);
 assert.equal(summary.pointsEarned, 6);
 assert.equal(summary.percent, 40);
 
+const PLACEHOLDER_OPTION = /^(Option\s*\d+|Incorrect distractor\s*\d+|Unrelated non-Avalanche alternative\s*\d+)$/i;
+for (const section of sections) {
+  for (const question of section.questions || []) {
+    assert.ok(Array.isArray(question.options) && question.options.length >= 4, `${question.id} needs 4 options`);
+    assert.equal(new Set(question.options).size, question.options.length, `${question.id} has duplicate options`);
+    assert.ok(question.options.includes(question.answer), `${question.id} answer missing from options`);
+    for (const option of question.options) {
+      assert.equal(
+        PLACEHOLDER_OPTION.test(String(option).trim()),
+        false,
+        `${question.id} still has blank placeholder option: ${option}`
+      );
+    }
+  }
+}
+
 console.log("quiz selection tests passed");

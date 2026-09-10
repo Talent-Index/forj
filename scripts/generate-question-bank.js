@@ -58,28 +58,100 @@ const FACTS = [
   ["evm", "Coreth is", "Avalanche’s EVM implementation for the C-Chain", ["A wallet brand", "An ICM router", "A P-Chain indexer"], "Coreth adapts the EVM to Avalanche consensus and fees."],
   ["evm", "Solidity contracts on Avalanche C-Chain generally", "Deploy with familiar EVM tooling", ["Require a new non-EVM language", "Cannot emit events", "Cannot use JSON-RPC"], "Builders reuse Hardhat, Foundry, and MetaMask-style flows on C-Chain."],
   ["evm", "An EVM address on C-Chain is", "A 20-byte account identifier", ["A 32-byte UTXO only", "A P-Chain NodeID", "A Teleporter nonce"], "Account model addresses match Ethereum-style 20-byte identities."],
-  ["l1s", "An Avalanche L1 is", "An independent blockchain with its own validator set rules", ["Always a smart contract on C-Chain", ["Always a rollup on Ethereum"], "Only a wallet plugin"], "L1s let teams define sovereignty and validator requirements."],
+  ["l1s", "An Avalanche L1 is", "An independent blockchain with its own validator set rules", ["Always a smart contract on C-Chain", "Always a rollup on Ethereum", "Only a wallet plugin"], "L1s let teams define sovereignty and validator requirements."],
   ["l1s", "Compared with a single C-Chain app, an L1 can", "Specialize fees, membership, and execution", ["Never use ICM", "Never use AVAX economics", "Only store NFTs"], "L1s customize the chain environment beyond a shared C-Chain dApp."],
   ["l1s", "Validator Manager contracts help", "Manage L1 validator set updates", ["Replace Snowman consensus", "Mint AVAX on Ethereum", "Delete the P-Chain"], "Validator Manager patterns coordinate who validates an L1."],
-  ["icm", "ICM / Warp messaging enables", "Authenticated messages between Avalanche chains", ["Free infinite gas", ["Automatic KYC"], "Replacing validators"], "ICM carries proofs so destination chains can verify cross-chain messages."],
+  ["icm", "ICM / Warp messaging enables", "Authenticated messages between Avalanche chains", ["Free infinite gas", "Automatic KYC", "Replacing validators"], "ICM carries proofs so destination chains can verify cross-chain messages."],
   ["icm", "Teleporter is associated with", "ICM application messaging contracts", ["P-Chain staking only", "X-Chain NFT standards only", "Bitcoin script"], "Teleporter builds on Warp/ICM for app-level cross-chain calls."],
   ["icm", "A cross-chain message should be treated as", "Data that must be verified on the destination", ["Automatically trusted without checks", "Impossible on Avalanche", "Only possible via centralized relays"], "Destination logic verifies ICM authenticity before acting."],
-  ["validators", "Validators on Avalanche", "Stake AVAX and participate in consensus", ["Never stake", ["Only run light clients"], "Only index subgraphs"], "Validation is tied to stake and protocol participation."],
-  ["validators", "Node software is used to", "Participate in validating and serving the network", ["Replace AVAX tokenomics", ["Disable ICM forever"], "Mint ETH"], "Nodes run the software that validates and serves chain data."],
-  ["consensus", "Snowman consensus is", "Avalanche’s chain-optimized consensus family", ["Proof of work mining only", ["PBFT from Hyperledger alone"], "A wallet seed phrase"], "Snowman suits totally ordered chains like C-Chain and P-Chain."],
-  ["consensus", "Finality on Avalanche aims to be", "Fast compared with probabilistic PoW waits", ["Infinite by design", ["Slower than weekly checkpoints only"], "Impossible without a committee of 3"], "Avalanche targets quick confirmation for builders and users."],
-  ["tooling", "Avalanche CLI / Platform CLI helps builders", "Create and manage local and cloud chain workflows", ["Replace MetaMask keys automatically", ["Ban Solidity"], "Delete Mainnet"], "Official tooling scaffolds L1 and network workflows."],
-  ["tooling", "Hardhat or Foundry on Fuji is useful for", "Deploying and testing Solidity contracts", ["Editing P-Chain staking math on-chain", ["Minting BTC"], "Replacing ICM proofs"], "Standard EVM frameworks target C-Chain deployments."],
-  ["ecosystem", "Builder Hub documentation is the place to", "Read official Avalanche developer references", ["Trade AVAX only", ["Host Discord bots only"], "Replace validators"], "build.avax.network hosts canonical builder docs."],
-  ["ecosystem", "A soulbound credential means", "It cannot be transferred to another wallet", ["It always sells on OpenSea", ["It is always issuer-attested"], "It deletes itself daily"], "Soulbound tokens stay bound to the holder wallet."],
+  ["validators", "Validators on Avalanche", "Stake AVAX and participate in consensus", ["Never stake", "Only run light clients", "Only index subgraphs"], "Validation is tied to stake and protocol participation."],
+  ["validators", "Node software is used to", "Participate in validating and serving the network", ["Replace AVAX tokenomics", "Disable ICM forever", "Mint ETH"], "Nodes run the software that validates and serves chain data."],
+  ["consensus", "Snowman consensus is", "Avalanche’s chain-optimized consensus family", ["Proof of work mining only", "PBFT from Hyperledger alone", "A wallet seed phrase"], "Snowman suits totally ordered chains like C-Chain and P-Chain."],
+  ["consensus", "Finality on Avalanche aims to be", "Fast compared with probabilistic PoW waits", ["Infinite by design", "Slower than weekly checkpoints only", "Impossible without a committee of 3"], "Avalanche targets quick confirmation for builders and users."],
+  ["tooling", "Avalanche CLI / Platform CLI helps builders", "Create and manage local and cloud chain workflows", ["Replace MetaMask keys automatically", "Ban Solidity", "Delete Mainnet"], "Official tooling scaffolds L1 and network workflows."],
+  ["tooling", "Hardhat or Foundry on Fuji is useful for", "Deploying and testing Solidity contracts", ["Editing P-Chain staking math on-chain", "Minting BTC", "Replacing ICM proofs"], "Standard EVM frameworks target C-Chain deployments."],
+  ["ecosystem", "Builder Hub documentation is the place to", "Read official Avalanche developer references", ["Trade AVAX only", "Host Discord bots only", "Replace validators"], "build.avax.network hosts canonical builder docs."],
+  ["ecosystem", "A soulbound credential means", "It cannot be transferred to another wallet", ["It always sells on OpenSea", "It is always issuer-attested", "It deletes itself daily"], "Soulbound tokens stay bound to the holder wallet."],
 ];
 
-// Fix accidental nested arrays in FACTS - I made typos with nested arrays in wrong places
+const TOPIC_DISTRACTOR_POOL = {
+  fundamentals: [
+    "A permissioned Oracle network only",
+    "A file-storage marketplace",
+    "A proof-of-burn minting scheme",
+    "A mobile-only payments app",
+  ],
+  "c-chain": [
+    "A DAG asset exchange with no contracts",
+    "A staking registry with no EVM",
+    "A Bitcoin script interpreter",
+    "An off-chain analytics dashboard",
+  ],
+  evm: [
+    "A non-programmable UTXO ledger",
+    "A consensus gossip protocol only",
+    "A hardware security module brand",
+    "A subnet membership ballot",
+  ],
+  l1s: [
+    "A C-Chain ERC-20 token wrapper",
+    "A hosted RPC CDN product",
+    "A browser extension theme",
+    "A centralized sequencer SaaS only",
+  ],
+  icm: [
+    "A local keystore backup format",
+    "A block explorer skin",
+    "A faucet drip schedule",
+    "A gas token bridge to Bitcoin",
+  ],
+  validators: [
+    "A marketing ambassador program",
+    "A frontend design system",
+    "A Discord moderation bot",
+    "An NFT allowlist curator",
+  ],
+  consensus: [
+    "A deterministic lottery for airdrops",
+    "A social recovery wallet scheme",
+    "A commit-reveal auction only",
+    "A weekly governance forum vote",
+  ],
+  tooling: [
+    "A social media scheduler",
+    "A cold-storage steel plate",
+    "A fiat on-ramp KYC desk",
+    "A meme coin launchpad",
+  ],
+  ecosystem: [
+    "A sports betting oracle",
+    "A password manager sync",
+    "A CDN image optimizer",
+    "A ride-sharing protocol",
+  ],
+};
+
 function normalizeFacts() {
   return FACTS.map((row) => {
     const [topic, stem, correct, wrongs, explanation] = row;
-    const cleanWrongs = wrongs.flat().filter((w) => typeof w === "string");
-    while (cleanWrongs.length < 3) cleanWrongs.push(`Incorrect distractor ${cleanWrongs.length + 1}`);
+    const cleanWrongs = [...new Set(
+      (Array.isArray(wrongs) ? wrongs.flat(Infinity) : [])
+        .filter((w) => typeof w === "string" && w.trim() && w !== correct)
+        .map((w) => w.trim())
+    )];
+    const pool = TOPIC_DISTRACTOR_POOL[topic] || TOPIC_DISTRACTOR_POOL.fundamentals;
+    for (const candidate of pool) {
+      if (cleanWrongs.length >= 3) break;
+      if (candidate !== correct && !cleanWrongs.includes(candidate)) {
+        cleanWrongs.push(candidate);
+      }
+    }
+    let n = 1;
+    while (cleanWrongs.length < 3) {
+      const filler = `Unrelated non-Avalanche alternative ${n}`;
+      if (!cleanWrongs.includes(filler) && filler !== correct) cleanWrongs.push(filler);
+      n += 1;
+    }
     return [topic, stem, correct, cleanWrongs.slice(0, 3), explanation];
   });
 }
@@ -118,6 +190,26 @@ const DIFFICULTY_TARGETS = {
   master: 120,
 };
 
+function mulberry32(seed) {
+  let t = seed >>> 0;
+  return () => {
+    t += 0x6d2b79f5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function shuffleOptions(options, seed) {
+  const list = options.slice();
+  const random = mulberry32(seed);
+  for (let i = list.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(random() * (i + 1));
+    [list[i], list[j]] = [list[j], list[i]];
+  }
+  return list;
+}
+
 function buildQuestion(sectionId, index, fact, angleIndex) {
   const [topic, stem, correct, wrongs, explanation] = fact;
   const moduleHint =
@@ -129,20 +221,14 @@ function buildQuestion(sectionId, index, fact, angleIndex) {
           ? "advanced"
           : "mastery";
   const angled = ANGLES[angleIndex % ANGLES.length](stem, correct, moduleHint, index);
-  const options = [angled.answer, ...wrongs];
-  // deterministic shuffle by index
-  const order = [0, 1, 2, 3].map((i) => (i * 7 + index * 3 + angleIndex) % 4);
-  const seen = new Set();
-  const shuffled = [];
-  for (let k = 0; k < 8 && shuffled.length < 4; k += 1) {
-    const pick = options[(order[k % 4] + k) % options.length];
-    if (!seen.has(pick)) {
-      seen.add(pick);
-      shuffled.push(pick);
-    }
+  const unique = [...new Set([angled.answer, ...wrongs].filter(Boolean))];
+  if (unique.length < 4) {
+    throw new Error(`Fact for ${topic} produced fewer than 4 unique options: ${unique.join(" | ")}`);
   }
-  while (shuffled.length < 4) shuffled.push(`Option ${shuffled.length}`);
-  if (!shuffled.includes(angled.answer)) shuffled[0] = angled.answer;
+  const shuffled = shuffleOptions(unique.slice(0, 4), index * 997 + angleIndex * 131 + topic.length * 17);
+  if (!shuffled.includes(angled.answer)) {
+    shuffled[0] = angled.answer;
+  }
 
   let question = angled.question;
   if (sectionId === "master") {
@@ -160,7 +246,7 @@ function buildQuestion(sectionId, index, fact, angleIndex) {
     difficulty: sectionId,
     module: moduleHint,
     question,
-    options: shuffled.slice(0, 4),
+    options: shuffled,
     answer: angled.answer,
     hint: `Focus on ${SKILL[topic] || topic}.`,
     explanation:

@@ -1444,9 +1444,9 @@ img {
   background: var(--surface-2);
 }
 
-.option-btn.selected .option-letter {
-  color: var(--text);
-  font-weight: 700;
+.option-btn.selected .option-mark {
+  border-color: var(--accent-ink);
+  background: var(--accent);
 }
 
 .option-btn.correct {
@@ -1583,10 +1583,31 @@ img {
   color: var(--muted);
 }
 
+.option-letter,
+.option-mark {
+  flex-shrink: 0;
+}
+
+.option-mark {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+}
+
+.option-btn.correct .option-mark {
+  border-color: var(--success);
+  background: var(--success);
+}
+
+.option-btn.wrong .option-mark {
+  border-color: var(--earth);
+  background: var(--earth);
+}
+
 .option-letter {
-  font-size: var(--font-kicker);
-  font-weight: 700;
-  color: var(--muted);
+  display: none;
 }
 
 .quiz-header-row,
