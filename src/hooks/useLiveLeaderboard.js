@@ -6,6 +6,19 @@ import {
 } from "../utils/progression/leaderboard";
 import { listenLiveLeaderboard, fetchLiveLeaderboard } from "../utils/backend/leaderboardSync";
 
+function withLocalOptIn(rows, state) {
+  if (!state?.leaderboard?.optIn || !state.learnerId) return rows || [];
+  const list = Array.isArray(rows) ? rows.slice() : [];
+  if (list.some((row) => row.learnerId === state.learnerId)) return list;
+  list.push(snapshotFromProgression(state, {
+    displayName: state.leaderboard.displayName,
+    publicSlug: state.leaderboard.publicSlug || "",
+    walletHint: state.leaderboard.hideWallet === false ? (state.leaderboard.walletHint || "") : "",
+    authority: LEADERBOARD_AUTHORITY.localPreview,
+  }));
+  return list;
+}
+
 export function useLiveLeaderboard({ progression, windowName = "global", trackId, enabled = true } = {}) {
   const [rows, setRows] = useState([]);
   const [status, setStatus] = useState("connecting");
@@ -14,6 +27,7 @@ export function useLiveLeaderboard({ progression, windowName = "global", trackId
 
   useEffect(() => {
     stateRef.current = progression?.state;
+    setRows((current) => withLocalOptIn(current, progression?.state));
   }, [progression?.state]);
 
   useEffect(() => {
@@ -27,44 +41,27 @@ export function useLiveLeaderboard({ progression, windowName = "global", trackId
     fetchLiveLeaderboard()
       .then((next) => {
         if (cancelled) return;
-        setRows(next);
+        setRows(withLocalOptIn(next, stateRef.current));
         setStatus("live");
       })
       .catch((err) => {
         if (cancelled) return;
         setError(err?.message || "Could not load the live board.");
         setStatus("local");
-        const state = stateRef.current;
-        if (state?.leaderboard?.optIn) {
-          setRows([
-            snapshotFromProgression(state, {
-              displayName: state.leaderboard.displayName,
-              authority: LEADERBOARD_AUTHORITY.localPreview,
-            }),
-          ]);
-        } else {
-          setRows([]);
-        }
+        setRows(withLocalOptIn([], stateRef.current));
       });
     const unsub = listenLiveLeaderboard(
       (next) => {
         if (cancelled) return;
-        setRows(next);
+        setRows(withLocalOptIn(next, stateRef.current));
         setStatus("live");
         setError("");
       },
       (err) => {
         if (cancelled) return;
         setRows((current) => {
-          if (current.length > 0) return current;
-          const state = stateRef.current;
-          if (!state?.leaderboard?.optIn) return current;
-          return [
-            snapshotFromProgression(state, {
-              displayName: state.leaderboard.displayName,
-              authority: LEADERBOARD_AUTHORITY.localPreview,
-            }),
-          ];
+          if (current.length > 0) return withLocalOptIn(current, stateRef.current);
+          return withLocalOptIn([], stateRef.current);
         });
         setStatus((current) => (current === "live" ? current : "local"));
         setError((current) => current || err?.message || "Could not load the live board.");

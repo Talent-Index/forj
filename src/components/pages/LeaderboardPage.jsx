@@ -151,7 +151,9 @@ function LeaderboardPage({
           <p className="meta-line">
             {board.status === "connecting"
               ? "Loading…"
-              : "No one on the board yet."}
+              : optedIn
+                ? "You are visible, but the live roster has not loaded yet. Check that Firestore rules are deployed, or refresh after learning activity syncs."
+                : "No one on the board yet."}
           </p>
         ) : (
           <ol className="leaderboard-list">

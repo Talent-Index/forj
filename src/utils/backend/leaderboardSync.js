@@ -23,7 +23,7 @@ function stamp() {
   return serverTimestamp();
 }
 
-function preferencePayload(userId, preference) {
+function preferencePayload(userId, preference, { legacy = false } = {}) {
   const hideWallet = preference.hideWallet !== false;
   const payload = {
     schemaVersion: SCHEMA_VERSION,
@@ -31,15 +31,22 @@ function preferencePayload(userId, preference) {
     optIn: Boolean(preference.optIn),
     displayName: preference.displayName || "",
     hideWallet,
-    publicSlug: preference.optIn ? (preference.publicSlug || "") : "",
     updatedAt: stamp(),
   };
-  if (!hideWallet && preference.walletHint) {
-    payload.walletHint = preference.walletHint;
-  } else if (hideWallet) {
-    payload.walletHint = "";
+  if (!legacy) {
+    payload.publicSlug = preference.optIn ? (preference.publicSlug || "") : "";
+    if (!hideWallet && preference.walletHint) {
+      payload.walletHint = preference.walletHint;
+    } else if (hideWallet) {
+      payload.walletHint = "";
+    }
   }
   return payload;
+}
+
+function isPermissionDenied(error) {
+  const code = String(error?.code || error?.message || "");
+  return /permission-denied|PERMISSION_DENIED|Missing or insufficient permissions/i.test(code);
 }
 
 export async function readLeaderboardPreference(userId) {
@@ -70,7 +77,15 @@ export async function writeLeaderboardPreference(userId, patch, extras = {}) {
   }
   const payload = preferencePayload(userId, applied.preference);
   payload.createdAt = createdAt;
-  await withTimeout(setDoc(ref, payload), FIRESTORE_TIMEOUT_MS);
+  try {
+    await withTimeout(setDoc(ref, payload), FIRESTORE_TIMEOUT_MS);
+  } catch (error) {
+    // Older deployed rules reject publicSlug / walletHint — retry the board-critical fields.
+    if (!isPermissionDenied(error)) throw error;
+    const legacy = preferencePayload(userId, applied.preference, { legacy: true });
+    legacy.createdAt = createdAt;
+    await withTimeout(setDoc(ref, legacy), FIRESTORE_TIMEOUT_MS);
+  }
   await withTimeout(setDoc(doc(db, COLLECTIONS.users, userId), {
     displayName: applied.preference.displayName,
     boardVisible: applied.preference.optIn,
@@ -104,14 +119,26 @@ function emptySnap() {
   return { docs: [] };
 }
 
-function rowsFromEventFallback(prefSnap, eventSnap) {
+function rosterFromSnap(snap) {
+  return snap.docs.map((item) => {
+    const data = item.data() || {};
+    return {
+      userId: data.userId || item.id,
+      displayName: typeof data.displayName === "string" ? data.displayName : "",
+      boardVisible: data.boardVisible !== false,
+    };
+  });
+}
+
+function rowsFromEventFallback(userSnap, prefSnap, eventSnap) {
+  const roster = rosterFromSnap(userSnap);
   const preferences = prefSnap.docs.map((item) => ({
     id: item.id,
     userId: item.data()?.userId || item.id,
     ...item.data(),
   }));
   const events = eventSnap.docs.map((item) => item.data());
-  return buildLiveLeaderboard(mergeAccountRoster([], preferences), events);
+  return buildLiveLeaderboard(mergeAccountRoster(roster, preferences), events);
 }
 
 function rowsFromStanding(standingSnap) {
@@ -123,19 +150,27 @@ function rowsFromStanding(standingSnap) {
   return buildStandingLeaderboard(rows);
 }
 
-export async function fetchLiveLeaderboard() {
-  const standingSnap = await withTimeout(
-    getDocs(optedInStandingQuery()),
-    FIRESTORE_TIMEOUT_MS
-  ).catch(() => emptySnap());
-  if (standingSnap.docs.length > 0) {
-    return rowsFromStanding(standingSnap);
-  }
-  const [prefSnap, eventSnap] = await Promise.all([
+async function readOptedInSnaps() {
+  const [userSnap, prefSnap, eventSnap] = await Promise.all([
+    withTimeout(getDocs(collection(db, COLLECTIONS.users)), FIRESTORE_TIMEOUT_MS).catch(() => emptySnap()),
     withTimeout(getDocs(optedInPreferenceQuery()), FIRESTORE_TIMEOUT_MS),
     withTimeout(getDocs(optedInEventQuery()), FIRESTORE_TIMEOUT_MS),
   ]);
-  return rowsFromEventFallback(prefSnap, eventSnap);
+  return { userSnap, prefSnap, eventSnap };
+}
+
+export async function fetchLiveLeaderboard() {
+  let standingSnap = emptySnap();
+  try {
+    standingSnap = await withTimeout(getDocs(optedInStandingQuery()), FIRESTORE_TIMEOUT_MS);
+  } catch {
+    // Standing is server-written; missing rules/deploy should not blank the board.
+  }
+  if (standingSnap.docs.length > 0) {
+    return rowsFromStanding(standingSnap);
+  }
+  const { userSnap, prefSnap, eventSnap } = await readOptedInSnaps();
+  return rowsFromEventFallback(userSnap, prefSnap, eventSnap);
 }
 
 export async function fetchPublicProfileBySlug(slug) {
@@ -176,12 +211,15 @@ function startLiveBoard() {
   const prefQuery = optedInPreferenceQuery();
   const eventQuery = optedInEventQuery();
   const standingQuery = optedInStandingQuery();
+  const usersRef = collection(db, COLLECTIONS.users);
 
   const listeners = new Map();
+  let roster = [];
   let preferences = [];
   let events = [];
   let standing = [];
   let standingReady = false;
+  let rosterReady = false;
   let prefReady = false;
   let eventReady = false;
   let lastRows = null;
@@ -194,8 +232,8 @@ function startLiveBoard() {
       for (const { onChange } of listeners.values()) onChange(lastRows);
       return;
     }
-    if (!prefReady || !eventReady) return;
-    lastRows = buildLiveLeaderboard(mergeAccountRoster([], preferences), events);
+    if (!rosterReady || !prefReady || !eventReady) return;
+    lastRows = buildLiveLeaderboard(mergeAccountRoster(roster, preferences), events);
     for (const { onChange } of listeners.values()) onChange(lastRows);
   }
 
@@ -214,6 +252,16 @@ function startLiveBoard() {
   }, () => {
     standing = [];
     standingReady = true;
+    emit();
+  });
+
+  const unsubUsers = onSnapshot(usersRef, (snap) => {
+    roster = rosterFromSnap(snap);
+    rosterReady = true;
+    emit();
+  }, () => {
+    roster = [];
+    rosterReady = true;
     emit();
   });
 
@@ -253,6 +301,18 @@ function startLiveBoard() {
     emit();
   });
 
+  getDocs(usersRef).then((userSnap) => {
+    if (rosterReady) return;
+    roster = rosterFromSnap(userSnap);
+    rosterReady = true;
+    emit();
+  }).catch(() => {
+    if (rosterReady) return;
+    roster = [];
+    rosterReady = true;
+    emit();
+  });
+
   Promise.all([
     getDocs(prefQuery),
     getDocs(eventQuery),
@@ -287,6 +347,7 @@ function startLiveBoard() {
       pendingUnsub = setTimeout(() => {
         if (listeners.size > 0) return;
         unsubStanding();
+        unsubUsers();
         unsubPrefs();
         unsubEvents();
         if (liveBoard === this) liveBoard = null;
