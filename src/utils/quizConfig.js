@@ -1,5 +1,5 @@
 /**
- * Quiz progression config — lengths, forge labels, fragment rewards.
+ * Quiz progression config. lengths, forge labels, fragment rewards.
  * Easy/Medium/Hard remain credential score sections; Master is assessment-only.
  */
 
@@ -21,7 +21,7 @@ export const QUIZ_LENGTHS = Object.freeze({
   master: 12,
 });
 
-/** Default / legacy constant — prefer quizLengthFor(sectionId). */
+/** Default / legacy constant. prefer quizLengthFor(sectionId). */
 export const QUESTIONS_PER_QUIZ = QUIZ_LENGTHS.easy;
 
 export const FORGE_LEVEL_META = Object.freeze({

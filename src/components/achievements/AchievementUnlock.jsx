@@ -3,7 +3,7 @@ import { Button } from "../ui/primitives";
 import { enrichAchievement } from "../../utils/achievementCatalog";
 
 /**
- * Restrained unlock reveal — uses existing doodle / feedback language.
+ * Restrained unlock reveal. uses existing doodle / feedback language.
  */
 export function AchievementUnlock({
   achievement,

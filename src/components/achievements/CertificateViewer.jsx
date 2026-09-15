@@ -3,7 +3,7 @@ import { Button } from "../ui/primitives";
 import { Doodle } from "../doodles";
 
 /**
- * Formal learning certificate — off-chain path evidence, not Fuji mint.
+ * Formal learning certificate. off-chain path evidence, not Fuji mint.
  */
 export function CertificateViewer({
   certificate,
@@ -48,8 +48,8 @@ export function CertificateViewer({
       </p>
       {earned ? (
         <dl className="certificate-meta">
-          <div><dt>Issued</dt><dd>{certificate.issuedLabel || "—"}</dd></div>
-          <div><dt>Certificate ID</dt><dd>{certificate.credentialId || "—"}</dd></div>
+          <div><dt>Issued</dt><dd>{certificate.issuedLabel || "…"}</dd></div>
+          <div><dt>Certificate ID</dt><dd>{certificate.credentialId || "…"}</dd></div>
           <div><dt>Status</dt><dd>Learning record · not on-chain</dd></div>
         </dl>
       ) : (

@@ -244,7 +244,7 @@ function SettingsPage({
           </div>
           <div className="profile-identity-copy">
             <p className="profile-identity-name">{account?.name || "Learner"}</p>
-            <p className="profile-email">{account?.email || "—"}</p>
+            <p className="profile-email">{account?.email || "…"}</p>
             <p className="meta-line">{signInMethod(account)}</p>
           </div>
         </div>

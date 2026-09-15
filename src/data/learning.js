@@ -305,7 +305,7 @@ export const LESSONS = [
     title: "What Avalanche is",
     optional: false,
     reference: REF.docs,
-    body: "Avalanche is a proof-of-stake network built for fast, irreversible finality. Instead of one monolithic chain for every workload, Avalanche separates shared security and messaging from application-specific execution.\n\nThe Primary Network is the shared base: validators stake AVAX there, and other Avalanche chains connect to that common security and messaging layer. That design is why L1s, the C-Chain, and ICM show up together in later tracks.\n\nForjora uses this track to ground those later lessons. Completing the Easy quiz records a claimed fundamentals score — it is not an issuer-attested credential.",
+    body: "Avalanche is a proof-of-stake network built for fast, irreversible finality. Instead of one monolithic chain for every workload, Avalanche separates shared security and messaging from application-specific execution.\n\nThe Primary Network is the shared base: validators stake AVAX there, and other Avalanche chains connect to that common security and messaging layer. That design is why L1s, the C-Chain, and ICM show up together in later tracks.\n\nForjora uses this track to ground those later lessons. Completing the Easy quiz records a claimed fundamentals score. It is not an issuer-attested credential.",
   },
   {
     id: "fund-chains",
@@ -337,7 +337,7 @@ export const LESSONS = [
     title: "Snowman consensus",
     optional: false,
     reference: REF.consensus,
-    body: "Snowman is the linear-chain member of the Snow family of consensus protocols. Validators repeatedly sample small random subsets of peers instead of running a classical all-to-all BFT round on every decision.\n\nThat sampling is why finality can be fast and irreversible once a transaction is accepted. There is no probabilistic “wait N blocks and hope” model like proof-of-work chain tips.\n\nForjora quizzes treat Snowman as required vocabulary: sampling, preference, and finality — not buzzwords, but the reason Avalanche feels responsive under load.",
+    body: "Snowman is the linear-chain member of the Snow family of consensus protocols. Validators repeatedly sample small random subsets of peers instead of running a classical all-to-all BFT round on every decision.\n\nThat sampling is why finality can be fast and irreversible once a transaction is accepted. There is no probabilistic “wait N blocks and hope” model like proof-of-work chain tips.\n\nForjora quizzes treat Snowman as required vocabulary: sampling, preference, and finality: not buzzwords, but the reason Avalanche feels responsive under load.",
   },
   {
     id: "arch-validators",
@@ -361,7 +361,7 @@ export const LESSONS = [
     title: "L1 validator sets",
     optional: false,
     reference: REF.validatorManager,
-    body: "L1 validators also validate the Primary Network. That dual role is what lets ICM carry validator-signed messages from one L1 to another with Avalanche’s shared security assumptions.\n\nSovereignty means the L1 controls its own execution and membership rules. It does not mean the L1 is isolated from Avalanche messaging or from Primary Network validation duties.\n\nValidator Manager contracts are how many modern L1s express membership on-chain. When docs mention manager contracts, they are talking about who may validate — not about C-Chain gas tokens.",
+    body: "L1 validators also validate the Primary Network. That dual role is what lets ICM carry validator-signed messages from one L1 to another with Avalanche’s shared security assumptions.\n\nSovereignty means the L1 controls its own execution and membership rules. It does not mean the L1 is isolated from Avalanche messaging or from Primary Network validation duties.\n\nValidator Manager contracts are how many modern L1s express membership on-chain. When docs mention manager contracts, they are talking about who may validate, not about C-Chain gas tokens.",
   },
   {
     id: "l1-custom",
@@ -377,7 +377,7 @@ export const LESSONS = [
     title: "C-Chain is an EVM",
     optional: false,
     reference: REF.coreth,
-    body: "The C-Chain is Avalanche’s Ethereum-compatible contract chain. Solidity, standard wallets, Hardhat/Foundry-style workflows, and EVM explorers work here once you point them at Avalanche network settings.\n\nUnder the hood, Coreth adapts the EVM to Avalanche consensus and networking. You still write familiar contracts; you do not get to ignore Avalanche chain IDs and RPCs.\n\nFuji C-Chain is the test environment Forjora uses for its credential contract. Practice deploys and mints there before you ever touch Mainnet issuance — and Forjora itself does not issue credentials on C-Chain Mainnet today.",
+    body: "The C-Chain is Avalanche’s Ethereum-compatible contract chain. Solidity, standard wallets, Hardhat/Foundry-style workflows, and EVM explorers work here once you point them at Avalanche network settings.\n\nUnder the hood, Coreth adapts the EVM to Avalanche consensus and networking. You still write familiar contracts; you do not get to ignore Avalanche chain IDs and RPCs.\n\nFuji C-Chain is the test environment Forjora uses for its credential contract. Practice deploys and mints there before you ever touch Mainnet issuance, and Forjora itself does not issue credentials on C-Chain Mainnet today.",
   },
   {
     id: "cchain-gas",
@@ -393,7 +393,7 @@ export const LESSONS = [
     title: "Contracts and soulbound records",
     optional: false,
     reference: REF.cChain,
-    body: "The Forjora credential is a soulbound NFT on the SkillForgeCredential contract — that Solidity name is the live Fuji identity. It stores a claimed score snapshot and puzzle mask. A later owner signature can mint an issuer-attested record instead.\n\nMinting from the learner UI is always Forjora claimed. The token cannot be transferred. Looking the record up proves it exists on Fuji; it does not turn a claimed score into an issuer assessment.\n\nExplorer links and metadata artwork are presence and presentation. They are not certification language, and Forjora does not issue this credential on Avalanche C-Chain Mainnet today.",
+    body: "The Forjora credential is a soulbound NFT on the SkillForgeCredential contract. That Solidity name is the live Fuji identity. It stores a claimed score snapshot and puzzle mask. A later owner signature can mint an issuer-attested record instead.\n\nMinting from the learner UI is always Forjora claimed. The token cannot be transferred. Looking the record up proves it exists on Fuji; it does not turn a claimed score into an issuer assessment.\n\nExplorer links and metadata artwork are presence and presentation. They are not certification language, and Forjora does not issue this credential on Avalanche C-Chain Mainnet today.",
   },
   {
     id: "icm-what",
@@ -409,7 +409,7 @@ export const LESSONS = [
     title: "Teleporter and Warp",
     optional: false,
     reference: REF.icmContracts,
-    body: "Warp messaging is the low-level protocol. Teleporter (ICM contracts such as TeleporterMessenger) is the developer-facing contract layer applications use to send and receive those messages.\n\nYou will see Warp, AWM, ICM, and Teleporter in Avalanche docs. Treat Warp as the primitive and Teleporter as the production-ready interface that handles formatting, delivery tracking, and retries.\n\nOfficial ICM contract docs warn that TeleporterMessenger is meant to share a deterministic address across chains. Copying a random deploy command can break that assumption — follow Builder Hub deploy guidance.",
+    body: "Warp messaging is the low-level protocol. Teleporter (ICM contracts such as TeleporterMessenger) is the developer-facing contract layer applications use to send and receive those messages.\n\nYou will see Warp, AWM, ICM, and Teleporter in Avalanche docs. Treat Warp as the primitive and Teleporter as the production-ready interface that handles formatting, delivery tracking, and retries.\n\nOfficial ICM contract docs warn that TeleporterMessenger is meant to share a deterministic address across chains. Copying a random deploy command can break that assumption. Follow Builder Hub deploy guidance.",
   },
   {
     id: "icm-use",

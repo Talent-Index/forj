@@ -230,7 +230,7 @@ export function VerificationStatusBanner({
         <p className="kicker">Credential revoked</p>
         <h2>This credential is no longer considered valid</h2>
         <p className="meta-line">
-          Credential ID: <span className="credential-mono">{queryLabel || "—"}</span>
+          Credential ID: <span className="credential-mono">{queryLabel || "…"}</span>
         </p>
       </div>
     );
@@ -316,9 +316,9 @@ export function CredentialShowcase({ view, artwork }) {
             ? Math.min(100, Math.round((Number(view.score) / 80) * 100))
             : 0
         }
-        difficulty={view.difficulty || "—"}
+        difficulty={view.difficulty || "…"}
         pathLabel={view.title || "Avalanche Developer Path"}
-        credentialId={view.tokenId ? `#${view.tokenId}` : "—"}
+        credentialId={view.tokenId ? `#${view.tokenId}` : "…"}
         verificationStatus={view.statusId}
         walletAddress={view.holderWallet}
         chainId={view.chainId}
@@ -340,7 +340,7 @@ export function CredentialInformation({ view }) {
       <dl className="lookup-info-list">
         <div>
           <dt>Credential ID</dt>
-          <dd className="credential-mono">{view.tokenId ? `#${view.tokenId}` : "—"}</dd>
+          <dd className="credential-mono">{view.tokenId ? `#${view.tokenId}` : "…"}</dd>
         </div>
         <div>
           <dt>Credential</dt>
@@ -348,11 +348,11 @@ export function CredentialInformation({ view }) {
         </div>
         <div>
           <dt>Level</dt>
-          <dd>{view.difficulty || "—"}</dd>
+          <dd>{view.difficulty || "…"}</dd>
         </div>
         <div>
           <dt>Score</dt>
-          <dd>{view.scoreLabel || "—"}</dd>
+          <dd>{view.scoreLabel || "…"}</dd>
         </div>
         <div>
           <dt>Status</dt>
@@ -443,19 +443,19 @@ export function AchievementSummaryStrip({ view }) {
   return (
     <section className="section-block lookup-achievements" aria-label="Achievement summary">
       <h2>Achievement summary</h2>
-      <p className="meta-line">On-chain snapshot only — not a live learner dashboard.</p>
+      <p className="meta-line">On-chain snapshot only. Not a live learner dashboard.</p>
       <div className="stat-row vault-stat-row">
         <div className="card stat-compact">
           <p className="kicker">Score</p>
-          <p className="stat-value">{view.scoreLabel || "—"}</p>
+          <p className="stat-value">{view.scoreLabel || "…"}</p>
         </div>
         <div className="card stat-compact">
           <p className="kicker">Difficulty</p>
-          <p className="stat-value vault-stat-level">{view.difficulty || "—"}</p>
+          <p className="stat-value vault-stat-level">{view.difficulty || "…"}</p>
         </div>
         <div className="card stat-compact">
           <p className="kicker">Token</p>
-          <p className="stat-value">{view.tokenId ? `#${view.tokenId}` : "—"}</p>
+          <p className="stat-value">{view.tokenId ? `#${view.tokenId}` : "…"}</p>
         </div>
       </div>
     </section>
@@ -476,11 +476,11 @@ export function VerificationDetailsPanel({ view }) {
         </div>
         <div>
           <dt>Credential ID</dt>
-          <dd className="credential-mono">{view.tokenId ? `#${view.tokenId}` : "—"}</dd>
+          <dd className="credential-mono">{view.tokenId ? `#${view.tokenId}` : "…"}</dd>
         </div>
         <div>
           <dt>Issuer</dt>
-          <dd>{view.issuer || "—"}</dd>
+          <dd>{view.issuer || "…"}</dd>
         </div>
         <div>
           <dt>Network</dt>
@@ -488,7 +488,7 @@ export function VerificationDetailsPanel({ view }) {
         </div>
         <div>
           <dt>Contract</dt>
-          <dd className="credential-mono">{view.contractAddress || "—"}</dd>
+          <dd className="credential-mono">{view.contractAddress || "…"}</dd>
         </div>
         {view.transactionHash ? (
           <div>

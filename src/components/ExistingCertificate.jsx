@@ -66,7 +66,7 @@ function ExistingCertificate({
       <h2 id="existing-certificate-heading">Your Fuji certificate</h2>
       <p>
         The current soulbound record for this wallet. Forjora keeps one live token per wallet;
-        a later mint replaces it. Lookup shows that the token exists — it is not issuer attestation.
+        a later mint replaces it. Lookup shows that the token exists. It is not issuer attestation.
       </p>
 
       {!walletConnected ? (

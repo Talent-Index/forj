@@ -16,7 +16,7 @@ export function CredentialStatus({
     ? {
         ...CREDENTIAL_STATES.claimed,
         label: "Learning record",
-        body: "Off-chain Forjora path certificate — not a Fuji mint.",
+        body: "Off-chain Forjora path certificate, not a Fuji mint.",
       }
     : CREDENTIAL_STATES[verificationStatus] || CREDENTIAL_STATES.claimed;
 

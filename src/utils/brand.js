@@ -3,7 +3,7 @@
 export const PRODUCT_NAME = "Forjora";
 export const PRODUCT_TAGLINE = "Learn. Forge. Prove.";
 export const PRODUCT_LOOP = "Learn → Build → Prove → Advance";
-export const PRODUCT_TITLE = "Forjora — Learn. Forge. Prove.";
+export const PRODUCT_TITLE = "Forjora · Learn. Forge. Prove.";
 export const PRODUCT_DESCRIPTION =
   "Forjora is an Avalanche learning product. Study, earn progress, forge a certificate, and optionally record a soulbound credential on Fuji. Claimed scores are not issuer-attested.";
 export const PRODUCT_KICKER = "Avalanche learning";

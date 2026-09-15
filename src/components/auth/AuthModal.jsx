@@ -149,7 +149,7 @@ function AuthModal({
       if (!result.ok) {
         setError(result.error || "Could not sign in.");
         if (result.suggestSignup) {
-          setInfo("New to Forjora? Use Create one below — sign-in only works after you register with email and password.");
+          setInfo("New to Forjora? Use Create one below. Sign-in only works after you register with email and password.");
         }
         return;
       }

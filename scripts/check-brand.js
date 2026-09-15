@@ -41,7 +41,7 @@ for (const { file, source } of components) {
 }
 
 const html = readFileSync(join(root, "index.html"), "utf8");
-assert.match(html, /Forjora — Learn\. Forge\. Prove\./);
+assert.match(html, /Forjora · Learn\. Forge\. Prove\./);
 assert.match(html, /og:title/);
 assert.match(html, /twitter:title/);
 assert.match(html, /og:image" content="\/og-image\.jpg"/);

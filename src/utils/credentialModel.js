@@ -274,7 +274,7 @@ export function validateCredentialRecord(record, { requireWallet = false, requir
     for (const key of ["easyCorrect", "mediumCorrect", "hardCorrect"]) {
       const n = score[key];
       if (!isInteger(n) || n < 0 || n > SCORE_MAX_PER_DIFFICULTY) {
-        pushError(errors, `score.${key}`, `Must be an integer 0–${SCORE_MAX_PER_DIFFICULTY}.`);
+        pushError(errors, `score.${key}`, `Must be an integer 0-${SCORE_MAX_PER_DIFFICULTY}.`);
       }
     }
     if (!isInteger(score.totalPoints) || score.totalPoints < 1) {
@@ -313,7 +313,7 @@ export function validateCredentialRecord(record, { requireWallet = false, requir
     pushError(errors, "completion", "Must be an object.");
   } else {
     if (!isUnixSeconds(completion.mintedAt)) {
-      pushError(errors, "completion.mintedAt", "Must be Unix seconds (integer 0–4102444800).");
+      pushError(errors, "completion.mintedAt", "Must be Unix seconds (integer 0-4102444800).");
     }
     if (completion.mintedAtIso != null && typeof completion.mintedAtIso !== "string") {
       pushError(errors, "completion.mintedAtIso", "Must be an ISO-8601 string or empty.");
@@ -326,16 +326,16 @@ export function validateCredentialRecord(record, { requireWallet = false, requir
     }
     const mask = toBigInt(completion.puzzleMask);
     if (typeof completion.puzzleMask !== "string" || mask < 1n || mask > BigInt(PUZZLE_MASK_MAX)) {
-      pushError(errors, "completion.puzzleMask", "Must be a decimal string for a 16-bit mask (1–65535).");
+      pushError(errors, "completion.puzzleMask", "Must be a decimal string for a 16-bit mask (1-65535).");
     }
     if (!isInteger(completion.puzzlePieces) || completion.puzzlePieces < 0 || completion.puzzlePieces > TOTAL_PIECES) {
-      pushError(errors, "completion.puzzlePieces", `Must be an integer 0–${TOTAL_PIECES}.`);
+      pushError(errors, "completion.puzzlePieces", `Must be an integer 0-${TOTAL_PIECES}.`);
     }
     if (completion.puzzleTotal !== TOTAL_PIECES) {
       pushError(errors, "completion.puzzleTotal", `Must be ${TOTAL_PIECES}.`);
     }
     if (!isInteger(completion.quizCorrect) || completion.quizCorrect < 0 || completion.quizCorrect > 15) {
-      pushError(errors, "completion.quizCorrect", "Must be an integer 0–15.");
+      pushError(errors, "completion.quizCorrect", "Must be an integer 0-15.");
     }
     if (typeof completion.puzzleMask === "string" && isInteger(completion.puzzlePieces)) {
       if (completion.puzzlePieces !== puzzlePieceCount(completion.puzzleMask)) {

@@ -62,8 +62,8 @@ function CertificateArtifact({
           <div><dt>Credential ID</dt><dd>{credentialId}</dd></div>
           <div><dt>Network</dt><dd>Avalanche Fuji · {chainId || 43113}</dd></div>
           <div><dt>Status</dt><dd>{trust.label}</dd></div>
-          <div><dt>Wallet</dt><dd>{shortAddress(walletAddress) || "—"}</dd></div>
-          <div><dt>Contract</dt><dd>{shortAddress(contractAddress) || "—"}</dd></div>
+          <div><dt>Wallet</dt><dd>{shortAddress(walletAddress) || "…"}</dd></div>
+          <div><dt>Contract</dt><dd>{shortAddress(contractAddress) || "…"}</dd></div>
           <div><dt>Version</dt><dd>Schema v{schemaVersion || 1}</dd></div>
           {metadataUri ? <div><dt>Metadata</dt><dd>{describeMetadataUri(metadataUri)}</dd></div> : null}
         </dl>

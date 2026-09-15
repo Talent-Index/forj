@@ -101,7 +101,7 @@ export const PUZZLE_EXPLAINER = {
 
 export const CREDENTIAL_EXPLAINER = {
   title: "Credentials",
-  body: "Minting writes your claimed quiz scores and puzzle progress to a soulbound NFT on Avalanche Fuji. It cannot be transferred. The app mints a Forjora claimed record — anyone can mint their own scores. A Forjora issuer-attested mint exists on-chain for later privileged issuance. This is not a proctored exam credential.",
+  body: "Minting writes your claimed quiz scores and puzzle progress to a soulbound NFT on Avalanche Fuji. It cannot be transferred. The app mints a Forjora claimed record. Anyone can mint their own scores. A Forjora issuer-attested mint exists on-chain for later privileged issuance. This is not a proctored exam credential.",
   claimed: CREDENTIAL_STATES.claimed.summary,
   attested: CREDENTIAL_STATES.attested.summary,
 };

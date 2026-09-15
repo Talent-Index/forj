@@ -496,7 +496,7 @@ function App() {
     if (typeof document === "undefined") return undefined;
     const previous = document.title;
     if (page === "not-found") {
-      document.title = "Forjora — Page not found";
+      document.title = "Forjora · Page not found";
       return () => {
         document.title = previous;
       };

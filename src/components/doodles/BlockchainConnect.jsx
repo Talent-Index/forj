@@ -3,7 +3,7 @@ import { doodleTiming } from "./doodleTiming.js";
 
 /**
  * Hand-drawn blockchain nodes connecting sequentially (verify language).
- * Honesty: label defaults to "On-chain" — pass "Attested" for issuer path only.
+ * Honesty: label defaults to "On-chain". pass "Attested" for issuer path only.
  */
 export function BlockchainConnect({
   trigger = "viewport",

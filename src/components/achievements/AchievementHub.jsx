@@ -92,7 +92,7 @@ export function AchievementHub({
         <p className="kicker">Achievements</p>
         <h2>Forge achievements</h2>
         <p className="lede">
-          Badges, streaks, skills, puzzle milestones, and learning certificates — evidence of what you know.
+          Badges, streaks, skills, puzzle milestones, and learning certificates: evidence of what you know.
         </p>
         <p className="meta-line">{earnedCount}/{visibleCount} unlocked</p>
       </header>
@@ -133,7 +133,7 @@ export function AchievementHub({
           <EmptyState
             doodle="badge"
             title="No badges in this family yet"
-            body="Keep learning — badges unlock from real assessments, streaks, skills, and puzzle progress."
+            body="Keep learning. Badges unlock from real assessments, streaks, skills, and puzzle progress."
             actionLabel="Explore learning"
             onAction={onLearn}
           />

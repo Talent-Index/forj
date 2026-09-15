@@ -6,7 +6,7 @@ let appCheckInstance = null;
 
 /**
  * Optional Firebase App Check. Initializes only when
- * VITE_FIREBASE_APPCHECK_SITE_KEY is set (reCAPTCHA v3 site key — public).
+ * VITE_FIREBASE_APPCHECK_SITE_KEY is set (reCAPTCHA v3 site key. public).
  * Enforce App Check in the Firebase console after the site key is configured.
  */
 export function initFirebaseAppCheck() {

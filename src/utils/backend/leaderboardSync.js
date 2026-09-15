@@ -80,7 +80,7 @@ export async function writeLeaderboardPreference(userId, patch, extras = {}) {
   try {
     await withTimeout(setDoc(ref, payload), FIRESTORE_TIMEOUT_MS);
   } catch (error) {
-    // Older deployed rules reject publicSlug / walletHint — retry the board-critical fields.
+    // Older deployed rules reject publicSlug / walletHint. retry the board-critical fields.
     if (!isPermissionDenied(error)) throw error;
     const legacy = preferencePayload(userId, applied.preference, { legacy: true });
     legacy.createdAt = createdAt;

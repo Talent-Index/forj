@@ -1,6 +1,6 @@
 /**
  * Presentation helpers for the Learn hub / track / lesson UX.
- * Derives display metadata from the existing catalog — no parallel curriculum.
+ * Derives display metadata from the existing catalog. no parallel curriculum.
  */
 
 import { TRACKS, getLearningCatalog } from "../data/learning.js";

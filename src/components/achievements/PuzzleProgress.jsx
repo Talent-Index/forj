@@ -24,7 +24,7 @@ export function PuzzleProgress({
       <ProgressBar label={`${puzzleCount} of ${total} pieces`} value={percent} />
       <p className="meta-line">
         {complete
-          ? "Puzzle complete — the path certificate is ready to name."
+          ? "Puzzle complete. The path certificate is ready to name."
           : next
             ? `Next milestone: ${next.label} (${next.count} / ${total})`
             : "Keep seating pieces with quiz points and fragments."}

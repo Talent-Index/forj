@@ -51,7 +51,7 @@ export function BadgeDetail({ achievement, onClose, onContinue }) {
       {achievement.tier ? (
         <>
           <p className="kicker">
-            Level {TIER_ROMAN[achievement.tier]} — {TIER_LABELS[achievement.tier]}
+            Level {TIER_ROMAN[achievement.tier]} · {TIER_LABELS[achievement.tier]}
           </p>
           <BadgeTier tier={achievement.tier} earned={earned} />
         </>

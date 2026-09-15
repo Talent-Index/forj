@@ -79,7 +79,7 @@ function ProgressPage({
       <header className="page-header">
         <p className="kicker">Your forge</p>
         <h1>Your Forge</h1>
-        <p className="lede">Level, streak, path, and challenge standing — community learning records, not attestation.</p>
+        <p className="lede">Level, streak, path, and challenge standing: community learning records, not attestation.</p>
       </header>
 
       {stats.isNewLearner && (
@@ -147,7 +147,7 @@ function ProgressPage({
 
       <section className="section-block">
         <h2>Skills</h2>
-        <p className="meta-line">Track progress as demonstrated skill — not issuer attestation.</p>
+        <p className="meta-line">Track progress as demonstrated skill, not issuer attestation.</p>
         <div className="learn-skills-grid">
           {skillsFromPath(progression?.state).map((row) => (
             <Card key={row.trackId} className="stat-compact">
@@ -204,7 +204,7 @@ function ProgressPage({
         })}
         </div>
         {typeof stats.masteryOverall === "number" ? (
-          <p className="meta-line">Overall mastery (Easy–Hard): {stats.masteryOverall}%</p>
+          <p className="meta-line">Overall mastery (Easy to Hard): {stats.masteryOverall}%</p>
         ) : null}
       </section>
 
@@ -276,7 +276,7 @@ function ProgressPage({
         <h2><Icon name="wallet" size={16} /> Wallet</h2>
         <p>{displayAddress || "Not connected"}</p>
         <p className="meta-line">
-          {isFuji ? "Fuji" : `Chain ${chainId || "—"}`}
+          {isFuji ? "Fuji" : `Chain ${chainId || "…"}`}
         </p>
         {safeExternalHref(explorerUrl) && (
           <p>

@@ -2,7 +2,7 @@ import { Doodle } from "../doodles";
 import { TIER_ROMAN } from "../../utils/achievementCatalog";
 
 /**
- * Collectible Forjora badge tile — reuses card / border / doodle language.
+ * Collectible Forjora badge tile. reuses card / border / doodle language.
  * Grid uses static doodles so Progress stays fast; detail views can animate.
  */
 export function BadgeCard({

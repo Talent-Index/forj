@@ -14,25 +14,25 @@ export function ForjoraIcon({ className = "", title = "" } = {}) {
       aria-label={title || undefined}
     >
       {title ? <title>{title}</title> : null}
-      {/* Vertical spine — progress stem */}
+      {/* Vertical spine. progress stem */}
       <path
         className="brand-mark-ink"
         fill="currentColor"
         d="M6 4h5.5v24H6z"
       />
-      {/* Top pathway bar — peak / prove */}
+      {/* Top pathway bar. peak / prove */}
       <path
         className="brand-mark-ink"
         fill="currentColor"
         d="M13 4h13l-4 5.5H13z"
       />
-      {/* Mid pathway bar — build (accent) */}
+      {/* Mid pathway bar. build (accent) */}
       <path
         className="brand-mark-accent"
         fill="currentColor"
         d="M13 12.25h10l-4 5.5H13z"
       />
-      {/* Lower pathway step — learn */}
+      {/* Lower pathway step. learn */}
       <path
         className="brand-mark-ink"
         fill="currentColor"

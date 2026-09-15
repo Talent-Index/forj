@@ -86,7 +86,7 @@ export const sections = [
     icon: "🟢",
     pointsPerQuestion: 3,
     timePerQuestion: 20,
-    description: "Foundation — Avalanche fundamentals for understanding before you build",
+    description: "Foundation: Avalanche fundamentals for understanding before you build",
     questions: [
       {
         id: "e1",
@@ -316,7 +316,7 @@ export const sections = [
         answer: "An independent EVM chain, not an Ethereum Layer 2",
         hint: "EVM compatibility does not mean it settles on Ethereum.",
         explanation:
-          "The C-Chain is Avalanche's own contract chain. It speaks the EVM so Ethereum tools work, but consensus, fees, and security are Avalanche's — it is not an Ethereum rollup or plasma chain.",
+          "The C-Chain is Avalanche's own contract chain. It speaks the EVM so Ethereum tools work, but consensus, fees, and security are Avalanche's. It is not an Ethereum rollup or plasma chain.",
         reference: REFS.cChain,
         funFact: "You still pick chain ID 43114 (mainnet) or 43113 (Fuji), not Ethereum's 1.",
       },
@@ -328,7 +328,7 @@ export const sections = [
     icon: "🟡",
     pointsPerQuestion: 5,
     timePerQuestion: 15,
-    description: "Builder — apply Avalanche concepts to practical situations",
+    description: "Builder: apply Avalanche concepts to practical situations",
     questions: [
       {
         id: "m1",
@@ -338,7 +338,7 @@ export const sections = [
         answer: "2,000 AVAX",
         hint: "Mainnet validators lock a few thousand tokens.",
         explanation:
-          "A mainnet Primary Network validator must stake at least 2,000 AVAX on the P-Chain for 14–365 days. Fuji documents a 1 AVAX test minimum. L1 validator slots use a separate continuous-fee model.",
+          "A mainnet Primary Network validator must stake at least 2,000 AVAX on the P-Chain for 14-365 days. Fuji documents a 1 AVAX test minimum. L1 validator slots use a separate continuous-fee model.",
         reference: REFS.nodes,
         funFact: "Validators can also accept delegations from others.",
       },
@@ -590,7 +590,7 @@ export const sections = [
     icon: "🔴",
     pointsPerQuestion: 8,
     timePerQuestion: 12,
-    description: "Advanced — problem-solving across architecture, security, and tooling",
+    description: "Advanced: problem-solving across architecture, security, and tooling",
     questions: [
       {
         id: "h1",
@@ -857,7 +857,7 @@ export const sections = [
     icon: "◆",
     pointsPerQuestion: 10,
     timePerQuestion: 18,
-    description: "Mastery — deep reasoning, security, and systems judgment",
+    description: "Mastery: deep reasoning, security, and systems judgment",
     questions: [],
   },
 ];

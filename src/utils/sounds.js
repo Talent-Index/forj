@@ -1,4 +1,4 @@
-// Web Audio API sound effects — no external files needed
+// Web Audio API sound effects. no external files needed
 
 let audioCtx = null;
 

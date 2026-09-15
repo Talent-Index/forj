@@ -87,7 +87,7 @@ function LessonWorkspace({
           <p className="kicker">Your progress</p>
           <h3>
             Module {(trackProgress?.modules?.findIndex((m) => m.id === module?.id) ?? 0) + 1} /{" "}
-            {trackProgress?.totalCount || "—"}
+            {trackProgress?.totalCount || "…"}
           </h3>
           <ProgressBar value={moduleProgress?.percent ?? 0} label="Module" />
           <ProgressBar value={trackProgress?.percent ?? 0} label="Track" />

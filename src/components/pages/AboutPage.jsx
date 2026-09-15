@@ -152,7 +152,7 @@ function AboutPage({ onNavigate, isAuthenticated = false }) {
         <p className="about-section-lede">{FUJI_EXPLAINER.body}</p>
         <p className="about-section-lede">
           <a href={safeExternalHref(FUJI_EXPLAINER.faucetUrl)} target="_blank" rel="noopener noreferrer">Get Fuji test AVAX</a>
-          {" — "}
+          {" · "}
           {FUJI_EXPLAINER.faucetHint}
         </p>
         {CONTRACT_EXPLORER ? (

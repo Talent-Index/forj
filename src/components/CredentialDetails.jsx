@@ -18,19 +18,19 @@ function HashValue({ value, href, empty = "Not found" }) {
 function fieldValue(view, key) {
   switch (key) {
     case "title":
-      return view.title || "—";
+      return view.title || "…";
     case "holderWallet":
       return view.holderWallet ? (
-        <HashValue value={view.holderWallet} href={view.holderExplorerUrl} empty="—" />
+        <HashValue value={view.holderWallet} href={view.holderExplorerUrl} empty="…" />
       ) : (
-        "—"
+        "…"
       );
     case "score":
-      return view.scoreLabel || view.score || "—";
+      return view.scoreLabel || view.score || "…";
     case "difficulty":
       return view.difficultyDetail
         ? `${view.difficulty} · ${view.difficultyDetail}`
-        : view.difficulty || "—";
+        : view.difficulty || "…";
     case "status":
       return (
         <span className="credential-details-status">
@@ -39,9 +39,9 @@ function fieldValue(view, key) {
         </span>
       );
     case "issuer":
-      return view.issuer || "—";
+      return view.issuer || "…";
     case "network":
-      return view.network ? `${view.network} · ${view.chainId}` : "—";
+      return view.network ? `${view.network} · ${view.chainId}` : "…";
     case "contractAddress":
       return view.contractAddress ? (
         <HashValue
@@ -49,10 +49,10 @@ function fieldValue(view, key) {
           href={safeExternalHref(`https://testnet.snowtrace.io/address/${view.contractAddress}`)}
         />
       ) : (
-        "—"
+        "…"
       );
     case "tokenId":
-      return view.tokenId ? `#${view.tokenId}` : "—";
+      return view.tokenId ? `#${view.tokenId}` : "…";
     case "transactionHash":
       return (
         <HashValue
@@ -67,7 +67,7 @@ function fieldValue(view, key) {
           {view.explorerLabel}
         </a>
       ) : (
-        "—"
+        "…"
       );
     case "metadataUrl":
       return safeExternalHref(view.metadataUrl) ? (
@@ -75,10 +75,10 @@ function fieldValue(view, key) {
           {view.metadataLabel || "Open tokenURI"}
         </a>
       ) : (
-        "—"
+        "…"
       );
     default:
-      return "—";
+      return "…";
   }
 }
 

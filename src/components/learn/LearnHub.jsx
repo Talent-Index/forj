@@ -24,7 +24,7 @@ function LearnHub({
         </h1>
         <p className="lede">
           Follow structured Avalanche tracks, complete practical challenges, forge progress into
-          credentials — claimed on Fuji when you are ready.
+          credentials, claimed on Fuji when you are ready.
         </p>
         <div className="learn-hub-doodles" aria-hidden="true">
           <AnimatedDoodle type="book" animation="open" trigger="viewport" size={28} variant="accent" />

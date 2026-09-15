@@ -310,7 +310,7 @@ export function vaultStats(items = [], { acquiredPieces = [], puzzleComplete = f
     attestedCount: attested.length,
     claimedCount: claimed.length,
     skillsCount: skills.size,
-    highestLevel: highest || "—",
+    highestLevel: highest || "…",
     puzzlePieces: pieces,
     puzzleTotal: TOTAL_PIECES,
     puzzleComplete: puzzleComplete || pieces >= TOTAL_PIECES,

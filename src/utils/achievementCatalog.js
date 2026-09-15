@@ -1,5 +1,5 @@
 /**
- * Shared Forjora achievement language — families, tiers, skills, certificates.
+ * Shared Forjora achievement language. families, tiers, skills, certificates.
  * Visual DNA stays on existing tokens / doodles / card patterns.
  */
 
@@ -28,7 +28,7 @@ export const TIER_ROMAN = Object.freeze({
   5: "V",
 });
 
-/** Overlay for registry rows — progressive extension without redesign. */
+/** Overlay for registry rows. progressive extension without redesign. */
 export const ACHIEVEMENT_META = Object.freeze({
   first: {
     family: "learning",
@@ -261,7 +261,7 @@ export const STREAK_MILESTONE_BADGES = Object.freeze([
 ]);
 
 /**
- * Skill ladders — progressive I–V using existing progression signals.
+ * Skill ladders. progressive I-V using existing progression signals.
  * Future skills can be appended without UI redesign.
  */
 export const SKILL_LADDERS = Object.freeze({
@@ -443,7 +443,7 @@ export function enrichAchievement(item = {}) {
         tier,
         requirementsCopy: [
           `Demonstrate ${ladder.skillLabel}`,
-          `Reach tier ${TIER_ROMAN[tier]} — ${TIER_LABELS[tier]}`,
+          `Reach tier ${TIER_ROMAN[tier]} · ${TIER_LABELS[tier]}`,
         ],
       };
     }
@@ -496,7 +496,7 @@ export function skillLadderEntries() {
       out.push({
         id,
         name: `${ladder.name} ${TIER_ROMAN[step.tier]}`,
-        description: `${ladder.skillLabel} — Level ${TIER_ROMAN[step.tier]} (${TIER_LABELS[step.tier]})`,
+        description: `${ladder.skillLabel} · Level ${TIER_ROMAN[step.tier]} (${TIER_LABELS[step.tier]})`,
         category: "skills",
         family: "skills",
         hidden: false,
@@ -545,7 +545,7 @@ export function formatIssuedMonth(timestamp = Date.now()) {
       new Date(timestamp)
     );
   } catch {
-    return "—";
+    return "…";
   }
 }
 
