@@ -120,7 +120,7 @@ const JOURNEY = [
   {
     n: "04",
     title: "Prove",
-    body: "Optionally record a claimed Fuji credential — not an attested exam.",
+    body: "Optionally record a claimed Fuji credential. Not an attested exam.",
     type: "certificate",
     animation: "stamp",
   },
@@ -130,7 +130,7 @@ const FORGE_STEPS = ["XP", "Pieces", "Puzzle", "Credential"];
 const PREVIEW_PIECES = [0, 1, 2, 4, 5, 8];
 
 const LEVEL_BODY = {
-  easy: "Start the fire. Wallets, C-Chain, validators.",
+  easy: "Start the fire. Wallets, C-Chain, Validators.",
   medium: "Strengthen understanding. Subnets, ICM, L1s.",
   hard: "Prove what you have learned. Snow, Coreth, ACP-77.",
 };

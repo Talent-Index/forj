@@ -3119,9 +3119,12 @@ img {
 
 .level-switch {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 4px 6px;
   margin: 16px 0 24px;
+  padding-inline: 2px;
   justify-content: center;
+  max-width: 100%;
 }
 
 .level-tab {
@@ -3129,13 +3132,15 @@ img {
   border: 0;
   border-bottom: 1px solid transparent;
   min-height: 44px;
-  padding: 8px 12px;
+  padding: 8px 10px;
   color: var(--muted);
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   font: inherit;
   font-size: 12px;
+  flex: 0 1 auto;
+  white-space: nowrap;
 }
 
 .level-tab.is-active {
@@ -3177,8 +3182,16 @@ img {
   font-family: "Source Serif 4", Georgia, serif;
   font-size: clamp(36px, 6vw, 52px);
   font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+  overflow: visible;
+  padding-inline: 0.15em;
+}
+
+.level-panel-title .doodle-text,
+.level-panel-title .doodle-text-word {
+  overflow: visible;
+  padding-inline: 0.04em;
 }
 
 .level-panel-body {
@@ -3648,6 +3661,16 @@ img {
   .landing-hero,
   .landing-section {
     padding: 40px var(--pad-x-sm);
+  }
+
+  .level-tab {
+    letter-spacing: 0.04em;
+    font-size: 11px;
+    padding: 8px 7px;
+  }
+
+  .level-switch {
+    gap: 2px 4px;
   }
 
   .landing-hero,
