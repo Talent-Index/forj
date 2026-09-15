@@ -3152,9 +3152,9 @@ img {
 
 .level-panel {
   position: relative;
-  max-width: 26rem;
+  max-width: 28rem;
   margin: 0 auto;
-  padding: 28px 24px 32px;
+  padding: 32px 28px 28px;
   text-align: center;
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -3164,13 +3164,13 @@ img {
 .level-panel-margin {
   display: flex;
   justify-content: center;
-  min-height: 52px;
-  margin-bottom: 12px;
+  min-height: 44px;
+  margin-bottom: 10px;
   color: var(--accent-ink);
 }
 
 .level-panel-kicker {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -3178,34 +3178,46 @@ img {
 }
 
 .level-panel-title {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   font-family: "Source Serif 4", Georgia, serif;
   font-size: clamp(36px, 6vw, 52px);
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.18;
+  line-height: 1.2;
   overflow: visible;
-  padding-inline: 0.15em;
+  padding-inline: 0.2em;
 }
 
 .level-panel-title .doodle-text,
 .level-panel-title .doodle-text-word {
   overflow: visible;
-  padding-inline: 0.04em;
+  padding-inline: 0.06em;
 }
 
 .level-panel-body {
-  margin: 0 auto 16px;
+  margin: 0 auto 24px;
   max-width: 22rem;
   color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.level-panel-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
 }
 
 .level-panel-meta {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-  margin: 0 0 20px;
+  margin: 0;
+  padding-top: 16px;
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -3217,7 +3229,8 @@ img {
   align-items: center;
   gap: 10px;
   margin: 0;
-  padding: 0 0 4px;
+  margin-left: auto;
+  padding: 16px 0 4px;
   border: 0;
   border-bottom: 1px solid var(--accent-ink);
   border-radius: 0;
@@ -3234,14 +3247,6 @@ img {
 .level-panel-cta:hover {
   color: var(--text);
   border-bottom-color: var(--text);
-}
-
-.level-panel-note {
-  position: absolute;
-  right: 14px;
-  bottom: 12px;
-  opacity: 0.45;
-  pointer-events: none;
 }
 
 [data-theme="light"] .level-panel {
@@ -3671,6 +3676,16 @@ img {
 
   .level-switch {
     gap: 2px 4px;
+  }
+
+  .level-panel-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .level-panel-cta {
+    margin-left: 0;
   }
 
   .landing-hero,

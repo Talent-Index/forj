@@ -130,15 +130,17 @@ const FORGE_STEPS = ["XP", "Pieces", "Puzzle", "Credential"];
 const PREVIEW_PIECES = [0, 1, 2, 4, 5, 8];
 
 const LEVEL_BODY = {
-  easy: "Start the fire. Wallets, C-Chain, Validators.",
-  medium: "Strengthen understanding. Subnets, ICM, L1s.",
-  hard: "Prove what you have learned. Snow, Coreth, ACP-77.",
+  easy: "Wallets, C-Chain, and Validators.",
+  medium: "Subnets, ICM, and L1s.",
+  hard: "Snow, Coreth, and ACP-77.",
+  master: "Security, systems judgment, and deep Avalanche reasoning.",
 };
 
 const LEVEL_DOODLE = {
   easy: "fire",
   medium: "blocks",
   hard: "hammer",
+  master: "diamond",
 };
 
 function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) {
@@ -275,36 +277,31 @@ function Landing({ onStart, onSignIn, onExploreCredentials, signedIn = false }) 
         <div key={level.id} className={`level-panel level-panel-${level.id}`}>
           <div className="level-panel-margin" aria-hidden="true">
             <AnimatedDoodle
-              type={LEVEL_DOODLE[level.id]}
-              animation={level.id === "easy" ? "spark" : level.id === "hard" ? "tap" : "assemble"}
+              type={LEVEL_DOODLE[level.id] || "fire"}
+              animation={level.id === "easy" ? "spark" : level.id === "hard" ? "tap" : level.id === "master" ? "draw" : "assemble"}
               stages={level.id === "easy" ? ["draw", "spark"] : ["draw"]}
               trigger="immediate"
-              size={48}
+              size={40}
               variant="accent"
             />
           </div>
-          <p className="level-panel-kicker">
-            {copy.title}
-            <span aria-hidden="true"> · </span>
-            {level.name}
-          </p>
+          <p className="level-panel-kicker">{copy.title}</p>
           <h2 className="level-panel-title">
             <DoodleText mark="underline" trigger="immediate" delay={120}>
               {forgeLabel}
             </DoodleText>
           </h2>
           <p className="level-panel-body">{LEVEL_BODY[level.id]}</p>
-          <p className="level-panel-meta">
-            <AnimatedDoodle type="quiz" animation="draw" trigger="immediate" size={14} variant="muted" delay={280} />
-            {level.questionsPerQuiz} questions
-          </p>
-          <button type="button" className="level-panel-cta" onClick={onStart}>
-            <span>Start {forgeLabel}</span>
-            <AnimatedDoodle type="door" animation="draw" trigger="immediate" size={16} variant="accent" delay={400} />
-          </button>
-          <span className="level-panel-note" aria-hidden="true">
-            <AnimatedDoodle type="pencil" animation="slide" trigger="immediate" size={18} variant="muted" delay={520} />
-          </span>
+          <div className="level-panel-footer">
+            <p className="level-panel-meta">
+              <AnimatedDoodle type="quiz" animation="draw" trigger="immediate" size={14} variant="muted" delay={280} />
+              <span>{level.questionsPerQuiz} questions</span>
+            </p>
+            <button type="button" className="level-panel-cta" onClick={onStart}>
+              <span>Start {forgeLabel}</span>
+              <AnimatedDoodle type="door" animation="draw" trigger="immediate" size={16} variant="accent" delay={400} />
+            </button>
+          </div>
         </div>
       </section>
 
