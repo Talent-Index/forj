@@ -5,8 +5,8 @@ import CredentialDetails from "../CredentialDetails";
 import CredentialQr from "../CredentialQr";
 import CredentialStatusBadge from "../CredentialStatusBadge";
 import CertificateArtifact from "../CertificateArtifact";
-import { AnimatedDoodle, BlockchainConnect, Doodle } from "../doodles";
-import { CREDENTIAL_STATES, EXPLORER_LINK_LABEL } from "../../utils/credentialStatus";
+import { Doodle } from "../doodles";
+import { EXPLORER_LINK_LABEL } from "../../utils/credentialStatus";
 import { retrievalUrl } from "../../utils/credentialMetadata";
 import { publicCredentialPath } from "../../utils/credentialLookup";
 import { safeExternalHref } from "../../utils/frontendSecurity";
@@ -15,15 +15,10 @@ import { EMPTY_STATES } from "../../utils/onboarding";
 export function LookupHero() {
   return (
     <header className="page-header lookup-hero">
-      <p className="kicker">Credential lookup</p>
-      <h1>Credential verification</h1>
+      <h1>Credential Lookup</h1>
       <p className="lede">
-        Confirm a Forjora on-chain credential and explore the skills it records.
+        Verify a Forjora credential and explore the evidence behind it.
         Looking it up does not make a Forjora claimed score issuer-attested.
-      </p>
-      <p className="certificate-status-row">
-        <CredentialStatusBadge status={CREDENTIAL_STATES.claimed} />
-        <CredentialStatusBadge status={CREDENTIAL_STATES.attested} />
       </p>
     </header>
   );
@@ -42,11 +37,16 @@ export function CredentialSearch({
 }) {
   const [scanning, setScanning] = useState(false);
   const [scanError, setScanError] = useState("");
+  const [showWallet, setShowWallet] = useState(Boolean(walletInput));
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const scanTimer = useRef(null);
 
   useEffect(() => () => stopScan(), []);
+
+  useEffect(() => {
+    if (walletInput) setShowWallet(true);
+  }, [walletInput]);
 
   function stopScan() {
     if (scanTimer.current) {
@@ -61,7 +61,7 @@ export function CredentialSearch({
   async function startScan() {
     setScanError("");
     if (typeof window === "undefined" || !("BarcodeDetector" in window)) {
-      setScanError("QR camera scan is not supported in this browser. Paste a credential URL or enter a token ID.");
+      setScanError("QR scan is not supported in this browser. Paste a credential URL or enter a credential ID.");
       return;
     }
     try {
@@ -89,84 +89,92 @@ export function CredentialSearch({
         }
       }, 700);
     } catch {
-      setScanError("Camera access was blocked. Enter a token ID or paste a share URL instead.");
+      setScanError("Camera access was blocked. Enter a credential ID or paste a share URL instead.");
       stopScan();
     }
   }
 
   return (
-    <section className="section-block lookup-search" aria-label="Credential lookup">
+    <section className="lookup-search" aria-label="Credential lookup">
       <form className="lookup-search-form" onSubmit={onSubmit}>
-        <div className="lookup-search-fields">
-          <label className="recipient-label" htmlFor="lookup-token">
-            Credential ID
-          </label>
-          <div className="lookup-input-row">
-            <input
-              id="lookup-token"
-              className="recipient-input"
-              value={tokenInput}
-              onChange={(event) => onTokenChange?.(event.target.value)}
-              placeholder="Example: 1"
-              inputMode="numeric"
-              disabled={disabled || loading}
-              autoComplete="off"
-            />
-            {tokenInput || walletInput ? (
-              <button
-                type="button"
-                className="btn btn-ghost lookup-clear"
-                onClick={onClear}
-                disabled={loading}
-              >
-                Clear
-              </button>
-            ) : null}
-          </div>
-          <label className="recipient-label" htmlFor="lookup-wallet">
-            Holder wallet <span className="meta-line">(optional)</span>
-          </label>
+        <label className="lookup-search-label" htmlFor="lookup-token">
+          Credential ID
+        </label>
+        <div className="lookup-verify-row">
           <input
-            id="lookup-wallet"
-            className="recipient-input"
-            value={walletInput}
-            onChange={(event) => onWalletChange?.(event.target.value)}
-            placeholder="0x…"
-            autoComplete="off"
-            spellCheck="false"
+            id="lookup-token"
+            className="recipient-input lookup-verify-input"
+            value={tokenInput}
+            onChange={(event) => onTokenChange?.(event.target.value)}
+            placeholder="Enter Credential ID"
+            inputMode="numeric"
             disabled={disabled || loading}
+            autoComplete="off"
+            aria-describedby="lookup-token-hint"
           />
-        </div>
-        <div className="lookup-search-actions">
           <Button type="submit" disabled={disabled || loading}>
-            {loading ? "Looking up…" : "Look up credential"}
+            {loading ? "Verifying…" : "Verify"}
           </Button>
         </div>
-      </form>
+        <p id="lookup-token-hint" className="meta-line lookup-search-hint">
+          Example: 7
+        </p>
 
-      <div className="lookup-or" aria-hidden="true">
-        <span>or</span>
-      </div>
-
-      <div className="lookup-scan">
-        {!scanning ? (
-          <Button type="button" variant="secondary" onClick={startScan} disabled={disabled || loading}>
-            <Doodle type="certificate" size={14} variant="ink" /> Scan QR code
-          </Button>
-        ) : (
-          <div className="lookup-scan-live">
-            <video ref={videoRef} className="lookup-scan-video" muted playsInline />
+        <div className="lookup-search-secondary">
+          {!scanning ? (
+            <Button type="button" variant="ghost" onClick={startScan} disabled={disabled || loading}>
+              <Doodle type="certificate" size={14} variant="ink" /> Scan QR
+            </Button>
+          ) : (
             <Button type="button" variant="ghost" onClick={stopScan}>
               Stop scan
             </Button>
-          </div>
-        )}
-        {scanError ? <p className="note" role="status">{scanError}</p> : null}
-      </div>
+          )}
+          {tokenInput || walletInput ? (
+            <button
+              type="button"
+              className="btn btn-ghost lookup-clear"
+              onClick={onClear}
+              disabled={loading}
+            >
+              Clear
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className="btn btn-ghost"
+            onClick={() => setShowWallet((open) => !open)}
+            aria-expanded={showWallet}
+          >
+            {showWallet ? "Hide wallet filter" : "Optional wallet filter"}
+          </button>
+        </div>
 
-      <p className="meta-line lookup-search-note">
-        Securely confirm credentials recorded through the Forjora learning ecosystem on Avalanche Fuji.
-      </p>
+        {showWallet ? (
+          <div className="lookup-wallet-field">
+            <label className="lookup-search-label" htmlFor="lookup-wallet">
+              Holder wallet <span className="meta-line">(optional)</span>
+            </label>
+            <input
+              id="lookup-wallet"
+              className="recipient-input"
+              value={walletInput}
+              onChange={(event) => onWalletChange?.(event.target.value)}
+              placeholder="0x…"
+              autoComplete="off"
+              spellCheck="false"
+              disabled={disabled || loading}
+            />
+          </div>
+        ) : null}
+
+        {scanning ? (
+          <div className="lookup-scan-live">
+            <video ref={videoRef} className="lookup-scan-video" muted playsInline />
+          </div>
+        ) : null}
+        {scanError ? <p className="note" role="status">{scanError}</p> : null}
+      </form>
     </section>
   );
 }
@@ -179,7 +187,7 @@ export function VerificationStatusBanner({
 }) {
   if (state === "loading") {
     return (
-      <div className="verification-state verification-state-pending" role="status">
+      <div className="verification-state verification-state-pending lookup-status" role="status">
         <p className="kicker">Credential lookup</p>
         <h2>Looking up on Fuji…</h2>
         <p className="meta-line">Reading the on-chain record.</p>
@@ -189,9 +197,8 @@ export function VerificationStatusBanner({
 
   if (state === "invalid") {
     return (
-      <div className="verification-state verification-state-none" role="alert">
-        <p className="kicker">Invalid credential ID</p>
-        <h2>Invalid credential identifier</h2>
+      <div className="verification-state verification-state-none lookup-status" role="alert">
+        <h2>Invalid credential ID</h2>
         <p className="meta-line">Enter a token ID starting at 1, or a 0x holder wallet address.</p>
         {onRetry ? (
           <div className="certificate-actions">
@@ -204,15 +211,14 @@ export function VerificationStatusBanner({
 
   if (state === "not-found") {
     return (
-      <div className="verification-state verification-state-none" role="status">
-        <p className="kicker">Credential not found</p>
-        <h2>No record found</h2>
+      <div className="verification-state verification-state-none lookup-status" role="status">
+        <h2>Credential not found</h2>
+        <p className="meta-line">Check the credential ID and try again.</p>
         {queryLabel ? (
           <p className="meta-line">
-            We could not find a credential matching <span className="credential-mono">{queryLabel}</span>.
+            No record for <span className="credential-mono">{queryLabel}</span>.
           </p>
         ) : null}
-        <p className="meta-line">{verification?.summary}</p>
         <EmptyState
           title={EMPTY_STATES.noLookup.title}
           body={EMPTY_STATES.noLookup.body}
@@ -226,20 +232,37 @@ export function VerificationStatusBanner({
 
   if (state === "revoked") {
     return (
-      <div className="verification-state verification-state-revoked" role="alert">
-        <p className="kicker">Credential revoked</p>
-        <h2>This credential is no longer considered valid</h2>
+      <div className="verification-state verification-state-revoked lookup-status" role="alert">
+        <h2>Credential revoked</h2>
         <p className="meta-line">
-          Credential ID: <span className="credential-mono">{queryLabel || "…"}</span>
+          This credential is no longer valid
+          {queryLabel ? (
+            <>
+              {" "}
+              (<span className="credential-mono">{queryLabel}</span>)
+            </>
+          ) : null}
+          .
         </p>
+      </div>
+    );
+  }
+
+  if (state === "replaced") {
+    return (
+      <div className="verification-state verification-state-none lookup-status" role="status">
+        <h2>This credential has been replaced by a newer credential</h2>
+        <p className="meta-line">A newer on-chain record supersedes this one.</p>
       </div>
     );
   }
 
   if (state === "owner-mismatch" && verification) {
     return (
-      <div className="verification-state verification-state-claimed verification-ownership-mismatch" role="status">
-        <p className="kicker">Holder check</p>
+      <div
+        className="verification-state verification-state-claimed verification-ownership-mismatch lookup-status"
+        role="status"
+      >
         <h2>Holder does not match</h2>
         <p className="meta-line">
           This token exists on Fuji, but the on-chain holder is not the wallet in the URL.
@@ -249,42 +272,11 @@ export function VerificationStatusBanner({
     );
   }
 
-  if (!verification) return null;
+  if (state === "found" && verification) {
+    return null;
+  }
 
-  const attested = verification.statusId === "attested";
-  return (
-    <div
-      className={`verification-state verification-state-${verification.statusId} verification-ownership-${verification.ownership} lookup-result-banner`}
-      role="status"
-    >
-      <p className="kicker">Forjora on-chain record</p>
-      <h2>{attested ? "Issuer-attested credential" : "Claimed credential"}</h2>
-      {attested ? (
-        <span className="lookup-seal" aria-hidden="true">
-          <BlockchainConnect trigger="immediate" active label="Attested" showCheck />
-          <AnimatedDoodle type="seal" animation="stamp" trigger="success" active size={48} variant="accent" delay={1200} />
-        </span>
-      ) : (
-        <span className="lookup-seal" aria-hidden="true">
-          <BlockchainConnect trigger="immediate" active label="On-chain" showCheck />
-          <AnimatedDoodle type="certificate" animation="draw" trigger="success" active size={40} variant="muted" />
-        </span>
-      )}
-      {verification.checks?.length ? (
-        <ul className="verification-checks">
-          {verification.checks.map((check) => (
-            <li key={check.id} className={check.ok ? "is-ok" : "is-miss"}>
-              {check.ok ? "✓" : "×"} {check.label}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      <p className="meta-line">{verification.summary}</p>
-      <p className="note">
-        Finding a record proves the token exists on Fuji. It does not turn a claimed score into an issuer assessment.
-      </p>
-    </div>
-  );
+  return null;
 }
 
 function publicSkills(view) {
@@ -292,104 +284,101 @@ function publicSkills(view) {
   const attrs = view?.metadata?.attributes || [];
   for (const trait of attrs) {
     const key = String(trait.trait_type || "").toLowerCase();
-    if (key.includes("skill") || key === "track" || key === "path" || key === "difficulty") {
-      skills.push(String(trait.value));
+    if (key.includes("skill") || key === "track" || key === "path") {
+      const value = String(trait.value || "").trim();
+      if (value) skills.push(value);
     }
   }
-  if (view?.difficulty) skills.push(`${view.difficulty} path difficulty`);
-  if (view?.scoreLabel) skills.push(`Quiz score · ${view.scoreLabel}`);
-  if (view?.difficultyDetail) skills.push("Easy / Medium / Hard quiz evidence on-chain");
-  return [...new Set(skills.filter(Boolean))].slice(0, 8);
+  return [...new Set(skills)].slice(0, 8);
+}
+
+function buildEvidence(view) {
+  const rows = [];
+  for (const check of view?.verification?.checks || []) {
+    rows.push({ id: check.id, label: check.label, ok: check.ok });
+  }
+  if (Number.isInteger(view?.puzzlePieces) && Number.isInteger(view?.puzzleTotal)) {
+    rows.push({
+      id: "puzzle",
+      label: `${view.puzzlePieces} / ${view.puzzleTotal} puzzle pieces collected`,
+      ok: view.puzzlePieces >= view.puzzleTotal,
+    });
+  }
+  if (view?.difficultyDetail) {
+    rows.push({
+      id: "difficulty",
+      label: `Quiz seating · ${view.difficultyDetail}`,
+      ok: true,
+    });
+  }
+  return rows;
+}
+
+export function CredentialResultHeader({ view }) {
+  if (!view) return null;
+  const attested = view.statusId === "attested";
+  return (
+    <header className="lookup-result-header">
+      <p className={`lookup-status-line ${attested ? "is-attested" : "is-claimed"}`}>
+        <span className="lookup-status-mark" aria-hidden="true">
+          {attested ? "✓" : "○"}
+        </span>
+        <span className="kicker">{attested ? "Issuer-Attested" : "Forjora Claimed"}</span>
+      </p>
+      <h2 className="lookup-credential-title">{view.title || "Forjora credential"}</h2>
+      {view.difficulty ? <p className="lookup-credential-level">{view.difficulty}</p> : null}
+      <div className="lookup-awarded">
+        <p className="meta-line">Awarded to</p>
+        <p className="lookup-awarded-name">{view.holderWalletShort || "Holder"}</p>
+        <p className="meta-line">On-chain holder wallet</p>
+        {safeExternalHref(view.holderExplorerUrl) ? (
+          <a
+            href={safeExternalHref(view.holderExplorerUrl)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="meta-line"
+          >
+            View holder on Snowtrace
+          </a>
+        ) : null}
+      </div>
+      <div className="lookup-status-badge-row">
+        <CredentialStatusBadge status={view.statusId} />
+      </div>
+    </header>
+  );
 }
 
 export function CredentialShowcase({ view, artwork }) {
   if (!view) return null;
   const image = artwork || retrievalUrl(view.metadata?.image) || "";
   return (
-    <section className="lookup-showcase section-block" aria-label="Credential showcase">
-      <p className="kicker">Credential</p>
-      <CertificateArtifact
-        artwork={image}
-        recipientName={view.holderWalletShort || "Learner"}
-        scorePercent={
-          view.score != null && view.score !== ""
-            ? Math.min(100, Math.round((Number(view.score) / 80) * 100))
-            : 0
-        }
-        difficulty={view.difficulty || "…"}
-        pathLabel={view.title || "Avalanche Developer Path"}
-        credentialId={view.tokenId ? `#${view.tokenId}` : "…"}
-        verificationStatus={view.statusId}
-        walletAddress={view.holderWallet}
-        chainId={view.chainId}
-        contractAddress={view.contractAddress}
-        metadataUri={view.metadataUrl}
-        explorerUrl={view.explorerUrl}
-        verificationUrl={publicCredentialPath({ tokenId: view.tokenId, wallet: view.holderWallet })}
-        compact
-      />
-    </section>
-  );
-}
-
-export function CredentialInformation({ view }) {
-  if (!view) return null;
-  return (
-    <section className="section-block lookup-info" aria-label="Credential information">
-      <h2>Credential information</h2>
-      <dl className="lookup-info-list">
-        <div>
-          <dt>Credential ID</dt>
-          <dd className="credential-mono">{view.tokenId ? `#${view.tokenId}` : "…"}</dd>
-        </div>
-        <div>
-          <dt>Credential</dt>
-          <dd>{view.title || "Forjora credential"}</dd>
-        </div>
-        <div>
-          <dt>Level</dt>
-          <dd>{view.difficulty || "…"}</dd>
-        </div>
-        <div>
-          <dt>Score</dt>
-          <dd>{view.scoreLabel || "…"}</dd>
-        </div>
-        <div>
-          <dt>Status</dt>
-          <dd>
-            <CredentialStatusBadge status={view.statusId} />
-          </dd>
-        </div>
-      </dl>
-    </section>
-  );
-}
-
-export function LearnerPublicCard({ view }) {
-  if (!view) return null;
-  return (
-    <section className="section-block lookup-learner" aria-label="Earned by">
-      <h2>Earned by</h2>
-      <div className="lookup-learner-card card">
-        <div className="lookup-learner-avatar" aria-hidden="true">
-          <Doodle type="badge" size={28} variant="accent" />
-        </div>
-        <div>
-          <p className="stat-value">{view.holderWalletShort || "Holder"}</p>
-          <p className="meta-line">On-chain holder wallet</p>
-          {safeExternalHref(view.holderExplorerUrl) ? (
-            <a
-              href={safeExternalHref(view.holderExplorerUrl)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="meta-line"
-            >
-              View holder on Snowtrace
-            </a>
-          ) : null}
-        </div>
+    <section className="lookup-showcase" aria-label="Certificate preview">
+      <h3 className="lookup-section-title">Certificate Preview</h3>
+      <div className="lookup-certificate-frame">
+        <CertificateArtifact
+          artwork={image}
+          recipientName={view.holderWalletShort || "Learner"}
+          scorePercent={
+            view.score != null && view.score !== "" && view.maxPoints
+              ? Math.min(100, Math.round((Number(view.score) / Number(view.maxPoints)) * 100))
+              : view.score != null && view.score !== ""
+                ? Math.min(100, Math.round((Number(view.score) / 80) * 100))
+                : 0
+          }
+          difficulty={view.difficulty || "…"}
+          pathLabel={view.title || "Avalanche Developer Path"}
+          credentialId={view.tokenId ? `#${view.tokenId}` : "…"}
+          verificationStatus={view.statusId}
+          walletAddress={view.holderWallet}
+          chainId={view.chainId}
+          contractAddress={view.contractAddress}
+          metadataUri={view.metadataUrl}
+          explorerUrl={view.explorerUrl}
+          verificationUrl={publicCredentialPath({ tokenId: view.tokenId, wallet: view.holderWallet })}
+          compact
+        />
       </div>
-      <p className="note">Only public on-chain holder data is shown. No email or private account fields.</p>
     </section>
   );
 }
@@ -397,42 +386,34 @@ export function LearnerPublicCard({ view }) {
 export function SkillEvidencePanel({ view }) {
   if (!view) return null;
   const skills = publicSkills(view);
-  const evidence = (view.verification?.checks || []).map((check) => ({
-    label: check.label,
-    ok: check.ok,
-  }));
+  const evidence = buildEvidence(view);
   return (
     <>
-      <section className="section-block lookup-skills" aria-label="Skills demonstrated">
-        <h2>Skills demonstrated</h2>
-        <p className="meta-line">Public evidence from the on-chain credential snapshot.</p>
+      <section className="lookup-section" aria-label="Skills">
+        <h3 className="lookup-section-title">Skills</h3>
         {skills.length ? (
-          <ul className="lookup-skill-grid">
+          <ul className="lookup-skill-list">
             {skills.map((skill) => (
-              <li key={skill} className="card lookup-skill-chip">
-                {skill}
+              <li key={skill}>{skill}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="meta-line">Skill labels are not present on this credential&apos;s on-chain metadata.</p>
+        )}
+      </section>
+      <section className="lookup-section" aria-label="Evidence">
+        <h3 className="lookup-section-title">Evidence</h3>
+        {evidence.length ? (
+          <ul className="verification-checks lookup-evidence-list">
+            {evidence.map((row) => (
+              <li key={row.id} className={row.ok ? "is-ok" : "is-miss"}>
+                {row.ok ? "✓" : "×"} {row.label}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="meta-line">Skill labels appear when present in on-chain metadata.</p>
+          <p className="meta-line">Evidence is unavailable for this record.</p>
         )}
-      </section>
-      <section className="section-block lookup-evidence" aria-label="Evidence">
-        <h2>Evidence</h2>
-        <ul className="verification-checks">
-          {evidence.map((row) => (
-            <li key={row.label} className={row.ok ? "is-ok" : "is-miss"}>
-              {row.ok ? "✓" : "×"} {row.label}
-            </li>
-          ))}
-          {view.scoreLabel ? (
-            <li className="is-ok">✓ Path score recorded · {view.scoreLabel}</li>
-          ) : null}
-          {view.difficultyDetail ? (
-            <li className="is-ok">✓ Difficulty counts · {view.difficultyDetail}</li>
-          ) : null}
-        </ul>
       </section>
     </>
   );
@@ -440,24 +421,34 @@ export function SkillEvidencePanel({ view }) {
 
 export function AchievementSummaryStrip({ view }) {
   if (!view) return null;
+  const max = view.maxPoints || 80;
+  const points = view.score !== "" && view.score != null ? view.score : null;
   return (
-    <section className="section-block lookup-achievements" aria-label="Achievement summary">
-      <h2>Achievement summary</h2>
-      <p className="meta-line">On-chain snapshot only. Not a live learner dashboard.</p>
-      <div className="stat-row vault-stat-row">
-        <div className="card stat-compact">
-          <p className="kicker">Score</p>
-          <p className="stat-value">{view.scoreLabel || "…"}</p>
-        </div>
-        <div className="card stat-compact">
-          <p className="kicker">Difficulty</p>
-          <p className="stat-value vault-stat-level">{view.difficulty || "…"}</p>
-        </div>
-        <div className="card stat-compact">
-          <p className="kicker">Token</p>
-          <p className="stat-value">{view.tokenId ? `#${view.tokenId}` : "…"}</p>
-        </div>
-      </div>
+    <section className="lookup-section" aria-label="Credential snapshot">
+      <h3 className="lookup-section-title">Credential Snapshot</h3>
+      {points != null ? (
+        <p className="lookup-snapshot-score">
+          <span className="lookup-snapshot-number">
+            {points} / {max}
+          </span>
+          <span className="kicker">Points</span>
+        </p>
+      ) : (
+        <p className="meta-line">Points snapshot is not available on this record.</p>
+      )}
+      {view.difficultyRows?.length ? (
+        <dl className="lookup-snapshot-rows">
+          {view.difficultyRows.map((row) => (
+            <div key={row.id}>
+              <dt>{row.name}</dt>
+              <dd>
+                {row.correct} / {row.total}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
+      <p className="note">Recorded at mint time. This is not a live learning score.</p>
     </section>
   );
 }
@@ -465,30 +456,36 @@ export function AchievementSummaryStrip({ view }) {
 export function VerificationDetailsPanel({ view }) {
   if (!view) return null;
   return (
-    <section className="section-block lookup-verification-details" aria-label="Lookup details">
-      <h2>On-chain details</h2>
-      <dl className="lookup-info-list">
-        <div>
-          <dt>Status</dt>
-          <dd>
-            <CredentialStatusBadge status={view.statusId} />
-          </dd>
-        </div>
-        <div>
-          <dt>Credential ID</dt>
-          <dd className="credential-mono">{view.tokenId ? `#${view.tokenId}` : "…"}</dd>
-        </div>
-        <div>
-          <dt>Issuer</dt>
-          <dd>{view.issuer || "…"}</dd>
-        </div>
+    <section className="lookup-section" aria-label="On-chain record">
+      <h3 className="lookup-section-title">On-chain Record</h3>
+      <dl className="lookup-def-list">
         <div>
           <dt>Network</dt>
           <dd>{view.network || "Avalanche Fuji"}</dd>
         </div>
         <div>
           <dt>Contract</dt>
-          <dd className="credential-mono">{view.contractAddress || "…"}</dd>
+          <dd>{view.contractName || "SkillForgeCredential"}</dd>
+        </div>
+        {view.contractAddress ? (
+          <div>
+            <dt>Address</dt>
+            <dd className="credential-mono">{view.contractAddress}</dd>
+          </div>
+        ) : null}
+        <div>
+          <dt>Token ID</dt>
+          <dd className="credential-mono">{view.tokenId ? `#${view.tokenId}` : "…"}</dd>
+        </div>
+        {view.mintedLabel ? (
+          <div>
+            <dt>Minted</dt>
+            <dd>{view.mintedLabel}</dd>
+          </div>
+        ) : null}
+        <div>
+          <dt>Issuer</dt>
+          <dd>{view.issuer || "…"}</dd>
         </div>
         {view.transactionHash ? (
           <div>
@@ -505,25 +502,47 @@ export function VerificationDetailsPanel({ view }) {
           </div>
         ) : null}
       </dl>
-      <div className="certificate-actions">
-        {safeExternalHref(view.explorerUrl) ? (
-          <a className="btn btn-secondary" href={safeExternalHref(view.explorerUrl)} target="_blank" rel="noopener noreferrer">
-            {EXPLORER_LINK_LABEL}
+      {safeExternalHref(view.explorerUrl) ? (
+        <p className="lookup-explorer-link">
+          <a href={safeExternalHref(view.explorerUrl)} target="_blank" rel="noopener noreferrer">
+            {EXPLORER_LINK_LABEL} →
           </a>
-        ) : null}
-      </div>
-      <CredentialDetails view={view} />
+        </p>
+      ) : null}
+      <details className="lookup-details-fold">
+        <summary>Full verification fields</summary>
+        <CredentialDetails view={view} />
+      </details>
     </section>
+  );
+}
+
+export function TrustExplainer({ view }) {
+  if (!view) return null;
+  const attested = view.statusId === "attested";
+  const claimedCopy =
+    "This credential exists on the Avalanche network. It was claimed by the learner and contains a snapshot of their credential data. It is not issuer-attested.";
+  const attestedCopy =
+    "This credential was minted using an authorized issuer signature.";
+  return (
+    <details className="lookup-trust-explainer">
+      <summary>What does this status mean?</summary>
+      <p>{attested ? attestedCopy : claimedCopy}</p>
+      {view.statusBody ? <p className="meta-line">{view.statusBody}</p> : null}
+      <p className="note">
+        Finding a record proves the token exists on Fuji. It does not turn a claimed score into an issuer assessment.
+      </p>
+    </details>
   );
 }
 
 export function QRCodeCard({ shareUrl }) {
   if (!shareUrl) return null;
   return (
-    <section className="section-block lookup-qr-card" aria-label="Share QR">
-      <h2>Confirm this credential</h2>
+    <section className="lookup-section lookup-qr-card" aria-label="Share QR">
+      <h3 className="lookup-section-title">Confirm this credential</h3>
       <p className="meta-line">Scan to open this public credential URL.</p>
-      <div className="lookup-qr-frame card">
+      <div className="lookup-qr-frame">
         <CredentialQr url={shareUrl} label="QR code for this credential URL" />
       </div>
     </section>
@@ -543,19 +562,19 @@ export function CredentialActions({
       : "";
 
   return (
-    <section className="section-block lookup-actions" aria-label="Share actions">
-      <h2>Shareable URL</h2>
+    <section className="lookup-section lookup-actions" aria-label="Share actions">
+      <h3 className="lookup-section-title">Shareable URL</h3>
       {shareUrl ? (
         <p className="credential-share-url">
           <a href={path || shareUrl}>{shareUrl}</a>
         </p>
       ) : null}
-      <div className="certificate-actions">
+      <div className="certificate-actions lookup-action-row">
         <Button type="button" variant="secondary" onClick={onCopy} disabled={!shareUrl}>
-          {copied ? "Copied" : "Copy lookup link"}
+          {copied ? "Copied" : "Share"}
         </Button>
         <Button type="button" variant="ghost" onClick={onPrint}>
-          Download / print certificate
+          Download
         </Button>
         {safeExternalHref(linkedIn) ? (
           <a className="btn btn-ghost" href={safeExternalHref(linkedIn)} target="_blank" rel="noopener noreferrer">
@@ -566,3 +585,5 @@ export function CredentialActions({
     </section>
   );
 }
+
+

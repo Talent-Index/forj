@@ -16,13 +16,13 @@ import {
 import {
   AchievementSummaryStrip,
   CredentialActions,
-  CredentialInformation,
+  CredentialResultHeader,
   CredentialSearch,
   CredentialShowcase,
-  LearnerPublicCard,
   LookupHero,
   QRCodeCard,
   SkillEvidencePanel,
+  TrustExplainer,
   VerificationDetailsPanel,
   VerificationStatusBanner,
 } from "../lookup/LookupPortalParts";
@@ -233,122 +233,113 @@ function CredentialLookupPage({ pathname = "", search = "", onHistoryChange }) {
 
   return (
     <div className="page credential-lookup lookup-portal">
-      <LookupHero />
+      <div className="lookup-column">
+        <LookupHero />
 
-      <CredentialSearch
-        tokenInput={tokenInput}
-        walletInput={walletInput}
-        onTokenChange={setTokenInput}
-        onWalletChange={setWalletInput}
-        onSubmit={submit}
-        onClear={clearSearch}
-        loading={loading}
-        disabled={!CONTRACT_ADDRESS}
-        onScanUrl={handleScanUrl}
-      />
-
-      {!CONTRACT_ADDRESS && (
-        <EmptyState
-          title="Lookup unavailable"
-          body="Credential lookup is not available until the Fuji contract is configured."
+        <CredentialSearch
+          tokenInput={tokenInput}
+          walletInput={walletInput}
+          onTokenChange={setTokenInput}
+          onWalletChange={setWalletInput}
+          onSubmit={submit}
+          onClear={clearSearch}
+          loading={loading}
+          disabled={!CONTRACT_ADDRESS}
+          onScanUrl={handleScanUrl}
         />
-      )}
 
-      {CONTRACT_ADDRESS && !hasQuery && !loading ? (
-        <p className="meta-line lookup-idle-note">
-          Enter a token ID or wallet, then look up the on-chain record.
-        </p>
-      ) : null}
+        {!CONTRACT_ADDRESS && (
+          <EmptyState
+            title="Lookup unavailable"
+            body="Credential lookup is not available until the Fuji contract is configured."
+          />
+        )}
 
-      {resultState === "no-contract" ? (
-        <EmptyState
-          title="Lookup unavailable"
-          body="Credential lookup is not available until the Fuji contract is configured."
-        />
-      ) : null}
+        {CONTRACT_ADDRESS && !hasQuery && !loading ? (
+          <p className="meta-line lookup-idle-note">
+            Enter a credential ID to verify a Forjora credential.
+          </p>
+        ) : null}
 
-      {resultState === "owner-mismatch" ? (
-        <VerificationStatusBanner
-          state="owner-mismatch"
-          verification={verification}
-          queryLabel={queryLabel}
-          onRetry={clearSearch}
-        />
-      ) : null}
+        {resultState === "no-contract" ? (
+          <EmptyState
+            title="Lookup unavailable"
+            body="Credential lookup is not available until the Fuji contract is configured."
+          />
+        ) : null}
 
-      {resultState === "loading" ||
-      resultState === "invalid" ||
-      resultState === "not-found" ||
-      resultState === "found" ? (
-        <VerificationStatusBanner
-          state={resultState}
-          verification={
-            resultState === "not-found"
-              ? missingVerification
-              : verification
-          }
-          queryLabel={queryLabel}
-          onRetry={clearSearch}
-        />
-      ) : null}
+        {resultState === "owner-mismatch" ? (
+          <VerificationStatusBanner
+            state="owner-mismatch"
+            verification={verification}
+            queryLabel={queryLabel}
+            onRetry={clearSearch}
+          />
+        ) : null}
 
-      {resultState === "owner-mismatch" && verification ? (
-        <VerificationStatusBanner
-          state="found"
-          verification={verification}
-          queryLabel={queryLabel}
-        />
-      ) : null}
+        {resultState === "loading" ||
+        resultState === "invalid" ||
+        resultState === "not-found" ? (
+          <VerificationStatusBanner
+            state={resultState}
+            verification={
+              resultState === "not-found"
+                ? missingVerification
+                : verification
+            }
+            queryLabel={queryLabel}
+            onRetry={clearSearch}
+          />
+        ) : null}
 
-      {view && !loading && (resultState === "found" || resultState === "owner-mismatch") ? (
-        <div className="lookup-result lookup-result-enter">
-          <div className="lookup-result-layout">
-            <div className="lookup-result-main">
-              <CredentialShowcase view={view} artwork={forgeCertificate} />
-              <CredentialInformation view={view} />
-              <LearnerPublicCard view={view} />
-            </div>
-            <aside className="lookup-result-side">
-              <SkillEvidencePanel view={view} />
-              <AchievementSummaryStrip view={view} />
-              <QRCodeCard shareUrl={shareUrl} />
-              <CredentialActions
-                shareUrl={shareUrl}
-                path={publicCredentialPath({
-                  tokenId: view.tokenId,
-                  wallet: query.wallet,
-                })}
-                copied={copied}
-                onCopy={copyShareUrl}
-                onPrint={handlePrint}
-              />
-            </aside>
+        {view && !loading && (resultState === "found" || resultState === "owner-mismatch") ? (
+          <div className="lookup-result lookup-result-enter">
+            <CredentialResultHeader view={view} />
+            <TrustExplainer view={view} />
+            <CredentialShowcase view={view} artwork={forgeCertificate} />
+            <CredentialActions
+              shareUrl={shareUrl}
+              path={publicCredentialPath({
+                tokenId: view.tokenId,
+                wallet: query.wallet,
+              })}
+              copied={copied}
+              onCopy={copyShareUrl}
+              onPrint={handlePrint}
+            />
+            <hr className="lookup-divider" />
+            <SkillEvidencePanel view={view} />
+            <hr className="lookup-divider" />
+            <AchievementSummaryStrip view={view} />
+            <hr className="lookup-divider" />
+            <VerificationDetailsPanel view={view} />
+            <hr className="lookup-divider" />
+            <QRCodeCard shareUrl={shareUrl} />
+            {view.metadata &&
+            (view.metadata.description || view.metadata.attributes.length > 0 || view.metadata.image) ? (
+              <section className="lookup-section credential-metadata">
+                <h3 className="lookup-section-title">On-chain metadata</h3>
+                {view.metadata.description ? <p>{view.metadata.description}</p> : null}
+                {view.metadata.image ? (
+                  <p className="meta-line">
+                    Image: <span className="credential-mono">{view.metadata.image}</span>
+                  </p>
+                ) : null}
+                {view.metadata.attributes.length > 0 ? (
+                  <ul className="credential-traits">
+                    {view.metadata.attributes.map((trait) => (
+                      <li key={`${trait.trait_type}-${trait.value}`}>
+                        <span>{trait.trait_type}</span>
+                        <strong>{String(trait.value)}</strong>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </section>
+            ) : null}
           </div>
-          <VerificationDetailsPanel view={view} />
-          {view.metadata &&
-          (view.metadata.description || view.metadata.attributes.length > 0 || view.metadata.image) ? (
-            <section className="section-block credential-metadata">
-              <h2>On-chain metadata</h2>
-              {view.metadata.description ? <p>{view.metadata.description}</p> : null}
-              {view.metadata.image ? (
-                <p className="meta-line">
-                  Image: <span className="credential-mono">{view.metadata.image}</span>
-                </p>
-              ) : null}
-              {view.metadata.attributes.length > 0 ? (
-                <ul className="credential-traits">
-                  {view.metadata.attributes.map((trait) => (
-                    <li key={`${trait.trait_type}-${trait.value}`}>
-                      <span>{trait.trait_type}</span>
-                      <strong>{String(trait.value)}</strong>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </section>
-          ) : null}
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </div>
   );
 }

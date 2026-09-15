@@ -1,6 +1,6 @@
 import { parseAbiItem } from "viem";
 import { mapOnChainCredential } from "./credential.js";
-import { describeMetadataUri, isCredentialId } from "./credentialModel.js";
+import { CREDENTIAL_STANDARD, describeMetadataUri, isCredentialId } from "./credentialModel.js";
 import { decodeTokenUri, retrievalUrl, TOKEN_NAME_PREFIX } from "./credentialMetadata.js";
 import { EXPLORER_LINK_LABEL, resolveCredentialStatus } from "./credentialStatus.js";
 import { highestDifficulty } from "./certificateView.js";
@@ -313,13 +313,19 @@ export function buildCredentialVerificationView(credential, extras = {}) {
         hard: credential.difficulty.hard,
       })
     : "";
-  const difficultyDetail = credential?.difficulty
-    ? ["easy", "medium", "hard"]
-        .map((id) => {
-          const row = credential.difficulty[id];
-          return `${row?.name || id} ${row?.correct ?? 0}/${row?.total ?? 0}`;
-        })
-        .join(" · ")
+  const difficultyRows = credential?.difficulty
+    ? ["easy", "medium", "hard"].map((id) => {
+        const row = credential.difficulty[id];
+        return {
+          id,
+          name: row?.name || id,
+          correct: row?.correct ?? 0,
+          total: row?.total ?? 0,
+        };
+      })
+    : [];
+  const difficultyDetail = difficultyRows.length
+    ? difficultyRows.map((row) => `${row.name} ${row.correct}/${row.total}`).join(" · ")
     : "";
   const metadataUri = credential?.metadataUri || "";
   const metadataUrl = retrievalUrl(metadataUri) || "";
@@ -331,16 +337,34 @@ export function buildCredentialVerificationView(credential, extras = {}) {
     image: decoded?.image || "",
     attributes: Array.isArray(decoded?.attributes) ? decoded.attributes : [],
   };
+  const maxPoints = credential?.score?.maxPoints ?? "";
+  const totalPoints = credential?.score?.totalPoints ?? "";
+  const puzzlePieces = credential?.completion?.puzzlePieces;
+  const puzzleTotal = credential?.completion?.puzzleTotal;
+  const mintedAtIso = credential?.completion?.mintedAtIso || "";
+  const mintedLabel = mintedAtIso
+    ? new Date(mintedAtIso).toLocaleDateString(undefined, {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
 
   return {
     title,
     holderWallet,
     holderWalletShort: shortAddress(holderWallet),
     holderExplorerUrl: walletExplorerUrl(holderWallet),
-    score: credential?.score?.totalPoints ?? "",
-    scoreLabel: credential?.score ? `${credential.score.totalPoints} pts` : "",
+    score: totalPoints,
+    scoreLabel: totalPoints !== "" ? `${totalPoints} pts` : "",
+    maxPoints,
     difficulty,
     difficultyDetail,
+    difficultyRows,
+    puzzlePieces: Number.isInteger(puzzlePieces) ? puzzlePieces : null,
+    puzzleTotal: Number.isInteger(puzzleTotal) ? puzzleTotal : null,
+    mintedAtIso,
+    mintedLabel,
     status: state.label,
     statusId: state.id,
     statusBody: state.body,
@@ -349,6 +373,7 @@ export function buildCredentialVerificationView(credential, extras = {}) {
     network: networkLabel(credential?.chainId || FUJI_CHAIN_ID),
     chainId: credential?.chainId || FUJI_CHAIN_ID,
     contractAddress: credential?.contractAddress || "",
+    contractName: CREDENTIAL_STANDARD,
     tokenId,
     transactionHash,
     transactionExplorerUrl: isTxHash(transactionHash) ? `${FUJI_EXPLORER_TX}${transactionHash}` : "",
