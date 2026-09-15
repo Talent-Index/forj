@@ -465,7 +465,7 @@ export function VerificationDetailsPanel({ view }) {
         </div>
         <div>
           <dt>Contract</dt>
-          <dd>{view.contractName || "SkillForgeCredential"}</dd>
+          <dd>Forjora credential</dd>
         </div>
         {view.contractAddress ? (
           <div>
