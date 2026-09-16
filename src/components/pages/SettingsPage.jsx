@@ -404,7 +404,7 @@ function SettingsPage({
       <Card className="settings-block settings-danger">
         <h2>Data</h2>
         <p>
-          Reset clears this browser’s quiz and puzzle cache. Account progress stays unless you delete the account.
+          Reset clears this browser’s quiz and puzzle cache. Your account progress remains unless you delete your account.
         </p>
         <div className="settings-actions">
           <Button variant="danger" onClick={handleReset} disabled={!account}>

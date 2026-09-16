@@ -2075,6 +2075,10 @@ img {
   background: var(--danger-bg);
 }
 
+.settings-danger > h2 {
+  text-align: center;
+}
+
 .first-run-steps {
   list-style: none;
   display: flex;
