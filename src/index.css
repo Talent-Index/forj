@@ -5621,11 +5621,11 @@ img {
 }
 
 [data-theme="light"] .page-doodles .doodle-field.is-dense .doodle-field-item {
-  opacity: 0.22;
+  opacity: 0.3;
 }
 
 [data-theme="light"] .page-doodles .doodle-field.is-dense .doodle-field-item.is-accent {
-  opacity: 0.38;
+  opacity: 0.48;
 }
 
 /* --- Doodle forge system --- */
@@ -5699,19 +5699,39 @@ img {
 }
 
 .page-doodles .doodle-field.is-dense .doodle-field-item {
-  opacity: 0.18;
+  opacity: 0.28;
 }
 
 .page-doodles .doodle-field.is-dense .doodle-field-item.is-accent {
-  opacity: 0.34;
+  opacity: 0.46;
+}
+
+.shell-auth .page-doodles .doodle-field.is-dense .doodle-field-item {
+  opacity: 0.3;
+}
+
+.shell-auth .page-doodles .doodle-field.is-dense .doodle-field-item.is-accent {
+  opacity: 0.5;
 }
 
 .page-doodles.is-animated .doodle-field.is-dense .doodle-field-item:has(.animated-doodle) {
-  opacity: 0.55;
+  opacity: 0.58;
 }
 
 .page-doodles.is-animated .doodle-field.is-dense .doodle-field-item.is-accent:has(.animated-doodle) {
   opacity: 0.78;
+}
+
+/* Opaque surfaces keep copy readable over the atmospheric field. */
+.shell-main .card,
+.shell-main .section-block,
+.shell-main .page-header,
+.shell-main .certificate,
+.shell-main .quiz-intro,
+.shell-main .quiz-active,
+.shell-main .modal,
+.shell-main .settings-block {
+  isolation: isolate;
 }
 
 .doodle-field-item {
@@ -6436,6 +6456,14 @@ img {
 @media (max-width: 860px) {
   .doodle-field-item.is-decorative {
     display: none;
+  }
+
+  .page-doodles .doodle-field.is-dense .doodle-field-item:not(.is-decorative) {
+    opacity: 0.32;
+  }
+
+  .page-doodles .doodle-field.is-dense .doodle-field-item.is-accent:not(.is-decorative) {
+    opacity: 0.5;
   }
 
   .forge-journey {

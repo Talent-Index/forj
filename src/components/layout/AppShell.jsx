@@ -3,6 +3,10 @@ import Footer from "./Footer";
 import MobileNav from "./MobileNav";
 import { PageDoodles } from "../doodles";
 
+/** Dense atmospheric field for every signed-in (and guest non-landing) page. */
+const PAGE_DOODLE_COUNT = 128;
+const PAGE_DOODLE_ANIMATE = 14;
+
 function AppShell({
   page,
   onNavigate,
@@ -39,9 +43,9 @@ function AppShell({
         {!isLanding ? (
           <PageDoodles
             page={page}
-            count={isAuthenticated ? 72 : 100}
-            animate={isAuthenticated}
-            animateCount={isAuthenticated ? 8 : 0}
+            count={PAGE_DOODLE_COUNT}
+            animate
+            animateCount={PAGE_DOODLE_ANIMATE}
           />
         ) : null}
         {children}

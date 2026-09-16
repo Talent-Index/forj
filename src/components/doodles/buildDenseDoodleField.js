@@ -26,35 +26,39 @@ const THEME_TYPES = Object.freeze({
   learn: [
     "book", "pencil", "notes", "code", "lightbulb", "quiz", "question", "cap",
     "arrow", "arrowDown", "pointer", "underline", "spark", "blocks", "blueprint",
-    "gear", "tools", "hammer", "puzzle", "star", "circle", "divider",
+    "gear", "tools", "hammer", "puzzle", "star", "circle", "divider", "mountain",
+    "badge", "certificate", "fire",
   ],
   progress: [
     "hammer", "anvil", "fire", "spark", "trophy", "medal", "star", "badge",
     "gear", "arrow", "blocks", "diamond", "check", "puzzle", "tools", "mountain",
+    "book", "cap",
   ],
   credentials: [
     "certificate", "seal", "stamp", "signature", "idcard", "shield", "blockchain",
     "nodes", "chain", "wallet", "contract", "check", "diamond", "badge", "spark",
+    "puzzle", "hammer",
   ],
   leaderboard: [
     "trophy", "medal", "star", "badge", "arrow", "check", "spark", "mountain",
-    "fire", "diamond", "cap", "shield",
+    "fire", "diamond", "cap", "shield", "nodes",
   ],
   about: DOODLE_TYPES,
   lookup: [
     "certificate", "seal", "blockchain", "nodes", "chain", "check", "shield",
-    "idcard", "question", "spark", "diamond",
+    "idcard", "question", "spark", "diamond", "stamp",
   ],
   settings: [
     "gear", "tools", "wallet", "idcard", "pencil", "notes", "shield", "spark", "circle",
+    "hammer", "badge",
   ],
   puzzle: [
     "puzzle", "hammer", "anvil", "fire", "diamond", "blocks", "gear", "spark",
-    "check", "certificate", "tools", "arrow",
+    "check", "certificate", "tools", "arrow", "badge",
   ],
   quiz: [
     "quiz", "question", "lightbulb", "pencil", "notes", "check", "spark", "star",
-    "book", "code", "circle", "arrow",
+    "book", "code", "circle", "arrow", "cap",
   ],
   default: DOODLE_TYPES,
 });
@@ -63,7 +67,7 @@ const ANIMATIONS = Object.freeze([
   "draw", "spark", "stamp", "tap", "assemble", "connect", "write", "wiggle", "slide", "open", "underline",
 ]);
 
-const SIZES = Object.freeze([12, 14, 16, 18, 20, 22, 24, 26, 28]);
+const SIZES = Object.freeze([14, 16, 18, 20, 22, 24, 26, 28, 30, 32]);
 
 /**
  * Build a deterministic dense doodle scatter (100+ by default).
@@ -104,16 +108,18 @@ export function buildDenseDoodleField({
     const left = Math.min(94, Math.max(1, (col + 0.5) * (100 / cols) + jitterX));
     const top = Math.min(94, Math.max(1, (row + 0.5) * (100 / rows) + jitterY));
 
+    // Soft keep-out over primary content center so copy stays readable.
     const dx = left - 50;
-    const dy = top - 42;
-    if (dx * dx + dy * dy < 220 && rnd() > 0.35) continue;
+    const dy = top - 40;
+    if (dx * dx + dy * dy < 180 && rnd() > 0.28) continue;
 
     const type = types[Math.floor(rnd() * types.length)];
     const size = SIZES[Math.floor(rnd() * SIZES.length)];
     const rotate = Math.round((rnd() - 0.5) * 36);
-    const accent = rnd() > 0.88;
+    const accent = rnd() > 0.86;
     const animate = filled < animateCount;
-    const mobileKeep = filled % 4 === 0;
+    // Keep ~half of glyphs on narrow viewports (CSS hides .is-decorative).
+    const mobileKeep = filled % 2 === 0;
 
     items.push({
       type,
@@ -127,7 +133,7 @@ export function buildDenseDoodleField({
       animation: ANIMATIONS[Math.floor(rnd() * ANIMATIONS.length)],
       animate,
       delay: animate ? Math.round(rnd() * 900) : 0,
-      strokeWidth: size <= 14 ? 1.4 : 1.6,
+      strokeWidth: size <= 16 ? 1.4 : 1.65,
     });
     filled += 1;
   }
@@ -141,9 +147,13 @@ export const PAGE_DOODLE_THEME = Object.freeze({
   progress: "progress",
   credentials: "credentials",
   leaderboard: "leaderboard",
+  board: "leaderboard",
   about: "about",
   lookup: "lookup",
   settings: "settings",
+  puzzle: "puzzle",
+  quiz: "quiz",
+  "public-profile": "leaderboard",
   "not-found": "default",
   privacy: "default",
   terms: "default",

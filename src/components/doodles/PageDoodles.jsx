@@ -10,7 +10,7 @@ function useViewportDoodleCount(baseCount) {
       return undefined;
     }
     const narrow = window.matchMedia("(max-width: 860px)");
-    const sync = () => setCount(narrow.matches ? Math.min(36, baseCount) : baseCount);
+    const sync = () => setCount(narrow.matches ? Math.min(72, baseCount) : baseCount);
     sync();
     narrow.addEventListener("change", sync);
     return () => narrow.removeEventListener("change", sync);
@@ -19,16 +19,16 @@ function useViewportDoodleCount(baseCount) {
 }
 
 /**
- * Page-level atmospheric doodle field (100+ on desktop).
+ * Page-level atmospheric doodle field (100+ on desktop, ~half kept on mobile).
  * Mounts after first paint so route content paints first.
- * Shell fields stay static (no per-glyph IntersectionObservers).
+ * Soft center keep-out + opaque cards keep copy readable after sign-in.
  */
 export function PageDoodles({
   page = "default",
-  count = 112,
+  count = 128,
   className = "",
-  animate = false,
-  animateCount = 8,
+  animate = true,
+  animateCount = 14,
 } = {}) {
   const [ready, setReady] = useState(false);
   const denseCount = useViewportDoodleCount(count);
