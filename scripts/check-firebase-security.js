@@ -75,7 +75,9 @@ assert.equal(byKey["Cross-Origin-Opener-Policy"], "same-origin-allow-popups");
 assert.equal(byKey["X-Permitted-Cross-Domain-Policies"], "none");
 assert.match(byKey["Strict-Transport-Security"] || "", /max-age=/);
 assert.match(byKey["Referrer-Policy"] || "", /strict-origin/);
-assert.match(byKey["Permissions-Policy"] || "", /camera=\(\)/);
+assert.match(byKey["Permissions-Policy"] || "", /camera=\(self\)/);
+assert.match(byKey["Permissions-Policy"] || "", /microphone=\(\)/);
+assert.equal(Array.isArray(vercel.rewrites) && vercel.rewrites.length > 0, true);
 
 assert.match(secretsAudit, /None found/);
 assert.match(secretsAudit, /\.env/);

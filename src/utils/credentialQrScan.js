@@ -56,8 +56,15 @@ export async function startCredentialQrScan({
       },
       audio: false,
     });
-  } catch {
-    onError?.("Camera access was blocked. Paste a credential URL or enter a credential ID instead.");
+  } catch (err) {
+    const blockedByPolicy =
+      err?.name === "NotAllowedError" ||
+      /Permissions policy|Permission denied|NotAllowed/i.test(String(err?.message || err || ""));
+    onError?.(
+      blockedByPolicy
+        ? "Camera is blocked in this browser or by site policy. Paste a credential URL or enter a credential ID instead."
+        : "Camera access failed. Paste a credential URL or enter a credential ID instead."
+    );
     return () => {};
   }
 
