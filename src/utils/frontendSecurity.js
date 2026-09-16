@@ -43,10 +43,55 @@ const FUJI_RPC_HOSTS = new Set([
   "avalanche-fuji-c-chain.publicnode.com",
 ]);
 const TX_HASH_RE = /^0x[a-fA-F0-9]{64}$/;
-const JPEG_AVATAR_RE = /^data:image\/jpeg;base64,[A-Za-z0-9+/]+=*$/;
-const PNG_AVATAR_RE = /^data:image\/png;base64,[A-Za-z0-9+/]+=*$/;
-const WEBP_AVATAR_RE = /^data:image\/webp;base64,[A-Za-z0-9+/]+=*$/;
+const JPEG_AVATAR_PREFIX = "data:image/jpeg;base64,";
+const PNG_AVATAR_PREFIX = "data:image/png;base64,";
+const WEBP_AVATAR_PREFIX = "data:image/webp;base64,";
 
+function isBase64Payload(value) {
+  if (!value || value.length % 4 !== 0) return false;
+  // Avoid one giant regex on 300KB+ strings (can fail or hang in some engines).
+  for (let i = 0; i < value.length; i += 1) {
+    const code = value.charCodeAt(i);
+    const ok =
+      (code >= 65 && code <= 90) // A-Z
+      || (code >= 97 && code <= 122) // a-z
+      || (code >= 48 && code <= 57) // 0-9
+      || code === 43 // +
+      || code === 47 // /
+      || code === 61; // =
+    if (!ok) return false;
+  }
+  return true;
+}
+
+function isDataAvatar(url, prefix) {
+  if (!url.startsWith(prefix)) return false;
+  return isBase64Payload(url.slice(prefix.length));
+}
+
+export function safeAvatarSrc(url) {
+  if (typeof url !== "string" || !url || url.length > 500_000) return "";
+  const compact = url.includes("\n") || url.includes("\r") || url.includes(" ")
+    ? url.replace(/\s+/g, "")
+    : url;
+  if (
+    isDataAvatar(compact, JPEG_AVATAR_PREFIX)
+    || isDataAvatar(compact, PNG_AVATAR_PREFIX)
+    || isDataAvatar(compact, WEBP_AVATAR_PREFIX)
+  ) {
+    return compact;
+  }
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:") return "";
+    if (parsed.username || parsed.password) return "";
+    if (!parsed.hostname.includes(".")) return "";
+    if (PRIVATE_HOST.test(parsed.hostname)) return "";
+    return parsed.toString();
+  } catch {
+    return "";
+  }
+}
 export function isSecretEnvName(name) {
   return SECRET_NAME.test(String(name || ""));
 }
@@ -145,24 +190,6 @@ export function isSameOriginAssetPath(value) {
     && !value.includes("\\")
     && !value.includes(":")
     && value.length < 512;
-}
-
-export function safeAvatarSrc(url) {
-  if (typeof url !== "string" || !url || url.length > 500_000) return "";
-  const compact = url.replace(/\s+/g, "");
-  if (JPEG_AVATAR_RE.test(compact) || PNG_AVATAR_RE.test(compact) || WEBP_AVATAR_RE.test(compact)) {
-    return url;
-  }
-  try {
-    const parsed = new URL(url);
-    if (parsed.protocol !== "https:") return "";
-    if (parsed.username || parsed.password) return "";
-    if (!parsed.hostname.includes(".")) return "";
-    if (PRIVATE_HOST.test(parsed.hostname)) return "";
-    return parsed.toString();
-  } catch {
-    return "";
-  }
 }
 
 export function safeMediaSrc(url) {

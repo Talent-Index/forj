@@ -309,7 +309,7 @@ export function useAuth() {
   }, [refreshUser]);
 
   const persistProfilePatch = useCallback(async (patch) => {
-    if (!auth.currentUser) return;
+    if (!auth.currentUser) return { ok: false, error: "Sign in to continue." };
     try {
       if (patch.name) {
         await withTimeout(
@@ -318,8 +318,9 @@ export function useAuth() {
         );
       }
       await withTimeout(upsertLearnerProfile(auth.currentUser, patch), FIRESTORE_TIMEOUT_MS);
-    } catch {
-      // Local account already advanced; cloud write can catch up later.
+      return { ok: true };
+    } catch (error) {
+      return { ok: false, error: mapAuthError(error) || "Could not save profile changes." };
     }
   }, []);
 
@@ -346,19 +347,24 @@ export function useAuth() {
       if (!recipient.ok) return { ok: false, error: recipient.error };
       nextAccount = { ...nextAccount, name: recipient.name };
     }
+    const previous = account;
     setAccount(nextAccount);
-    void persistProfilePatch(nextAccount.name ? { ...patch, name: nextAccount.name } : patch);
+    const saved = await persistProfilePatch(nextAccount.name ? { ...patch, name: nextAccount.name } : patch);
+    if (!saved.ok) {
+      if (previous) setAccount(previous);
+      return saved;
+    }
     return { ok: true, account: nextAccount };
   }, [account, persistProfilePatch]);
 
-  const updateAvatar = useCallback((avatarUrl) => {
+  const updateAvatar = useCallback(async (avatarUrl) => {
     const next = avatarUrl || "";
     if (next && next.length > MAX_AVATAR_BYTES) {
-      return Promise.resolve({ ok: false, error: "That image is too large. Try a smaller photo." });
+      return { ok: false, error: "That image is too large. Try a smaller photo." };
     }
     const safe = next ? safeAvatarSrc(next) : "";
     if (next && !safe) {
-      return Promise.resolve({ ok: false, error: "Use a JPEG, PNG, or WebP photo." });
+      return { ok: false, error: "Use a JPEG, PNG, or WebP photo." };
     }
     return updateLearnerProfile({ avatarUrl: safe });
   }, [updateLearnerProfile]);

@@ -242,6 +242,9 @@ function SettingsPage({
                 </Button>
               ) : null}
             </div>
+            <p className="note settings-copy">
+              Photos are saved at high resolution for page zoom. Re-upload once if an older photo looks soft when zoomed.
+            </p>
           </div>
           <div className="profile-identity-copy">
             <p className="profile-identity-name">{account?.name || "Learner"}</p>
