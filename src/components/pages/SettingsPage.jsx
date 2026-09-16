@@ -7,6 +7,7 @@ import { WALLET_GUIDANCE } from "../../utils/onboarding";
 import { validateRecipientName } from "../../utils/recipient";
 import { WALLET_LABELS } from "../../utils/wallet";
 import { AvatarFace } from "../auth/AvatarFace";
+import { AnimatedDoodle } from "../doodles";
 import { ThemeToggle, ZoomToggle } from "../layout/Navbar";
 import { Badge, Button, Card } from "../ui/primitives";
 
@@ -62,6 +63,7 @@ function SettingsPage({
   zoom,
   onCycleZoom,
   reducedMotion,
+  osReducedMotion = false,
   onToggleMotion,
   onReset,
   onConnectWallet,
@@ -345,14 +347,51 @@ function SettingsPage({
           </div>
           <ZoomToggle zoom={zoom} onCycleZoom={onCycleZoom} />
         </div>
-        <div className="settings-row">
-          <div>
-            <p className="settings-label">Motion</p>
-            <p className="note">{reducedMotion ? "Animations reduced" : "Full motion"}</p>
+        <div className="settings-motion">
+          <div className="settings-row">
+            <div>
+              <p className="settings-label">Motion</p>
+              <p className="note">
+                {reducedMotion ? "Reduced animation" : "Full motion"}
+              </p>
+            </div>
+            <Button variant="secondary" onClick={() => onToggleMotion(!reducedMotion)}>
+              {reducedMotion ? "Use full motion" : "Reduce animation"}
+            </Button>
           </div>
-          <Button variant="secondary" onClick={() => onToggleMotion(!reducedMotion)}>
-            {reducedMotion ? "Use full motion" : "Reduce motion"}
-          </Button>
+          <p className="note settings-copy">
+            Full motion plays doodle draw, forge, and verify effects, UI transitions, and smooth scrolling.
+            Reduced animation shows still visuals for a calmer experience.
+          </p>
+          <div
+            className={`settings-motion-preview ${reducedMotion ? "is-reduced" : "is-full"}`}
+            aria-hidden="true"
+          >
+            <span className="settings-motion-pulse" />
+            <AnimatedDoodle
+              key={reducedMotion ? "reduced" : "full"}
+              type="hammer"
+              animation="forge"
+              trigger="immediate"
+              active
+              loop={!reducedMotion}
+              size={36}
+              variant="accent"
+            />
+            <p className="meta-line">
+              {reducedMotion ? "Preview · still" : "Preview · animating"}
+            </p>
+          </div>
+          {osReducedMotion && !reducedMotion ? (
+            <p className="note settings-copy">
+              Your device prefers reduced motion. Full motion in Forjora is on for this site so you can test animations here.
+            </p>
+          ) : null}
+          {osReducedMotion && reducedMotion ? (
+            <p className="note settings-copy">
+              Matches your device preference for reduced motion.
+            </p>
+          ) : null}
         </div>
       </Card>
 

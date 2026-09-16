@@ -689,6 +689,7 @@ function App() {
           zoom={zoom.zoom}
           onCycleZoom={zoom.cycleZoom}
           reducedMotion={theme.reducedMotion}
+          osReducedMotion={theme.osReducedMotion}
           onToggleMotion={theme.setReducedMotion}
           onReset={handleFullReset}
           onConnectWallet={openModal}

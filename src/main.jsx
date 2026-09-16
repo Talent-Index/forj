@@ -4,11 +4,11 @@ import App from "./App";
 import "./index.css";
 import "./firebase";
 import { initFirebaseAppCheck } from "./utils/appCheck";
-import { applyDocumentTheme, getInitialReducedMotion, getInitialTheme } from "./utils/theme";
+import { applyDocumentTheme, getInitialMotionChoice, getInitialReducedMotion, getInitialTheme } from "./utils/theme";
 import { applyDocumentZoom, getInitialZoom } from "./utils/zoom";
 
 initFirebaseAppCheck();
-applyDocumentTheme(getInitialTheme(), getInitialReducedMotion());
+applyDocumentTheme(getInitialTheme(), getInitialReducedMotion(), getInitialMotionChoice());
 applyDocumentZoom(getInitialZoom());
 
 ReactDOM.createRoot(document.getElementById("root")).render(
