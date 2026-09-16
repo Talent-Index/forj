@@ -1,6 +1,9 @@
-const AVATAR_SIZE = 192;
+const AVATAR_SIZE = 384;
 const AVATAR_TYPE = "image/jpeg";
 const AVATAR_QUALITY = 0.86;
+const AVATAR_QUALITY_MIN = 0.72;
+/** Keep encoded data URLs under the app avatar byte budget (see MAX_AVATAR_BYTES). */
+const AVATAR_DATA_URL_BUDGET = 340_000;
 
 export function initialsFromName(name, email) {
   const source = String(name || email || "?").trim();
@@ -28,11 +31,25 @@ export async function readAvatarFile(file) {
     const context = canvas.getContext("2d");
     if (!context) return { ok: false, error: "Could not process that image." };
 
+    context.imageSmoothingEnabled = true;
+    if ("imageSmoothingQuality" in context) {
+      context.imageSmoothingQuality = "high";
+    }
+
     const source = Math.min(image.width, image.height);
     const sx = (image.width - source) / 2;
     const sy = (image.height - source) / 2;
     context.drawImage(image, sx, sy, source, source, 0, 0, AVATAR_SIZE, AVATAR_SIZE);
-    const avatarUrl = canvas.toDataURL(AVATAR_TYPE, AVATAR_QUALITY);
+
+    let quality = AVATAR_QUALITY;
+    let avatarUrl = canvas.toDataURL(AVATAR_TYPE, quality);
+    while (avatarUrl.length > AVATAR_DATA_URL_BUDGET && quality > AVATAR_QUALITY_MIN) {
+      quality = Math.max(AVATAR_QUALITY_MIN, Number((quality - 0.06).toFixed(2)));
+      avatarUrl = canvas.toDataURL(AVATAR_TYPE, quality);
+    }
+    if (avatarUrl.length > AVATAR_DATA_URL_BUDGET) {
+      return { ok: false, error: "That photo is still too large after resize. Try a simpler image." };
+    }
     return { ok: true, avatarUrl };
   } catch {
     return { ok: false, error: "Could not read that image." };
