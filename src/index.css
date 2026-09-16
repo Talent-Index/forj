@@ -1220,6 +1220,20 @@ img {
   gap: 8px;
 }
 
+.wallet-steps {
+  margin: 12px 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  font-size: var(--font-meta);
+  text-align: left;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.wallet-steps li {
+  margin: 0;
+}
+
 .empty-state {
   border: 1px solid var(--border);
   background: var(--surface-2);

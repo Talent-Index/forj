@@ -25,6 +25,36 @@ export const WALLET_LABELS = {
 
 export const STORAGE_ADDRESS = "skillforge_wallet";
 export const STORAGE_WALLET_ID = "skillforge_wallet_id";
+export const STORAGE_PENDING_WALLET = "skillforge_pending_wallet";
+
+export function readPendingWalletId(storage = globalThis.localStorage) {
+  try {
+    const value = storage?.getItem?.(STORAGE_PENDING_WALLET);
+    return isAllowedWalletId(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+export function writePendingWalletId(walletId, storage = globalThis.localStorage) {
+  try {
+    if (!isAllowedWalletId(walletId)) {
+      storage?.removeItem?.(STORAGE_PENDING_WALLET);
+      return;
+    }
+    storage?.setItem?.(STORAGE_PENDING_WALLET, walletId);
+  } catch {
+    /* private mode */
+  }
+}
+
+export function clearPendingWalletId(storage = globalThis.localStorage) {
+  try {
+    storage?.removeItem?.(STORAGE_PENDING_WALLET);
+  } catch {
+    /* private mode */
+  }
+}
 
 export function parseChainId(value) {
   if (value == null) return null;
@@ -122,7 +152,7 @@ export function walletDeepLink(walletId, href) {
     }
     if (url.username || url.password) return walletInstallUrl(walletId);
     if (walletId === WALLET_IDS.metamask) {
-      return `https://metamask.app.link/dapp/${url.host}${url.pathname}${url.search}`;
+      return `https://metamask.app.link/dapp/${url.host}${url.pathname}${url.search}${url.hash}`;
     }
     if (walletId === WALLET_IDS.core) {
       return `https://go.core.app/dapp?url=${encodeURIComponent(url.toString())}`;
@@ -144,7 +174,7 @@ export function formatWalletError(err, context = "connect") {
     return "Account not authorized. Please approve the connection request in your wallet.";
   }
   if (code === -32002) {
-    return "A wallet request is already pending. Open MetaMask or Core Wallet to continue.";
+    return "A wallet request is already pending. Open MetaMask or Core Wallet and finish or reject it, then retry.";
   }
   if (code === 4902) {
     return "Avalanche Fuji is not in your wallet yet. Approve adding the network, then try again.";

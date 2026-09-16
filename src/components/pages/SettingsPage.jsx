@@ -57,7 +57,6 @@ function SettingsPage({
   isFuji,
   walletName,
   lastWalletId,
-  walletAvailable,
   theme,
   onToggleTheme,
   zoom,
@@ -91,7 +90,7 @@ function SettingsPage({
   }, [account?.name]);
 
   const lastWalletName = lastWalletId ? WALLET_LABELS[lastWalletId] : "";
-  const canReconnect = Boolean(!address && lastWalletId && walletAvailable?.[lastWalletId]);
+  const canReconnect = Boolean(!address && lastWalletId);
   const hasPhoto = Boolean(safeAvatarSrc(account?.avatarUrl));
   const nameDirty = name.trim() !== (account?.name || "").trim();
 

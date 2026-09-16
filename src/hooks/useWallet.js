@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { createWalletClient, custom, createPublicClient } from "viem";
 import { avalancheFuji } from "viem/chains";
 import {
@@ -6,6 +6,7 @@ import {
   STORAGE_WALLET_ID,
   WALLET_IDS,
   WALLET_LABELS,
+  clearPendingWalletId,
   detectAvailableWallets,
   findProvider,
   formatWalletError,
@@ -14,10 +15,12 @@ import {
   isFujiChain,
   isMobileUserAgent,
   parseChainId,
+  readPendingWalletId,
   requestChainId,
   switchOrAddFuji,
   walletDeepLink,
   walletInstallUrl,
+  writePendingWalletId,
 } from "../utils/wallet";
 import { normalizeAddress } from "../utils/progress";
 
@@ -59,8 +62,10 @@ export function useWallet() {
   const [connecting, setConnecting] = useState(false);
   const [switching, setSwitching] = useState(false);
   const [error, setError] = useState(null);
+  const [info, setInfo] = useState(null);
   const [restoring, setRestoring] = useState(true);
   const [available, setAvailable] = useState({ metamask: false, core: false, any: false });
+  const resumeAttempted = useRef(false);
 
   const isMobile = useMemo(
     () => (typeof navigator === "undefined" ? false : isMobileUserAgent(navigator.userAgent)),
@@ -97,9 +102,9 @@ export function useWallet() {
   }, [provider, walletId]);
 
   const persistSession = useCallback((nextAddress, nextWalletId) => {
-    const address = normalizeAddress(nextAddress);
+    const next = normalizeAddress(nextAddress);
     const id = isAllowedWalletId(nextWalletId) ? nextWalletId : null;
-    if (address) localStorage.setItem(STORAGE_ADDRESS, address);
+    if (next) localStorage.setItem(STORAGE_ADDRESS, next);
     else localStorage.removeItem(STORAGE_ADDRESS);
     if (id) localStorage.setItem(STORAGE_WALLET_ID, id);
     else localStorage.removeItem(STORAGE_WALLET_ID);
@@ -111,6 +116,8 @@ export function useWallet() {
     setChainId(null);
     setWalletId(null);
     setError(null);
+    setInfo(null);
+    clearPendingWalletId();
     persistSession(null, null);
   }, [persistSession]);
 
@@ -138,19 +145,24 @@ export function useWallet() {
     }
   }, [provider, walletId]);
 
-  const connect = useCallback(async (preferredWalletId = null) => {
+  const connect = useCallback(async (preferredWalletId = null, { resume = false } = {}) => {
     setConnecting(true);
     setError(null);
+    if (!resume) setInfo(null);
     try {
-      await waitForInjectedProvider();
+      await waitForInjectedProvider(isMobile ? 3200 : 1500);
       const detected = refreshAvailability();
       const nextProvider = findProvider(preferredWalletId, window);
 
       if (!nextProvider) {
         const target = preferredWalletId || WALLET_IDS.metamask;
         if (isMobile) {
+          writePendingWalletId(target);
+          setInfo(
+            `Opening ${WALLET_LABELS[target]}. Continue inside that wallet's browser to connect and mint.`
+          );
           window.location.href = walletDeepLink(target, window.location.href);
-          throw new Error(`Opening ${WALLET_LABELS[target]}. Return here after connecting.`);
+          return { opened: true, walletId: target };
         }
         throw new Error(
           detected.any
@@ -176,6 +188,8 @@ export function useWallet() {
 
       setAddress(nextAddress);
       persistSession(nextAddress, selectedId);
+      clearPendingWalletId();
+      setInfo(null);
 
       try {
         await switchOrAddFuji(nextProvider);
@@ -183,41 +197,62 @@ export function useWallet() {
         const nextChainId = await requestChainId(nextProvider);
         setChainId(nextChainId);
         setError(formatWalletError(switchError, "switch"));
-        return;
+        return { connected: true, walletId: selectedId };
       }
 
       const nextChainId = await requestChainId(nextProvider);
       setChainId(nextChainId);
+      return { connected: true, walletId: selectedId };
     } catch (err) {
       setError(formatWalletError(err, "connect"));
+      return { error: true };
     } finally {
       setConnecting(false);
     }
   }, [isMobile, persistSession, refreshAvailability, rememberProvider]);
+
+  const resumePendingConnect = useCallback(async () => {
+    if (typeof window === "undefined") return;
+    const pending = readPendingWalletId();
+    if (!pending) return;
+    await waitForInjectedProvider(isMobile ? 3200 : 1500);
+    refreshAvailability();
+    const nextProvider = findProvider(pending, window);
+    if (!nextProvider) return;
+    if (resumeAttempted.current) return;
+    resumeAttempted.current = true;
+    await connect(pending, { resume: true });
+  }, [connect, isMobile, refreshAvailability]);
 
   useEffect(() => {
     let cancelled = false;
 
     async function restoreSession() {
       try {
-        await waitForInjectedProvider();
+        await waitForInjectedProvider(isMobile ? 3200 : 1500);
         if (cancelled) return;
         refreshAvailability();
 
         const rawAddress = localStorage.getItem(STORAGE_ADDRESS);
-        if (!rawAddress) return;
+        if (!rawAddress) {
+          await resumePendingConnect();
+          return;
+        }
         const savedAddress = normalizeAddress(rawAddress);
         const savedWalletId = isAllowedWalletId(localStorage.getItem(STORAGE_WALLET_ID))
           ? localStorage.getItem(STORAGE_WALLET_ID)
           : null;
         if (!savedAddress) {
           persistSession(null, null);
+          await resumePendingConnect();
           return;
         }
 
         const nextProvider = findProvider(savedWalletId, window) || findProvider(null, window);
         if (!nextProvider) {
-          persistSession(null, null);
+          // Keep the saved address on mobile so Reconnect / Open still has a target.
+          if (!isMobile) persistSession(null, null);
+          await resumePendingConnect();
           return;
         }
 
@@ -225,7 +260,8 @@ export function useWallet() {
         const match = accounts.find((account) => account.toLowerCase() === savedAddress.toLowerCase())
           || accounts[0];
         if (!match) {
-          persistSession(null, null);
+          if (!isMobile) persistSession(null, null);
+          await resumePendingConnect();
           return;
         }
 
@@ -239,10 +275,11 @@ export function useWallet() {
         }
         setAddress(restored);
         persistSession(restored, selectedId);
+        clearPendingWalletId();
         const nextChainId = await requestChainId(nextProvider);
         if (!cancelled) setChainId(nextChainId);
       } catch {
-        persistSession(null, null);
+        if (!isMobile) persistSession(null, null);
       } finally {
         if (!cancelled) setRestoring(false);
       }
@@ -252,7 +289,7 @@ export function useWallet() {
     return () => {
       cancelled = true;
     };
-  }, [persistSession, refreshAvailability, rememberProvider]);
+  }, [isMobile, persistSession, refreshAvailability, rememberProvider, resumePendingConnect]);
 
   useEffect(() => {
     if (!provider) return undefined;
@@ -270,6 +307,7 @@ export function useWallet() {
       setAddress(next);
       persistSession(next, walletId || identifyProvider(provider));
       setError(null);
+      setInfo(null);
     };
 
     const handleChain = (id) => {
@@ -293,12 +331,18 @@ export function useWallet() {
   }, [disconnect, persistSession, provider, walletId]);
 
   useEffect(() => {
-    if (!address || !provider) return undefined;
-
-    async function syncFromWallet() {
-      if (!provider?.request) return;
+    async function onVisible() {
+      if (document.visibilityState !== "visible") return;
+      refreshAvailability();
+      if (!address) {
+        resumeAttempted.current = false;
+        await resumePendingConnect();
+        return;
+      }
+      const nextProvider = provider || findProvider(walletId, window);
+      if (!nextProvider?.request) return;
       try {
-        const accounts = await provider.request({ method: "eth_accounts" });
+        const accounts = await nextProvider.request({ method: "eth_accounts" });
         if (!accounts || accounts.length === 0) {
           disconnect();
           return;
@@ -310,41 +354,40 @@ export function useWallet() {
             return;
           }
           setAddress(next);
-          persistSession(next, walletId || identifyProvider(provider));
+          persistSession(next, walletId || identifyProvider(nextProvider));
         }
-        const nextChainId = await requestChainId(provider);
+        const nextChainId = await requestChainId(nextProvider);
         setChainId(nextChainId);
       } catch {
         // Keep the restored session; the next user action will surface a wallet error.
       }
     }
 
-    const onVisible = () => {
-      if (document.visibilityState === "visible") syncFromWallet();
-    };
-
-    window.addEventListener("focus", syncFromWallet);
+    window.addEventListener("focus", onVisible);
     document.addEventListener("visibilitychange", onVisible);
     return () => {
-      window.removeEventListener("focus", syncFromWallet);
+      window.removeEventListener("focus", onVisible);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [address, disconnect, persistSession, provider, walletId]);
+  }, [address, disconnect, persistSession, provider, refreshAvailability, resumePendingConnect, walletId]);
+
+  const lastWalletId = walletId || (typeof localStorage === "undefined"
+    ? null
+    : (isAllowedWalletId(localStorage.getItem(STORAGE_WALLET_ID))
+      ? localStorage.getItem(STORAGE_WALLET_ID)
+      : null));
 
   return {
     address,
     chainId,
     walletId,
     walletName: walletId ? WALLET_LABELS[walletId] : null,
-    lastWalletId: walletId || (typeof localStorage === "undefined"
-      ? null
-      : (isAllowedWalletId(localStorage.getItem(STORAGE_WALLET_ID))
-        ? localStorage.getItem(STORAGE_WALLET_ID)
-        : null)),
+    lastWalletId,
     connecting,
     switching,
     restoring,
     error,
+    info,
     available,
     isMobile,
     connect,

@@ -55,7 +55,10 @@ assert.equal(CREDENTIAL_EXPLAINER.attested.includes("Forjora issuer-attested"), 
 assert.equal(/verif(?:y|ied|ication|iable)/i.test(CREDENTIAL_EXPLAINER.body), false);
 assert.equal(FUJI_EXPLAINER.chainId, 43113);
 assert.match(WALLET_GUIDANCE.body, /MetaMask|Core/);
+assert.match(WALLET_GUIDANCE.mobileBody, /Android|MetaMask|Core/);
+assert.match(WALLET_GUIDANCE.mobileNoWallet, /Android Chrome|MetaMask|Core/);
 assert.equal(WALLET_GUIDANCE.steps.length >= 4, true);
+assert.equal(WALLET_GUIDANCE.mobileSteps.length >= 4, true);
 
 for (const key of ["restoring", "noQuizzes", "noPoints", "noPieces", "noCredential", "noLookup", "noAttempts"]) {
   assert.ok(EMPTY_STATES[key].title);

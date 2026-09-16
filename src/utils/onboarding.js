@@ -117,13 +117,23 @@ export const FUJI_EXPLAINER = {
 export const WALLET_GUIDANCE = {
   title: "Connect a wallet when you need on-chain features",
   body: "A Forjora account lets you learn immediately. Connect MetaMask or Core Wallet later to save credentials on Avalanche Fuji and send a mint transaction you must approve.",
+  mobileBody:
+    "On Android and iPhone, stock browsers usually cannot inject MetaMask or Core. Open Forjora inside MetaMask or Core to connect, then mint there. Learning still works without a wallet.",
   steps: [
     "Install MetaMask or Core Wallet if you do not have one.",
     "Click Connect and approve the request in your wallet.",
     "Switch to Avalanche Fuji when asked. Rejecting the switch only blocks minting, not quizzes.",
     "If a request stays pending, open the wallet extension and finish or reject it, then retry.",
   ],
+  mobileSteps: [
+    "Install MetaMask or Core Wallet on your phone if you do not have one.",
+    "Tap Open MetaMask or Open Core. Forjora loads inside that wallet's browser.",
+    "Approve the connection, then switch to Avalanche Fuji when asked.",
+    "If Chrome still shows Not connected, use Open again, or Retry connect after returning from the wallet app.",
+  ],
   noWallet: "No injected wallet was found in this browser. Install MetaMask or Core, then refresh.",
+  mobileNoWallet:
+    "No wallet was injected in this browser. On Android Chrome, open Forjora from MetaMask or Core instead of connecting from Chrome alone.",
 };
 
 export const EMPTY_STATES = {

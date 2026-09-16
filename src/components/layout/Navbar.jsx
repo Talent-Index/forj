@@ -200,6 +200,7 @@ function Navbar({
         onClose={walletModal.closeModal}
         connecting={wallet.connecting}
         error={wallet.error}
+        info={wallet.info}
         available={wallet.available}
         isMobile={wallet.isMobile}
         lastWalletId={wallet.lastWalletId}

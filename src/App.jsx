@@ -684,7 +684,6 @@ function App() {
           isFuji={wallet.isFuji}
           walletName={wallet.walletName}
           lastWalletId={wallet.lastWalletId}
-          walletAvailable={wallet.available}
           theme={theme.theme}
           onToggleTheme={theme.toggleTheme}
           zoom={zoom.zoom}

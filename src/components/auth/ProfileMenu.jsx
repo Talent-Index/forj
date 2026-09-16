@@ -39,7 +39,7 @@ function ProfileMenu({
   }, [open]);
 
   const lastWalletName = wallet.lastWalletId ? WALLET_LABELS[wallet.lastWalletId] : "";
-  const canReconnect = Boolean(!wallet.address && wallet.lastWalletId && wallet.available?.[wallet.lastWalletId]);
+  const canReconnect = Boolean(!wallet.address && wallet.lastWalletId);
   const walletLabel = wallet.address
     ? `${wallet.walletName || "Wallet"} · ${shortAddress(wallet.address)}`
     : "Not connected";
