@@ -1898,6 +1898,22 @@ img {
   text-align: left;
 }
 
+.settings-wallet {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  text-align: left;
+}
+
+.settings-copy,
+.settings-block > p,
+.settings-wallet .note {
+  margin-inline: 0;
+  max-width: none;
+  text-align: left;
+}
+
 .settings-row {
   display: flex;
   justify-content: space-between;
@@ -1935,13 +1951,14 @@ img {
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .settings-wallet-status {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-start;
   gap: 8px;
 }
 

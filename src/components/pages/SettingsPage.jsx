@@ -308,23 +308,25 @@ function SettingsPage({
 
       <Card className="settings-block">
         <h2>Wallet</h2>
-        <div className="settings-wallet-status">
-          <p className="profile-wallet-status">
-            {address ? `${walletName || "Wallet"} · ${shortAddress(address)}` : "Not connected"}
-          </p>
-          {address ? (
-            <Badge tone={isFuji ? "success" : "warning"}>{isFuji ? "Avalanche Fuji" : "Not Fuji"}</Badge>
-          ) : null}
-        </div>
-        <p>{WALLET_GUIDANCE.body}</p>
-        <div className="settings-actions">
-          {address ? (
-            <Button variant="secondary" onClick={onDisconnectWallet}>Disconnect</Button>
-          ) : canReconnect ? (
-            <Button onClick={onReconnectWallet}>Reconnect {lastWalletName}</Button>
-          ) : (
-            <Button onClick={onConnectWallet}>Connect wallet</Button>
-          )}
+        <div className="settings-wallet">
+          <div className="settings-wallet-status">
+            <p className="profile-wallet-status">
+              {address ? `${walletName || "Wallet"} · ${shortAddress(address)}` : "Not connected"}
+            </p>
+            {address ? (
+              <Badge tone={isFuji ? "success" : "warning"}>{isFuji ? "Avalanche Fuji" : "Not Fuji"}</Badge>
+            ) : null}
+          </div>
+          <p className="note settings-copy">{WALLET_GUIDANCE.body}</p>
+          <div className="settings-actions">
+            {address ? (
+              <Button variant="secondary" onClick={onDisconnectWallet}>Disconnect</Button>
+            ) : canReconnect ? (
+              <Button onClick={onReconnectWallet}>Reconnect {lastWalletName}</Button>
+            ) : (
+              <Button onClick={onConnectWallet}>Connect wallet</Button>
+            )}
+          </div>
         </div>
       </Card>
 
