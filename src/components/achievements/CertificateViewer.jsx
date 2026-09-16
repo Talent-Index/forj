@@ -79,7 +79,7 @@ export function CertificateCard({ certificate, onOpen }) {
     >
       <div className="track-cert-head">
         <span className="track-cert-icon" aria-hidden="true">
-          <Doodle type="certificate" size={18} variant={earned ? "accent" : "muted"} />
+          <Doodle type="certificate" size={32} variant={earned ? "accent" : "muted"} />
         </span>
         <p className="kicker">{earned ? "Achieved" : "In progress"}</p>
       </div>

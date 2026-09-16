@@ -1,17 +1,9 @@
 import { PIECE_COST } from "../data/questions.js";
 import { describeAllTrackCertificates } from "../utils/trackCertificates.js";
 import { safeMediaSrc } from "../utils/frontendSecurity.js";
+import { TRACK_DOODLE } from "../utils/learningPresentation.js";
 import { Button, Card, ProgressBar } from "./ui/primitives";
 import { Doodle } from "./doodles";
-
-const TRACK_DOODLE = {
-  fundamentals: "book",
-  architecture: "blueprint",
-  l1s: "mountain",
-  "c-chain": "contract",
-  icm: "nodes",
-  developer: "badge",
-};
 
 function statusLabel(status) {
   if (status === "achieved") return "Achieved";
@@ -38,7 +30,7 @@ function TrackCertificateCard({
         <span className="track-cert-icon" aria-hidden="true">
           <Doodle
             type={doodleType}
-            size={18}
+            size={32}
             variant={cert.achieved ? "accent" : "muted"}
             animated={Boolean(cert.achieved)}
           />

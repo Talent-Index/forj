@@ -4338,9 +4338,54 @@ img {
 
 .learn-hub-doodles {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   justify-content: center;
+  align-items: center;
   margin-top: 16px;
+}
+
+.learn-hub-doodles .doodle,
+.learn-hub-doodles svg {
+  width: 40px;
+  height: 40px;
+}
+
+.learn-track-doodle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--accent-ink);
+  flex-shrink: 0;
+}
+
+.learn-track-doodle .doodle,
+.learn-track-doodle svg {
+  width: 44px;
+  height: 44px;
+}
+
+.learn-track-doodle-lg {
+  width: 4.25rem;
+  height: 4.25rem;
+  margin-inline: auto;
+  margin-bottom: 0.35rem;
+}
+
+.learn-track-doodle-lg .doodle,
+.learn-track-doodle-lg svg {
+  width: 52px;
+  height: 52px;
+}
+
+.learn-track-card.is-complete .learn-track-doodle,
+.learn-track-card:not(.is-locked) .learn-track-doodle {
+  border-color: var(--accent-ink);
+  background: var(--warning-bg);
 }
 
 .learn-continue {
@@ -4795,13 +4840,19 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--accent-ink);
   background: var(--surface-2);
   flex-shrink: 0;
+}
+
+.track-cert-icon .doodle,
+.track-cert-icon svg {
+  width: 32px;
+  height: 32px;
 }
 
 .track-cert-card.is-achieved .track-cert-icon {

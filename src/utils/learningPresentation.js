@@ -18,37 +18,53 @@ export const LEARN_CATEGORIES = Object.freeze([
   "Ecosystems",
 ]);
 
+/** Per-track doodle for hub cards, journeys, and certificates. */
+export const TRACK_DOODLE = Object.freeze({
+  fundamentals: "book",
+  architecture: "blueprint",
+  l1s: "mountain",
+  "c-chain": "contract",
+  icm: "nodes",
+  developer: "badge",
+});
+
 /** Per-track display enrichment (skills + discovery tags). */
 export const TRACK_PRESENTATION = Object.freeze({
   fundamentals: {
     category: ["Blockchain", "Ecosystems"],
     skills: ["Avalanche basics", "Primary Network", "AVAX"],
     estimatedMinutes: 45,
+    doodle: TRACK_DOODLE.fundamentals,
   },
   architecture: {
     category: ["Blockchain", "Ecosystems"],
     skills: ["Snowman consensus", "Validators", "Chain roles"],
     estimatedMinutes: 55,
+    doodle: TRACK_DOODLE.architecture,
   },
   l1s: {
     category: ["Ecosystems", "Blockchain"],
     skills: ["Avalanche L1s", "Validator sets", "Sovereignty"],
     estimatedMinutes: 40,
+    doodle: TRACK_DOODLE.l1s,
   },
   "c-chain": {
     category: ["Smart Contracts", "Web3 Development"],
     skills: ["C-Chain", "EVM", "Smart contracts"],
     estimatedMinutes: 45,
+    doodle: TRACK_DOODLE["c-chain"],
   },
   icm: {
     category: ["Web3 Development", "Blockchain"],
     skills: ["ICM", "Warp messaging", "Teleporter"],
     estimatedMinutes: 50,
+    doodle: TRACK_DOODLE.icm,
   },
   developer: {
     category: ["Web3 Development", "Smart Contracts"],
     skills: ["Tooling", "Fuji practice", "Path capstone"],
     estimatedMinutes: 70,
+    doodle: TRACK_DOODLE.developer,
   },
 });
 
@@ -97,6 +113,7 @@ export function describeTrackCard(track, progress, presentation = TRACK_PRESENTA
     description: track.description,
     difficulty: formatDifficulty(track.difficulty),
     difficultyId: track.difficulty,
+    doodle: meta.doodle || TRACK_DOODLE[track.id] || "book",
     categories: meta.category || [],
     skills: meta.skills || [],
     estimatedMinutes: meta.estimatedMinutes || 40,

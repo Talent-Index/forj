@@ -1,6 +1,6 @@
 import { Button, Card, ProgressBar } from "../ui/primitives";
-import { AnimatedDoodle, DoodleText } from "../doodles";
-import { formatDifficulty, formatDuration, TRACK_PRESENTATION } from "../../utils/learningPresentation";
+import { AnimatedDoodle, Doodle, DoodleText } from "../doodles";
+import { formatDifficulty, formatDuration, TRACK_DOODLE, TRACK_PRESENTATION } from "../../utils/learningPresentation";
 
 function statusGlyph(status, kind) {
   if (kind === "credential") return status === "completed" ? "◇" : "◇";
@@ -21,10 +21,14 @@ function TrackJourney({
 }) {
   const meta = presentation || TRACK_PRESENTATION[track.id] || {};
   const duration = formatDuration(meta.estimatedMinutes);
+  const doodleType = meta.doodle || TRACK_DOODLE[track.id] || "book";
 
   return (
     <div className="page learn-track-page">
       <header className="page-header">
+        <span className="learn-track-doodle learn-track-doodle-lg" aria-hidden="true">
+          <Doodle type={doodleType} size={52} variant={track.unlocked ? "accent" : "muted"} />
+        </span>
         <p className="kicker">{formatDifficulty(track.difficulty)}</p>
         <h1>
           <DoodleText trigger="immediate" mark="underline">

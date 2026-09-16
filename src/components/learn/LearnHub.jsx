@@ -1,5 +1,5 @@
 import { Button, Card, ProgressBar } from "../ui/primitives";
-import { AnimatedDoodle, DoodleText } from "../doodles";
+import { AnimatedDoodle, Doodle, DoodleText } from "../doodles";
 import { LEARN_CATEGORIES } from "../../utils/learningPresentation";
 
 function LearnHub({
@@ -27,9 +27,9 @@ function LearnHub({
           credentials, claimed on Fuji when you are ready.
         </p>
         <div className="learn-hub-doodles" aria-hidden="true">
-          <AnimatedDoodle type="book" animation="open" trigger="viewport" size={28} variant="accent" />
-          <AnimatedDoodle type="hammer" animation="tap" trigger="viewport" size={24} variant="muted" delay={120} />
-          <AnimatedDoodle type="certificate" animation="stamp" trigger="viewport" size={26} variant="accent" delay={240} />
+          <AnimatedDoodle type="book" animation="open" trigger="viewport" size={40} variant="accent" />
+          <AnimatedDoodle type="hammer" animation="tap" trigger="viewport" size={36} variant="muted" delay={120} />
+          <AnimatedDoodle type="certificate" animation="stamp" trigger="viewport" size={38} variant="accent" delay={240} />
         </div>
       </header>
 
@@ -93,6 +93,13 @@ function LearnHub({
               key={card.id}
               className={`track-card learn-track-card ${card.complete ? "is-complete" : ""} ${card.unlocked ? "" : "is-locked"}`}
             >
+              <span className="learn-track-doodle" aria-hidden="true">
+                <Doodle
+                  type={card.doodle || "book"}
+                  size={44}
+                  variant={card.complete || card.unlocked ? "accent" : "muted"}
+                />
+              </span>
               <p className="kicker">{card.difficulty}</p>
               <h3>{card.name}</h3>
               <p className="track-copy">{card.description}</p>
