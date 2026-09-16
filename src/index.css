@@ -3165,9 +3165,12 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  html[data-motion-choice="system"] *,
+  html[data-motion-choice="system"] *::before,
+  html[data-motion-choice="system"] *::after,
+  html:not([data-motion-choice]) *,
+  html:not([data-motion-choice]) *::before,
+  html:not([data-motion-choice]) *::after {
     animation: none !important;
     transition: none !important;
   }
@@ -6411,21 +6414,36 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .doodle-draw path,
-  .doodle-draw circle,
-  .doodle-draw line,
-  .doodle-draw polyline,
-  .doodle-draw polygon,
-  .animated-doodle,
-  .doodle-arrow,
-  .doodle-text-mark path,
-  .doodle-text-mark ellipse,
-  .blockchain-connect .bc-node,
-  .blockchain-connect .bc-link,
-  .blockchain-connect .bc-check,
-  .loading-forge-underline,
-  .xp-handwrite,
-  .puzzle-piece-snap.is-snapping {
+  html[data-motion-choice="system"] .doodle-draw path,
+  html[data-motion-choice="system"] .doodle-draw circle,
+  html[data-motion-choice="system"] .doodle-draw line,
+  html[data-motion-choice="system"] .doodle-draw polyline,
+  html[data-motion-choice="system"] .doodle-draw polygon,
+  html[data-motion-choice="system"] .animated-doodle,
+  html[data-motion-choice="system"] .doodle-arrow,
+  html[data-motion-choice="system"] .doodle-text-mark path,
+  html[data-motion-choice="system"] .doodle-text-mark ellipse,
+  html[data-motion-choice="system"] .blockchain-connect .bc-node,
+  html[data-motion-choice="system"] .blockchain-connect .bc-link,
+  html[data-motion-choice="system"] .blockchain-connect .bc-check,
+  html[data-motion-choice="system"] .loading-forge-underline,
+  html[data-motion-choice="system"] .xp-handwrite,
+  html[data-motion-choice="system"] .puzzle-piece-snap.is-snapping,
+  html:not([data-motion-choice]) .doodle-draw path,
+  html:not([data-motion-choice]) .doodle-draw circle,
+  html:not([data-motion-choice]) .doodle-draw line,
+  html:not([data-motion-choice]) .doodle-draw polyline,
+  html:not([data-motion-choice]) .doodle-draw polygon,
+  html:not([data-motion-choice]) .animated-doodle,
+  html:not([data-motion-choice]) .doodle-arrow,
+  html:not([data-motion-choice]) .doodle-text-mark path,
+  html:not([data-motion-choice]) .doodle-text-mark ellipse,
+  html:not([data-motion-choice]) .blockchain-connect .bc-node,
+  html:not([data-motion-choice]) .blockchain-connect .bc-link,
+  html:not([data-motion-choice]) .blockchain-connect .bc-check,
+  html:not([data-motion-choice]) .loading-forge-underline,
+  html:not([data-motion-choice]) .xp-handwrite,
+  html:not([data-motion-choice]) .puzzle-piece-snap.is-snapping {
     animation: none !important;
     stroke-dasharray: none !important;
     stroke-dashoffset: 0 !important;

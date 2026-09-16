@@ -15,10 +15,17 @@ export const THEME_CHROME = Object.freeze({
   dark: "#121110",
 });
 
-export function applyDocumentTheme(theme, reducedMotion) {
+export const MOTION_CHOICE = Object.freeze({
+  system: "system",
+  full: "full",
+  reduced: "reduced",
+});
+
+export function applyDocumentTheme(theme, reducedMotion, motionChoice = MOTION_CHOICE.system) {
   if (typeof document === "undefined") return;
   document.documentElement.dataset.theme = theme;
   document.documentElement.dataset.reducedMotion = reducedMotion ? "true" : "false";
+  document.documentElement.dataset.motionChoice = motionChoice;
   const chrome = theme === "dark" ? THEME_CHROME.dark : THEME_CHROME.light;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute("content", chrome);
@@ -33,14 +40,23 @@ export function getInitialTheme() {
   return "light";
 }
 
-export function getInitialReducedMotion() {
+export function systemPrefersReducedMotion() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+export function getInitialMotionChoice() {
   const stored = readStored(MOTION_KEY, "");
-  if (stored === "true") return true;
-  if (stored === "false") return false;
-  if (typeof window !== "undefined") {
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }
-  return false;
+  if (stored === "true") return MOTION_CHOICE.reduced;
+  if (stored === "false") return MOTION_CHOICE.full;
+  return MOTION_CHOICE.system;
+}
+
+export function getInitialReducedMotion() {
+  const choice = getInitialMotionChoice();
+  if (choice === MOTION_CHOICE.reduced) return true;
+  if (choice === MOTION_CHOICE.full) return false;
+  return systemPrefersReducedMotion();
 }
 
 export function persistTheme(theme) {

@@ -1,26 +1,23 @@
 import { useEffect, useState } from "react";
 
-/** Reads document + OS reduced-motion flags. */
+/** Reads Forjora motion choice, with system preference only when choice is system. */
 export function useReducedMotion() {
   const [reduced, setReduced] = useState(() => {
     if (typeof window === "undefined") return false;
-    const flag = document.documentElement.dataset.reducedMotion === "true";
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    return flag || media;
+    return readReduced();
   });
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     function sync() {
-      const flag = document.documentElement.dataset.reducedMotion === "true";
-      setReduced(flag || mq.matches);
+      setReduced(readReduced(mq.matches));
     }
     sync();
     mq.addEventListener("change", sync);
     const observer = new MutationObserver(sync);
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["data-reduced-motion"],
+      attributeFilter: ["data-reduced-motion", "data-motion-choice"],
     });
     return () => {
       mq.removeEventListener("change", sync);
@@ -29,4 +26,13 @@ export function useReducedMotion() {
   }, []);
 
   return reduced;
+}
+
+function readReduced(mediaMatches) {
+  const choice = document.documentElement.dataset.motionChoice || "system";
+  if (choice === "full") return false;
+  if (choice === "reduced") return true;
+  const flag = document.documentElement.dataset.reducedMotion === "true";
+  if (typeof mediaMatches === "boolean") return flag || mediaMatches;
+  return flag || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
