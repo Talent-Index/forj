@@ -58,9 +58,6 @@ function LearnHub({
             ) : null}
           </div>
           <div className="learn-continue-actions">
-            {path?.percent > 0 ? (
-              <ProgressBar value={path.percent} label="Path" />
-            ) : null}
             <Button
               disabled={nextItem.locked || nextItem.kind === "complete"}
               onClick={onContinue}
