@@ -20,15 +20,19 @@ function CertificateArtifact({
   explorerUrl,
   verificationUrl = "",
   compact = false,
+  quiet = false,
   pathLabel = "Avalanche Developer Path",
 }) {
   const trust = resolveCredentialStatus(verificationStatus);
   const shareHref = isSameOriginAssetPath(verificationUrl) || isCredentialShareUrl(verificationUrl)
     ? verificationUrl
     : "";
+  const hideTrustCopy = quiet || compact;
 
   return (
-    <article className={`certificate-artifact status-${trust.id} ${compact ? "is-compact" : ""}`}>
+    <article
+      className={`certificate-artifact status-${trust.id} ${compact ? "is-compact" : ""} ${quiet ? "is-quiet" : ""}`}
+    >
       <p className="certificate-brand">{PRODUCT_NAME}</p>
       <div className="certificate-divider" aria-hidden="true" />
       <h2 className="certificate-title">
@@ -53,10 +57,12 @@ function CertificateArtifact({
         Score · {scorePercent}%
         <span>Difficulty · {difficulty}</span>
       </p>
-      <p className="certificate-trust">
-        <CredentialStatusBadge status={trust} />
-      </p>
-      <p className="certificate-trust-body">{trust.body}</p>
+      {!quiet ? (
+        <p className="certificate-trust">
+          <CredentialStatusBadge status={trust} />
+        </p>
+      ) : null}
+      {!hideTrustCopy ? <p className="certificate-trust-body">{trust.body}</p> : null}
       {!compact && (
         <dl className="certificate-meta">
           <div><dt>Credential ID</dt><dd>{credentialId}</dd></div>
@@ -68,16 +74,16 @@ function CertificateArtifact({
           {metadataUri ? <div><dt>Metadata</dt><dd>{describeMetadataUri(metadataUri)}</dd></div> : null}
         </dl>
       )}
-      {shareHref && (
+      {!quiet && shareHref ? (
         <p className="certificate-verify-url">
           <a href={shareHref}>{shareHref}</a>
         </p>
-      )}
-      {safeExternalHref(explorerUrl) && (
+      ) : null}
+      {!quiet && safeExternalHref(explorerUrl) ? (
         <p className="certificate-explorer">
           <a href={safeExternalHref(explorerUrl)} target="_blank" rel="noopener noreferrer">{EXPLORER_LINK_LABEL}</a>
         </p>
-      )}
+      ) : null}
     </article>
   );
 }

@@ -12,7 +12,7 @@ import EmptyState from "../EmptyState";
 import ExistingCertificate from "../ExistingCertificate";
 import CertificateArtifact from "../CertificateArtifact";
 import CertificateViewer from "../achievements/CertificateViewer";
-import { CredentialStatus, PuzzleProgress, PuzzleMilestoneList } from "../achievements";
+import { PuzzleProgress, PuzzleMilestoneList } from "../achievements";
 import CredentialStatusBadge from "../CredentialStatusBadge";
 import JigsawBoard from "../JigsawBoard";
 import { Button } from "../ui/primitives";
@@ -240,21 +240,6 @@ function CredentialVault({
         onLookup={onLookup}
         onConnectWallet={onConnectWallet}
       />
-
-      {onChainCredential && verificationView ? (
-        <section className="section-block">
-          <CredentialStatus
-            verificationStatus={onChainStatus.id}
-            credentialId={
-              onChainCredential.credentialId
-                ? `#${onChainCredential.credentialId}`
-                : certId
-            }
-            issuedLabel=""
-            onVerify={onLookup}
-          />
-        </section>
-      ) : null}
 
       {vault.featured ? (
         <FeaturedCredential

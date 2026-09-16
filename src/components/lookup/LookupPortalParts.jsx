@@ -377,6 +377,7 @@ export function CredentialShowcase({ view, artwork }) {
           explorerUrl={view.explorerUrl}
           verificationUrl={publicCredentialPath({ tokenId: view.tokenId, wallet: view.holderWallet })}
           compact
+          quiet
         />
       </div>
     </section>

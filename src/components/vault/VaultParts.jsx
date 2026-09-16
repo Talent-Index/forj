@@ -4,38 +4,33 @@ import { TOTAL_PIECES } from "../../data/questions";
 import { TIER_ROMAN } from "../../utils/achievementCatalog";
 
 export function VaultHero({ stats }) {
+  const metrics = [
+    { id: "credentials", label: "Credentials", value: stats.credentialsEarned },
+    { id: "attested", label: "Issuer-attested", value: stats.attestedCount },
+    { id: "skills", label: "Skills", value: stats.skillsCount },
+    { id: "level", label: "Highest level", value: stats.highestLevel },
+    {
+      id: "puzzle",
+      label: "Puzzle",
+      value: `${stats.puzzlePieces}/${stats.puzzleTotal || TOTAL_PIECES}`,
+    },
+  ];
+
   return (
     <header className="page-header vault-hero">
       <p className="kicker">My credentials</p>
       <h1>Credential vault</h1>
       <p className="lede">
-        Proof of skills, path certificates, and optional Fuji on-chain records.
-        Learning certificates are off-chain. Learner mints are Forjora claimed, not issuer-attested.
+        Path certificates and optional Fuji on-chain records. Learner mints are Forjora claimed, not issuer-attested.
       </p>
-      <div className="stat-row vault-stat-row" role="list">
-        <div className="card stat-compact" role="listitem">
-          <p className="kicker">Credentials</p>
-          <p className="stat-value">{stats.credentialsEarned}</p>
-        </div>
-        <div className="card stat-compact" role="listitem">
-          <p className="kicker">Issuer-attested</p>
-          <p className="stat-value">{stats.attestedCount}</p>
-        </div>
-        <div className="card stat-compact" role="listitem">
-          <p className="kicker">Skills</p>
-          <p className="stat-value">{stats.skillsCount}</p>
-        </div>
-        <div className="card stat-compact" role="listitem">
-          <p className="kicker">Highest level</p>
-          <p className="stat-value vault-stat-level">{stats.highestLevel}</p>
-        </div>
-        <div className="card stat-compact" role="listitem">
-          <p className="kicker">Puzzle</p>
-          <p className="stat-value">
-            {stats.puzzlePieces}/{stats.puzzleTotal || TOTAL_PIECES}
-          </p>
-        </div>
-      </div>
+      <dl className="vault-metrics" role="list">
+        {metrics.map((metric) => (
+          <div key={metric.id} className="vault-metric" role="listitem">
+            <dt>{metric.label}</dt>
+            <dd className={metric.id === "level" ? "vault-stat-level" : undefined}>{metric.value}</dd>
+          </div>
+        ))}
+      </dl>
     </header>
   );
 }
@@ -353,22 +348,25 @@ export function VaultAchievementStrip({
   skills = [],
 }) {
   return (
-    <section className="section-block vault-achievement-strip" aria-label="Achievement summary">
-      <p className="kicker">Achievement summary</p>
-      <div className="stat-row vault-stat-row">
-        <div className="card stat-compact">
-          <p className="kicker">Level</p>
-          <p className="stat-value">{level != null ? String(level).padStart(2, "0") : "-"}</p>
+    <section className="vault-achievement-strip" aria-label="Learning record">
+      <h2 className="vault-section-title">Learning record</h2>
+      <p className="note">
+        XP represents learning progression within Forjora. It is separate from the on-chain credential score.
+      </p>
+      <dl className="vault-metrics vault-metrics-inline">
+        <div className="vault-metric">
+          <dt>Level</dt>
+          <dd>{level != null ? String(level).padStart(2, "0") : "—"}</dd>
         </div>
-        <div className="card stat-compact">
-          <p className="kicker">XP</p>
-          <p className="stat-value">{xp != null ? Number(xp).toLocaleString() : "-"}</p>
+        <div className="vault-metric">
+          <dt>XP</dt>
+          <dd>{xp != null ? Number(xp).toLocaleString() : "—"}</dd>
         </div>
-        <div className="card stat-compact">
-          <p className="kicker">Streak</p>
-          <p className="stat-value">{streak != null ? `${streak}d` : "-"}</p>
+        <div className="vault-metric">
+          <dt>Streak</dt>
+          <dd>{streak != null ? `${streak}d` : "—"}</dd>
         </div>
-      </div>
+      </dl>
       {skills.length ? (
         <ul className="vault-skill-chips">
           {skills.slice(0, 6).map((item) => (

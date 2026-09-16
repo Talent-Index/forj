@@ -60,14 +60,18 @@ function ExistingCertificate({
         wallet: credential.walletAddress,
       })
     : "";
+  const points = credential?.score?.totalPoints;
+  const maxPoints = credential?.score?.maxPoints;
+  const difficulty = highestDifficulty(scores);
 
   return (
-    <section className="section-block existing-certificate" aria-labelledby="existing-certificate-heading">
-      <h2 id="existing-certificate-heading">Your Fuji certificate</h2>
-      <p>
-        The current soulbound record for this wallet. Forjora keeps one live token per wallet;
-        a later mint replaces it. Lookup shows that the token exists. It is not issuer attestation.
-      </p>
+    <section className="existing-certificate" aria-labelledby="existing-certificate-heading">
+      <header className="existing-certificate-head">
+        <h2 id="existing-certificate-heading">Your Fuji certificate</h2>
+        <p className="lede">
+          The live soulbound record for this wallet. Lookup proves the token exists; it does not make a claimed score issuer-attested.
+        </p>
+      </header>
 
       {!walletConnected ? (
         <>
@@ -80,7 +84,7 @@ function ExistingCertificate({
           {actions ? <div className="certificate-actions">{actions}</div> : null}
         </>
       ) : loading ? (
-        <p role="status">Loading this wallet's Fuji certificate…</p>
+        <p role="status">Loading this wallet&apos;s Fuji certificate…</p>
       ) : !credential ? (
         <>
           <EmptyState
@@ -91,21 +95,22 @@ function ExistingCertificate({
           {actions ? <div className="certificate-actions">{actions}</div> : null}
         </>
       ) : (
-        <>
-          <p className="certificate-status-row">
+        <div className="existing-certificate-body">
+          <p className="existing-certificate-status">
             <CredentialStatusBadge status={status} />
             <span className="meta-line">
               Token #{credential.credentialId}
-              {mintedDay(credential) ? ` · ${mintedDay(credential)} UTC` : ""}
+              {mintedDay(credential) ? ` · ${mintedDay(credential)}` : ""}
               {` · ${credential.completion?.puzzlePieces ?? 0}/${TOTAL_PIECES} pieces`}
             </span>
           </p>
-          <div className="existing-certificate-layout">
+
+          <div className="existing-certificate-frame">
             <CertificateArtifact
               artwork={artworkSrc(credential, artworkFallback)}
               recipientName={recipientName}
               scorePercent={quizPercent(scores)}
-              difficulty={highestDifficulty(scores)}
+              difficulty={difficulty}
               pathLabel={PATH_LABEL}
               credentialId={`#${credential.credentialId}`}
               verificationStatus={status.id}
@@ -117,29 +122,62 @@ function ExistingCertificate({
               explorerUrl={credential.explorerUrl}
               verificationUrl={sharePath}
               compact
+              quiet
             />
-            <div className="existing-certificate-record">
-              {view ? <CredentialDetails view={view} /> : null}
-              <p className="note">
-                {recipientName
-                  ? "Recipient name is from your account. It is not stored on-chain."
-                  : "Recipient name is not part of the on-chain record."}
-              </p>
-              <div className="certificate-actions">
-                {onLookup ? (
-                  <Button
-                    variant="secondary"
-                    onClick={() => onLookup(credential.credentialId, credential.walletAddress)}
-                  >
-                    Open public lookup
-                  </Button>
-                ) : null}
-                {actions}
-              </div>
-              {showQr && shareUrl ? <CredentialQr url={shareUrl} /> : null}
-            </div>
           </div>
-        </>
+
+          <dl className="existing-certificate-summary">
+            {points != null ? (
+              <div>
+                <dt>Score</dt>
+                <dd>
+                  {points}
+                  {maxPoints ? ` / ${maxPoints}` : ""} pts
+                  {difficulty ? ` · ${difficulty}` : ""}
+                </dd>
+              </div>
+            ) : null}
+            <div>
+              <dt>Network</dt>
+              <dd>Avalanche Fuji</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd>{status.label}</dd>
+            </div>
+          </dl>
+
+          <p className="note">
+            {recipientName
+              ? "Recipient name is from your account. It is not stored on-chain."
+              : "Recipient name is not part of the on-chain record."}
+          </p>
+
+          <div className="certificate-actions">
+            {onLookup ? (
+              <Button
+                variant="secondary"
+                onClick={() => onLookup(credential.credentialId, credential.walletAddress)}
+              >
+                Open public lookup
+              </Button>
+            ) : null}
+            {actions}
+          </div>
+
+          {view ? (
+            <details className="existing-certificate-details">
+              <summary>Full verification fields</summary>
+              <CredentialDetails view={view} />
+            </details>
+          ) : null}
+
+          {showQr && shareUrl ? (
+            <div className="existing-certificate-qr">
+              <CredentialQr url={shareUrl} />
+            </div>
+          ) : null}
+        </div>
       )}
     </section>
   );
