@@ -1929,8 +1929,9 @@ img {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  align-items: center;
-  text-align: center;
+  align-items: stretch;
+  text-align: left;
+  width: 100%;
 }
 
 .settings-copy,
@@ -1942,9 +1943,9 @@ img {
 
 .settings-wallet .note,
 .settings-wallet .settings-copy {
-  margin-inline: auto;
-  max-width: 36em;
-  text-align: center;
+  margin-inline: 0;
+  max-width: none;
+  text-align: left;
   text-wrap: pretty;
 }
 
@@ -1988,20 +1989,23 @@ img {
   justify-content: flex-start;
 }
 
-.settings-wallet .settings-actions {
-  justify-content: center;
-}
-
 .settings-wallet-status {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  justify-content: flex-start;
+  gap: 8px 12px;
+  width: 100%;
+}
+
+.settings-wallet-status .profile-wallet-status {
+  margin: 0;
+  text-align: left;
 }
 
 .settings-block:has(> .settings-wallet) > h2 {
-  text-align: center;
+  text-align: left;
+  justify-content: flex-start;
   width: 100%;
 }
 
