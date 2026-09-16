@@ -1929,16 +1929,23 @@ img {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  align-items: stretch;
-  text-align: left;
+  align-items: center;
+  text-align: center;
 }
 
 .settings-copy,
-.settings-block > p,
-.settings-wallet .note {
+.settings-block > p {
   margin-inline: 0;
   max-width: none;
   text-align: left;
+}
+
+.settings-wallet .note,
+.settings-wallet .settings-copy {
+  margin-inline: auto;
+  max-width: 36em;
+  text-align: center;
+  text-wrap: pretty;
 }
 
 .settings-row {
@@ -1981,12 +1988,21 @@ img {
   justify-content: flex-start;
 }
 
+.settings-wallet .settings-actions {
+  justify-content: center;
+}
+
 .settings-wallet-status {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 8px;
+}
+
+.settings-block:has(> .settings-wallet) > h2 {
+  text-align: center;
+  width: 100%;
 }
 
 .settings-motion {
