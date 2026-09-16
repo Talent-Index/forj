@@ -40,7 +40,7 @@ function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzz
               <p className="kicker difficulty-forge-label">
                 <Doodle
                   type={LEVEL_DOODLE[section.id] || "spark"}
-                  size={14}
+                  size={22}
                   variant="accent"
                 />
                 {forgeLabel}

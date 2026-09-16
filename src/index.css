@@ -5759,7 +5759,15 @@ img {
 .difficulty-forge-label {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 8px;
+}
+
+.difficulty-card .difficulty-forge-label .doodle,
+.difficulty-card .difficulty-forge-label svg {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
 }
 
 .challenge-sheet .option-btn.wrong {
