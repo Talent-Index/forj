@@ -67,7 +67,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 
 ## Leaderboard
 
-New verified accounts appear on the live board under their display name, including at 0 XP and including people who signed up before opening Board. Guests can browse the Board without signing in. Learners can hide, and can optionally show a truncated linked wallet. Standing prefers a server-written XP ledger materialized from first-time learning events; when that ledger is not yet available the board falls back to replaying the same event log. Learners cannot write XP totals or rank fields. Quiz retries do not farm standing. The board is **community ranking**, not a tamper-proof exam.
+New verified accounts appear on the live board under their display name, including at 0 XP and including people who signed up before opening Board. Guests can browse the Board without signing in. Learners can hide, and can optionally show a truncated linked wallet. Standing prefers a server-written XP ledger, materialized from first-time learning events; when that ledger is not yet available the board falls back to replaying the same event log. Learners cannot write XP totals or rank fields. Quiz retries do not farm standing. The board is a **community ranking**, not a tamper-proof exam. It is not on-chain, and is not issuer-attested.
 
 Public learner profiles live at `/u/:slug` for opted-in board names. They show the same community standing honesty: not issuer-attested, not on-chain.
 

@@ -11,7 +11,7 @@ export const LEADERBOARD_AUTHORITY = Object.freeze({
   xpLedger: "xp-ledger",
 });
 export const LEADERBOARD_DISCLAIMER =
-  "Standing prefers a server-written XP ledger materialized from first-time learning events under security rules. When that ledger is unavailable, the board falls back to replaying the same event log. Learners cannot write XP totals or rank fields. This board is still not a tamper-proof exam, not on-chain, and not issuer-attested. Treat it as community ranking, not proof of skill.";
+  "Standing prefers a server-written XP ledger, materialized from first-time learning events under security rules. When that ledger is unavailable, the board falls back to replaying the same event log. Learners cannot write XP totals or rank fields. This board is still not a tamper-proof exam, is not on-chain, and is not issuer-attested. Treat it as a community ranking, not proof of skill.";
 export const LEADERBOARD_PREFERENCE_KEYS = Object.freeze([
   "schemaVersion",
   "userId",
