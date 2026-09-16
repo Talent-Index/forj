@@ -8,7 +8,6 @@ import { Doodle } from "../doodles";
 const LOGGED_OUT_LINKS = [
   { id: "learn", label: "Learn", icon: "learn" },
   { id: "credentials", label: "Credentials", icon: "badge" },
-  { id: "leaderboard", label: "Board", icon: "board" },
   { id: "lookup", label: "Lookup", icon: "certificate" },
   { id: "about", label: "About", icon: "about" },
 ];

@@ -159,7 +159,7 @@ export function useAuth() {
     try {
       const credential = await createUserWithEmailAndPassword(auth, normalized, password);
       await updateProfile(credential.user, { displayName: recipient.name });
-      // Firestore requires email_verified. persist profile after the user verifies.
+      // Firestore requires email_verified — persist profile after the user verifies.
       await sendEmailVerification(credential.user, { url: actionUrl() });
       const accountState = {
         ...profileFromDoc(credential.user, {}),
@@ -370,13 +370,6 @@ export function useAuth() {
       if (!result.ok) return result;
       return refreshUser();
     } catch (error) {
-      if (error?.code === "timeout" || /timed out/i.test(String(error?.message || ""))) {
-        return {
-          ok: false,
-          error:
-            "Could not link this wallet to your Forjora account. The cloud save timed out after 8 seconds. Your wallet may still be connected in this browser. Check your connection, then reconnect the wallet or refresh and try again.",
-        };
-      }
       return { ok: false, error: mapAuthError(error) };
     }
   }, [refreshUser]);
