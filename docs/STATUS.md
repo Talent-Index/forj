@@ -62,7 +62,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Learner mint records a **claimed** score.
 - The Credentials page is a **Credential vault**: quiet summary metrics, featured proof, filters, multi-state cards, journey + puzzle, skills, and the optional claimed Fuji path mint panel. Looking up a Fuji record does not make a claimed score issuer-attested.
 - The contract also supports **issuer-attested** mint with an owner signature. That path is not the default learner UI.
-- Shareable lookup by credential ID or holder wallet (URL and QR), also reachable from Lookup in the nav and footer. The Lookup page is a quiet public confirmation portal: compact search, status, certificate preview, skills, evidence, mint-time snapshot, and on-chain record. Sharing the site or a credential URL shows Forjora forge artwork in the link preview. A found record is an on-chain record, not a verified exam.
+- Shareable lookup by credential ID, share URL, or QR, also reachable from Lookup in the nav and footer. The Lookup page is a quiet public confirmation portal: compact search, status, certificate preview, skills, evidence, mint-time snapshot, and on-chain record. Sharing the site or a credential URL shows Forjora forge artwork in the link preview. A found record is an on-chain record, not a verified exam.
 - Forjora does not issue credentials on Avalanche C-Chain today.
 
 ## Leaderboard

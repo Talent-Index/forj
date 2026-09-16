@@ -159,6 +159,13 @@ function CredentialLookupPage({ pathname = "", search = "", onHistoryChange }) {
     event.preventDefault();
     const rawToken = tokenInput.trim();
     const rawWallet = walletInput.trim();
+    const fromPaste = parseScannedValue(rawToken);
+    if (fromPaste && (fromPaste.tokenId || fromPaste.wallet || fromPaste.invalidPathId)) {
+      if (fromPaste.tokenId) setTokenInput(fromPaste.tokenId);
+      if (fromPaste.wallet) setWalletInput(fromPaste.wallet);
+      pushQuery(fromPaste);
+      return;
+    }
     if (rawToken && !isCredentialId(rawToken) && !normalizeAddress(rawWallet)) {
       pushQuery({ tokenId: "", wallet: "", invalidPathId: true });
       setError("invalid");
@@ -257,7 +264,7 @@ function CredentialLookupPage({ pathname = "", search = "", onHistoryChange }) {
 
         {CONTRACT_ADDRESS && !hasQuery && !loading ? (
           <p className="meta-line lookup-idle-note">
-            Enter a credential ID to verify a Forjora credential.
+            Enter a credential ID or paste a share URL to verify a Forjora credential.
           </p>
         ) : null}
 

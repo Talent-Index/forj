@@ -51,7 +51,7 @@ Unknown or missing status is treated as **claimed** (fail closed). Explorer link
 
 ## Lookup
 
-A minted credential has a shareable URL and QR. The Lookup page is Forjora’s public credential confirmation portal: enter a credential ID (or optional holder wallet), verify the Fuji record, and scan status, certificate, skills, evidence, mint-time snapshot, and on-chain details. Anyone can open it without signing in. Finding a record is not the same as attesting a score. Claimed records stay Forjora claimed; issuer-attested records stay issuer-attested. The link card uses Forjora forge artwork; that preview is branding, not an attested score.
+A minted credential has a shareable URL and QR. The Lookup page is Forjora’s public credential confirmation portal: enter a credential ID, paste a share URL, or scan a QR, then verify the Fuji record and scan status, certificate, skills, evidence, mint-time snapshot, and on-chain details. Anyone can open it without signing in. Finding a record is not the same as attesting a score. Claimed records stay Forjora claimed; issuer-attested records stay issuer-attested. The link card uses Forjora forge artwork; that preview is branding, not an attested score.
 
 ## On-chain record
 

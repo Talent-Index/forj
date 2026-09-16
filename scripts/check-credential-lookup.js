@@ -176,8 +176,14 @@ assert.doesNotMatch(lookupUi, /verifiable on-chain/i);
 assert.match(lookupUi, /does not make a Forjora claimed score issuer-attested/);
 assert.match(portal, /\bVerify\b/);
 assert.match(portal, /Scan QR/);
+assert.match(portal, /startCredentialQrScan/);
+assert.doesNotMatch(portal, /Example:\s*7/);
+assert.doesNotMatch(lookupUi, /QR scan is not supported in this browser/);
 assert.doesNotMatch(portal, /["'`]Verified["'`]/);
 assert.doesNotMatch(portal, /verified by Forjora/i);
+const qrScan = readFileSync(join(root, "src/utils/credentialQrScan.js"), "utf8");
+assert.match(qrScan, /jsQR|from "jsqr"/);
+assert.match(qrScan, /BarcodeDetector/);
 
 const app = readFileSync(join(root, "src/App.jsx"), "utf8");
 assert.match(app, /parseCredentialLocation/);

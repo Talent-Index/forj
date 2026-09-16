@@ -30,6 +30,8 @@ const credentialDoc = readFileSync(join(root, "docs/CREDENTIAL.md"), "utf8");
 const certificate = readFileSync(join(root, "src/components/Certificate.jsx"), "utf8");
 const artifact = readFileSync(join(root, "src/components/CertificateArtifact.jsx"), "utf8");
 const lookupPage = readFileSync(join(root, "src/components/pages/CredentialLookupPage.jsx"), "utf8");
+const lookupPortal = readFileSync(join(root, "src/components/lookup/LookupPortalParts.jsx"), "utf8");
+const lookupUi = `${lookupPage}\n${lookupPortal}`;
 const useWallet = readFileSync(join(root, "src/hooks/useWallet.js"), "utf8");
 const css = readFileSync(join(root, "src/index.css"), "utf8");
 const rules = readFileSync(join(root, "firestore.rules"), "utf8");
@@ -38,7 +40,7 @@ const adversarial = readFileSync(join(root, "test/SkillForgeAdversarial.js"), "u
 const srcBlob = [
   readFileSync(join(root, "src/App.jsx"), "utf8"),
   certificate,
-  lookupPage,
+  lookupUi,
   readFileSync(join(root, "src/components/pages/AboutPage.jsx"), "utf8"),
 ].join("\n");
 
@@ -147,7 +149,7 @@ assert.ok(artifactCssStart >= 0);
 const artifactCss = css.slice(artifactCssStart, artifactCssStart + 900);
 assert.doesNotMatch(artifactCss, /linear-gradient|radial-gradient|text-shadow|filter:|box-shadow/);
 
-assert.match(lookupPage, /Looking it up does not make a Forjora claimed score issuer-attested/);
+assert.match(lookupUi, /Looking it up does not make a Forjora claimed score issuer-attested/);
 assert.match(srcBlob, /\/credential/);
 assert.doesNotMatch(srcBlob, /IssuerDashboard|issuer dashboard/i);
 

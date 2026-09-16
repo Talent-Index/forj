@@ -9,6 +9,7 @@ import { Doodle } from "../doodles";
 import { EXPLORER_LINK_LABEL } from "../../utils/credentialStatus";
 import { retrievalUrl } from "../../utils/credentialMetadata";
 import { publicCredentialPath } from "../../utils/credentialLookup";
+import { browserSupportsCameraScan, startCredentialQrScan } from "../../utils/credentialQrScan";
 import { safeExternalHref } from "../../utils/frontendSecurity";
 import { EMPTY_STATES } from "../../utils/onboarding";
 
@@ -39,66 +40,56 @@ export function CredentialSearch({
   const [scanError, setScanError] = useState("");
   const [showWallet, setShowWallet] = useState(Boolean(walletInput));
   const videoRef = useRef(null);
-  const streamRef = useRef(null);
-  const scanTimer = useRef(null);
+  const stopScanRef = useRef(null);
+  const cameraOk = typeof window !== "undefined" && browserSupportsCameraScan();
 
-  useEffect(() => () => stopScan(), []);
+  useEffect(
+    () => () => {
+      stopScanRef.current?.();
+      stopScanRef.current = null;
+    },
+    []
+  );
 
   useEffect(() => {
     if (walletInput) setShowWallet(true);
   }, [walletInput]);
 
   function stopScan() {
-    if (scanTimer.current) {
-      window.clearInterval(scanTimer.current);
-      scanTimer.current = null;
-    }
-    streamRef.current?.getTracks?.().forEach((track) => track.stop());
-    streamRef.current = null;
+    stopScanRef.current?.();
+    stopScanRef.current = null;
     setScanning(false);
   }
 
   async function startScan() {
     setScanError("");
-    if (typeof window === "undefined" || !("BarcodeDetector" in window)) {
-      setScanError("QR scan is not supported in this browser. Paste a credential URL or enter a credential ID.");
+    if (!cameraOk) {
+      setScanError("Camera scanning is not available here. Paste a credential URL or enter a credential ID.");
       return;
     }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-        audio: false,
-      });
-      streamRef.current = stream;
-      setScanning(true);
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
-      const detector = new window.BarcodeDetector({ formats: ["qr_code"] });
-      scanTimer.current = window.setInterval(async () => {
-        if (!videoRef.current) return;
-        try {
-          const codes = await detector.detect(videoRef.current);
-          const raw = codes?.[0]?.rawValue || "";
-          if (!raw) return;
-          stopScan();
-          onScanUrl?.(raw);
-        } catch {
-          /* keep scanning */
-        }
-      }, 700);
-    } catch {
-      setScanError("Camera access was blocked. Enter a credential ID or paste a share URL instead.");
-      stopScan();
-    }
+    setScanning(true);
+    await new Promise((resolve) => window.requestAnimationFrame(() => resolve()));
+    const stop = await startCredentialQrScan({
+      video: videoRef.current,
+      onDetect: (raw) => {
+        setScanning(false);
+        stopScanRef.current = null;
+        onScanUrl?.(raw);
+      },
+      onError: (message) => {
+        setScanError(message);
+        setScanning(false);
+        stopScanRef.current = null;
+      },
+    });
+    stopScanRef.current = stop;
   }
 
   return (
     <section className="lookup-search" aria-label="Credential lookup">
       <form className="lookup-search-form" onSubmit={onSubmit}>
         <label className="lookup-search-label" htmlFor="lookup-token">
-          Credential ID
+          Credential ID or share URL
         </label>
         <div className="lookup-verify-row">
           <input
@@ -106,30 +97,28 @@ export function CredentialSearch({
             className="recipient-input lookup-verify-input"
             value={tokenInput}
             onChange={(event) => onTokenChange?.(event.target.value)}
-            placeholder="Enter Credential ID"
-            inputMode="numeric"
+            placeholder="Credential ID or paste share URL"
+            inputMode="text"
             disabled={disabled || loading}
             autoComplete="off"
-            aria-describedby="lookup-token-hint"
           />
           <Button type="submit" disabled={disabled || loading}>
             {loading ? "Verifying…" : "Verify"}
           </Button>
         </div>
-        <p id="lookup-token-hint" className="meta-line lookup-search-hint">
-          Example: 7
-        </p>
 
         <div className="lookup-search-secondary">
-          {!scanning ? (
-            <Button type="button" variant="ghost" onClick={startScan} disabled={disabled || loading}>
-              <Doodle type="certificate" size={14} variant="ink" /> Scan QR
-            </Button>
-          ) : (
-            <Button type="button" variant="ghost" onClick={stopScan}>
-              Stop scan
-            </Button>
-          )}
+          {cameraOk ? (
+            !scanning ? (
+              <Button type="button" variant="ghost" onClick={startScan} disabled={disabled || loading}>
+                <Doodle type="certificate" size={14} variant="ink" /> Scan QR
+              </Button>
+            ) : (
+              <Button type="button" variant="ghost" onClick={stopScan}>
+                Stop scan
+              </Button>
+            )
+          ) : null}
           {tokenInput || walletInput ? (
             <button
               type="button"
@@ -171,6 +160,7 @@ export function CredentialSearch({
         {scanning ? (
           <div className="lookup-scan-live">
             <video ref={videoRef} className="lookup-scan-video" muted playsInline />
+            <p className="meta-line">Point the camera at a Forjora credential QR code.</p>
           </div>
         ) : null}
         {scanError ? <p className="note" role="status">{scanError}</p> : null}
@@ -199,7 +189,7 @@ export function VerificationStatusBanner({
     return (
       <div className="verification-state verification-state-none lookup-status" role="alert">
         <h2>Invalid credential ID</h2>
-        <p className="meta-line">Enter a token ID starting at 1, or a 0x holder wallet address.</p>
+        <p className="meta-line">Enter a credential ID, paste a share URL, or scan a QR code.</p>
         {onRetry ? (
           <div className="certificate-actions">
             <Button variant="secondary" onClick={onRetry}>Try again</Button>

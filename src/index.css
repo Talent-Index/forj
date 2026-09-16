@@ -2670,11 +2670,6 @@ img {
   min-height: 2.75rem;
 }
 
-.lookup-search-hint {
-  margin: 0;
-  text-align: left;
-}
-
 .lookup-search-secondary {
   display: flex;
   flex-wrap: wrap;
