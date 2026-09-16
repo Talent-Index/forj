@@ -5794,14 +5794,14 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .difficulty-card .difficulty-forge-label .doodle,
 .difficulty-card .difficulty-forge-label svg {
   flex-shrink: 0;
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
 }
 
 .challenge-sheet .option-btn.wrong {
