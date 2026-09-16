@@ -1772,8 +1772,21 @@ img {
 
 .puzzle-layout {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   gap: 24px;
+  align-items: start;
+  justify-items: center;
+}
+
+.puzzle-layout > .jigsaw-board {
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+.puzzle-layout > .card {
+  width: 100%;
+  max-width: 28rem;
 }
 
 .puzzle-grid,
@@ -2275,6 +2288,7 @@ img {
   max-width: 520px;
   height: auto;
   display: block;
+  margin-inline: auto;
   background: var(--surface-2);
   border: 1px solid var(--border);
 }
