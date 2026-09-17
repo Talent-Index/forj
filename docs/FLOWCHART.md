@@ -19,7 +19,7 @@ flowchart LR
 
 | Stage | What happens today |
 | --- | --- |
-| Learn | Seven Avalanche tracks, ordered lessons, self-claimed project lab on Developer |
+| Learn | Eight Avalanche tracks, ordered lessons, self-claimed labs on ICM and Developer |
 | Challenge | Easy / Medium / Hard seating quizzes; Mastery deepens knowledge without changing Fuji seating |
 | Earn | First-time XP, puzzle fragments, points; retries do not farm rewards |
 | Unlock | Track and module gates; seating points unlock that quiz’s reserved pieces |
@@ -53,11 +53,13 @@ flowchart TD
 ```mermaid
 flowchart TD
   F[Fundamentals + Easy] --> A[Architecture + Medium]
+  A --> N[Nodes and Validators — lesson-only]
   A --> L[L1s — lesson-only]
   A --> C[C-Chain — lesson-only]
-  L --> I[ICM — lesson-only]
-  C --> I
-  I --> D[Developer]
+  L --> I[ICM lessons]
+  I --> IP[ICM messaging lab — self-claimed]
+  C --> D[Developer]
+  IP --> D
   D --> DL[Tooling lessons]
   DL --> DP[Project lab — self-claimed]
   DP --> DQ[Hard seating]
@@ -67,8 +69,8 @@ flowchart TD
 | Kind | Tracks | Seating effect |
 | --- | --- | --- |
 | Quiz tracks | Fundamentals, Architecture, Developer | Easy 3 / Medium 5 / Hard 8 pieces |
-| Lesson tracks | L1s, C-Chain, ICM, Security | Track certificate when complete; no seating quiz |
-| Project lab | Developer module before Hard | Self-claimed lessons only — not graded, not issuer-attested |
+| Lesson tracks | Nodes, L1s, C-Chain, ICM (plus messaging lab), Security | Track certificate when complete; no seating quiz |
+| Project labs | ICM messaging lab; Developer project lab before Hard | Self-claimed lessons only — not graded, not issuer-attested |
 
 Puzzle seats **0–15** stay frozen. There is no fourth seating quiz.
 
@@ -147,22 +149,24 @@ flowchart TD
 
 | Wave | Role | Depends on | Must not imply |
 | --- | --- | --- | --- |
-| **A** — More path content + richer labs | Deeper lesson-only tracks and self-claimed project labs | Shipped seven-track Fuji loop | Foundation exam, graded review, or issuer attestation |
-| **B** — Learning analytics · question ops | Operator question bank and analytics | Wave A stable | That analytics or bank edits change seating honesty or attestation |
+| **A** — More path content + richer labs | Deeper lesson-only tracks and self-claimed project labs | Shipped Fuji loop | Foundation exam, graded review, or issuer attestation |
+| **B** — Learning analytics · question ops | Operator question bank and analytics | Wave A shipped | That analytics or bank edits change seating honesty or attestation |
 | **C** — Issuer ops, then attested mint UI | Key custody + dashboard → attested mint in learner UI → revocation / versioning | Contract attested mint (shipped); Wave A does not block start | That claimed scores were always attested; Lookup alone as certification |
 | **D** — C-Chain after production gate | Review → custody → monitoring → open gate → C-Chain deploy → E2E | Wave C issuer custody | That Fuji claimed equals a Mainnet diploma; env flag as launch approval |
 | **E** — Ecosystem | Partners, collections, third-party verify of **attested** records | Wave D (production-ready attestation) | That Board rank or claimed mint is partner-attested |
 
-### Wave A — next build slice (locked)
+### Wave A — shipped
 
-Phase 2 remaining. New work stays lesson-only tracks and/or self-claimed `steps[]` labs (same pattern as Developer project lab and Security).
+Phase 2 path expansion. Puzzle seats **0–15** unchanged. No fourth seating quiz.
 
-1. **Lesson-only track: Nodes & Validators** — prerequisites Architecture; parallel to L1s / C-Chain; three Builder Hub–linked lessons; track certificate (`kind: "track"`); lesson ids allowlisted for progress events.
-2. **Richer lab: ICM messaging lab** — brief → build → verify checklist on ICM; self-claimed; does not gate Hard seating.
+1. **Lesson-only track: Nodes & Validators** — prerequisites Architecture; parallel to L1s / C-Chain; three Builder Hub–linked lessons; track certificate (`kind: "track"`).
+2. **Richer lab: ICM messaging lab** — brief → build → verify on ICM; self-claimed; does not add Hard seating (Hard stays on Developer).
+
+Further lesson tracks or labs beyond this slice remain optional Phase 2 polish; Wave B is the next sequenced platform wave.
 
 ### Wave B — analytics and question ops
 
-Phase 5. Operator-facing question bank management and learning analytics after Wave A is stable. Does not change seating math or credential honesty. Stays off the attested path.
+Phase 5. Operator-facing question bank management and learning analytics after Wave A. Does not change seating math or credential honesty. Stays off the attested path.
 
 ### Wave C — issuer path (ops before UI)
 
@@ -181,6 +185,7 @@ Phase 6. Independent review of freeze v1 → issuer custody → monitoring → o
 Phase 7. Partners, institutions, collections, and third-party verification of **attested** credentials. Public achievement profiles (`/u/:slug`) already ship with the Board.
 
 See [Roadmap](./ROADMAP.md) for phase status and [Status](./STATUS.md) for the not-shipped list tagged by wave.
+
 ---
 
 ## 7. One-page map
@@ -189,8 +194,8 @@ See [Roadmap](./ROADMAP.md) for phase status and [Status](./STATUS.md) for the n
                     ACCOUNT (progress)          WALLET (optional → mint)
                            │                              │
                            ▼                              │
-          ┌──────── Learn path (7 tracks) ────────┐       │
-          │  lessons → lab (claimed) → quizzes    │       │
+          ┌──────── Learn path (8 tracks) ────────┐       │
+          │  lessons → labs (claimed) → quizzes   │       │
           └───────────────┬───────────────────────┘       │
                           ▼                               │
               XP · badges · streak · Board                │

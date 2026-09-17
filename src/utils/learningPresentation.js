@@ -22,9 +22,10 @@ export const LEARN_CATEGORIES = Object.freeze([
 export const TRACK_DOODLE = Object.freeze({
   fundamentals: "book",
   architecture: "blueprint",
+  nodes: "nodes",
   l1s: "mountain",
   "c-chain": "contract",
-  icm: "nodes",
+  icm: "chain",
   developer: "badge",
   security: "shield",
 });
@@ -43,6 +44,12 @@ export const TRACK_PRESENTATION = Object.freeze({
     estimatedMinutes: 55,
     doodle: TRACK_DOODLE.architecture,
   },
+  nodes: {
+    category: ["Blockchain", "Ecosystems"],
+    skills: ["Node roles", "Staking hygiene", "RPC trust"],
+    estimatedMinutes: 40,
+    doodle: TRACK_DOODLE.nodes,
+  },
   l1s: {
     category: ["Ecosystems", "Blockchain"],
     skills: ["Avalanche L1s", "Validator sets", "Sovereignty"],
@@ -57,8 +64,8 @@ export const TRACK_PRESENTATION = Object.freeze({
   },
   icm: {
     category: ["Web3 Development", "Blockchain"],
-    skills: ["ICM", "Warp messaging", "Teleporter"],
-    estimatedMinutes: 50,
+    skills: ["ICM", "Warp messaging", "Messaging lab"],
+    estimatedMinutes: 75,
     doodle: TRACK_DOODLE.icm,
   },
   developer: {
