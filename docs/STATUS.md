@@ -1,6 +1,6 @@
 # Forjora — Status
 
-Last updated: 10 September 2026
+Last updated: 17 September 2026
 
 This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
@@ -10,7 +10,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | --- | --- |
 | Foundation (wallet, quiz, scoring, puzzle, CI) | Complete |
 | Identity | Account sign-in (email or Google) with progress on the learner account |
-| Learning experience | Partial — Learn hub with track discovery, vertical track journeys, lesson workspace; seven Avalanche tracks including Developer project lab and lesson-only Security; further path content not shipped |
+| Learning experience | Partial — seven Avalanche tracks including Developer project lab and lesson-only Security; **Wave A** next (Nodes track + ICM lab) not shipped |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
 | Gamification | Live community ranking (public Board browse); server-written XP ledger when Functions are deployed, otherwise event-log replay; XP, levels, achievements, streaks, path engine |
 | Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
@@ -75,8 +75,10 @@ It is not a league with an issuer, not on-chain, and not a verified exam. A clai
 
 ## Not shipped yet
 
-- Question bank managed independently of the app
-- Learning analytics dashboards
-- Forjora Issuer dashboard
-- Credential revocation and versioning
-- Independent review of freeze v1, issuer operations, production monitoring, and Avalanche C-Chain issuance (the production readiness gate stays closed; launch validation is not public-launch approval; see [Security & Launch](./ROADMAP.md))
+Tagged by extension wave — see [Flowchart](./FLOWCHART.md) §6 and [Roadmap](./ROADMAP.md).
+
+- **Wave A** — Nodes & Validators lesson-only track; ICM messaging lab (next build slice; no fourth seating quiz)
+- **Wave B** — Question bank managed independently of the app; learning analytics dashboards
+- **Wave C** — Forjora Issuer dashboard and key custody; attested mint in the learner UI; credential revocation and versioning
+- **Wave D** — Independent review of freeze v1, production monitoring, and Avalanche C-Chain issuance (the production readiness gate stays closed; launch validation is not public-launch approval; see [Security & Launch](./ROADMAP.md))
+- **Wave E** — Partners, collections, third-party verification of attested credentials (after Wave D)

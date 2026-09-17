@@ -32,25 +32,25 @@ Wallet and Fuji network, quiz banks, retry-safe scoring, durable local progress,
 
 Shipped: landing loop for guests, explanations after submit, official Avalanche references, persistent progress. After sign-in, learners go to **Learn on Forjora** — track discovery/filters, vertical track journeys, lesson workspace (nav · content · progress), and knowledge-check challenges (Foundation / Builder / Advanced / Mastery) on the path. Quizzes award XP and puzzle fragments; five fragments convert into a puzzle piece. Seven tracks — Fundamentals, Architecture, L1s, C-Chain, ICM, Developer (tooling lessons, self-claimed project lab, then Hard seating), and Security Practices (lesson-only after Developer) — with deeper lesson bodies, stronger Builder Hub references, mapped quizzes, and polished track vs path certificates on Credentials (track certificates and the project lab stay off-chain learning records; lab completion is self-claimed, not issuer-attested).
 
-Remaining: further path content beyond these seven tracks (additional lesson tracks or banks); more project/capstone workspaces beyond the Developer project lab.
+Remaining (**Wave A** — next build slice): lesson-only **Nodes & Validators** track (after Architecture, parallel to L1s / C-Chain); richer **ICM messaging lab** (brief → build → verify, self-claimed, does not gate Hard). No fourth seating quiz. See [Flowchart](./FLOWCHART.md) Wave A.
 
 ## Phase 3 — Credentials 🟡
 
 Shipped: credential model, soulbound metadata, claimed vs attested, owner-signed attested mint on the contract, shareable credential URL/QR and in-product Lookup.
 
-Remaining: issuer-key operations, attested mint in the learner UI, versioning and revocation.
+Remaining (**Wave C** — ops before UI): (1) issuer-key custody and dashboard, (2) attested mint in the learner UI, (3) versioning and revocation. Contract attested mint already ships; learner mint stays claimed-only until Wave C. See [Flowchart](./FLOWCHART.md) Wave C.
 
 ## Phase 4 — Gamification ✅ *Live ranking*
 
 Shipped: shared progression events, XP and levels, achievements, UTC streaks, path engine, interlocking puzzle, per-track certificates, default-on live ranking, public Board browse, optional wallet hint, public `/u/:slug` profiles, and a Cloud Functions XP ledger that materializes `xpTransactions` / `leaderboardStanding` (board prefers standing when present). Product copy treats the board as community ranking. Lesson completion events are allowlisted in Firestore rules; quiz sources include Master.
 
-Remaining: keep honesty clear that rank is not issuer-attested and not on-chain. Ledger standing is live only after Functions are deployed to the Firebase project.
+Remaining: keep honesty clear that rank is not issuer-attested and not on-chain (every wave). Ledger standing is live only after Functions are deployed to the Firebase project.
 
 ## Phase 5 — Platform 🟡
 
 Shipped: learner accounts persist progress, quiz state, and puzzle state beyond a single browser. Wallets link to the account without becoming the account. A non-empty wallet-local snapshot replaces the account copy on link. Clients cannot write XP or rank.
 
-Remaining: question management, learning analytics, issuer dashboard, and production monitoring.
+Remaining: **Wave B** — question management and learning analytics (after Wave A is stable); **Wave C** — issuer dashboard (with Phase 3); production monitoring (feeds **Wave D**). See [Flowchart](./FLOWCHART.md).
 
 ## Phase 6 — Security & Launch
 
@@ -60,22 +60,22 @@ The readiness gate is **closed**. Schema v1 metadata, Privacy/Terms disclosures,
 
 Shipped on Fuji: soulbound transfer rules and owner-signed attestation. Contract tests cover unauthorized mint, forged and replayed signatures, wrong nonce, wrong chain, wrong contract, expired authorizations, unauthorized issuer and ownership changes, and duplicate current credentials. The learner app does not hold issuer keys; wallet, contract, and mint inputs are checked before a transaction is sent. Freeze v1 of the credential source is packed for independent review. That pack is **not** an audit.
 
-Remaining before production issuance:
+Remaining before production issuance (**Wave D** — after Wave C issuer custody):
 
 - Independent review of freeze v1 (the credential contract and issuer authorization)
 - Redeploy the frozen credential before production issuance if the live Fuji address still lags this source
-- Dedicated issuer operations and key custody (signing keys never live in the learner browser)
+- Dedicated issuer operations and key custody (signing keys never live in the learner browser) — shared with Wave C
 - Production monitoring and incident operations beyond documented v1 limits
 - Open the production gate in source only after those items are ready, then C-Chain deploy
 - End-to-end learner and issuer checks on Avalanche C-Chain
 
-Product copy must stay honest on C-Chain: claimed scores are not issuer-attested. Forjora does not issue credentials on C-Chain today.
+Product copy must stay honest on C-Chain: claimed scores are not issuer-attested. Forjora does not issue credentials on C-Chain today. See [Flowchart](./FLOWCHART.md) Wave D.
 
 Launch validation of the Fuji learner loop (quiz, retry, puzzle, claimed mint, public lookup, and issuer-authorization rejects) is **not** approval to launch. Live wallets, mobile and desktop browsers, issuer operations, monitoring, and a C-Chain contract remain unsigned.
 
 ## Phase 7 — Ecosystem
 
-Partners, institutions, partner-issued credentials, collections, third-party verification — without pretending a claimed score is attested. Public achievement profiles (`/u/:slug`) ship with the Board.
+**Wave E.** Partners, institutions, partner-issued credentials, collections, third-party verification of **attested** records — without pretending a claimed score is attested. Public achievement profiles (`/u/:slug`) ship with the Board. Depends on Wave D production-ready attestation. See [Flowchart](./FLOWCHART.md) Wave E.
 
 ## Product loop
 
