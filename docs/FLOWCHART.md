@@ -122,36 +122,65 @@ flowchart LR
 
 ## 6. What can be added (planned)
 
-Extensions that fit the same honesty model — claimed learning stays distinct from attestation.
+Extensions that fit the same honesty model — claimed learning stays distinct from attestation. Work is sequenced in waves that match the [roadmap](./ROADMAP.md) phases. Puzzle seats **0–15** stay frozen (Easy 3 / Medium 5 / Hard 8); there is no fourth seating quiz.
+
+### Honesty (every wave)
+
+- Lesson tracks, project labs, Board, and XP are **learning / community records**.
+- **Forjora claimed** mint stays a self-published Fuji snapshot.
+- **Issuer-attested** only via a privileged path (owner signature on-contract today; issuer ops later).
+- Partners and third-party verify **attested** records only — never claimed scores or Board rank.
+
+### Wave sequence
 
 ```mermaid
 flowchart TD
-  Today[Shipped Fuji loop] --> LearnMore[More lesson tracks / banks]
-  Today --> Labs[Richer project / capstone labs]
-  Today --> IssuerUI[Attested mint in learner UI]
-  Today --> IssuerOps[Issuer keys · dashboard · revocation]
-  Today --> Analytics[Learning analytics · question ops]
-  Today --> Mainnet[C-Chain issuance after production gate]
-  Today --> Eco[Partners · collections · third-party verify]
-
-  LearnMore -.-> Honesty[Still learning records unless issuer-attested]
-  Labs -.-> Honesty
-  IssuerUI --> Attest[Privileged attestation path]
-  IssuerOps --> Attest
-  Mainnet --> Attest
-  Eco --> Attest
+  WaveA[WaveA_LearnMore_Labs] --> WaveB[WaveB_Analytics_QuestionOps]
+  WaveA --> WaveC[WaveC_IssuerOps_then_UI]
+  WaveC --> WaveD[WaveD_ProductionGate_CChain]
+  WaveD --> WaveE[WaveE_Ecosystem]
+  WaveA -.-> Honesty[Learning_records_only]
+  WaveC --> Attest[Privileged_attestation]
+  WaveD --> Attest
+  WaveE --> Attest
 ```
 
-| Addition | Role | Must not imply |
-| --- | --- | --- |
-| More path content / labs | Deeper learning and self-claimed practice | Foundation exam or graded review |
-| Issuer dashboard + attested mint UI | Privileged attestation | That claimed scores were always attested |
-| Revocation / versioning | Credential lifecycle | That Lookup alone is certification |
-| C-Chain issuance | Production network after gate opens | That Fuji claimed equals Mainnet diploma |
-| Partners / ecosystem | External verification of **attested** records | That Board rank or claimed mint is partner-attested |
+| Wave | Role | Depends on | Must not imply |
+| --- | --- | --- | --- |
+| **A** — More path content + richer labs | Deeper lesson-only tracks and self-claimed project labs | Shipped seven-track Fuji loop | Foundation exam, graded review, or issuer attestation |
+| **B** — Learning analytics · question ops | Operator question bank and analytics | Wave A stable | That analytics or bank edits change seating honesty or attestation |
+| **C** — Issuer ops, then attested mint UI | Key custody + dashboard → attested mint in learner UI → revocation / versioning | Contract attested mint (shipped); Wave A does not block start | That claimed scores were always attested; Lookup alone as certification |
+| **D** — C-Chain after production gate | Review → custody → monitoring → open gate → C-Chain deploy → E2E | Wave C issuer custody | That Fuji claimed equals a Mainnet diploma; env flag as launch approval |
+| **E** — Ecosystem | Partners, collections, third-party verify of **attested** records | Wave D (production-ready attestation) | That Board rank or claimed mint is partner-attested |
 
-Production readiness (independent review, issuer custody, monitoring, C-Chain deploy) stays on the Security & Launch gate — see [Roadmap](./ROADMAP.md).
+### Wave A — next build slice (locked)
 
+Phase 2 remaining. New work stays lesson-only tracks and/or self-claimed `steps[]` labs (same pattern as Developer project lab and Security).
+
+1. **Lesson-only track: Nodes & Validators** — prerequisites Architecture; parallel to L1s / C-Chain; three Builder Hub–linked lessons; track certificate (`kind: "track"`); lesson ids allowlisted for progress events.
+2. **Richer lab: ICM messaging lab** — brief → build → verify checklist on ICM; self-claimed; does not gate Hard seating.
+
+### Wave B — analytics and question ops
+
+Phase 5. Operator-facing question bank management and learning analytics after Wave A is stable. Does not change seating math or credential honesty. Stays off the attested path.
+
+### Wave C — issuer path (ops before UI)
+
+Phase 3 / 5. Contract `mintCredentialWithAuthorization` and Lookup/vault display of attested records already ship; learner mint today is claimed-only.
+
+1. Issuer key custody and dashboard (signing keys never in the learner browser).
+2. Attested mint in the learner UI (submit owner authorization — not the default claimed button).
+3. Revocation and versioning (product + contract; not in freeze v1).
+
+### Wave D — production gate and C-Chain
+
+Phase 6. Independent review of freeze v1 → issuer custody → monitoring → open the gate in source → C-Chain deploy → end-to-end checks. An env flag cannot open issuance. Claimed on C-Chain still is not attested.
+
+### Wave E — ecosystem
+
+Phase 7. Partners, institutions, collections, and third-party verification of **attested** credentials. Public achievement profiles (`/u/:slug`) already ship with the Board.
+
+See [Roadmap](./ROADMAP.md) for phase status and [Status](./STATUS.md) for the not-shipped list tagged by wave.
 ---
 
 ## 7. One-page map
@@ -177,5 +206,5 @@ Production readiness (independent review, issuer custody, monitoring, C-Chain de
                           │
                           ╳  (not default)
                           ▼
-              Issuer-attested  ← planned ops / UI
+              Issuer-attested  ← Wave C ops · UI; Wave D C-Chain; Wave E partners
 ```
