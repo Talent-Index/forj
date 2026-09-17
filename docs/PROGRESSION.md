@@ -44,17 +44,18 @@ Level is a function of total XP. The dashboard shows current level, XP, and XP r
 
 ## Path and tracks
 
-The **Avalanche Developer Path** contains seven tracks in order of dependency:
+The **Avalanche Developer Path** contains eight tracks in order of dependency:
 
 1. Avalanche Fundamentals  
 2. Avalanche Architecture  
-3. Avalanche L1s  
-4. C-Chain & Smart Contracts  
-5. Avalanche ICM  
-6. Avalanche Developer Track (tooling lessons, self-claimed project lab, then Hard seating)  
-7. Avalanche Security Practices (lesson-only; does not unlock a seating quiz)  
+3. Nodes & Validators (lesson-only; parallel to L1s / C-Chain after Architecture)  
+4. Avalanche L1s  
+5. C-Chain & Smart Contracts  
+6. Avalanche ICM (lessons plus self-claimed messaging lab; no seating quiz)  
+7. Avalanche Developer Track (tooling lessons, self-claimed project lab, then Hard seating)  
+8. Avalanche Security Practices (lesson-only; does not unlock a seating quiz)  
 
-Earlier required work unlocks later work. Optional lessons do not block a module. Easy / Medium / Hard quizzes are the credential-seating assessments for Fundamentals, Architecture, and the Developer capstone. The Developer project lab and Security track are off-chain learning records — self-claimed progress, not issuer-attested credentials. Mastery assessments deepen knowledge without changing the frozen Fuji score scale (five counted corrects per Easy / Medium / Hard). Lessons carry deeper Avalanche explanations and official Builder Hub references.
+Earlier required work unlocks later work. Optional lessons do not block a module. Easy / Medium / Hard quizzes are the credential-seating assessments for Fundamentals, Architecture, and the Developer capstone. Nodes, ICM messaging lab, Developer project lab, and Security are off-chain learning records — self-claimed progress, not issuer-attested credentials. Mastery assessments deepen knowledge without changing the frozen Fuji score scale (five counted corrects per Easy / Medium / Hard). Lessons carry deeper Avalanche explanations and official Builder Hub references.
 
 The dashboard’s “next” item is the first unlocked incomplete lesson or quiz on that path.
 
