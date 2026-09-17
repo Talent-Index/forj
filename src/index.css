@@ -4315,6 +4315,18 @@ img {
   margin-bottom: 12px;
 }
 
+.lesson-steps {
+  margin: 1.1rem 0 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.55rem;
+  color: var(--ink-soft, inherit);
+}
+
+.lesson-steps li {
+  line-height: 1.45;
+}
+
 .lesson-reference {
   display: flex;
   flex-direction: column;

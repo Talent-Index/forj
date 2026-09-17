@@ -23,7 +23,7 @@ The mark is a geometric **F / upward pathway** in charcoal with a forge-orange a
 
 - An **account** (email or Google) that holds progress across devices. A wallet is optional until mint. Linking copies that wallet’s local quiz and puzzle snapshot onto the account; the wallet snapshot wins if both exist.
 - **Privacy Policy** and **Terms of Service** for the account and learning record.
-- **Six Avalanche tracks:** Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, and Developer.
+- **Seven Avalanche tracks:** Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer (including a self-claimed project lab before Hard), and Security Practices (lesson-only).
 - **XP and levels** from real completions, not quiz retries.
 - **Achievements** and **streaks** from the same learning events.
 - **Credential vault** on Credentials: track and learning certificates (off-chain, earned / in progress / locked), puzzle progress, and optional claimed Fuji path mint. Quiz points seat that track’s pieces. The path mint stays one claimed snapshot.
@@ -49,6 +49,7 @@ The live Fuji credential sits on [`SkillForgeCredential`](https://testnet.snowtr
 | --- | --- |
 | [Status](docs/STATUS.md) | What is shipped today |
 | [Roadmap](docs/ROADMAP.md) | Foundation through Security & Launch, then ecosystem |
+| [Flowchart](docs/FLOWCHART.md) | System flow — what exists and what can be added |
 | [Progression](docs/PROGRESSION.md) | Paths, XP, achievements, streaks, puzzle, leaderboard |
 | [Credential](docs/CREDENTIAL.md) | On-chain learning record and claimed vs attested |
 | [Authorization](docs/AUTHORIZATION.md) | How issuer attestation is designed |

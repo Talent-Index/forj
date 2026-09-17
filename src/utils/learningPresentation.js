@@ -26,6 +26,7 @@ export const TRACK_DOODLE = Object.freeze({
   "c-chain": "contract",
   icm: "nodes",
   developer: "badge",
+  security: "shield",
 });
 
 /** Per-track display enrichment (skills + discovery tags). */
@@ -62,9 +63,15 @@ export const TRACK_PRESENTATION = Object.freeze({
   },
   developer: {
     category: ["Web3 Development", "Smart Contracts"],
-    skills: ["Tooling", "Fuji practice", "Path capstone"],
-    estimatedMinutes: 70,
+    skills: ["Tooling", "Project lab", "Fuji practice", "Path capstone"],
+    estimatedMinutes: 100,
     doodle: TRACK_DOODLE.developer,
+  },
+  security: {
+    category: ["Web3 Development", "Blockchain"],
+    skills: ["Threat awareness", "Key hygiene", "Operational safety"],
+    estimatedMinutes: 40,
+    doodle: TRACK_DOODLE.security,
   },
 });
 
@@ -157,6 +164,8 @@ export function buildTrackJourney(trackProgress) {
       status = inProgress ? "current" : "available";
     }
     const isQuizOnly = Boolean(module.quizId) && lessonCount === 0;
+    const isProjectLab = /project/i.test(module.id) || /project lab/i.test(module.name || "");
+    const kind = isQuizOnly ? "challenge" : isProjectLab ? "project" : "module";
     return {
       id: module.id,
       index: index + 1,
@@ -167,10 +176,11 @@ export function buildTrackJourney(trackProgress) {
       challengeCount,
       quizId: module.quizId || null,
       lessons: module.lessons || [],
-      kind: isQuizOnly ? "challenge" : "module",
+      kind,
       summary: isQuizOnly
         ? `1 Challenge`
         : [
+            isProjectLab ? "Project lab" : null,
             lessonCount ? `${lessonCount} Lesson${lessonCount === 1 ? "" : "s"}` : null,
             challengeCount ? `${challengeCount} Challenge` : null,
           ]

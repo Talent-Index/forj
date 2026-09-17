@@ -250,7 +250,9 @@ service cloud.firestore {
         'l1-what', 'l1-validators', 'l1-custom',
         'cchain-evm', 'cchain-gas', 'cchain-contracts',
         'icm-what', 'icm-teleporter', 'icm-use',
-        'dev-tooling', 'dev-fuji', 'dev-practice'
+        'dev-tooling', 'dev-fuji', 'dev-practice',
+        'dev-lab-brief', 'dev-lab-build', 'dev-lab-verify',
+        'sec-threats', 'sec-keys', 'sec-ops'
       ];
     }
 
