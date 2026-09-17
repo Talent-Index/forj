@@ -95,4 +95,4 @@ LEARN → CHALLENGE → EARN XP / POINTS
 | Credentials | Keep claimed scores honest; attestation is a separate, privileged path |
 | Launch | Do not issue on mainnet until review, honest copy, and issuer keys are production-ready |
 
-Related: [Status](./STATUS.md) · [Progression](./PROGRESSION.md) · [Credential](./CREDENTIAL.md) · [Authorization](./AUTHORIZATION.md)
+Related: [Status](./STATUS.md) · [Progression](./PROGRESSION.md) · [Flowchart](./FLOWCHART.md) · [Credential](./CREDENTIAL.md) · [Authorization](./AUTHORIZATION.md)

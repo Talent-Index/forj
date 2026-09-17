@@ -49,6 +49,7 @@ The live Fuji credential sits on [`SkillForgeCredential`](https://testnet.snowtr
 | --- | --- |
 | [Status](docs/STATUS.md) | What is shipped today |
 | [Roadmap](docs/ROADMAP.md) | Foundation through Security & Launch, then ecosystem |
+| [Flowchart](docs/FLOWCHART.md) | System flow — what exists and what can be added |
 | [Progression](docs/PROGRESSION.md) | Paths, XP, achievements, streaks, puzzle, leaderboard |
 | [Credential](docs/CREDENTIAL.md) | On-chain learning record and claimed vs attested |
 | [Authorization](docs/AUTHORIZATION.md) | How issuer attestation is designed |

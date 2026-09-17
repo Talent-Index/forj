@@ -29,6 +29,7 @@ When you ship, change, or remove user-facing behavior (learning loop, identity, 
 - `README.md` — product overview
 - `docs/STATUS.md` — current shipped state
 - `docs/ROADMAP.md` — phases and remaining work
+- `docs/FLOWCHART.md` — system flow: shipped loop vs planned additions
 - `docs/PROGRESSION.md` — learning and gamification model
 - `docs/CREDENTIAL.md` — credential product model
 - `docs/AUTHORIZATION.md` — issuer attestation as a trust product
