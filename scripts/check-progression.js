@@ -219,4 +219,33 @@ const migratedAgain = migrateFromQuizProgress(migrated, {
 assert.equal(getXP(migratedAgain), getXP(migrated));
 assert.equal(migrated.completedQuizzes.easy.perfect, true);
 
+// --- Developer project lab gates Hard; security unlocks after developer ---
+assert.equal(isModuleUnlocked(emptyProgression(LEARNER_A), "dev-project"), false);
+let labState = emptyProgression(LEARNER_A);
+labState = {
+  ...labState,
+  completedTracks: { fundamentals: t0, architecture: t0, l1s: t0, "c-chain": t0, icm: t0 },
+  completedModules: { "dev-lessons": t0 },
+  completedLessons: {
+    "dev-tooling": t0,
+    "dev-fuji": t0,
+    "dev-practice": t0,
+  },
+};
+assert.equal(isTrackUnlocked(labState, "developer"), true);
+assert.equal(isModuleUnlocked(labState, "dev-project"), true);
+assert.equal(isModuleUnlocked(labState, "dev-quiz"), false);
+assert.equal(isLessonUnlocked(labState, "dev-lab-brief"), true);
+labState = completeLessons(labState, ["dev-lab-brief", "dev-lab-build", "dev-lab-verify"]);
+assert.equal(isModuleUnlocked(labState, "dev-quiz"), true);
+assert.equal(isTrackUnlocked(labState, "security"), false);
+labState = apply(labState, EVENT_TYPES.QUIZ_COMPLETED, "hard", t0, {
+  difficulty: "hard",
+  correct: 5,
+  total: 5,
+  perfect: true,
+}).state;
+assert.equal(isTrackUnlocked(labState, "security"), true);
+assert.equal(isLessonUnlocked(labState, "sec-threats"), true);
+
 console.log("progression system tests passed");

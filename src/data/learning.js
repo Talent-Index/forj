@@ -3,7 +3,7 @@
  * UI should read this file instead of hardcoding track or path rules.
  */
 
-export const LEARNING_CATALOG_VERSION = 2;
+export const LEARNING_CATALOG_VERSION = 3;
 
 export const QUIZ_MODULE_IDS = {
   easy: "fund-quiz",
@@ -62,8 +62,8 @@ export const LEARNING_PATHS = [
     id: "avalanche-developer-path",
     name: "Avalanche Developer Path",
     description:
-      "A structured path from Avalanche fundamentals through architecture, L1s, C-Chain, ICM, and a developer capstone.",
-    trackIds: ["fundamentals", "architecture", "l1s", "c-chain", "icm", "developer"],
+      "A structured path from Avalanche fundamentals through architecture, L1s, C-Chain, ICM, a developer project lab and Hard capstone, then security practices.",
+    trackIds: ["fundamentals", "architecture", "l1s", "c-chain", "icm", "developer", "security"],
   },
 ];
 
@@ -126,13 +126,26 @@ export const TRACKS = [
   {
     id: "developer",
     name: "Avalanche Developer Track",
-    description: "Tooling, Fuji practice, and the Hard assessment that closes the developer path.",
+    description:
+      "Tooling, Fuji practice, a self-claimed project lab, and the Hard assessment that seats the path’s remaining pieces.",
     difficulty: "advanced",
     prerequisites: ["c-chain", "icm"],
     xpReward: 160,
     pointReward: 0,
     credential: { type: "path-capstone", claimed: true, attested: false },
-    moduleIds: ["dev-lessons", "dev-quiz"],
+    moduleIds: ["dev-lessons", "dev-project", "dev-quiz"],
+  },
+  {
+    id: "security",
+    name: "Avalanche Security Practices",
+    description:
+      "Operational and application security habits for Avalanche builders after the developer capstone. Off-chain learning record only.",
+    difficulty: "advanced",
+    prerequisites: ["developer"],
+    xpReward: 140,
+    pointReward: 0,
+    credential: { type: "track", claimed: true, attested: false },
+    moduleIds: ["security-lessons"],
   },
 ];
 
@@ -202,6 +215,16 @@ export const TRACK_CERTIFICATES = Object.freeze([
     icon: "badge",
     pieceIndexes: Object.freeze([8, 9, 10, 11, 12, 13, 14, 15]),
     kind: "quiz",
+  },
+  {
+    id: "security",
+    trackId: "security",
+    title: "Security Practices Certificate",
+    quizId: null,
+    quizLabel: null,
+    icon: "shield",
+    pieceIndexes: Object.freeze([]),
+    kind: "track",
   },
 ]);
 
@@ -287,6 +310,16 @@ export const MODULES = [
     prerequisites: [],
   },
   {
+    id: "dev-project",
+    trackId: "developer",
+    name: "Developer project lab",
+    required: true,
+    optional: false,
+    quizId: null,
+    lessonIds: ["dev-lab-brief", "dev-lab-build", "dev-lab-verify"],
+    prerequisites: [],
+  },
+  {
     id: "dev-quiz",
     trackId: "developer",
     name: "Developer capstone",
@@ -294,7 +327,17 @@ export const MODULES = [
     optional: false,
     quizId: "hard",
     lessonIds: [],
-    prerequisites: ["dev-lessons"],
+    prerequisites: ["dev-project"],
+  },
+  {
+    id: "security-lessons",
+    trackId: "security",
+    name: "Security practices lessons",
+    required: true,
+    optional: false,
+    quizId: null,
+    lessonIds: ["sec-threats", "sec-keys", "sec-ops"],
+    prerequisites: [],
   },
 ];
 
@@ -441,7 +484,80 @@ export const LESSONS = [
     title: "Close the loop",
     optional: false,
     reference: REF.docs,
-    body: "The Forjora loop is learn, challenge, earn, unlock, forge, then prove. Lessons unlock in order. Quiz points seat that quiz’s certificate pieces. Track certificates show progress per track.\n\nSeating all sixteen pieces reveals the path certificate for naming. A wallet is required only for the optional on-chain claim, which is always Forjora claimed from the learner UI.\n\nThe Hard quiz is the capstone assessment for this path. Retries replace that section’s points; they do not farm extra XP or leaderboard standing.",
+    body: "The Forjora loop is learn, challenge, earn, unlock, forge, then prove. Lessons unlock in order. Quiz points seat that quiz’s certificate pieces. Track certificates show progress per track.\n\nSeating all sixteen pieces reveals the path certificate for naming. A wallet is required only for the optional on-chain claim, which is always Forjora claimed from the learner UI.\n\nNext you will run a short Fuji project lab. Marking those lessons complete is self-claimed practice. The Hard quiz that follows remains the seating assessment for this track’s pieces.",
+  },
+  {
+    id: "dev-lab-brief",
+    moduleId: "dev-project",
+    title: "Lab brief: Fuji practice deploy",
+    optional: false,
+    reference: REF.tooling,
+    steps: [
+      "Open Avalanche Builder Hub tooling docs and note the official CLI / network entry points",
+      "Write down Fuji C-Chain chain ID and an official RPC host from Builder Hub (not a random blog)",
+      "Decide a tiny practice goal: connect wallet, request faucet AVAX, or deploy a trivial contract on Fuji",
+    ],
+    body: "This lab is a practice checklist, not a graded submission and not an issuer-attested review. You mark complete when you have followed the official docs far enough to name the network you will touch.\n\nKeep the goal small. Fuji is for rehearsal: wrong chain IDs, unpaid Mainnet gas, and unofficial faucet links are the usual failure modes.\n\nForjora never treats lab completion as Avalanche Foundation certification or as attestation. Claimed remains claimed.",
+  },
+  {
+    id: "dev-lab-build",
+    moduleId: "dev-project",
+    title: "Lab build: network and toolchain",
+    optional: false,
+    reference: REF.docs,
+    steps: [
+      "Configure your wallet or toolchain for Avalanche Fuji (chain ID and RPC from Builder Hub)",
+      "Confirm you can distinguish Fuji from C-Chain Mainnet before sending any transaction",
+      "If you deploy or call a contract, use test AVAX only and record the explorer transaction URL for yourself",
+    ],
+    body: "Builders mix an EVM toolchain with Avalanche network parameters. Builder Hub is the source of truth for chain IDs, RPC endpoints, and CLI flags. Unofficial mirrors drift.\n\nWork through the checklist in order. If you cannot safely obtain Fuji AVAX or switch networks, stop and re-read the official docs rather than improvising Mainnet values.\n\nCompleting this lesson means you practiced the setup. It does not mean Forjora verified your deploy.",
+  },
+  {
+    id: "dev-lab-verify",
+    moduleId: "dev-project",
+    title: "Lab verify: honesty check",
+    optional: false,
+    reference: REF.docs,
+    steps: [
+      "Confirm any practice transaction (if you made one) appears on the Fuji explorer, not Mainnet",
+      "Restate in your own words: Mark complete is self-claimed learning activity",
+      "Proceed to the Hard quiz only when you are ready for the seating assessment",
+    ],
+    body: "Verification here means you checked your own work against Fuji explorers and official docs. It is not on-chain attestation and not a Foundation diploma.\n\nHard quiz points still seat only this track’s reserved puzzle pieces under the frozen Easy / Medium / Hard score scale. Lab XP and lesson completion do not change that seating math.\n\nWhen you Mark complete, you are recording that you finished the practice checklist—not that an issuer reviewed your project.",
+  },
+  {
+    id: "sec-threats",
+    moduleId: "security-lessons",
+    title: "Threats builders actually meet",
+    optional: false,
+    reference: REF.nodes,
+    body: "After the developer capstone, security work is about habits: phishing wallets, wrong-network approvals, leaked private keys, and trusting unofficial RPC or faucet links.\n\nAvalanche’s docs emphasize official tooling and validator/node operations. Treat community tips as starting points, then confirm against Builder Hub.\n\nThis track is an off-chain learning record. Completing it does not seat puzzle pieces and does not mint an issuer-attested credential.",
+  },
+  {
+    id: "sec-keys",
+    moduleId: "security-lessons",
+    title: "Keys, wallets, and signing risk",
+    optional: false,
+    reference: REF.docs,
+    steps: [
+      "List where your practice keys live (browser extension, hardware, or throwaway Fuji key)",
+      "Confirm you never paste a seed phrase into a site that is not your wallet",
+      "Prefer a dedicated Fuji account for experiments so Mainnet keys stay cold",
+    ],
+    body: "Most learner incidents are operational: signing a malicious typed-data payload, approving an unlimited allowance on the wrong chain, or reusing a Mainnet key for throwaway tests.\n\nForjora’s learner mint path never holds issuer keys in the browser. Your wallet still can. Separate practice keys from anything that holds real value.\n\nMarking this lesson complete is a self-check that you reviewed those habits—not a security audit of your setup.",
+  },
+  {
+    id: "sec-ops",
+    moduleId: "security-lessons",
+    title: "Operational hygiene on Avalanche",
+    optional: false,
+    reference: REF.nodes,
+    steps: [
+      "Prefer official docs for node, RPC, and faucet guidance",
+      "Before any Mainnet action, re-verify chain ID and contract address from a trusted source",
+      "Remember: path certificates and Fuji claimed mints are not issuer-attested exams",
+    ],
+    body: "Operational hygiene is boring on purpose: pin known-good RPC URLs, double-check explorers, and refuse to rush Mainnet deploys after a Fuji rehearsal.\n\nValidators and nodes have their own hardening path in Avalanche docs. Application builders still inherit the same honesty rule—claimed learning progress is not attestation.\n\nFinishing this track unlocks no seating quiz. It deepens judgment after the Hard capstone without changing the frozen Fuji score layout.",
   },
 ];
 

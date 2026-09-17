@@ -57,6 +57,13 @@ function LessonWorkspace({
           {lesson.body.split("\n\n").map((paragraph, index) => (
             <p key={`${lesson.id}-${index}`}>{paragraph}</p>
           ))}
+          {Array.isArray(lesson.steps) && lesson.steps.length > 0 ? (
+            <ol className="lesson-steps">
+              {lesson.steps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+          ) : null}
           {lesson.reference && safeExternalHref(lesson.reference.url) && (
             <p className="lesson-reference">
               <span className="kicker">Official reference</span>

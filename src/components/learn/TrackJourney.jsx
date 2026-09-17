@@ -80,7 +80,13 @@ function TrackJourney({
               <div className="learn-journey-body">
                 <p className="kicker">
                   {String(step.index).padStart(2, "0")}
-                  {step.kind === "challenge" ? " · Challenge" : step.kind === "credential" ? " · Credential" : " · Module"}
+                  {step.kind === "challenge"
+                    ? " · Challenge"
+                    : step.kind === "credential"
+                      ? " · Credential"
+                      : step.kind === "project"
+                        ? " · Project lab"
+                        : " · Module"}
                 </p>
                 <h3>{step.title}</h3>
                 <p className="meta-line">{step.summary}</p>

@@ -10,7 +10,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | --- | --- |
 | Foundation (wallet, quiz, scoring, puzzle, CI) | Complete |
 | Identity | Account sign-in (email or Google) with progress on the learner account |
-| Learning experience | Partial — Learn hub with track discovery, vertical track journeys, lesson workspace; six Avalanche tracks; content beyond these tracks not shipped |
+| Learning experience | Partial — Learn hub with track discovery, vertical track journeys, lesson workspace; seven Avalanche tracks including Developer project lab and lesson-only Security; further path content not shipped |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
 | Gamification | Live community ranking (public Board browse); server-written XP ledger when Functions are deployed, otherwise event-log replay; XP, levels, achievements, streaks, path engine |
 | Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
@@ -36,8 +36,8 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Lesson workspace: track nav · lesson body · progress/skills rail (stacks on mobile).
 - Easy, Medium, Hard, and Master quizzes are Foundation / Builder / Advanced / Mastery **challenges** in the learner UI (5 / 7 / 10 / 12 questions). Knowledge checks appear after a short stretch of learning, not on a fixed lesson count.
 - Challenges award XP and puzzle fragments on first completion (retries do not farm rewards). Five fragments convert into one puzzle piece. Fuji seating/mint still uses the frozen Easy / Medium / Hard five-correct scale (80 points).
-- Structured path with six tracks: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer.
-- Lessons unlock in order. Each lesson has a deeper body and an official Avalanche reference. Challenges sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone; Mastery is challenge-only).
+- Structured path with seven tracks: Fundamentals, Architecture, L1s, C-Chain & Smart Contracts, ICM, Developer (tooling → self-claimed project lab → Hard), and Security Practices (lesson-only after Developer).
+- Lessons unlock in order. Each lesson has a deeper body and an official Avalanche reference. Some lessons include a self-check steps checklist. Challenges sit on the path (Easy → Fundamentals, Medium → Architecture, Hard → Developer capstone after the project lab; Mastery is challenge-only). Security does not unlock a seating quiz.
 - Shared layout tokens align nav, main, and footer gutters; page chrome (`page` → `page-header` → `section-block`) is consistent across Learn, Progress, Credentials, Board, and Profile. Unknown URLs show a custom Forjora 404 (“Path not forged”) with links home and to Lookup.
 
 ## Progression
@@ -52,7 +52,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 ## Puzzle and certificate
 
 - Sixteen interlocking pieces, reserved by quiz: Easy 3, Medium 5, Hard 8. Points from a quiz only seat that quiz’s pieces. Puzzle fragments from assessments convert into additional pieces (5 fragments = 1 piece).
-- Each of the six tracks has a certificate. Quiz tracks are achieved when their pieces are seated. Lesson tracks (L1s, C-Chain, ICM) are achieved when the track is complete.
+- Each of the seven tracks has a certificate. Quiz tracks are achieved when their pieces are seated. Lesson tracks (L1s, C-Chain, ICM, Security) are achieved when the track is complete. The Developer project lab is a self-claimed learning record, not a graded or issuer-attested review.
 - The **Credential vault** on Credentials separates **track and learning certificates** (off-chain, earned / in progress / locked) from the **path snapshot** (sixteen pieces → name → optional claimed Fuji mint). Achieved cards do not pretend to be on-chain tokens.
 - Artwork: Forjora forge certificate image — blacksmith in a workshop presenting a crafted diamond; banners say Forjora and Learn · Forge · Prove, not “certified” or “verified”.
 
