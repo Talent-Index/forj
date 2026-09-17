@@ -3,7 +3,7 @@
  * UI should read this file instead of hardcoding track or path rules.
  */
 
-export const LEARNING_CATALOG_VERSION = 3;
+export const LEARNING_CATALOG_VERSION = 4;
 
 export const QUIZ_MODULE_IDS = {
   easy: "fund-quiz",
@@ -62,8 +62,8 @@ export const LEARNING_PATHS = [
     id: "avalanche-developer-path",
     name: "Avalanche Developer Path",
     description:
-      "A structured path from Avalanche fundamentals through architecture, L1s, C-Chain, ICM, a developer project lab and Hard capstone, then security practices.",
-    trackIds: ["fundamentals", "architecture", "l1s", "c-chain", "icm", "developer", "security"],
+      "A structured path from Avalanche fundamentals through architecture, nodes, L1s, C-Chain, ICM with a messaging lab, a developer project lab and Hard capstone, then security practices.",
+    trackIds: ["fundamentals", "architecture", "nodes", "l1s", "c-chain", "icm", "developer", "security"],
   },
 ];
 
@@ -91,6 +91,18 @@ export const TRACKS = [
     moduleIds: ["arch-lessons", "arch-quiz"],
   },
   {
+    id: "nodes",
+    name: "Nodes & Validators",
+    description:
+      "Node roles, staking and ops hygiene, and how to trust RPC and explorer sources. Off-chain learning record only.",
+    difficulty: "intermediate",
+    prerequisites: ["architecture"],
+    xpReward: 120,
+    pointReward: 0,
+    credential: { type: "track", claimed: true, attested: false },
+    moduleIds: ["nodes-lessons"],
+  },
+  {
     id: "l1s",
     name: "Avalanche L1s",
     description: "Independent L1s, validator-set sovereignty, and when to launch an L1 instead of a contract.",
@@ -115,13 +127,14 @@ export const TRACKS = [
   {
     id: "icm",
     name: "Avalanche ICM",
-    description: "Interchain Messaging, Warp/Teleporter, and authentic messages between Avalanche chains.",
+    description:
+      "Interchain Messaging, Warp/Teleporter, and a self-claimed messaging practice lab. Off-chain learning record; no seating quiz.",
     difficulty: "advanced",
     prerequisites: ["l1s"],
     xpReward: 140,
     pointReward: 0,
     credential: { type: "track", claimed: true, attested: false },
-    moduleIds: ["icm-lessons"],
+    moduleIds: ["icm-lessons", "icm-project"],
   },
   {
     id: "developer",
@@ -175,6 +188,16 @@ export const TRACK_CERTIFICATES = Object.freeze([
     icon: "progress",
     pieceIndexes: Object.freeze([3, 4, 5, 6, 7]),
     kind: "quiz",
+  },
+  {
+    id: "nodes",
+    trackId: "nodes",
+    title: "Nodes & Validators Certificate",
+    quizId: null,
+    quizLabel: null,
+    icon: "nodes",
+    pieceIndexes: Object.freeze([]),
+    kind: "track",
   },
   {
     id: "l1s",
@@ -280,6 +303,16 @@ export const MODULES = [
     prerequisites: [],
   },
   {
+    id: "nodes-lessons",
+    trackId: "nodes",
+    name: "Nodes and validators lessons",
+    required: true,
+    optional: false,
+    quizId: null,
+    lessonIds: ["node-roles", "node-stake", "node-rpc"],
+    prerequisites: [],
+  },
+  {
     id: "cchain-lessons",
     trackId: "c-chain",
     name: "C-Chain lessons",
@@ -297,6 +330,16 @@ export const MODULES = [
     optional: false,
     quizId: null,
     lessonIds: ["icm-what", "icm-teleporter", "icm-use"],
+    prerequisites: [],
+  },
+  {
+    id: "icm-project",
+    trackId: "icm",
+    name: "ICM messaging lab",
+    required: true,
+    optional: false,
+    quizId: null,
+    lessonIds: ["icm-lab-brief", "icm-lab-build", "icm-lab-verify"],
     prerequisites: [],
   },
   {
@@ -460,7 +503,80 @@ export const LESSONS = [
     title: "When to use ICM",
     optional: false,
     reference: REF.icmContracts,
-    body: "Use ICM when state on one L1 must be acted on by another L1 or by a Primary Network surface, and you need validator-backed authenticity for that message.\n\nDo not use it as a substitute for a local database, a cron job, or an ordinary C-Chain contract call on the same chain. Cross-chain messaging adds latency, fee, and failure modes you only want when the product needs them.\n\nThe Hard quiz includes ICM, L1, and C-Chain items together because production Avalanche builders meet all three in one system design.",
+    body: "Use ICM when state on one L1 must be acted on by another L1 or by a Primary Network surface, and you need validator-backed authenticity for that message.\n\nDo not use it as a substitute for a local database, a cron job, or an ordinary C-Chain contract call on the same chain. Cross-chain messaging adds latency, fee, and failure modes you only want when the product needs them.\n\nNext you will run a short ICM messaging lab. Marking those lessons complete is self-claimed practice. The Hard quiz later on the Developer track remains the seating assessment—this lab does not add puzzle seats.",
+  },
+  {
+    id: "icm-lab-brief",
+    moduleId: "icm-project",
+    title: "Lab brief: message between chains",
+    optional: false,
+    reference: REF.icm,
+    steps: [
+      "Open Avalanche Warp / ICM overview docs on Builder Hub",
+      "Name two chains you would message between in a Fuji practice scenario (e.g. C-Chain and an L1)",
+      "Write one sentence on why the message needs validator-backed authenticity rather than a trusted relay alone",
+    ],
+    body: "This lab is a practice checklist for Interchain Messaging, not a graded submission and not an issuer-attested review. You mark complete when you can scope a tiny Fuji messaging goal from official docs.\n\nKeep the goal conceptual if you are not ready to send a live message: naming the chains, the Warp vs Teleporter layer, and the failure modes is enough for this brief.\n\nForjora never treats lab completion as Avalanche Foundation certification or as attestation. Claimed remains claimed.",
+  },
+  {
+    id: "icm-lab-build",
+    moduleId: "icm-project",
+    title: "Lab build: Teleporter checklist",
+    optional: false,
+    reference: REF.icmContracts,
+    steps: [
+      "From Builder Hub ICM contract docs, note that TeleporterMessenger is meant to share a deterministic address across chains",
+      "List the official doc steps you would follow before calling send/receive on Fuji (no random blog deploy)",
+      "Confirm your practice plan stays on Fuji test networks, not C-Chain Mainnet",
+    ],
+    body: "Builders meet Warp as the primitive and Teleporter as the application contract layer. Official docs warn against ad-hoc Messenger deploys that break the shared-address assumption.\n\nWork the checklist against Builder Hub only. Completing this lesson means you rehearsed the setup judgment—not that Forjora verified a cross-chain send.\n\nThis lab does not seat puzzle pieces. Easy / Medium / Hard seating stays on Fundamentals, Architecture, and Developer.",
+  },
+  {
+    id: "icm-lab-verify",
+    moduleId: "icm-project",
+    title: "Lab verify: honesty check",
+    optional: false,
+    reference: REF.icmContracts,
+    steps: [
+      "If you sent a practice message, confirm it against Fuji explorers or official tooling—not Mainnet",
+      "Restate: Mark complete is self-claimed learning activity, not issuer attestation",
+      "Proceed toward the Developer track when ICM lessons and this lab are done",
+    ],
+    body: "Verification here means you checked your own understanding against official ICM docs and explorers. It is not on-chain attestation and not a Foundation diploma.\n\nHard quiz points still seat only the Developer track’s reserved pieces under the frozen Easy / Medium / Hard score scale. ICM lab XP and lesson completion do not change that seating math.\n\nWhen you Mark complete, you are recording that you finished the messaging checklist—not that an issuer reviewed your project.",
+  },
+  {
+    id: "node-roles",
+    moduleId: "nodes-lessons",
+    title: "What nodes and validators do",
+    optional: false,
+    reference: REF.nodes,
+    body: "Validators stake AVAX and participate in consensus on the Primary Network. Nodes also serve RPC, indexing, and operational roles that wallets and apps depend on every day.\n\nBuilder Hub’s nodes docs are the starting point for how Avalanche thinks about running and connecting to the network. Unofficial “quick RPC” lists drift and can point you at the wrong chain.\n\nThis track is an off-chain learning record. Completing it does not seat puzzle pieces and does not mint an issuer-attested credential.",
+  },
+  {
+    id: "node-stake",
+    moduleId: "nodes-lessons",
+    title: "Staking and ops hygiene",
+    optional: false,
+    reference: REF.nodes,
+    steps: [
+      "Skim official nodes docs for validator vs non-validating node roles",
+      "Note that staking and Primary Network validation are distinct from running a random public RPC",
+      "Write one operational risk you would refuse to take from an unofficial guide",
+    ],
+    body: "Staking secures the Primary Network. Running infrastructure well means preferring official parameters, monitoring, and known-good endpoints over copy-pasted community configs.\n\nYou do not need to operate a validator to finish this lesson. You do need to recognize that ops mistakes—wrong network, untrusted RPC, leaked keys—are learner-scale versions of the same hygiene.\n\nMarking complete is a self-check against Builder Hub, not a staking audit.",
+  },
+  {
+    id: "node-rpc",
+    moduleId: "nodes-lessons",
+    title: "RPC, explorers, and trust",
+    optional: false,
+    reference: REF.docs,
+    steps: [
+      "Prefer Builder Hub or Avalanche official sources when picking an RPC or faucet",
+      "Before any Mainnet action, re-check chain ID against a trusted source",
+      "Remember: path certificates and Fuji claimed mints are not issuer-attested exams",
+    ],
+    body: "Wallets and toolchains are only as trustworthy as the RPC and explorer they use. Fuji and Mainnet look similar until a wrong chain ID costs real AVAX.\n\nTreat unofficial mirrors as untrusted until confirmed. Forjora’s mint path validates Fuji explicitly for the same reason.\n\nFinishing this track unlocks no seating quiz. It sits beside L1s and C-Chain after Architecture without changing the frozen Fuji score layout.",
   },
   {
     id: "dev-tooling",

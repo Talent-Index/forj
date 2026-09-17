@@ -252,7 +252,9 @@ service cloud.firestore {
         'icm-what', 'icm-teleporter', 'icm-use',
         'dev-tooling', 'dev-fuji', 'dev-practice',
         'dev-lab-brief', 'dev-lab-build', 'dev-lab-verify',
-        'sec-threats', 'sec-keys', 'sec-ops'
+        'sec-threats', 'sec-keys', 'sec-ops',
+        'node-roles', 'node-stake', 'node-rpc',
+        'icm-lab-brief', 'icm-lab-build', 'icm-lab-verify'
       ];
     }
 
