@@ -248,4 +248,32 @@ labState = apply(labState, EVENT_TYPES.QUIZ_COMPLETED, "hard", t0, {
 assert.equal(isTrackUnlocked(labState, "security"), true);
 assert.equal(isLessonUnlocked(labState, "sec-threats"), true);
 
+// --- Wave A: nodes after architecture; ICM lab required for ICM track complete ---
+assert.equal(isTrackUnlocked(emptyProgression(LEARNER_A), "nodes"), false);
+let nodesState = emptyProgression(LEARNER_A);
+nodesState = {
+  ...nodesState,
+  completedTracks: { fundamentals: t0, architecture: t0 },
+};
+assert.equal(isTrackUnlocked(nodesState, "nodes"), true);
+assert.equal(isLessonUnlocked(nodesState, "node-roles"), true);
+
+let icmLab = emptyProgression(LEARNER_A);
+icmLab = {
+  ...icmLab,
+  completedTracks: { fundamentals: t0, architecture: t0, l1s: t0 },
+  completedModules: { "icm-lessons": t0 },
+  completedLessons: {
+    "icm-what": t0,
+    "icm-teleporter": t0,
+    "icm-use": t0,
+  },
+};
+assert.equal(isModuleUnlocked(icmLab, "icm-project"), true);
+assert.equal(isLessonUnlocked(icmLab, "icm-lab-brief"), true);
+assert.equal(Boolean(icmLab.completedTracks.icm), false);
+icmLab = completeLessons(icmLab, ["icm-lab-brief", "icm-lab-build", "icm-lab-verify"]);
+assert.ok(icmLab.completedModules["icm-project"]);
+assert.ok(icmLab.completedTracks.icm);
+
 console.log("progression system tests passed");
