@@ -150,7 +150,7 @@ flowchart TD
 | Wave | Role | Depends on | Must not imply |
 | --- | --- | --- | --- |
 | **A** — More path content + richer labs | Deeper lesson-only tracks and self-claimed project labs | Shipped Fuji loop | Foundation exam, graded review, or issuer attestation |
-| **B** — Learning analytics · question ops | Operator question bank and analytics | Wave A shipped | That analytics or bank edits change seating honesty or attestation |
+| **B** — Learning analytics · question ops | Operator question bank and analytics (RTDB; partial) | Wave A shipped | That analytics or bank edits change seating honesty or attestation |
 | **C** — Issuer ops, then attested mint UI | Key custody + dashboard → attested mint in learner UI → revocation / versioning | Contract attested mint (shipped); Wave A does not block start | That claimed scores were always attested; Lookup alone as certification |
 | **D** — C-Chain after production gate | Review → custody → monitoring → open gate → C-Chain deploy → E2E | Wave C issuer custody | That Fuji claimed equals a Mainnet diploma; env flag as launch approval |
 | **E** — Ecosystem | Partners, collections, third-party verify of **attested** records | Wave D (production-ready attestation) | That Board rank or claimed mint is partner-attested |
@@ -164,9 +164,11 @@ Phase 2 path expansion. Puzzle seats **0–15** unchanged. No fourth seating qui
 
 Further lesson tracks or labs beyond this slice remain optional Phase 2 polish; Wave B is the next sequenced platform wave.
 
-### Wave B — analytics and question ops
+### Wave B — analytics and question ops (partial)
 
-Phase 5. Operator-facing question bank management and learning analytics after Wave A. Does not change seating math or credential honesty. Stays off the attested path.
+Phase 5. **Shipped (partial):** Realtime Database analytics events from learner completions; gated Ops UI for question bank health, draft → publish, and analytics funnel; quiz merges published RTDB bank over the bundled fallback. Does not change seating math or credential honesty. Stays off the attested path.
+
+Remaining: richer dashboards; optional remote-only bank without bundled fallback.
 
 ### Wave C — issuer path (ops before UI)
 

@@ -1,6 +1,6 @@
 # Forjora — Status
 
-Last updated: 17 September 2026
+Last updated: 18 September 2026
 
 This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
@@ -13,7 +13,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | Learning experience | Partial — eight Avalanche tracks including Nodes & Validators and ICM messaging lab (**Wave A** shipped); further optional path polish not sequenced |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
 | Gamification | Live community ranking (public Board browse); server-written XP ledger when Functions are deployed, otherwise event-log replay; XP, levels, achievements, streaks, path engine |
-| Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
+| Platform | Partial — account-backed progress and wallet linking; **Wave B** RTDB analytics + Ops question publish (partial); issuer ops not shipped |
 | Security & Launch | Partial — production readiness gate is **closed**; launch validation **not approved** for public launch |
 | Fuji credential | Live |
 
@@ -78,7 +78,7 @@ It is not a league with an issuer, not on-chain, and not a verified exam. A clai
 Tagged by extension wave — see [Flowchart](./FLOWCHART.md) §6 and [Roadmap](./ROADMAP.md).
 
 - **Wave A** — shipped: Nodes & Validators lesson-only track; ICM messaging lab (no fourth seating quiz)
-- **Wave B** — Question bank managed independently of the app; learning analytics dashboards
+- **Wave B** — partial: RTDB learning analytics + gated Ops question bank (draft → publish, bank health, funnel). Remaining: richer dashboards; optional remote-only bank without bundled fallback
 - **Wave C** — Forjora Issuer dashboard and key custody; attested mint in the learner UI; credential revocation and versioning
 - **Wave D** — Independent review of freeze v1, production monitoring, and Avalanche C-Chain issuance (the production readiness gate stays closed; launch validation is not public-launch approval; see [Security & Launch](./ROADMAP.md))
 - **Wave E** — Partners, collections, third-party verification of attested credentials (after Wave D)

@@ -2,8 +2,12 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PUBLIC_ENV_KEYS, sanitizeClientPayload } from "../src/utils/frontendSecurity.js";
-import { isAllowedAnalyticsType, QUESTION_STATUSES } from "../src/utils/backend/schema.js";
+import { PUBLIC_ENV_KEYS } from "../src/utils/frontendSecurity.js";
+import {
+  isAllowedAnalyticsType,
+  QUESTION_STATUSES,
+  sanitizeClientPayload,
+} from "../src/utils/backend/schema.js";
 import {
   mergeQuestionsById,
   mergeSectionWithPublished,

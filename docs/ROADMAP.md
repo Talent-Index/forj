@@ -32,7 +32,7 @@ Wallet and Fuji network, quiz banks, retry-safe scoring, durable local progress,
 
 Shipped: landing loop for guests, explanations after submit, official Avalanche references, persistent progress. After sign-in, learners go to **Learn on Forjora** — track discovery/filters, vertical track journeys, lesson workspace (nav · content · progress), and knowledge-check challenges (Foundation / Builder / Advanced / Mastery) on the path. Quizzes award XP and puzzle fragments; five fragments convert into a puzzle piece. Eight tracks — Fundamentals, Architecture, Nodes & Validators, L1s, C-Chain, ICM (lessons plus self-claimed messaging lab), Developer (tooling, self-claimed project lab, then Hard seating), and Security Practices — with deeper lesson bodies, Builder Hub references, mapped quizzes, and polished track vs path certificates on Credentials (track certificates and labs stay off-chain learning records; lab completion is self-claimed, not issuer-attested). **Wave A** is shipped.
 
-Remaining: optional further lesson tracks or labs beyond Wave A; then **Wave B** platform work. No fourth seating quiz. See [Flowchart](./FLOWCHART.md).
+Remaining: optional further lesson tracks or labs beyond Wave A. **Wave B** is partial (RTDB analytics + question ops). No fourth seating quiz. See [Flowchart](./FLOWCHART.md).
 
 ## Phase 3 — Credentials 🟡
 
@@ -50,7 +50,7 @@ Remaining: keep honesty clear that rank is not issuer-attested and not on-chain 
 
 Shipped: learner accounts persist progress, quiz state, and puzzle state beyond a single browser. Wallets link to the account without becoming the account. A non-empty wallet-local snapshot replaces the account copy on link. Clients cannot write XP or rank.
 
-Remaining: **Wave B** — question management and learning analytics (Wave A shipped); **Wave C** — issuer dashboard (with Phase 3); production monitoring (feeds **Wave D**). See [Flowchart](./FLOWCHART.md).
+Remaining: **Wave B** — richer analytics dashboards / remote-only bank polish (RTDB analytics + Ops question publish shipped partial); **Wave C** — issuer dashboard (with Phase 3); production monitoring (feeds **Wave D**). See [Flowchart](./FLOWCHART.md).
 
 ## Phase 6 — Security & Launch
 
