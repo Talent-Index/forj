@@ -1944,6 +1944,59 @@ img {
   margin-inline: auto;
 }
 
+.ops-page {
+  max-width: var(--content-wide, 960px);
+  margin-inline: auto;
+}
+
+.ops-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.ops-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.ops-card,
+.ops-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ops-question-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.ops-question-row {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.12));
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.ops-stat-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 4px;
+}
+
 .settings-form,
 .recipient-form {
   margin-inline: auto;

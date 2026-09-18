@@ -75,6 +75,8 @@ function SettingsPage({
   onChangePassword,
   onSetPassword,
   onUpdateProfile,
+  showOps = false,
+  onOpenOps,
 }) {
   const fileRef = useRef(null);
   const [name, setName] = useState(account?.name || "");
@@ -397,6 +399,16 @@ function SettingsPage({
           ) : null}
         </div>
       </Card>
+
+      {showOps && onOpenOps ? (
+        <Card className="settings-block">
+          <h2>Operator</h2>
+          <p>
+            Question bank and learning analytics on Realtime Database. Not issuer attestation — seating and claimed credentials stay unchanged.
+          </p>
+          <Button onClick={onOpenOps}>Open ops</Button>
+        </Card>
+      ) : null}
 
       <Card className="settings-block">
         <h2>Session</h2>

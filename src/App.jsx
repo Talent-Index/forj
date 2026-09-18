@@ -14,6 +14,7 @@ import Landing from "./components/Landing";
 import EmptyState from "./components/EmptyState";
 import AboutPage from "./components/pages/AboutPage";
 import SettingsPage from "./components/pages/SettingsPage";
+import OpsPage from "./components/pages/OpsPage";
 import ProgressPage from "./components/pages/ProgressPage";
 import LearnPage from "./components/pages/LearnPage";
 import LeaderboardPage from "./components/pages/LeaderboardPage";
@@ -46,6 +47,8 @@ import { pageFromPathname, publicProfilePath, publicProfileSlugFromPath } from "
 import { adoptLinkedWalletProgress, migrateAndHydrate } from "./utils/backend/migrate";
 import { writeQuizProgress } from "./utils/backend/progressSync";
 import { normalizeAddress } from "./utils/progress";
+import { isOperator } from "./utils/rtdb/operators";
+import { hydratePublishedBanks } from "./utils/rtdb/questionBank";
 
 const VIEWS = PROGRESS_VIEWS;
 const PUBLIC_PAGES = new Set([
@@ -108,6 +111,7 @@ function App() {
   );
   const [progressRevision, setProgressRevision] = useState(0);
   const [walletLinkError, setWalletLinkError] = useState("");
+  const [opsAllowed, setOpsAllowed] = useState(false);
   const authActionHandled = useRef(false);
   const walletAdoptedFor = useRef(null);
   const userImage = forgeCertificate;
@@ -178,6 +182,25 @@ function App() {
       cancelled = true;
     };
   }, [account?.name, applyProgress, auth.user, ownerId]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !ownerId) {
+      setOpsAllowed(false);
+      return undefined;
+    }
+    let cancelled = false;
+    isOperator(ownerId)
+      .then((allowed) => {
+        if (!cancelled) setOpsAllowed(Boolean(allowed));
+      })
+      .catch(() => {
+        if (!cancelled) setOpsAllowed(false);
+      });
+    hydratePublishedBanks().catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated, ownerId]);
 
   useEffect(() => {
     if (!progressReady) return;
@@ -711,6 +734,26 @@ function App() {
           onChangePassword={auth.changePassword}
           onSetPassword={auth.setPassword}
           onUpdateProfile={auth.updateProfile}
+          showOps={opsAllowed}
+          onOpenOps={() => setPage("ops")}
+        />
+      );
+    }
+    if (page === "ops") {
+      if (!opsAllowed) {
+        return (
+          <EmptyState
+            title="Ops locked"
+            body="This operator surface is only available to allowlisted accounts."
+            actionLabel="Back to settings"
+            onAction={() => setPage("settings")}
+          />
+        );
+      }
+      return (
+        <OpsPage
+          uid={ownerId}
+          onBack={() => setPage("settings")}
         />
       );
     }

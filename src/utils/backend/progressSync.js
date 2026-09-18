@@ -15,7 +15,6 @@ import { replayEvents } from "../progression/replay";
 import {
   COLLECTIONS,
   SCHEMA_VERSION,
-  isAllowedAnalyticsType,
   isAllowedProgressEventSource,
   isClientEventType,
   progressEventDocId,
@@ -115,13 +114,7 @@ export async function readQuizProgress(userId) {
 export { replayEvents };
 
 export async function writeAnalyticsEvent(userId, type, payload = {}) {
-  if (!userId || !isAllowedAnalyticsType(type)) return { ok: false };
-  await setDoc(doc(collection(db, COLLECTIONS.analyticsEvents)), {
-    schemaVersion: SCHEMA_VERSION,
-    userId,
-    type,
-    payload: sanitizeClientPayload(payload),
-    createdAt: serverTimestamp(),
-  });
-  return { ok: true };
+  // Wave B: analytics live on Realtime Database (see utils/rtdb/analytics.js).
+  const { writeAnalyticsEvent: writeRtdb } = await import("../rtdb/analytics.js");
+  return writeRtdb(userId, type, payload);
 }

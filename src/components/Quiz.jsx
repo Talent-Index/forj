@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { getSectionById, TOTAL_PIECES } from "../data/questions";
+import { TOTAL_PIECES } from "../data/questions";
 import {
   quizLengthFor,
   canAcceptSubmit,
@@ -16,6 +16,7 @@ import { fragmentProgress } from "../utils/fragments";
 import { playCorrectSound, playWrongSound, playSectionCompleteSound } from "../utils/sounds";
 import { ERROR_STATES, PATH_COPY, FORGE_LEVEL_LABELS } from "../utils/onboarding";
 import { safeExternalHref } from "../utils/frontendSecurity";
+import { getLiveSectionById, hydratePublishedBanks } from "../utils/rtdb/questionBank";
 import { Button, ProgressBar } from "./ui/primitives";
 import EmptyState from "./EmptyState";
 import { AnimatedDoodle, LoadingForge, XpHandwrite } from "./doodles";
@@ -46,7 +47,32 @@ function Quiz({
   puzzlePieceCount = 0,
   onGoToPuzzle,
 }) {
-  const section = getSectionById(sectionId);
+  const [section, setSection] = useState(() => getLiveSectionById(sectionId));
+  const [bankReady, setBankReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    hydratePublishedBanks()
+      .then(() => {
+        if (cancelled) return;
+        setSection(getLiveSectionById(sectionId));
+        setBankReady(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setSection(getLiveSectionById(sectionId));
+        setBankReady(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [sectionId]);
+
+  useEffect(() => {
+    if (!bankReady) return;
+    setStartError(bank.ok ? null : bank.error);
+  }, [bankReady, bank.ok, bank.error]);
+
   const pointsPerQ = section?.pointsPerQuestion ?? 0;
   const timePerQ = section?.timePerQuestion ?? 0;
   const expectedCount = quizLengthFor(sectionId);
@@ -56,7 +82,7 @@ function Quiz({
   const levelMeta = FORGE_LEVEL_META[sectionId];
 
   const [quizQuestions, setQuizQuestions] = useState([]);
-  const [startError, setStartError] = useState(bank.error);
+  const [startError, setStartError] = useState(null);
   const [phase, setPhase] = useState("intro");
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
