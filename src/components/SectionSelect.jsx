@@ -1,7 +1,9 @@
-import { sections } from "../data/questions";
+import { useEffect, useState } from "react";
+import { sections as staticSections } from "../data/questions";
 import { quizLengthFor, getQuestionBankStatus } from "../utils/quiz";
 import { PATH_COPY, FORGE_LEVEL_LABELS } from "../utils/onboarding";
 import { FORGE_LEVEL_META } from "../utils/quizConfig";
+import { describeBankHealth, getLiveSectionById, hydratePublishedBanks } from "../utils/rtdb/questionBank";
 import { Button } from "./ui/primitives";
 import { Doodle } from "./doodles";
 
@@ -13,6 +15,21 @@ const LEVEL_DOODLE = {
 };
 
 function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzzle, completedSections }) {
+  const [sections, setSections] = useState(staticSections);
+
+  useEffect(() => {
+    let cancelled = false;
+    hydratePublishedBanks()
+      .then(() => {
+        if (cancelled) return;
+        setSections(staticSections.map((s) => getLiveSectionById(s.id) || s));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section className="section-block">
       <p className="meta-line">
@@ -24,6 +41,7 @@ function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzz
           const done = completedSections.includes(section.id);
           const length = quizLengthFor(section.id);
           const bank = getQuestionBankStatus(section, length);
+          const health = describeBankHealth(section.id);
           const copy = PATH_COPY[section.id] || {
             kicker: section.name,
             title: section.name,
@@ -48,6 +66,9 @@ function SectionSelect({ sectionScores, totalPoints, onSelectSection, onGoToPuzz
               <h3>{copy.title}</h3>
               <p className="meta-line">{section.name} · {length} questions</p>
               <p className="meta-line">{blurb}</p>
+              {!bank.ok ? (
+                <p className="meta-line">Bank needs {health.needed - health.size} more questions</p>
+              ) : null}
               {!bank.ok && <span className="section-score">{bank.error}</span>}
               {score !== undefined && (
                 <span className="section-score">

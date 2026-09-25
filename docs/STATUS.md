@@ -1,6 +1,6 @@
 # Forjora — Status
 
-Last updated: 17 September 2026
+Last updated: 18 September 2026
 
 This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
@@ -13,7 +13,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | Learning experience | Partial — eight Avalanche tracks including Nodes & Validators and ICM messaging lab (**Wave A** shipped); further optional path polish not sequenced |
 | Credentials | Partial — soulbound contract live on Fuji; learner mint is self-claimed |
 | Gamification | Live community ranking (public Board browse); server-written XP ledger when Functions are deployed, otherwise event-log replay; XP, levels, achievements, streaks, path engine |
-| Platform | Partial — account-backed progress and wallet linking; issuer ops not shipped |
+| Platform | Partial — account-backed progress and wallet linking; **Wave B** RTDB analytics + Ops question publish (partial); issuer ops not shipped |
 | Security & Launch | Partial — production readiness gate is **closed**; launch validation **not approved** for public launch |
 | Fuji credential | Live |
 

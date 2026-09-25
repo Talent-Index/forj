@@ -23,6 +23,8 @@ firestore-debug.log
 ui-debug.log
 .firebase/
 
+scripts/seed-rtdb-questions.out.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

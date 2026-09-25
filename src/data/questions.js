@@ -327,7 +327,7 @@ export const sections = [
     name: "Medium",
     icon: "🟡",
     pointsPerQuestion: 5,
-    timePerQuestion: 15,
+    timePerQuestion: 20,
     description: "Builder: apply Avalanche concepts to practical situations",
     questions: [
       {
@@ -589,7 +589,7 @@ export const sections = [
     name: "Hard",
     icon: "🔴",
     pointsPerQuestion: 8,
-    timePerQuestion: 12,
+    timePerQuestion: 20,
     description: "Advanced: problem-solving across architecture, security, and tooling",
     questions: [
       {
@@ -856,7 +856,7 @@ export const sections = [
     name: "Master",
     icon: "◆",
     pointsPerQuestion: 10,
-    timePerQuestion: 18,
+    timePerQuestion: 20,
     description: "Mastery: deep reasoning, security, and systems judgment",
     questions: [],
   },

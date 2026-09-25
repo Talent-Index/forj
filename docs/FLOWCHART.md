@@ -164,7 +164,7 @@ Phase 2 path expansion. Puzzle seats **0–15** unchanged. No fourth seating qui
 
 Further lesson tracks or labs beyond this slice remain optional Phase 2 polish; Wave B is the next sequenced platform wave.
 
-### Wave B — analytics and question ops
+Further lesson tracks or labs beyond this slice remain optional Phase 2 polish; Wave B is the next sequenced platform wave.
 
 Phase 5. Operator-facing question bank management and learning analytics after Wave A. Does not change seating math or credential honesty. Stays off the attested path.
 

@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 import { getFirestore, initializeFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { readPublicEnv } from "./utils/frontendSecurity.js";
@@ -16,6 +17,10 @@ export const firebaseConfig = {
   messagingSenderId: env("VITE_FIREBASE_MESSAGING_SENDER_ID", "1026391141211"),
   appId: env("VITE_FIREBASE_APP_ID", "1:1026391141211:web:cae23963b037c2a7b7887e"),
   measurementId: env("VITE_FIREBASE_MEASUREMENT_ID", "G-D1FWZ1R65N"),
+  databaseURL: env(
+    "VITE_FIREBASE_DATABASE_URL",
+    "https://skillforge-1-default-rtdb.firebaseio.com"
+  ),
 };
 
 export const app = initializeApp(firebaseConfig);
@@ -31,4 +36,5 @@ function firestoreDb() {
   }
 }
 export const db = firestoreDb();
+export const rtdb = getDatabase(app);
 export const storage = getStorage(app);

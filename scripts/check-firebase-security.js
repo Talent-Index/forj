@@ -58,6 +58,10 @@ assert.match(LEADERBOARD_DISCLAIMER, /community ranking/i);
 assert.match(progressionDoc, /community ranking/i);
 
 assert.equal(PUBLIC_ENV_KEYS.includes("VITE_FIREBASE_APPCHECK_SITE_KEY"), true);
+assert.equal(PUBLIC_ENV_KEYS.includes("VITE_FIREBASE_DATABASE_URL"), true);
+assert.match(envExample, /VITE_FIREBASE_DATABASE_URL/);
+assert.match(readFileSync(join(root, "src/firebase.js"), "utf8"), /getDatabase/);
+assert.match(readFileSync(join(root, "database.rules.json"), "utf8"), /banks/);
 assert.match(appCheck, /initializeAppCheck/);
 assert.match(appCheck, /ReCaptchaV3Provider/);
 assert.match(main, /initFirebaseAppCheck/);

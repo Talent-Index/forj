@@ -1,0 +1,36 @@
+{
+  "rules": {
+    "ops": {
+      "operators": {
+        "$uid": {
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": false
+        }
+      }
+    },
+    "questions": {
+      ".read": "auth != null && root.child('ops').child('operators').child(auth.uid).val() === true",
+      "$questionId": {
+        ".write": "auth != null && root.child('ops').child('operators').child(auth.uid).val() === true"
+      }
+    },
+    "banks": {
+      "published": {
+        "$sectionId": {
+          ".read": "auth != null",
+          ".write": "auth != null && root.child('ops').child('operators').child(auth.uid).val() === true",
+          "$questionId": {
+            ".validate": "newData.hasChildren(['id', 'question', 'options', 'answer'])"
+          }
+        }
+      }
+    },
+    "analytics": {
+      ".read": "auth != null && root.child('ops').child('operators').child(auth.uid).val() === true",
+      "$eventId": {
+        ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('ops').child('operators').child(auth.uid).val() === true)",
+        ".write": "auth != null && !data.exists() && newData.child('userId').val() === auth.uid && newData.hasChildren(['userId', 'type', 'createdAt'])"
+      }
+    }
+  }
+}

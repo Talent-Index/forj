@@ -18,6 +18,7 @@ import {
 } from "../utils/progression/index.js";
 import { isClientEventType } from "../utils/backend/schema.js";
 import { writeProgressEvent, setProgressEventsOptIn } from "../utils/backend/progressSync.js";
+import { emitAnalyticsFromProgress } from "../utils/rtdb/analytics.js";
 import { readLeaderboardPreference, writeLeaderboardPreference } from "../utils/backend/leaderboardSync.js";
 
 function browserStorage() {
@@ -150,6 +151,10 @@ export function useProgression(learnerId, quizSnapshot, { ready = false, display
         timestamp: event.timestamp ?? Date.now(),
         optIn: Boolean(result.state.leaderboard?.optIn),
       }).catch(() => {});
+      emitAnalyticsFromProgress(current.learnerId, {
+        ...event,
+        timestamp: event.timestamp ?? Date.now(),
+      });
     }
     return result;
   }, [persist]);
