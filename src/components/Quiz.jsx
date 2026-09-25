@@ -68,11 +68,6 @@ function Quiz({
     };
   }, [sectionId]);
 
-  useEffect(() => {
-    if (!bankReady) return;
-    setStartError(bank.ok ? null : bank.error);
-  }, [bankReady, bank.ok, bank.error]);
-
   const pointsPerQ = section?.pointsPerQuestion ?? 0;
   const timePerQ = section?.timePerQuestion ?? 0;
   const expectedCount = quizLengthFor(sectionId);
@@ -83,6 +78,11 @@ function Quiz({
 
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [startError, setStartError] = useState(null);
+
+  useEffect(() => {
+    if (!bankReady) return;
+    setStartError(bank.ok ? null : bank.error);
+  }, [bankReady, bank.ok, bank.error]);
   const [phase, setPhase] = useState("intro");
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
