@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { QUESTION_STATUSES } from "../../utils/backend/schema.js";
 import { listRecentAnalytics, summarizeAnalyticsFunnel } from "../../utils/rtdb/analytics.js";
 import {
@@ -36,10 +36,7 @@ function OpsPage({ uid, onBack }) {
   const [busy, setBusy] = useState(false);
   const [funnel, setFunnel] = useState({ byType: {}, bySection: {}, total: 0 });
 
-  const health = useMemo(
-    () => SECTIONS.map((id) => describeBankHealth(id)),
-    [questions]
-  );
+  const health = SECTIONS.map((id) => describeBankHealth(id));
 
   const refresh = useCallback(async () => {
     setError("");
