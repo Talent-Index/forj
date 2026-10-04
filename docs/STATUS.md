@@ -1,6 +1,6 @@
 # Forjora — Status
 
-Last updated: 18 September 2026
+Last updated: 5 October 2026
 
 This is the shipped product today, against the [roadmap](./ROADMAP.md).
 
@@ -16,6 +16,7 @@ This is the shipped product today, against the [roadmap](./ROADMAP.md).
 | Platform | Partial — account-backed progress and wallet linking; **Wave B** RTDB analytics + Ops question publish (partial); issuer ops not shipped |
 | Security & Launch | Partial — production readiness gate is **closed**; launch validation **not approved** for public launch |
 | Fuji credential | Live |
+| Learner-progression agent, language model, MCP | Not shipped — planned extension; see [Architecture](./ARCHITECTURE.md) |
 
 Fuji contract: [`0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df`](https://testnet.snowtrace.io/address/0x3756be4955530Bba0844C4D2EcF35DB5ed7d90df) (chain ID 43113).
 
@@ -47,7 +48,7 @@ Existing browser progress is moved onto the account once, so a returning learner
 - Mastery (accuracy by difficulty) sits beside XP (activity). Puzzle progress shows pieces seated and fragments toward the next piece.
 - Streaks use UTC calendar days. Duplicate activity on the same UTC day does not inflate the streak.
 - Achievements unlock from events (first quiz, perfect score, difficulties, streak milestones, puzzle milestones, skill ladders, credential, track certificates, path). The Progress forge shows family-grouped badges, streak calendar, puzzle milestones, and off-chain learning certificates — distinct from Fuji claimed or issuer-attested mints.
-- Dashboard shows level, XP, streak, puzzle count, path progress, and the next recommended activity.
+- Dashboard shows level, XP, streak, puzzle count, path progress, and the next activity on the path. That next step is path order (the first unlocked incomplete lesson or quiz). It is not a language-model recommendation.
 
 ## Puzzle and certificate
 
@@ -82,3 +83,4 @@ Tagged by extension wave — see [Flowchart](./FLOWCHART.md) §6 and [Roadmap](.
 - **Wave C** — Forjora Issuer dashboard and key custody; attested mint in the learner UI; credential revocation and versioning
 - **Wave D** — Independent review of freeze v1, production monitoring, and Avalanche C-Chain issuance (the production readiness gate stays closed; launch validation is not public-launch approval; see [Security & Launch](./ROADMAP.md))
 - **Wave E** — Partners, collections, third-party verification of attested credentials (after Wave D)
+- **Agentic extension** — Learner-progression agent, a language model, tool use, outcome tracking, and MCP servers. None of this is in the product. The [architecture](./ARCHITECTURE.md) separates that plan from the shipped loop. An “AI Builder” badge is a skill ladder for builder-tooling progress, not an agent.

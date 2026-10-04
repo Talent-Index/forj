@@ -54,3 +54,4 @@ The live Fuji credential sits on [`SkillForgeCredential`](https://testnet.snowtr
 | [Credential](docs/CREDENTIAL.md) | On-chain learning record and claimed vs attested |
 | [Authorization](docs/AUTHORIZATION.md) | How issuer attestation is designed |
 | [Metadata](docs/METADATA.md) | What the certificate record displays |
+| [Architecture](docs/ARCHITECTURE.md) | System boundaries today, and the planned agent and MCP extension |
