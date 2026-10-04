@@ -79,7 +79,7 @@ It is not a league with an issuer, not on-chain, and not a verified exam. A clai
 Tagged by extension wave — see [Flowchart](./FLOWCHART.md) §6 and [Roadmap](./ROADMAP.md).
 
 - **Wave A** — shipped: Nodes & Validators lesson-only track; ICM messaging lab (no fourth seating quiz)
-- **Wave B** — Question bank managed independently of the app; learning analytics dashboards
+- **Wave B** — Remainder of question-bank operations and learning analytics dashboards. A partial operator surface can already publish questions and summarize learning events.
 - **Wave C** — Forjora Issuer dashboard and key custody; attested mint in the learner UI; credential revocation and versioning
 - **Wave D** — Independent review of freeze v1, production monitoring, and Avalanche C-Chain issuance (the production readiness gate stays closed; launch validation is not public-launch approval; see [Security & Launch](./ROADMAP.md))
 - **Wave E** — Partners, collections, third-party verification of attested credentials (after Wave D)
