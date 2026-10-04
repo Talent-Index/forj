@@ -2,7 +2,7 @@
 
 How the product moves a learner from account to proof — what ships today, and what can be added without blurring claimed learning with issuer attestation.
 
-Related: [Status](./STATUS.md) · [Roadmap](./ROADMAP.md) · [Progression](./PROGRESSION.md) · [Credential](./CREDENTIAL.md)
+Related: [Status](./STATUS.md) · [Roadmap](./ROADMAP.md) · [Progression](./PROGRESSION.md) · [Credential](./CREDENTIAL.md) · [Architecture](./ARCHITECTURE.md)
 
 ---
 
@@ -164,9 +164,9 @@ Phase 2 path expansion. Puzzle seats **0–15** unchanged. No fourth seating qui
 
 Further lesson tracks or labs beyond this slice remain optional Phase 2 polish; Wave B is the next sequenced platform wave.
 
-Further lesson tracks or labs beyond this slice remain optional Phase 2 polish; Wave B is the next sequenced platform wave.
+### Wave B — learning analytics and question ops
 
-Phase 5. Operator-facing question bank management and learning analytics after Wave A. Does not change seating math or credential honesty. Stays off the attested path.
+Phase 5. Operator-facing question bank management and learning analytics after Wave A. A partial operator surface can publish questions and summarize learning events. It does not change seating math or credential honesty, and it stays off the attested path. It is not a learner-progression agent.
 
 ### Wave C — issuer path (ops before UI)
 
@@ -185,6 +185,8 @@ Phase 6. Independent review of freeze v1 → issuer custody → monitoring → o
 Phase 7. Partners, institutions, collections, and third-party verification of **attested** credentials. Public achievement profiles (`/u/:slug`) already ship with the Board.
 
 See [Roadmap](./ROADMAP.md) for phase status and [Status](./STATUS.md) for the not-shipped list tagged by wave.
+
+A learner-progression agent and an MCP extensibility layer are **planned**. They are not part of the shipped loop above. The dashboard’s next activity is path order. See [Architecture](./ARCHITECTURE.md).
 
 ---
 

@@ -57,7 +57,7 @@ The **Avalanche Developer Path** contains eight tracks in order of dependency:
 
 Earlier required work unlocks later work. Optional lessons do not block a module. Easy / Medium / Hard quizzes are the credential-seating assessments for Fundamentals, Architecture, and the Developer capstone. Nodes, ICM messaging lab, Developer project lab, and Security are off-chain learning records — self-claimed progress, not issuer-attested credentials. Mastery assessments deepen knowledge without changing the frozen Fuji score scale (five counted corrects per Easy / Medium / Hard). Lessons carry deeper Avalanche explanations and official Builder Hub references.
 
-The dashboard’s “next” item is the first unlocked incomplete lesson or quiz on that path.
+The dashboard’s “next” item is the first unlocked incomplete lesson or quiz on that path. That choice is path order inside the app. It is not a language-model recommendation. A future learner-progression agent is described in [Architecture](./ARCHITECTURE.md) and is outside this loop today.
 
 ## Achievements
 
